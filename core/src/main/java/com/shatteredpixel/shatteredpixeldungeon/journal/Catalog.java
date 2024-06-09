@@ -24,17 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.journal;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.BrokenBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.DeepBloodBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.GrassKingBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.IceCityBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.MagicGirlBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.NoKingMobBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.YellowSunBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.playbookslist.BzmdrBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.playbookslist.DeYiZiBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.playbookslist.MoneyMoreBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.playbookslist.PinkRandomBooks;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -44,30 +34,38 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public enum Catalog {
-	
+
+	//EQUIPMENT
 	WEAPONS,
 	ARMOR,
 	WANDS,
 	RINGS,
 	ARTIFACTS,
+
+	//CONSUMABLES
 	POTIONS,
-	SCROLLS,
-	BOOKS,
-	PLAYBOOKS;
+	SCROLLS;
 	
 	private LinkedHashMap<Class<? extends Item>, Boolean> seen = new LinkedHashMap<>();
 	
 	public Collection<Class<? extends Item>> items(){
 		return seen.keySet();
 	}
-	
-	public boolean allSeen(){
-		for (Class<?extends Item> item : items()){
-			if (!seen.get(item)){
-				return false;
-			}
+
+	public String title(){
+		return Messages.get(this, name() + ".title");
+	}
+
+	public int totalItems(){
+		return seen.size();
+	}
+
+	public int totalSeen(){
+		int seenTotal = 0;
+		for (boolean itemSeen : seen.values()){
+			if (itemSeen) seenTotal++;
 		}
-		return true;
+		return seenTotal;
 	}
 	
 	static {
@@ -111,18 +109,6 @@ public enum Catalog {
 			SCROLLS.seen.put( scroll, false);
 		}
 
-		BOOKS.seen.put( IceCityBooks.class,           	false);
-		BOOKS.seen.put( DeepBloodBooks.class,           false);
-		BOOKS.seen.put( GrassKingBooks.class,           false);
-		BOOKS.seen.put( YellowSunBooks.class,           false);
-		BOOKS.seen.put( MagicGirlBooks.class,           false);
-		BOOKS.seen.put( NoKingMobBooks.class,           false);
-		BOOKS.seen.put( BrokenBooks.class,           false);
-
-		PLAYBOOKS.seen.put( MoneyMoreBooks.class,          	 true);
-		PLAYBOOKS.seen.put( PinkRandomBooks.class,           true);
-		PLAYBOOKS.seen.put( DeYiZiBooks.class,          	 true);
-		PLAYBOOKS.seen.put(	BzmdrBooks.class,          	 true);
 	}
 	
 	public static LinkedHashMap<Catalog, Badges.Badge> catalogBadges = new LinkedHashMap<>();
