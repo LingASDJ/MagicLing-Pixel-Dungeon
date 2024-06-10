@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.AikeLaier;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -42,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
-import com.shatteredpixel.shatteredpixeldungeon.plants.SkyBlueFireBloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
@@ -54,7 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public abstract class TippedDart extends Dart {
 	
@@ -201,22 +199,20 @@ public abstract class TippedDart extends Dart {
 		return 8 * quantity;
 	}
 	
-	public static HashMap<Class<?extends Plant.Seed>, Class<?extends TippedDart>> types = new HashMap<>();
+	public static final LinkedHashMap<Class<?extends Plant.Seed>, Class<?extends TippedDart>> types = new LinkedHashMap<>();
 	static {
-		types.put(Blindweed.Seed.class,     BlindingDart.class);
-		types.put(Mageroyal.Seed.class,     CleansingDart.class);
-		types.put(Earthroot.Seed.class,     ParalyticDart.class);
-		types.put(Fadeleaf.Seed.class,      DisplacingDart.class);
-		types.put(Firebloom.Seed.class,     IncendiaryDart.class);
-		types.put(Icecap.Seed.class,        ChillingDart.class);
 		types.put(Rotberry.Seed.class,      RotDart.class);
-		types.put(Sorrowmoss.Seed.class,    PoisonDart.class);
-		types.put(Starflower.Seed.class,    HolyDart.class);
-		types.put(Stormvine.Seed.class,     ShockingDart.class);
 		types.put(Sungrass.Seed.class,      HealingDart.class);
+		types.put(Fadeleaf.Seed.class,      DisplacingDart.class);
+		types.put(Icecap.Seed.class,        ChillingDart.class);
+		types.put(Firebloom.Seed.class,     IncendiaryDart.class);
+		types.put(Sorrowmoss.Seed.class,    PoisonDart.class);
 		types.put(Swiftthistle.Seed.class,  AdrenalineDart.class);
-		types.put(SkyBlueFireBloom.Seed.class,  HaloDart.class);
-		types.put(AikeLaier.Seed.class,  LightDart.class);
+		types.put(Blindweed.Seed.class,     BlindingDart.class);
+		types.put(Stormvine.Seed.class,     ShockingDart.class);
+		types.put(Earthroot.Seed.class,     ParalyticDart.class);
+		types.put(Mageroyal.Seed.class,     CleansingDart.class);
+		types.put(Starflower.Seed.class,    HolyDart.class);
 	}
 	
 	public static TippedDart getTipped( Plant.Seed s, int quantity ){
