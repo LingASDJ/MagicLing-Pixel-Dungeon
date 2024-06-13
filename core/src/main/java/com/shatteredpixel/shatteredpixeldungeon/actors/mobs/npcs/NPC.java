@@ -22,38 +22,30 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 
 public abstract class NPC extends Mob {
+
 	{
 		HP = HT = 1;
 		EXP = 0;
-		properties.add(Property.NPC);
+
 		alignment = Alignment.NEUTRAL;
 		state = PASSIVE;
 	}
-	protected void throwItem() {
-		Heap heap = Dungeon.level.heaps.get( pos );
-		if (heap != null && heap.type == Heap.Type.HEAP) {
-			int n;
-			do {
-				n = pos + PathFinder.NEIGHBOURS8[Random.Int( 8 )];
-			} while (!Dungeon.level.passable[n] && !Dungeon.level.avoid[n]);
-			Dungeon.level.drop( heap.pickUp(), n ).sprite.drop( pos );
+
+	@Override
+	protected boolean act() {
+		if (Dungeon.level.heroFOV[pos]){
+			Bestiary.setSeen(getClass());
 		}
+
+		return super.act();
 	}
+
 	@Override
 	public void beckon( int cell ) {
 	}
-
-	@Override
-	public boolean add(Buff buff ) {
-		//lee();
-		return false;
-	}
-
+	
 }
