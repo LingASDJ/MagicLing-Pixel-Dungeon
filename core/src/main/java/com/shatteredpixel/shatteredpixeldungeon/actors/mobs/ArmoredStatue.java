@@ -136,7 +136,11 @@ public class ArmoredStatue extends Statue {
 	@Override
 	public CharSprite sprite() {
 		CharSprite sprite = super.sprite();
-		((StatueSprite)sprite).setArmor(armor.tier);
+		if (armor != null) {
+			((StatueSprite) sprite).setArmor(armor.tier);
+		} else {
+			((StatueSprite) sprite).setArmor(3);
+		}
 		return sprite;
 	}
 
@@ -164,7 +168,11 @@ public class ArmoredStatue extends Statue {
 
 	@Override
 	public String description() {
-		return Messages.get(this, "desc", weapon.name(), armor.name());
+		String desc = Messages.get(this, "desc");
+		if (weapon != null && armor != null){
+			desc += "\n\n" + Messages.get(this, "desc_arm_wep", weapon.name(), armor.name());
+		}
+		return desc;
 	}
 
 }

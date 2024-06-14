@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.spical.GooMob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -140,15 +139,6 @@ public class WandOfLivingEarth extends DamageWand {
 					guardian.pos = closest;
 					GameScene.add(guardian, 1);
 					Dungeon.level.occupyCell(guardian);
-
-//					if(Statistics.RandMode){
-//						Mob gooFriend = new GooMob();
-//						gooFriend.alignment = Char.Alignment.ALLY;
-//						gooFriend.pos = closest;
-//						GameScene.add(gooFriend);
-//					}
-
-
 				}
 
 				if (ch.alignment == Char.Alignment.ENEMY || ch.buff(Amok.class) != null) {
@@ -378,14 +368,20 @@ public class WandOfLivingEarth extends DamageWand {
 
 		@Override
 		public String description() {
-			if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-				return Messages.get(this, "desc", wandLevel, 2 + wandLevel);
-			} else {
-				return Messages.get(this, "desc", wandLevel, 3 + 3*wandLevel);
+			String desc = Messages.get(this, "desc");
+
+			if (Actor.chars().contains(this)) {
+				if (Dungeon.isChallenged(Challenges.NO_ARMOR)) {
+					desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, 2 + wandLevel);
+				} else {
+					desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, 3 + 3 * wandLevel);
+				}
 			}
 
+			return desc;
+			
 		}
-
+		
 		{
 			immunities.add( AllyBuff.class );
 		}
@@ -416,12 +412,6 @@ public class WandOfLivingEarth extends DamageWand {
 					Dungeon.hero.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + wandLevel/2);
 					destroy();
 					sprite.die();
-					for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
-						if (mob instanceof GooMob) {
-							mob.die(true);
-							break;
-						}
-					}
 					return true;
 				} else {
 					return super.act(enemyInFOV, justAlerted);
