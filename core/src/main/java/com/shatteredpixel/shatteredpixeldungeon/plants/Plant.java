@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -84,6 +85,7 @@ public abstract class Plant implements Bundlable {
 
 		wither();
 		activate( ch );
+		Bestiary.trackEncounter(getClass());
 	}
 	
 	public abstract void activate( Char ch );
