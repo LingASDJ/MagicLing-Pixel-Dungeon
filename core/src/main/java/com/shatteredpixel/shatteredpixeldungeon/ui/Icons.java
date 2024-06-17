@@ -22,7 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -39,7 +39,6 @@ public enum Icons {
 	CHANGES,
 	PREFS,
 	SHPX,
-	THANKS,
 
 	//rankings and hero select icons, spacing for 16x16
 	STAIRS,
@@ -48,14 +47,6 @@ public enum Icons {
 	ROGUE,
 	HUNTRESS,
 	DUELIST,
-
-	LEFTBUTTON,
-	RIGHTBUTTON,
-
-	SEED,
-	LEFTARROW,
-	RIGHTARROW,
-	CALENDAR,
 
 	//grey icons, mainly used for buttons, spacing for 16x16
 	EXIT,
@@ -66,30 +57,38 @@ public enum Icons {
 	AUDIO,
 	LANGS,
 	CONTROLLER,
+	KEYBOARD,
 	STATS,
 	CHALLENGE_OFF,
 	CHALLENGE_ON,
-
 	RENAME_OFF,
 	RENAME_ON,
+	SEED,
+	LEFTARROW,
+	RIGHTARROW,
+	CALENDAR,
 
 	//misc icons, mainly used for buttons, spacing for 16x16 until the smaller icons at the end
 	UNCHECKED,
 	CHECKED,
 	CLOSE,
 	PLUS,
+	REPEAT,
 	ARROW,
 	INFO,
 	WARNING,
 	BACKPACK_LRG,
 	TALENT,
 	MAGNIFY,
+	SNAKE,
 	BUFFS,
 	ENERGY,
+	COPY,
+	PASTE,
+	CATALOG,
 	COIN_SML,
 	ENERGY_SML,
 	BACKPACK,
-	B_BACKPACK,
 	SEED_POUCH,
 	SCROLL_HOLDER,
 	WAND_HOLSTER,
@@ -103,7 +102,7 @@ public enum Icons {
 	SLEEP,
 	ALERT,
 	LOST,
-	DEPTH,
+	DEPTH,      //depth icons have two variants, for regular and seeded runs
 	DEPTH_CHASM,
 	DEPTH_WATER,
 	DEPTH_GRASS,
@@ -111,30 +110,7 @@ public enum Icons {
 	DEPTH_LARGE,
 	DEPTH_TRAPS,
 	DEPTH_SECRETS,
-
-	DEPTH_BTRAPS,
-
-	DEPTH_WELLS,
-
-	DEPTH_LINK_ROOM,
-
-	DEPTH_DIED,
-
-	DEPTH_BIGROOM,
-
-	DEPTH_BLOOD,
-
-	DEPTH_SKYCITY,
-	//Base on SHPD 2.4.2
-	REPEAT,
-	MISSON_ON,
-	MISSON_OFF,
-
 	CHAL_COUNT,
-
-	HAPPY_ICON,
-
-	LOVE,
 
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
@@ -144,20 +120,14 @@ public enum Icons {
 	KRISTJAN,
 	CUBE_CODE,
 	PURIGRO,
-	ARCNOR,
-
-	PASTE,
-
-	COPY,
-
-	SKIP;
+	ARCNOR;
 
 	public Image get() {
 		return get( this );
 	}
-
+	
 	public static Image get( Icons type ) {
-		Image icon = new Image(SPDSettings.ClassUI() ? Assets.Interfaces.ICONS : Assets.Interfaces.ICONS_NORMAL );
+		Image icon = new Image( Assets.Interfaces.ICONS );
 		switch (type) {
 
 			case ENTER:
@@ -184,12 +154,6 @@ public enum Icons {
 			case SHPX:
 				icon.frame( icon.texture.uvRectBySize( 119, 0, 16, 16 ) );
 				break;
-			case THANKS:
-				icon.frame( icon.texture.uvRectBySize( 135, 0, 16, 16 ) );
-				break;
-			case DUELIST:
-				icon.frame( icon.texture.uvRectBySize( 176, 0, 16, 16 ));
-				break;
 
 			case STAIRS:
 				icon.frame( icon.texture.uvRectBySize( 0, 16, 13, 16 ) );
@@ -206,20 +170,8 @@ public enum Icons {
 			case HUNTRESS:
 				icon.frame( icon.texture.uvRectBySize( 64, 16, 16, 16 ) );
 				break;
-			case LEFTBUTTON:
-				icon.frame( icon.texture.uvRectBySize( 80, 16, 9, 9 ) );
-				break;
-			case RIGHTBUTTON:
-				icon.frame( icon.texture.uvRectBySize( 97, 16, 9, 9 ) );
-				break;
-			case PASTE:
-				icon.frame( icon.texture.uvRectBySize( 113, 16, 13, 13 ) );
-				break;
-			case COPY:
-				icon.frame( icon.texture.uvRectBySize( 129, 16, 13, 13 ) );
-				break;
-			case SKIP:
-				icon.frame( icon.texture.uvRectBySize( 145, 16, 25, 16 ) );
+			case DUELIST:
+				icon.frame( icon.texture.uvRectBySize( 80, 16, 13, 14 ) );
 				break;
 
 			case EXIT:
@@ -238,7 +190,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 32, 32, 16, 12 ) );
 				break;
 			case DATA:
-				icon.frame( icon.texture.uvRectBySize( 48, 32, 16, 15 ) );
+				icon.frame( icon.texture.uvRectBySize( 48, 32, 14, 15 ) );
 				break;
 			case AUDIO:
 				icon.frame( icon.texture.uvRectBySize( 64, 32, 14, 14 ) );
@@ -249,33 +201,37 @@ public enum Icons {
 			case CONTROLLER:
 				icon.frame( icon.texture.uvRectBySize( 96, 32, 16, 12 ) );
 				break;
+			case KEYBOARD:
+				icon.frame( icon.texture.uvRectBySize( 112, 32, 15, 12 ) );
+				break;
 			case STATS:
-				icon.frame( icon.texture.uvRectBySize( 112, 32, 16, 13 ) );
+				icon.frame( icon.texture.uvRectBySize( 128, 32, 16, 13 ) );
 				break;
 			case CHALLENGE_OFF:
-				icon.frame( icon.texture.uvRectBySize( 128, 32, 14, 12 ) );
+				icon.frame( icon.texture.uvRectBySize( 144, 32, 15, 12 ) );
 				break;
 			case CHALLENGE_ON:
-				icon.frame( icon.texture.uvRectBySize( 144, 32, 14, 12 ) );
+				icon.frame( icon.texture.uvRectBySize( 160, 32, 15, 12 ) );
 				break;
 			case RENAME_OFF:
-				icon.frame( icon.texture.uvRectBySize( 160, 32, 15, 14 ) );
-				break;
-			case RENAME_ON:
 				icon.frame( icon.texture.uvRectBySize( 176, 32, 15, 14 ) );
 				break;
-			case LEFTARROW:
-				icon.frame( icon.texture.uvRectBySize( 192, 32, 14, 8 ) );
-				break;
-			case RIGHTARROW:
-				icon.frame( icon.texture.uvRectBySize( 208, 32, 14, 8 ) );
+			case RENAME_ON:
+				icon.frame( icon.texture.uvRectBySize( 192, 32, 15, 14 ) );
 				break;
 			case SEED:
 				icon.frame( icon.texture.uvRectBySize( 208, 32, 15, 10 ) );
 				break;
+			case LEFTARROW:
+				icon.frame( icon.texture.uvRectBySize( 224, 32, 14, 9 ) );
+				break;
+			case RIGHTARROW:
+				icon.frame( icon.texture.uvRectBySize( 240, 32, 14, 9 ) );
+				break;
 			case CALENDAR:
 				icon.frame( icon.texture.uvRectBySize( 240, 16, 15, 12 ) );
 				break;
+
 			case UNCHECKED:
 				icon.frame( icon.texture.uvRectBySize( 0, 48, 12, 12 ) );
 				break;
@@ -288,53 +244,65 @@ public enum Icons {
 			case PLUS:
 				icon.frame( icon.texture.uvRectBySize( 48, 48, 11, 11 ) );
 				break;
-			case ARROW:
+			case REPEAT:
 				icon.frame( icon.texture.uvRectBySize( 64, 48, 11, 11 ) );
 				break;
-			case INFO:
-				icon.frame( icon.texture.uvRectBySize( 80, 48, 14, 14 ) );
+			case ARROW:
+				icon.frame( icon.texture.uvRectBySize( 80, 48, 11, 11 ) );
 				break;
-			case WARNING:
+			case INFO:
 				icon.frame( icon.texture.uvRectBySize( 96, 48, 14, 14 ) );
 				break;
+			case WARNING:
+				icon.frame( icon.texture.uvRectBySize( 112, 48, 14, 14 ) );
+				break;
 			case BACKPACK_LRG:
-				icon.frame( icon.texture.uvRectBySize( 112, 48, 16, 16 ) );
+				icon.frame( icon.texture.uvRectBySize( 128, 48, 16, 16 ) );
 				break;
 			case TALENT:
-				icon.frame( icon.texture.uvRectBySize( 128, 48, 13, 13 ) );
+				icon.frame( icon.texture.uvRectBySize( 144, 48, 13, 13 ) );
 				break;
 			case MAGNIFY:
-				icon.frame( icon.texture.uvRectBySize( 144, 48, 14, 14 ) );
+				icon.frame( icon.texture.uvRectBySize( 160, 48, 14, 14 ) );
+				break;
+			case SNAKE:
+				icon.frame( icon.texture.uvRectBySize( 176, 48,  9, 13 ) );
 				break;
 			case BUFFS:
-				icon.frame( icon.texture.uvRectBySize( 160, 48, 16, 15 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 48, 16, 15 ) );
 				break;
 			case ENERGY:
-				icon.frame( icon.texture.uvRectBySize( 176, 48, 16, 16 ) );
+				icon.frame( icon.texture.uvRectBySize( 208, 48, 16, 16 ) );
+				break;
+			case COPY:
+				icon.frame( icon.texture.uvRectBySize( 224, 48, 13, 13 ) );
+				break;
+			case PASTE:
+				icon.frame( icon.texture.uvRectBySize( 240, 48, 13, 13 ) );
+				break;
+			case CATALOG:
+				icon.frame( icon.texture.uvRectBySize( 240, 64, 13, 16 ) );
 				break;
 			case COIN_SML:
-				icon.frame( icon.texture.uvRectBySize( 192, 48, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 80, 7, 7 ) );
 				break;
 			case ENERGY_SML:
-				icon.frame( icon.texture.uvRectBySize( 192, 56, 8, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 88, 8, 7 ) );
 				break;
 			case BACKPACK:
-				icon.frame( icon.texture.uvRectBySize( 201, 48, 10, 10 ) );
-				break;
-			case B_BACKPACK:
-				icon.frame( icon.texture.uvRectBySize( 201, 59, 10, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 201, 80, 10, 10 ) );
 				break;
 			case SCROLL_HOLDER:
-				icon.frame( icon.texture.uvRectBySize( 211, 48, 10, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 211, 80, 10, 10 ) );
 				break;
 			case SEED_POUCH:
-				icon.frame( icon.texture.uvRectBySize( 221, 48, 10, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 221, 80, 10, 10 ) );
 				break;
 			case WAND_HOLSTER:
-				icon.frame( icon.texture.uvRectBySize( 231, 48, 10, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 231, 80, 10, 10 ) );
 				break;
 			case POTION_BANDOLIER:
-				icon.frame( icon.texture.uvRectBySize( 241, 48, 10, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 241, 80, 10, 10 ) );
 				break;
 
 			case TARGET:
@@ -359,69 +327,33 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 40, 72, 8, 8 ) );
 				break;
 			case DEPTH:
-				icon.frame( icon.texture.uvRectBySize( 48, 64, 6, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 48, 64 + runTypeOfs(), 6, 7 ) );
 				break;
 			case DEPTH_CHASM:
-				icon.frame( icon.texture.uvRectBySize( 56, 64, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 56, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case DEPTH_WATER:
-				icon.frame( icon.texture.uvRectBySize( 64, 64, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 64, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case DEPTH_GRASS:
-				icon.frame( icon.texture.uvRectBySize( 72, 64, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 72, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case DEPTH_DARK:
-				icon.frame( icon.texture.uvRectBySize( 80, 64, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 80, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case DEPTH_LARGE:
-				icon.frame( icon.texture.uvRectBySize( 88, 64, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 88, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case DEPTH_TRAPS:
-				icon.frame( icon.texture.uvRectBySize( 96, 64, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 96, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case DEPTH_SECRETS:
-				icon.frame( icon.texture.uvRectBySize( 104, 64, 7, 7 ) );
-				break;
-			case DEPTH_BTRAPS:
-				icon.frame( icon.texture.uvRectBySize( 112, 64, 7, 7 ) );
-				break;
-			case DEPTH_WELLS:
-				icon.frame( icon.texture.uvRectBySize( 120, 64, 7, 7 ) );
-				break;
-			case DEPTH_LINK_ROOM:
-				icon.frame( icon.texture.uvRectBySize( 128, 64, 7, 7 ) );
-				break;
-			case DEPTH_DIED:
-				icon.frame( icon.texture.uvRectBySize( 136, 64, 7, 7 ) );
-				break;
-			case DEPTH_BIGROOM:
-				icon.frame( icon.texture.uvRectBySize( 80, 72, 7, 7 ) );
-				break;
-			case DEPTH_BLOOD:
-				icon.frame( icon.texture.uvRectBySize( 88, 72, 7, 7 ) );
-				break;
-			case DEPTH_SKYCITY:
-				icon.frame( icon.texture.uvRectBySize( 96, 72, 7, 7 ) );
-				break;
-			case MISSON_OFF:
-				icon.frame( icon.texture.uvRectBySize( 144, 64, 32, 14 ) );
-				break;
-			case REPEAT:
-				icon.frame( icon.texture.uvRectBySize( 192, 80, 11, 11 ) );
-				break;
-			case MISSON_ON:
-				icon.frame( icon.texture.uvRectBySize( 144, 80, 32, 14 ) );
+				icon.frame( icon.texture.uvRectBySize( 104, 64 + runTypeOfs(), 7, 7 ) );
 				break;
 			case CHAL_COUNT:
-				icon.frame( icon.texture.uvRectBySize( 48, 72, 7, 7 ) );
+				icon.frame( icon.texture.uvRectBySize( 112, 64, 7, 7 ) );
 				break;
-			case HAPPY_ICON:
-				icon.frame( icon.texture.uvRectBySize( 56, 72, 7, 5 ) );
-				break;
-			case LOVE:
-				icon.frame( icon.texture.uvRectBySize( 65, 72, 10, 6 ) );
-				break;
-
+		
 			case LIBGDX:
 				icon.frame( icon.texture.uvRectBySize( 0, 96, 16, 13 ) );
 				break;
@@ -458,18 +390,32 @@ public enum Icons {
 		return icon;
 	}
 
+	private static int runTypeOfs(){
+		if (Dungeon.daily){
+			if (Dungeon.dailyReplay){
+				return 24;
+			} else {
+				return 16;
+			}
+		} else if (!Dungeon.customSeedText.isEmpty()){
+			return 8;
+		} else {
+			return 0;
+		}
+	}
+	
 	public static Image get( HeroClass cl ) {
 		switch (cl) {
 			case WARRIOR:
-				return get( WARRIOR );
+				return get( Icons.WARRIOR );
 			case MAGE:
-				return get( MAGE );
+				return get( Icons.MAGE );
 			case ROGUE:
-				return get( ROGUE );
+				return get( Icons.ROGUE );
 			case HUNTRESS:
-				return get( HUNTRESS );
+				return get( Icons.HUNTRESS );
 			case DUELIST:
-				return get( DUELIST );
+				return get( Icons.DUELIST );
 			default:
 				return null;
 		}
@@ -491,22 +437,8 @@ public enum Icons {
 				return get(DEPTH_LARGE);
 			case TRAPS:
 				return get(DEPTH_TRAPS);
-			case BIGTRAP:
-				return get(DEPTH_BTRAPS);
-			case THREEWELL:
-				return get(DEPTH_WELLS);
-			case DIEDROOM:
-				return get(DEPTH_DIED);
-			case LINKROOM:
-				return get(DEPTH_LINK_ROOM);
 			case SECRETS:
 				return get(DEPTH_SECRETS);
-			case SKYCITY:
-				return get(DEPTH_SKYCITY);
-			case BIGROOMS:
-				return get(DEPTH_BIGROOM);
-			case BLOOD:
-				return get(DEPTH_BLOOD);
 		}
 	}
 }
