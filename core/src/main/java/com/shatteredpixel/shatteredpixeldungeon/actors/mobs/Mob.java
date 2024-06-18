@@ -987,7 +987,8 @@ public abstract class Mob extends Char {
 				Statistics.enemiesSlain++;
 				Badges.validateMonstersSlain();
 				Statistics.qualifiedForNoKilling = false;
-				Bestiary.trackEncounter(getClass());
+				Bestiary.setSeen(getClass());
+				Bestiary.countEncounter(getClass());
 
 				AscensionChallenge.processEnemyKill(this);
 

@@ -36,18 +36,17 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCorrosiveGas;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonKingBreath;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShroudingFog;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.AikeLaier;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -56,7 +55,6 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
-import com.shatteredpixel.shatteredpixeldungeon.plants.SkyBlueFireBloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
@@ -80,11 +78,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class Potion extends Item {
-	
-	@Override
-	public String anonymousName() {
-		return Messages.get(this, color);
-	}
 
 	public static final String AC_DRINK = "DRINK";
 	
@@ -107,32 +100,27 @@ public class Potion extends Item {
 			put("charcoal",ItemSpriteSheet.POTION_CHARCOAL);
 			put("silver",ItemSpriteSheet.POTION_SILVER);
 			put("ivory",ItemSpriteSheet.POTION_IVORY);
-
-			put("skyblue",ItemSpriteSheet.POTION_SKYBLUE);
-			put("deepyellow",ItemSpriteSheet.POTION_DEEPYELLOW);
 		}
 	};
 
-	public static final HashSet<Class<?extends Potion>> mustThrowPots = new HashSet<>();
+	protected static final HashSet<Class<?extends Potion>> mustThrowPots = new HashSet<>();
 	static{
 		mustThrowPots.add(PotionOfToxicGas.class);
 		mustThrowPots.add(PotionOfLiquidFlame.class);
 		mustThrowPots.add(PotionOfParalyticGas.class);
 		mustThrowPots.add(PotionOfFrost.class);
-		mustThrowPots.add(PotionOfLiquidFlameX.class);
+		
 		//exotic
 		mustThrowPots.add(PotionOfCorrosiveGas.class);
 		mustThrowPots.add(PotionOfSnapFreeze.class);
 		mustThrowPots.add(PotionOfShroudingFog.class);
 		mustThrowPots.add(PotionOfStormClouds.class);
-		mustThrowPots.add(PotionOfDragonKingBreath.class);
-		//also all brews, hardcoded
+		
+		//also all brews except unstable, hardcoded
 	}
 	
-	public static final HashSet<Class<?extends Potion>> canThrowPots = new HashSet<>();
+	protected static final HashSet<Class<?extends Potion>> canThrowPots = new HashSet<>();
 	static{
-		//canThrowPots.add(AlchemicalCatalyst.class);
-		
 		canThrowPots.add(PotionOfPurity.class);
 		canThrowPots.add(PotionOfLevitation.class);
 		
@@ -149,7 +137,6 @@ public class Potion extends Item {
 
 	//affects how strongly on-potion talents trigger from this potion
 	protected float talentFactor = 1;
-
 	//the chance (0-1) of whether on-potion talents trigger from this potion
 	protected float talentChance = 1;
 	
@@ -289,7 +276,7 @@ public class Potion extends Item {
 		}
 	}
 	
-	public void drink(Hero hero) {
+	protected void drink( Hero hero ) {
 		
 		detach( hero.belongings.backpack );
 		
@@ -301,8 +288,11 @@ public class Potion extends Item {
 		
 		hero.sprite.operate( hero.pos );
 
-		if (!anonymous){
-			Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
+		if (!anonymous) {
+			Catalog.countUse(getClass());
+			if (Random.Float() < talentChance) {
+				Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
+			}
 		}
 	}
 	
@@ -314,11 +304,17 @@ public class Potion extends Item {
 			
 		} else  {
 
-			Dungeon.level.pressCell( cell );
+			//aqua brew specifically doesn't press cells, so it can disarm traps
+			if (!(this instanceof AquaBrew)){
+				Dungeon.level.pressCell( cell );
+			}
 			shatter( cell );
 
-			if (!anonymous){
-				Talent.onPotionUsed(curUser, cell, talentFactor);
+			if (!anonymous) {
+				Catalog.countUse(getClass());
+				if (Random.Float() < talentChance) {
+					Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
+				}
 			}
 			
 		}
@@ -469,9 +465,6 @@ public class Potion extends Item {
 			types.put(Stormvine.Seed.class,     PotionOfLevitation.class);
 			types.put(Sungrass.Seed.class,      PotionOfHealing.class);
 			types.put(Swiftthistle.Seed.class,  PotionOfHaste.class);
-
-			types.put(SkyBlueFireBloom.Seed.class,     PotionOfLiquidFlameX.class);
-			types.put(AikeLaier.Seed.class, PotionOfLightningShiledX.class);
 		}
 		
 		@Override

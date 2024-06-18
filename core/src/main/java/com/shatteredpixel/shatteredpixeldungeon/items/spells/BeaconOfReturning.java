@@ -26,11 +26,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPassage;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -51,29 +52,10 @@ public class BeaconOfReturning extends Spell {
 	
 	{
 		image = ItemSpriteSheet.RETURN_BEACON;
-		defaultAction = AC_CAST;
+
+		talentChance = 1/(float)Recipe.OUT_QUANTITY;
 	}
-
-	@Override
-	public String defaultAction() {
-		if( Dungeon.branch != 0){
-			return AC_THROW;
-		} else {
-			return AC_CAST;
-		}
-	}
-
-	@Override
-	public ArrayList<String> actions(Hero hero) {
-		if( Dungeon.branch != 0){
-			return new ArrayList<>(); //yup, no dropping this one
-		} else {
-			return super.actions(hero);
-		}
-
-	}
-
-
+	
 	public int returnDepth	= -1;
 	public int returnBranch	= 0;
 	public int returnPos;
@@ -131,38 +113,6 @@ public class BeaconOfReturning extends Spell {
 		Sample.INSTANCE.play( Assets.Sounds.BEACON );
 		updateQuickslot();
 	}
-
-	@Override
-	public void execute( final Hero hero, String action ) {
-
-		GameScene.cancel();
-		curUser = hero;
-		curItem = this;
-
-		if (action.equals( AC_DROP )) {
-
-			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
-				doDrop(hero);
-			}
-
-		} else if (action.equals( AC_THROW )) {
-
-			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
-				doThrow(hero);
-			}
-
-		} else if (action.equals( AC_CAST )) {
-
-			if (curUser.buff(MagicImmune.class) != null){
-				GLog.w( Messages.get(this, "no_magic") );
-			} else if (!Dungeon.interfloorTeleportAllowed()) {
-				GLog.n( Messages.get(this, "preventing_2") );
-			} else {
-				onCast(hero);
-			}
-
-		}
-	}
 	
 	private void returnBeacon( Hero hero ){
 		
@@ -204,7 +154,10 @@ public class BeaconOfReturning extends Spell {
 
 		} else {
 
-
+			if (!Dungeon.interfloorTeleportAllowed()) {
+				GLog.w( Messages.get(this, "preventing") );
+				return;
+			}
 
 			//cannot return to mining level
 			if (returnDepth >= 11 && returnDepth <= 14 && returnBranch == 1){
@@ -221,6 +174,10 @@ public class BeaconOfReturning extends Spell {
 			Game.switchScene( InterlevelScene.class );
 		}
 		detach(hero.belongings.backpack);
+		Catalog.countUse(getClass());
+		if (Random.Float() < talentChance){
+			Talent.onScrollUsed(curUser, curUser.pos, talentFactor);
+		}
 	}
 	
 	@Override
@@ -263,11 +220,17 @@ public class BeaconOfReturning extends Spell {
 	
 	@Override
 	public int value() {
-		//prices of ingredients, divided by output quantity, rounds down
-		return (int)((50 + 40) * (quantity/5f));
+		return (int)(60 * (quantity/(float)Recipe.OUT_QUANTITY));
+	}
+
+	@Override
+	public int energyVal() {
+		return (int)(12 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
+
+		private static final int OUT_QUANTITY = 5;
 		
 		{
 			inputs =  new Class[]{ScrollOfPassage.class};
@@ -276,7 +239,7 @@ public class BeaconOfReturning extends Spell {
 			cost = 12;
 			
 			output = BeaconOfReturning.class;
-			outQuantity = 5;
+			outQuantity = OUT_QUANTITY;
 		}
 		
 	}

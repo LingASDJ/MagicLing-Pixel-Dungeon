@@ -33,22 +33,19 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLightningShiledX;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlameX;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfLightStromCloud;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant.Seed;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.utils.Bundle;
@@ -136,8 +133,6 @@ public class Blandfruit extends Food {
 		if (potionAttrib instanceof PotionOfPurity)         return Messages.get(this, "dreamfruit");
 		if (potionAttrib instanceof PotionOfExperience)     return Messages.get(this, "starfruit");
 		if (potionAttrib instanceof PotionOfHaste)          return Messages.get(this, "swiftfruit");
-		if (potionAttrib instanceof PotionOfLiquidFlameX)          return Messages.get(this, "halofruit");
-		if (potionAttrib instanceof PotionOfLightStromCloud)          return Messages.get(this, "lightfruit");
 		return super.name();
 	}
 
@@ -150,8 +145,7 @@ public class Blandfruit extends Food {
 			if (potionAttrib instanceof PotionOfFrost
 				|| potionAttrib instanceof PotionOfLiquidFlame
 				|| potionAttrib instanceof PotionOfToxicGas
-				|| potionAttrib instanceof PotionOfParalyticGas
-					||potionAttrib instanceof PotionOfLiquidFlameX) {
+				|| potionAttrib instanceof PotionOfParalyticGas) {
 				desc += Messages.get(this, "desc_throw");
 			} else {
 				desc += Messages.get(this, "desc_eat");
@@ -188,10 +182,6 @@ public class Blandfruit extends Food {
 		if (potionAttrib instanceof PotionOfPurity)         potionGlow = new ItemSprite.Glowing( 0xC152AA );
 		if (potionAttrib instanceof PotionOfExperience)     potionGlow = new ItemSprite.Glowing( 0x404040 );
 		if (potionAttrib instanceof PotionOfHaste)          potionGlow = new ItemSprite.Glowing( 0xCCBB00 );
-		if (potionAttrib instanceof PotionOfLiquidFlameX)          potionGlow = new ItemSprite.Glowing( 0x00ffff );
-		if (potionAttrib instanceof PotionOfLightningShiledX)          potionGlow = new ItemSprite.Glowing( 0xFF4500 );
-
-		if (potionAttrib instanceof PotionOfLightStromCloud)          potionGlow = new ItemSprite.Glowing(Window.CYELLOW);
 
 		return this;
 	}
@@ -208,9 +198,9 @@ public class Blandfruit extends Food {
 				potionAttrib instanceof PotionOfParalyticGas ||
 				potionAttrib instanceof PotionOfFrost ||
 				potionAttrib instanceof PotionOfLevitation ||
-				potionAttrib instanceof PotionOfPurity
-				||potionAttrib instanceof PotionOfLiquidFlameX) {
+				potionAttrib instanceof PotionOfPurity) {
 
+			Catalog.countUse(getClass());
 			potionAttrib.shatter( cell );
 			Dungeon.level.drop(new Chunks(), cell).sprite.drop();
 			

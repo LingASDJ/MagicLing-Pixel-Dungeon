@@ -21,21 +21,19 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.Statistics.TPDoorDieds;
-import static com.shatteredpixel.shatteredpixeldungeon.Statistics.crivusfruitslevel2;
-import static com.shatteredpixel.shatteredpixeldungeon.Statistics.crivusfruitslevel3;
-
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DragonGirlBlue;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ItemButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -46,17 +44,15 @@ public class WndResurrect extends Window {
 	private static final int WIDTH		= 120;
 	private static final int BTN_HEIGHT	= 20;
 	private static final float GAP		= 2;
-	private static final float BTN_GAP  = 5;
+	private static final float BTN_GAP  = 10;
 
-	private static final int BTN_SIZE	= 24;
+	private static final int BTN_SIZE	= 36;
 
 	public static Object instance;
 
-	private WndBlacksmith.ItemButtonX btnItem1;
-	private WndBlacksmith.ItemButtonX btnItem2;
-	private WndBlacksmith.ItemButtonX btnItem3;
-	private WndBlacksmith.ItemButtonX btnItem4;
-	private WndBlacksmith.ItemButtonX btnPressed;
+	private ItemButton btnItem1;
+	private ItemButton btnItem2;
+	private ItemButton btnPressed;
 
 	RedButton btnContinue;
 	
@@ -71,126 +67,78 @@ public class WndResurrect extends Window {
 		titlebar.label( Messages.titleCase(Messages.get(this, "title")) );
 		titlebar.setRect( 0, 0, WIDTH, 0 );
 		add( titlebar );
-
+		
 		RenderedTextBlock message = PixelScene.renderTextBlock(Messages.get(this, "message"), 6 );
 		message.maxWidth(WIDTH);
 		message.setPos(0, titlebar.bottom() + GAP);
 		add( message );
 
-		btnItem1 = new WndBlacksmith.ItemButtonX() {
+		btnItem1 = new ItemButton() {
 			@Override
 			protected void onClick() {
 				btnPressed = btnItem1;
 				GameScene.selectItem( itemSelector );
 			}
 		};
-		btnItem1.item(hero.belongings.weapon());
-		btnItem1.setRect( (WIDTH - BTN_GAP) / 4 - BTN_SIZE, message.bottom() + BTN_GAP, BTN_SIZE, BTN_SIZE );
+		btnItem1.item(Dungeon.hero.belongings.weapon());
+		btnItem1.setRect( (WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.bottom() + BTN_GAP, BTN_SIZE, BTN_SIZE );
 		add( btnItem1 );
 
-		btnItem2 = new WndBlacksmith.ItemButtonX() {
+		btnItem2 = new ItemButton() {
 			@Override
 			protected void onClick() {
 				btnPressed = btnItem2;
 				GameScene.selectItem( itemSelector );
 			}
 		};
-		btnItem2.item(hero.belongings.armor());
+		btnItem2.item(Dungeon.hero.belongings.armor());
 		btnItem2.setRect( btnItem1.right() + BTN_GAP, btnItem1.top(), BTN_SIZE, BTN_SIZE );
 		add( btnItem2 );
-
-		Item item3 = null, item4 =null;
-		if(hero.belongings.artifact() != null){
-			item3 = hero.belongings.artifact();
-		}else if(hero.belongings.misc() != null){
-			item3 = hero.belongings.misc();
-		}else {
-			item3 = hero.belongings.ring();
-		}
-		if( hero.belongings.misc() != null && item3!=hero.belongings.misc() ){
-			item4 = hero.belongings.misc();
-		}else if(item3!=hero.belongings.ring()){
-			item4 = hero.belongings.ring();
-		}
-
-		btnItem3 = new WndBlacksmith.ItemButtonX() {
-			@Override
-			protected void onClick() {
-				btnPressed = btnItem3;
-				GameScene.selectItem( itemSelector );
-			}
-		};
-		btnItem3.item(item3);
-		btnItem3.setRect( btnItem2.right() + BTN_GAP, btnItem2.top(), BTN_SIZE, BTN_SIZE );
-		add( btnItem3 );
-
-
-		btnItem4 = new WndBlacksmith.ItemButtonX() {
-			@Override
-			protected void onClick() {
-				btnPressed = btnItem4;
-				GameScene.selectItem( itemSelector );
-			}
-		};
-		btnItem4.item(item4);
-		btnItem4.setRect( btnItem3.right() + BTN_GAP, btnItem3.top(), BTN_SIZE, BTN_SIZE );
-		add( btnItem4);
 		
 		btnContinue = new RedButton( Messages.get(this, "confirm") ) {
 			@Override
 			protected void onClick() {
-				hide();
-				
-				Statistics.ankhsUsed++;
-
-				ankh.detach(hero.belongings.backpack);
-
-				if (btnItem1.item != null){
-					btnItem1.item.keptThoughLostInvent = true;
-				}
-				if (btnItem2.item != null){
-					btnItem2.item.keptThoughLostInvent = true;
-				}
-				if (btnItem3.item != null){
-					btnItem3.item.keptThoughLostInvent = true;
-				}
-				if (btnItem4.item != null){
-					btnItem4.item.keptThoughLostInvent = true;
-				}
-
-				if(Statistics.bossRushMode){
-					//克里弗斯之果二阶段死亡的时候的给予重新评估
-					if(crivusfruitslevel2){
-						crivusfruitslevel2 = false;
-					}
-					if(crivusfruitslevel3){
-						crivusfruitslevel3 = false;
-					}
+				if (btnItem1.item() == null || btnItem2.item() == null){
+					GameScene.show(new WndOptions(Icons.WARNING.get(),
+							Messages.get(WndResurrect.class, "warn_title"),
+							Messages.get(WndResurrect.class, "warn_body"),
+							Messages.get(WndResurrect.class, "warn_yes"),
+							Messages.get(WndResurrect.class, "warn_no")){
+						@Override
+						protected void onSelect(int index) {
+							if (index == 0){
+								resurrect(ankh);
+							}
+						}
+					});
 				} else {
-					//克里弗斯之果二阶段死亡的时候的给予重新评估
-					if(crivusfruitslevel2){
-						crivusfruitslevel2 = false;
-					}
+					resurrect( ankh );
 				}
-
-
-				//拟态王二阶段死亡的时候给予重新评估
-				if(TPDoorDieds){
-					TPDoorDieds = false;
-				}
-
-				DragonGirlBlue.Quest.four_used_points = 0;
-
-				Statistics.sakaBackStage = 0;
-
-				InterlevelScene.mode = InterlevelScene.Mode.RESURRECT;
-				Game.switchScene( InterlevelScene.class );
 			}
 		};
 		btnContinue.setRect( 0, btnItem1.bottom() + BTN_GAP, WIDTH, BTN_HEIGHT );
 		add( btnContinue );
 
 		resize( WIDTH, (int)btnContinue.bottom() );
+	}
+
+	private void resurrect( final Ankh ankh ){
+		hide();
+
+		Statistics.ankhsUsed++;
+		Catalog.countUse(Ankh.class);
+
+		ankh.detach(Dungeon.hero.belongings.backpack);
+
+		if (btnItem1.item() != null){
+			btnItem1.item().keptThoughLostInvent = true;
+		}
+		if (btnItem2.item() != null){
+			btnItem2.item().keptThoughLostInvent = true;
+		}
+
+		InterlevelScene.mode = InterlevelScene.Mode.RESURRECT;
+		Game.switchScene( InterlevelScene.class );
 	}
 
 	protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
@@ -211,19 +159,11 @@ public class WndResurrect extends Window {
 			if (item != null && btnPressed.parent != null) {
 				btnPressed.item( item );
 
-				if (btnItem1.item == btnItem2.item){
+				if (btnItem1.item() == btnItem2.item()){
 					if (btnPressed == btnItem1){
 						btnItem2.clear();
 					} else {
 						btnItem1.clear();
-					}
-				}
-
-				if (btnItem3.item == btnItem4.item){
-					if (btnPressed == btnItem3){
-						btnItem4.clear();
-					} else {
-						btnItem3.clear();
 					}
 				}
 

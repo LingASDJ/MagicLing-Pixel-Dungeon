@@ -21,8 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -32,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.custom.CustomArmor;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
@@ -54,23 +52,11 @@ public class KingsCrown extends Item {
 
 		unique = true;
 	}
-
-	@Override
-	public String defaultAction() {
-		if((hero.belongings.armor instanceof CustomArmor)){
-			return AC_THROW;
-		} else {
-			return super.defaultAction();
-		}
-	}
 	
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if(!(hero.belongings.armor instanceof CustomArmor)){
-			actions.add( AC_WEAR );
-		}
-
+		actions.add( AC_WEAR );
 		return actions;
 	}
 	
@@ -104,8 +90,9 @@ public class KingsCrown extends Item {
 	public void upgradeArmor(Hero hero, Armor armor, ArmorAbility ability) {
 
 		detach(hero.belongings.backpack);
+		Catalog.countUse( getClass() );
 
-		hero.sprite.emitter().burst( Speck.factory( Speck.STAR), 12 );
+		hero.sprite.emitter().burst( Speck.factory( Speck.CROWN), 12 );
 		hero.spend(Actor.TICK);
 		hero.busy();
 
@@ -119,10 +106,13 @@ public class KingsCrown extends Item {
 
 			ClassArmor classArmor = ClassArmor.upgrade(hero, armor);
 			if (hero.belongings.armor == armor) {
+
 				hero.belongings.armor = classArmor;
 				((HeroSprite) hero.sprite).updateArmor();
 				classArmor.activate(hero);
+
 			} else {
+
 				armor.detach(hero.belongings.backpack);
 				classArmor.collect(hero.belongings.backpack);
 
