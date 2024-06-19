@@ -208,6 +208,7 @@ public class TrinketCatalyst extends Item {
 						if (cata != null) {
 							cata.detach(Dungeon.hero.belongings.backpack);
 							Catalog.countUse(cata.getClass());
+							item.identify();
 							((AlchemyScene)ShatteredPixelDungeon.scene()).craftItem(null, item);
 						}
 					}
