@@ -66,4 +66,9 @@ public class Greatshield extends MeleeWeapon {
 	protected void duelistAbility(Hero hero, Integer target) {
 		RoundShield.guardAbility(hero, 10, this);
 	}
+
+	@Override
+	public String upgradeAbilityStat(int level) {
+		return Integer.toString(3 + level);
+	}
 }
