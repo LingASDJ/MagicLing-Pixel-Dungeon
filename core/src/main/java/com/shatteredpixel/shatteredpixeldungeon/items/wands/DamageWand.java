@@ -104,4 +104,9 @@ public abstract class DamageWand extends Wand{
 					min(0)*2:min(0), Dungeon.hero.buff(AnkhInvulnerability.GodDied.class)!=null?
 					max(0)*2:max(0));
 	}
+
+	@Override
+	public String upgradeStat1(int level) {
+		return min(level) + "-" + max(level);
+	}
 }
