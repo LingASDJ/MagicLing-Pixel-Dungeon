@@ -21,31 +21,23 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.branch;
-import static com.shatteredpixel.shatteredpixeldungeon.ui.Window.CYELLOW;
-import static com.shatteredpixel.shatteredpixeldungeon.ui.Window.GREEN_COLOR;
-import static com.shatteredpixel.shatteredpixeldungeon.ui.Window.RED_COLOR;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
-import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndGame;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndStory;
-import com.watabou.glwrap.Blending;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Game;
@@ -59,57 +51,22 @@ public class MenuPane extends Component {
 
 	private Image depthIcon;
 	private BitmapText depthText;
-	public static Button depthButton;
+	private Button depthButton;
 
 	private Image challengeIcon;
-	private Image gameHappyIcon;
 	private BitmapText challengeText;
 	private Button challengeButton;
-	private Button gameHappyIconButton;
 
 	private JournalButton btnJournal;
 	private MenuButton btnMenu;
 
 	private Toolbar.PickedUpItem pickedUp;
 
-	public static BitmapText version;
+	private BitmapText version;
 
 	private DangerIndicator danger;
 
 	public static final int WIDTH = 32;
-
-
-	protected String displayText(){
-		InterlevelScene.curTransition = new LevelTransition();
-		String depth = Integer.toString(Dungeon.depth);
-		String abcd;
-		switch (branch){
-				default:
-				case 1: abcd = "A";
-				break;
-				case 2: abcd = "B";
-				break;
-				case 3: abcd = "C";
-				break;
-				case 4: abcd = "D";
-				break;
-				case 5: abcd = "E";
-				break;
-				case 6: case 7: case 10:
-				abcd = "?";
-				break;
-		}
-
-		if(Statistics.bossRushMode && Dungeon.depth != 0 && branch == 0) {
-			depth = "BR-" + depth;
-		} else if(Statistics.RandMode && Dungeon.depth != 0 && branch == 0){
-			depth = "RS-"+depth;
-		} else if(branch!=0){
-			depth += "-" + abcd;
-		}
-
-		return depth;
-	}
 
 	@Override
 	protected void createChildren() {
@@ -121,38 +78,34 @@ public class MenuPane extends Component {
 		depthIcon = Icons.get(Dungeon.level.feeling);
 		add(depthIcon);
 
-//		depthText = PixelScene.renderTextBlock(4);
-//		depthText.text("桃源岛");
-//		depthText.hardlight( Window.Pink_COLOR );
-//		//depthText.measure();
-//		add(depthText);
-
-		depthText = new BitmapText(displayText(), PixelScene.pixelFont);
+		depthText = new BitmapText( Integer.toString( Dungeon.depth ), PixelScene.pixelFont);
 		depthText.hardlight( 0xCACFC2 );
 		depthText.measure();
-		add(depthText);
+		add( depthText );
 
 		depthButton = new Button(){
 			@Override
 			protected String hoverText() {
-				switch (Dungeon.level.feeling) {
-					case CHASM:     return Messages.get(GameScene.class, "chasm");
-					case WATER:     return Messages.get(GameScene.class, "water");
-					case GRASS:     return Messages.get(GameScene.class, "grass");
-					case DARK:      return Messages.get(GameScene.class, "dark");
-					case LARGE:     return Messages.get(GameScene.class, "large");
-					case TRAPS:     return Messages.get(GameScene.class, "traps");
-					case BIGTRAP:     return Messages.get(GameScene.class, "moretraps");
-					case SECRETS:   return Messages.get(GameScene.class, "secrets");
+				if (Dungeon.level.feeling != Level.Feeling.NONE){
+					return Dungeon.level.feeling.desc();
+				} else {
+					return null;
 				}
-				return null;
 			}
 
 			@Override
 			protected void onClick() {
 				super.onClick();
-				//just open journal for now, maybe have it open landmarks after expanding that page?
-				GameScene.show( new WndJournal() );
+
+				if (Dungeon.level.feeling == Level.Feeling.NONE){
+					GameScene.show(new WndJournal());
+				} else {
+					Image icon = Icons.get(Dungeon.level.feeling);
+					icon.scale.set(2f);
+					GameScene.show(new WndTitledMessage(icon,
+							Dungeon.level.feeling.title(),
+							Dungeon.level.feeling.desc()));
+				}
 			}
 		};
 		add(depthButton);
@@ -161,44 +114,15 @@ public class MenuPane extends Component {
 			challengeIcon = Icons.get(Icons.CHAL_COUNT);
 			add(challengeIcon);
 
-			challengeText = new BitmapText( Integer.toString( Challenges.activeChallenges() ), PixelScene.pixelFont)			{
-				private float time;
-				@Override
-				public void update() {
-					super.update();
-					text(Integer.toString( Challenges.activeChallenges()));
-				    am = 1f + 0.01f*Math.max(0f, (float)Math.sin( time += Game.elapsed));
-					time += Game.elapsed / 3.5f;
-					float r = 0.33f+0.57f*Math.max(0f, (float)Math.sin( time));
-					float g = 0.53f+0.57f*Math.max(0f, (float)Math.sin( time + 2*Math.PI/3 ));
-					float b = 0.63f+0.57f*Math.max(0f, (float)Math.sin( time + 4*Math.PI/3 ));
-					if (Challenges.activeChallenges() >= 13) {
-						challengeText.hardlight(r,g,b);
-						if (time >= 2f * Math.PI) time = 0;
-					} else if (Challenges.activeChallenges() > 9) {
-						challengeText.hardlight(RED_COLOR);
-					} else if (Challenges.activeChallenges() > 6 && Challenges.activeChallenges() < 9){
-						challengeText.hardlight(CYELLOW);
-					} else {
-						challengeText.hardlight(GREEN_COLOR);
-					}
-				}
-
-				@Override
-				public void draw() {
-					Blending.setLightMode();
-					super.draw();
-					Blending.setNormalMode();
-				}
-			};
+			challengeText = new BitmapText( Integer.toString( Challenges.activeChallenges() ), PixelScene.pixelFont);
+			challengeText.hardlight( 0xCACFC2 );
 			challengeText.measure();
-			challengeText.alpha(1f);
 			add( challengeText );
 
 			challengeButton = new Button(){
 				@Override
 				protected void onClick() {
-					GameScene.show(new WndChallenges(Dungeon.challenges, false,null));
+					GameScene.show(new WndChallenges(Dungeon.challenges, false));
 				}
 
 				@Override
@@ -209,16 +133,13 @@ public class MenuPane extends Component {
 			add(challengeButton);
 		}
 
-
-
 		btnJournal = new JournalButton();
 		add( btnJournal );
 
 		btnMenu = new MenuButton();
 		add( btnMenu );
 
-		version = new BitmapText( "v" + Game.version + (Dungeon.isDLC(Conducts.Conduct.DEV)?"-DEV_MODE":""),
-				PixelScene.pixelFont);
+		version = new BitmapText( "v" + Game.version, PixelScene.pixelFont);
 		version.alpha( 0.5f );
 		add(version);
 
@@ -239,20 +160,20 @@ public class MenuPane extends Component {
 
 		btnJournal.setPos( btnMenu.left() - btnJournal.width() + 2, y );
 
-		depthIcon.x = btnJournal.left() - 9 + (7 - depthIcon.width())/2f - 0.1f;
+		depthIcon.x = btnJournal.left() - 7 + (7 - depthIcon.width())/2f - 0.1f;
 		depthIcon.y = y + 1;
 		if (SPDSettings.interfaceSize() == 0) depthIcon.y++;
 		PixelScene.align(depthIcon);
 
 		depthText.scale.set(PixelScene.align(0.67f));
-		depthText.x = (depthIcon.x + (depthIcon.width() - depthText.width())/2f);
+		depthText.x = depthIcon.x + (depthIcon.width() - depthText.width())/2f;
 		depthText.y = depthIcon.y + depthIcon.height();
 		PixelScene.align(depthText);
 
 		depthButton.setRect(depthIcon.x, depthIcon.y, depthIcon.width(), depthIcon.height() + depthText.height());
 
 		if (challengeIcon != null){
-			challengeIcon.x = btnJournal.left() - 17 + (7 - challengeIcon.width())/2f - 0.1f;
+			challengeIcon.x = btnJournal.left() - 14 + (7 - challengeIcon.width())/2f - 0.1f;
 			challengeIcon.y = y + 1;
 			if (SPDSettings.interfaceSize() == 0) challengeIcon.y++;
 			PixelScene.align(challengeIcon);
@@ -263,15 +184,6 @@ public class MenuPane extends Component {
 			PixelScene.align(challengeText);
 
 			challengeButton.setRect(challengeIcon.x, challengeIcon.y, challengeIcon.width(), challengeIcon.height() + challengeText.height());
-		}
-
-		if (gameHappyIcon != null){
-			gameHappyIcon.x = btnJournal.left() - 20 + (7 - gameHappyIcon.width())/2f - 0.1f;
-			gameHappyIcon.y = y + 1;
-			if (SPDSettings.interfaceSize() == 0) gameHappyIcon.y++;
-			PixelScene.align(gameHappyIcon);
-
-			gameHappyIconButton.setRect(gameHappyIcon.x, gameHappyIcon.y, gameHappyIcon.width(), gameHappyIcon.height());
 		}
 
 		version.scale.set(PixelScene.align(0.5f));
