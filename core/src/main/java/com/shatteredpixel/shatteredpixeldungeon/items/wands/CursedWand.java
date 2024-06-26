@@ -132,7 +132,7 @@ public class CursedWand {
 	}
 
 	private static boolean commonEffect(final Item origin, final Char user, final int targetPos){
-		boolean positiveOnly = Random.Float() < WondrousResin.positiveCurseEffectChance();
+		boolean positiveOnly = user == Dungeon.hero && Random.Float() < WondrousResin.positiveCurseEffectChance();
 		switch(Random.Int(4)){
 
 			//anti-entropy
@@ -195,7 +195,7 @@ public class CursedWand {
 	}
 
 	private static boolean uncommonEffect(final Item origin, final Char user, final int targetPos){
-		boolean positiveOnly = Random.Float() < WondrousResin.positiveCurseEffectChance();
+		boolean positiveOnly = user == Dungeon.hero && Random.Float() < WondrousResin.positiveCurseEffectChance();
 		switch(Random.Int(4)){
 
 			//Random plant
@@ -276,7 +276,7 @@ public class CursedWand {
 	}
 
 	private static boolean rareEffect(final Item origin, final Char user, final int targetPos){
-		boolean positiveOnly = Random.Float() < WondrousResin.positiveCurseEffectChance();
+		boolean positiveOnly = user == Dungeon.hero && Random.Float() < WondrousResin.positiveCurseEffectChance();
 		switch(Random.Int(4)){
 
 			//sheep transformation
@@ -358,7 +358,7 @@ public class CursedWand {
 	}
 
 	private static boolean veryRareEffect(final Item origin, final Char user, final int targetPos){
-		boolean positiveOnly = Random.Float() < WondrousResin.positiveCurseEffectChance();
+		boolean positiveOnly = user == Dungeon.hero && Random.Float() < WondrousResin.positiveCurseEffectChance();
 		switch( Random.Int(4) ){
 
 			//great forest fire!
