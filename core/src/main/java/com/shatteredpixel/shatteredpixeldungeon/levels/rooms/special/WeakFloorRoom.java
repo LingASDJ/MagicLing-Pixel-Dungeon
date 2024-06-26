@@ -23,9 +23,8 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -35,24 +34,15 @@ import com.watabou.noosa.Tilemap;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
-import java.util.ArrayList;
-
 public class WeakFloorRoom extends SpecialRoom {
 
 	public void paint( Level level ) {
 		
 		Painter.fill( level, this, Terrain.WALL );
-
-		if(Dungeon.depth == 17 && Dungeon.branch == 5 || Statistics.bossRushMode || Dungeon.depth == 5){
-			Painter.fill( level, this, 1, Terrain.WATER );
-		}else{
-			Painter.fill( level, this, 1, Terrain.CHASM );
-		}
-
+		Painter.fill( level, this, 1, Terrain.CHASM );
+		
 		Door door = entrance();
 		door.set( Door.Type.REGULAR );
-
-
 		
 		Point well = null;
 		
@@ -77,36 +67,13 @@ public class WeakFloorRoom extends SpecialRoom {
 			}
 			well = new Point( Random.Int( 2 ) == 0 ? left + 1 : right - 1, top+2 );
 		}
+		
+		Painter.set(level, well, Terrain.CHASM);
+		CustomTilemap vis = new HiddenWell();
+		vis.pos(well.x, well.y);
+		level.customTiles.add(vis);
 
-		if(Dungeon.branch == 0) {
-			Painter.set(level, well, Terrain.CHASM);
-			CustomTilemap vis = new HiddenWell();
-			vis.pos(well.x, well.y);
-			level.customTiles.add(vis);
-		} else {
-			Painter.set(level, well, Terrain.ALCHEMY);
-			int centerX = left + width() / 2;
-			int centerY = top + height() / 2;
-
-			Point e = new Point(centerX, centerY-1);
-			Point x = new Point(centerX, centerY+1);
-			Point j = new Point(centerX-1, centerY);
-			Point s = new Point(centerX+1, centerY);
-
-			ArrayList<Integer> places = new ArrayList<>();
-
-			places.add((left + right) - e.x + e.y * level.width());
-			places.add((left + right) - x.x + x.y * level.width());
-
-			int pos = Random.element(places);
-			level.drop( new EnergyCrystal().random(), pos );
-
-			int book = (left + right) - j.x + j.y * level.width();
-			int srol = (left + right) - s.x + s.y * level.width();
-
-			level.drop(Generator.random(Generator.Category.POTION), book);
-			level.drop(Generator.random(Generator.Category.SCROLL), srol);
-		}
+		Blob.seed( well.x + level.width() * well.y, 1, WellID.class, level );
 	}
 
 	public static class HiddenWell extends CustomTilemap {
@@ -131,6 +98,31 @@ public class WeakFloorRoom extends SpecialRoom {
 		@Override
 		public String desc(int tileX, int tileY) {
 			return Messages.get(this, "desc");
+		}
+
+	}
+
+	//we use a blob to track visibility of the well, yes this sucks
+	public static class WellID extends Blob {
+
+		@Override
+		protected void evolve() {
+			int cell;
+			for (int i=area.top-1; i <= area.bottom; i++) {
+				for (int j = area.left-1; j <= area.right; j++) {
+					cell = j + i* Dungeon.level.width();
+					if (Dungeon.level.insideMap(cell)) {
+						off[cell] = cur[cell];
+
+						volume += off[cell];
+						if (off[cell] > 0 && Dungeon.level.visited[cell]){
+							Notes.add( Notes.Landmark.DISTANT_WELL );
+							fullyClear(); //deletes itself after fulfilling its purpose
+							return;
+						}
+					}
+				}
+			}
 		}
 
 	}
