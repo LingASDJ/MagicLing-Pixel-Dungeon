@@ -87,6 +87,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -1180,6 +1181,12 @@ public abstract class Mob extends Char {
 
     public boolean reset() {
 		return false;
+	}
+
+	//some mobs have an associated landmark entry, which is added when the hero sees them
+	//mobs may also remove this landmark in some cases, such as when a quest is complete or they die
+	public Notes.Landmark landmark(){
+		return null;
 	}
 
 	public interface AiState {

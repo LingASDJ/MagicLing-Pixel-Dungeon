@@ -57,7 +57,12 @@ public class Imp extends NPC {
 	}
 	
 	private boolean seenBefore = false;
-	
+
+	@Override
+	public Notes.Landmark landmark() {
+		return Notes.Landmark.IMP;
+	}
+
 	@Override
 	protected boolean act() {
 		if (Dungeon.hero.buff(AscensionChallenge.class) != null){
@@ -65,7 +70,6 @@ public class Imp extends NPC {
 			return true;
 		}
 		if (!Quest.given && Dungeon.level.visited[pos]) {
-			Notes.add( Notes.Landmark.IMP );
 			if (!seenBefore && Dungeon.level.heroFOV[pos]) {
 				yell(Messages.get(this, "hey", Messages.titleCase(Dungeon.hero.name())));
 				seenBefore = true;
@@ -125,7 +129,6 @@ public class Imp extends NPC {
 			tell( Quest.alternative ? Messages.get(this, "monks_1") : Messages.get(this, "golems_1") );
 			Quest.given = true;
 			Quest.completed = false;
-			Notes.add( Notes.Landmark.IMP );
 		}
 
 		return true;

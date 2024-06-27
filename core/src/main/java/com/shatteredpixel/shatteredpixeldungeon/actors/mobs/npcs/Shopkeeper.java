@@ -21,9 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -32,17 +29,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessNoMoney;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayMoneyMore;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -52,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkeeperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndRushTradeItem;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTradeItem;
 import com.watabou.noosa.Game;
@@ -77,41 +68,34 @@ public class Shopkeeper extends NPC {
 	public ArrayList<Item> buybackItems = new ArrayList<>();
 
 	private int turnsSinceHarmed = -1;
-	private boolean seenBefore = false;
+
+	@Override
+	public Notes.Landmark landmark() {
+		return Notes.Landmark.SHOP;
+	}
+
 	@Override
 	protected boolean act() {
-
-		if (Dungeon.level.visited[pos]){
-			Notes.add(Notes.Landmark.SHOP);
-		}
 
 		if (turnsSinceHarmed >= 0){
 			turnsSinceHarmed ++;
 		}
-		if (!seenBefore && Dungeon.level.heroFOV[pos]) {
-			if (Dungeon.hero.buff(AscensionChallenge.class) != null) {
-				yell(Messages.get(this, "talk_ascent", Messages.titleCase(Dungeon.hero.name())));
-			}
-			seenBefore = true;
-		}
+
 		sprite.turnTo( pos, Dungeon.hero.pos );
 		spend( TICK );
 		return super.act();
 	}
-
+	
 	@Override
 	public void damage( int dmg, Object src ) {
+		processHarm();
 	}
-
+	
 	@Override
-	public int defenseSkill( Char enemy ) {
-		return INFINITE_EVASION;
-	}
-
-
-
-	@Override
-	public boolean add(Buff buff ) {
+	public boolean add( Buff buff ) {
+		if (buff.type == Buff.buffType.NEGATIVE){
+			processHarm();
+		}
 		return false;
 	}
 
@@ -165,7 +149,7 @@ public class Shopkeeper extends NPC {
 	public void flee() {
 		destroy();
 
-		Notes.remove(Notes.Landmark.SHOP);
+		Notes.remove( landmark() );
 
 		if (sprite != null) {
 			sprite.killAndErase();
@@ -181,7 +165,12 @@ public class Shopkeeper extends NPC {
 				if (ShatteredPixelDungeon.scene() instanceof GameScene) {
 					CellEmitter.get(heap.pos).burst(ElmoParticle.FACTORY, 4);
 				}
-				heap.type = Heap.Type.HEAP;
+				if (heap.size() == 1) {
+					heap.destroy();
+				} else {
+					heap.items.remove(heap.size()-1);
+					heap.type = Heap.Type.HEAP;
+				}
 			}
 		}
 	}
@@ -193,36 +182,7 @@ public class Shopkeeper extends NPC {
 
 	//shopkeepers are greedy!
 	public static int sellPrice(Item item){
-		int price = item.value() * 5 * (Dungeon.depth / 5 + 1);
-
-		if(hero.buff(MagicGirlSayMoneyMore.class) != null){
-			if(item instanceof Ankh ||item instanceof Food || item instanceof PotionOfHealing){
-				price *= 2.5;
-			}
-		} else if (hero.buff(BlessNoMoney.class) != null) {
-			price *= 0.6;
-		}
-		if (Dungeon.hero.buff(AscensionChallenge.class) != null && Dungeon.shopOnLevel()){
-			price *= 3f;
-		}
-//		if(Dungeon.isDLC(Conducts.Conduct.MONEYLETGO)){
-//			price *= 0.5;
-//		}
-		return price;
-	}
-
-	public static int sellIcePrice(Item item){
-		int price = item.iceCoinValue();
-
-		if (Badges.isUnlocked(Badges.Badge.NYZ_SHOP)){
-			price *= 0.9f;
-		}
-
-		return price;
-	}
-
-	public static int sellRushPrice(Item item){
-		return item.RushValue();
+		return item.value() * 5 * (Dungeon.depth / 5 + 1);
 	}
 	
 	public static WndBag sell() {
@@ -252,12 +212,7 @@ public class Shopkeeper extends NPC {
 		public void onSelect( Item item ) {
 			if (item != null) {
 				WndBag parentWnd = sell();
-				if(Statistics.bossRushMode){
-					GameScene.show( new WndRushTradeItem( item, parentWnd ) );
-				} else {
-					GameScene.show( new WndTradeItem( item, parentWnd ) );
-				}
-
+				GameScene.show( new WndTradeItem( item, parentWnd ) );
 			}
 		}
 	};
