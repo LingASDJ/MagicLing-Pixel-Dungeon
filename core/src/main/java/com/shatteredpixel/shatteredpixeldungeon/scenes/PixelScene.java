@@ -274,7 +274,7 @@ public class PixelScene extends Scene {
 		}
 	}
 
-	//FIXME this system currently only works for a subset of windows
+	//this system only preserves windows with a public zero-arg constructor
 	private static ArrayList<Class<?extends Window>> savedWindows = new ArrayList<>();
 	private static Class<?extends PixelScene> savedClass = null;
 	
@@ -296,7 +296,7 @@ public class PixelScene extends Scene {
 				try{
 					add(Reflection.newInstanceUnhandled(w));
 				} catch (Exception e){
-					//window has no public zero-arg constructor, just eat the exception
+					//just eat the exception
 				}
 			}
 		}
