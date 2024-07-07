@@ -420,6 +420,8 @@ public class CursedWand {
 					mimic.items.add(reward);
 				}
 
+				Dungeon.level.occupyCell(mimic);
+
 				return true;
 
 			//appears to crash the game (actually just closes it)
