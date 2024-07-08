@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,12 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
+import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.SakaFishSketon;
+import com.shatteredpixel.shatteredpixeldungeon.items.remains.RemainsItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -36,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.EarthGuardianSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.MiniSakaFishBossSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WardSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
@@ -57,11 +57,13 @@ import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Point;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SurfaceScene extends PixelScene {
 
@@ -92,7 +94,7 @@ public class SurfaceScene extends PixelScene {
 				new float[]{1, 1},
 				false);
 		
-		PixelScene.uiCamera.visible = false;
+		uiCamera.visible = false;
 		
 		int w = Camera.main.width;
 		int h = Camera.main.height;
@@ -113,10 +115,10 @@ public class SurfaceScene extends PixelScene {
 		window.camera = viewport;
 		add( window );
 
-		boolean dayTime =
-				Calendar.getInstance().get(Calendar.HOUR_OF_DAY) < 18 && Calendar.getInstance().get(Calendar.HOUR_OF_DAY) > 7;
-
-		Sky sky = new Sky( Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) ;
+		Calendar cal = GregorianCalendar.getInstance();
+		boolean dayTime = cal.get(Calendar.HOUR_OF_DAY) >= 8 && cal.get(Calendar.HOUR_OF_DAY) <= 19;
+		
+		Sky sky = new Sky( dayTime );
 		sky.scale.set( SKY_WIDTH, SKY_HEIGHT );
 		window.add( sky );
 		
@@ -130,7 +132,7 @@ public class SurfaceScene extends PixelScene {
 				window.add( star );
 			}
 		}
-
+		
 		float range = SKY_HEIGHT * 2 / 3;
 		for (int i=0; i < NCLOUDS; i++) {
 			Cloud cloud = new Cloud( (NCLOUDS - 1 - i) * (range / NCLOUDS) + Random.Float( range / NCLOUDS ), dayTime );
@@ -174,8 +176,6 @@ public class SurfaceScene extends PixelScene {
 		//allies. Attempts to pick highest level, but prefers rose > earth > ward.
 		//Rose level is halved because it's easier to upgrade
 		CharSprite allySprite = null;
-
-		final SakaHappy sakaHappy = new SakaHappy();
 		
 		//picks the highest between ghost's weapon, armor, and rose level/2
 		int roseLevel = 0;
@@ -194,9 +194,6 @@ public class SurfaceScene extends PixelScene {
 		int wardLevel = Dungeon.hero.belongings.getItem(WandOfWarding.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfWarding.class).level();
 		
 		MagesStaff staff = Dungeon.hero.belongings.getItem(MagesStaff.class);
-
-		SakaFishSketon sakaFishSketon = Dungeon.hero.belongings.getItem(SakaFishSketon.class);
-
 		if (staff != null){
 			if (staff.wandClass() == WandOfLivingEarth.class){
 				earthLevel = Math.max(earthLevel, staff.level());
@@ -216,20 +213,22 @@ public class SurfaceScene extends PixelScene {
 		}
 		
 		if (allySprite != null){
-			allySprite.scale.set(0.9f);
-			allySprite.x = a.x - allySprite.width()*0.55f;
+			allySprite.add(CharSprite.State.PARALYSED);
+			allySprite.scale = new PointF(2, 2);
+			allySprite.x = a.x - allySprite.width()*0.75f;
 			allySprite.y = SKY_HEIGHT - allySprite.height();
 			align(allySprite);
 			window.add(allySprite);
 		}
-		if(sakaFishSketon!=null) {
-			sakaHappy.x = 10;
-			sakaHappy.y = 40;
-			align(sakaHappy);
-			sakaHappy.jump();
-			window.add(sakaHappy);
-		}
 
+		if (Dungeon.hero.belongings.getItem(RemainsItem.class) != null){
+			Image grave = new Image(Assets.Interfaces.SURFACE, 88, 74, 16, 22);
+
+			grave.x = a.x + a.width() + 10;
+			grave.y = a.y + a.height() - grave.height();
+			window.add(grave);
+		}
+		
 		window.add( a );
 		window.add( pet );
 		
@@ -245,7 +244,7 @@ public class SurfaceScene extends PixelScene {
 			window.add( patch );
 		}
 		
-		Image frame = new Image(SPDSettings.ClassUI() ? Assets.Interfaces.SURFACE : Assets.Interfaces.SURFACE_DARK );
+		Image frame = new Image( Assets.Interfaces.SURFACE );
 
 		frame.frame( 0, 0, FRAME_WIDTH, FRAME_HEIGHT );
 		frame.x = vx - FRAME_MARGIN_X;
@@ -267,9 +266,12 @@ public class SurfaceScene extends PixelScene {
 		gameOver.setSize( SKY_WIDTH - FRAME_MARGIN_X * 2, BUTTON_HEIGHT );
 		gameOver.setPos( frame.x + FRAME_MARGIN_X * 2, frame.y + frame.height + 4 );
 		add( gameOver );
-		
+
 		Badges.validateHappyEnd();
-		Badges.STORM();
+		Dungeon.win( Amulet.class );
+		Dungeon.deleteGame( GamesInProgress.curSlot, true );
+		Badges.saveGlobal();
+		
 		fadeIn();
 	}
 
@@ -290,8 +292,6 @@ public class SurfaceScene extends PixelScene {
 
 	@Override
 	public void destroy() {
-		Badges.saveGlobal();
-		
 		Camera.remove( viewport );
 		super.destroy();
 	}
@@ -301,65 +301,41 @@ public class SurfaceScene extends PixelScene {
 	}
 	
 	private static class Sky extends Visual {
-
-		private static final int[][] gradients = new int[][] {
-				{ 0xff012459, 0xff001322 },
-				{ 0xff003972, 0xff001322 },
-				{ 0xff003972, 0xff001322 },
-				{ 0xff004372, 0xff00182b },
-				{ 0xff004372, 0xff011d34 },
-				{ 0xff016792, 0xff00182b },
-				{ 0xff07729f, 0xff042c47 },
-				{ 0xff12a1c0, 0xff07506e },
-				{ 0xff74d4cc, 0xff1386a6 },
-				{ 0xffefeebc, 0xff61d0cf },
-				{ 0xfffee154, 0xffa3dec6 },
-				{ 0xfffdc352, 0xffe8ed92 },
-				{ 0xffffac6f, 0xffffe467 },
-				{ 0xfffda65a, 0xffffe467 },
-				{ 0xfffd9e58, 0xffffe467 },
-				{ 0xfff18448, 0xffffd364 },
-				{ 0xfff06b7e, 0xfff9a856 },
-				{ 0xffca5a92, 0xfff4896b },
-				{ 0xff5b2c83, 0xffd1628b },
-				{ 0xff371a79, 0xff713684 },
-				{ 0xff28166b, 0xff45217c },
-				{ 0xff192861, 0xff372074 },
-				{ 0xff040b3c, 0xff233072 },
-				{ 0xff040b3c, 0xff012459 },
-		};
+		
+		private static final int[] day		= {0xFF4488FF, 0xFFCCEEFF};
+		private static final int[] night	= {0xFF001155, 0xFF335980};
 		
 		private SmartTexture texture;
 		private FloatBuffer verticesBuffer;
-
-		public Sky( int hour ) {
+		
+		public Sky( boolean dayTime ) {
 			super( 0, 0, 1, 1 );
 
-			texture = TextureCache.createGradient( gradients[hour] );
-
+			texture = TextureCache.createGradient( dayTime ? day : night );
+			
 			float[] vertices = new float[16];
 			verticesBuffer = Quad.create();
-
+			
 			vertices[2]		= 0.25f;
 			vertices[6]		= 0.25f;
 			vertices[10]	= 0.75f;
 			vertices[14]	= 0.75f;
-
+			
 			vertices[3]		= 0;
 			vertices[7]		= 1;
 			vertices[11]	= 1;
 			vertices[15]	= 0;
-
-
+			
+			
 			vertices[0] 	= 0;
 			vertices[1] 	= 0;
-
+			
 			vertices[4] 	= 1;
 			vertices[5] 	= 0;
-
+			
 			vertices[8] 	= 1;
 			vertices[9] 	= 1;
-
+			
 			vertices[12]	= 0;
 			vertices[13]	= 1;
 
@@ -386,39 +362,39 @@ public class SurfaceScene extends PixelScene {
 			script.drawQuad( verticesBuffer );
 		}
 	}
-
+	
 	private static class Cloud extends Image {
-
+		
 		private static int lastIndex = -1;
-
+		
 		public Cloud( float y, boolean dayTime ) {
 			super( Assets.Interfaces.SURFACE );
-
+			
 			int index;
 			do {
 				index = Random.Int( 3 );
 			} while (index == lastIndex);
-
+			
 			switch (index) {
-				case 0:
-					frame( 88, 0, 49, 20 );
-					break;
-				case 1:
-					frame( 88, 20, 49, 22 );
-					break;
-				case 2:
-					frame( 88, 42, 50, 18 );
-					break;
+			case 0:
+				frame( 88, 0, 49, 20 );
+				break;
+			case 1:
+				frame( 88, 20, 49, 22 );
+				break;
+			case 2:
+				frame( 88, 42, 50, 18 );
+				break;
 			}
-
+			
 			lastIndex = index;
-
+			
 			this.y = y;
 
 			scale.set( 1 - y / SKY_HEIGHT );
 			x = Random.Float( SKY_WIDTH + width() ) - width();
 			speed.x = scale.x * (dayTime ? +8 : -8);
-
+			
 			if (dayTime) {
 				tint( 0xCCEEFF, 1 - scale.y );
 			} else {
@@ -426,7 +402,7 @@ public class SurfaceScene extends PixelScene {
 				ra = ga = ba = -2.1f;
 			}
 		}
-
+		
 		@Override
 		public void update() {
 			super.update();
@@ -440,18 +416,12 @@ public class SurfaceScene extends PixelScene {
 
 	private static class Avatar extends Image {
 		
-		private static final int WIDTH	= 64;
-		private static final int HEIGHT	= 64;
+		private static final int WIDTH	= 24;
+		private static final int HEIGHT	= 32;
 		
 		public Avatar( HeroClass cl ) {
-			texture(cl.GetSkinAssest());
-			frame( new TextureFilm( texture, WIDTH, HEIGHT ).get( cl.GetSkin() ) );
-		}
-	}
-
-	private static class SakaHappy extends MiniSakaFishBossSprites {
-		public void jump() {
-			play( run );
+			super( Assets.Sprites.AVATARS );
+			frame( new TextureFilm( texture, WIDTH, HEIGHT ).get( cl.ordinal() ) );
 		}
 	}
 	
