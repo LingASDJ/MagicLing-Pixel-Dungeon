@@ -23,22 +23,13 @@ package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AnkhInvulnerability;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Random;
 
 //for wands that directly damage a target
-//wands with AOE effects count here (e.g. fireblast), but wands with indrect damage do not (e.g. venom, transfusion)
+//wands with AOE or circumstantial direct damage count here (e.g. fireblast, transfusion), but wands with indirect damage do not (e.g. corrosion)
 public abstract class DamageWand extends Wand{
 
 	public int min(){
@@ -58,7 +49,7 @@ public abstract class DamageWand extends Wand{
 	}
 
 	public int damageRoll(int lvl){
-		int dmg = Random.NormalIntRange(min(lvl), max(lvl));
+		int dmg = Hero.heroDamageIntRange(min(lvl), max(lvl));
 		WandEmpower emp = Dungeon.hero.buff(WandEmpower.class);
 		if (emp != null){
 			dmg += emp.dmgBoost;
@@ -68,41 +59,15 @@ public abstract class DamageWand extends Wand{
 			}
 			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 		}
-			if(Dungeon.hero.hasTalent(Talent.FANATICISM_MAGIC)){
-				if (dmg > 0){
-					Berserk berserk = Buff.affect(Dungeon.hero, Berserk.class);
-					berserk.damage(dmg/2);
-				}
-		}
-
-		return Dungeon.hero.buff(AnkhInvulnerability.GodDied.class)!=null ? dmg*2 : dmg;
-	}
-
-	//TODO some naming issues here. Consider renaming this method and externalizing char awareness buff
-	public static void processSoulMark(Char target, int wandLevel){
-		if (Dungeon.hero.hasTalent(Talent.ARCANE_VISION)) {
-			int dur = 5 + 5*Dungeon.hero.pointsInTalent(Talent.ARCANE_VISION);
-			Buff.append(Dungeon.hero, TalismanOfForesight.CharAwareness.class, dur).charID = target.id();
-		}
-
-		if (target != Dungeon.hero &&
-				Dungeon.hero.subClass == HeroSubClass.WARLOCK &&
-				//standard 1 - 0.92^x chance, plus 7%. Starts at 15%
-				Random.Float() > (Math.pow(0.92f, (wandLevel)+1) - 0.07f)){
-			SoulMark.prolong(target, SoulMark.class, SoulMark.DURATION + wandLevel);
-		}
+		return dmg;
 	}
 
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", Dungeon.hero.buff(AnkhInvulnerability.GodDied.class)!=null?
-					min()*2:min(),	Dungeon.hero.buff(AnkhInvulnerability.GodDied.class)!=null?
-					max()*2:max());
+			return Messages.get(this, "stats_desc", min(), max());
 		else
-			return Messages.get(this, "stats_desc", Dungeon.hero.buff(AnkhInvulnerability.GodDied.class)!=null?
-					min(0)*2:min(0), Dungeon.hero.buff(AnkhInvulnerability.GodDied.class)!=null?
-					max(0)*2:max(0));
+			return Messages.get(this, "stats_desc", min(0), max(0));
 	}
 
 	@Override
