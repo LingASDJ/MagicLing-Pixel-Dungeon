@@ -21,19 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.AQUAPHOBIA;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.EXSG;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.RLPT;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.SBSG;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Boss;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
@@ -56,7 +49,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.YogSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
@@ -70,7 +62,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class YogDzewa extends Boss {
+public class YogDzewa extends Mob {
 
 	{
 		spriteClass = YogSprite.class;
@@ -189,34 +181,6 @@ public class YogDzewa extends Boss {
 			if (Dungeon.level.heroFOV[pos]) {
 				notice();
 			}
-		}
-
-		if (phase == 4 && findFist() == null){
-			yell(Messages.get(this, "hope"));
-			summonCooldown = -15; //summon a burst of minions!
-			phase = 5;
-			BossHealthBar.bleed(true);
-			Game.runOnRenderThread(new Callback() {
-				@Override
-				public void call() {
-					Music.INSTANCE.fadeOut(0.5f, new Callback() {
-						@Override
-						public void call() {
-							if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
-									YogFist.FreezingFist freezingFist = new YogFist.FreezingFist();
-									freezingFist.pos = pos-3;
-									GameScene.add(freezingFist);
-									Camera.main.shake(1,3f);
-									GameScene.flash(0x808080,true);
-									YogFist.HaloFist haloFist = new YogFist.HaloFist();
-									haloFist.pos = pos+3;
-									GameScene.add(haloFist);
-							}
-							Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
-						}
-					});
-				}
-			});
 		}
 
 		if (phase == 0){
@@ -386,6 +350,28 @@ public class YogDzewa extends Boss {
 		return true;
 	}
 
+	public void processFistDeath(){
+		//normally Yog has no logic when a fist dies specifically
+		//but the very last fist to die does trigger the final phase
+		if (phase == 4 && findFist() == null){
+			yell(Messages.get(this, "hope"));
+			summonCooldown = -15; //summon a burst of minions!
+			phase = 5;
+			BossHealthBar.bleed(true);
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					Music.INSTANCE.fadeOut(0.5f, new Callback() {
+						@Override
+						public void call() {
+							Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
+						}
+					});
+				}
+			});
+		}
+	}
+
 	@Override
 	public boolean isAlive() {
 		return super.isAlive() || phase != 5;
@@ -528,32 +514,10 @@ public class YogDzewa extends Boss {
 	@Override
 	public void die( Object cause ) {
 
-
-
 		for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
 			if (mob instanceof Larva || mob instanceof YogRipper || mob instanceof YogEye || mob instanceof YogScorpio) {
 				mob.die( cause );
 			}
-		}
-
-		if(Dungeon.isChallenged(RLPT)){
-			Badges.GOODRLPT();
-		}
-
-		if(!Dungeon.whiteDaymode){
-			PaswordBadges.NIGHT_CAT();
-		}
-
-		if(Dungeon.isChallenged(AQUAPHOBIA)){
-			Badges.CLEARWATER();
-		}
-
-		if(Dungeon.isChallenged(SBSG)){
-			PaswordBadges.BIGX();
-		}
-
-		if(Dungeon.isChallenged(EXSG)){
-			PaswordBadges.EXSG();
 		}
 
 		updateVisibility(Dungeon.level);
@@ -575,26 +539,26 @@ public class YogDzewa extends Boss {
 
 	@Override
 	public void notice() {
-			if (!BossHealthBar.isAssigned()) {
-				BossHealthBar.assignBoss(this);
-				yell(Messages.get(this, "notice"));
-				for (Char ch : Actor.chars()) {
-					if (ch instanceof DriedRose.GhostHero) {
-						((DriedRose.GhostHero) ch).sayBoss();
-					}
-				}
-				Game.runOnRenderThread(new Callback() {
-					@Override
-					public void call() {
-						Music.INSTANCE.play(Assets.Music.HALLS_TENSE, true);
-					}
-				});
-				if (phase == 0) {
-					phase = 1;
-					summonCooldown = Random.NormalFloat(MIN_SUMMON_CD, MAX_SUMMON_CD);
-					abilityCooldown = Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
+		if (!BossHealthBar.isAssigned()) {
+			BossHealthBar.assignBoss(this);
+			yell(Messages.get(this, "notice"));
+			for (Char ch : Actor.chars()){
+				if (ch instanceof DriedRose.GhostHero){
+					((DriedRose.GhostHero) ch).sayBoss();
 				}
 			}
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					Music.INSTANCE.play(Assets.Music.HALLS_BOSS, true);
+				}
+			});
+			if (phase == 0) {
+				phase = 1;
+				summonCooldown = Random.NormalFloat(MIN_SUMMON_CD, MAX_SUMMON_CD);
+				abilityCooldown = Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
+			}
+		}
 	}
 
 	@Override
