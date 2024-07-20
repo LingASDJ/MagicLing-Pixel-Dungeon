@@ -21,37 +21,21 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.AQUAPHOBIA;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.EXSG;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.MOREROOM;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.anCityQuestProgress;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.branch;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.Holiday.XMAS;
-
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AutoRandomBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RandomBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.EbonyMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DragonGirlBlue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -59,8 +43,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.journal.DocumentPage;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.GuidePage;
+import com.shatteredpixel.shatteredpixeldungeon.items.journal.RegionLorePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
@@ -72,36 +58,14 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.builders.FigureEightBuild
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.LoopBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.DragonCaveRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.FayiNaRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.AutoShopRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.GoldRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.HealWellRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.IdenityRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.MagicalFireRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.NxhyShopRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.NyzBombAndBooksRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.OilWellRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.PitRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.PumpkinRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.RandomRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ShopRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.AquariumRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.BigEyeRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.BloodCrystalRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.CoinRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.DreamcatcherRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EntranceRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ExitRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EyeRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.GooRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.HeartRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.LinkRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.LoveRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.MagicDimandRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance.EntranceRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.exit.ExitRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.BlazingTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.BurningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ChillingTrap;
@@ -111,78 +75,35 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FrostTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.PitfallTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WornDartTrap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public abstract class RegularLevel extends Level {
-
-
-    public static Holiday holiday;
-
-	public static AltHoliday altHoliday;
-
-    public static DevBirthday birthday;
-
-	public static ArrayList<Room> roomList;
-
-    static {
-
-        holiday = Holiday.NONE;
-
-        final Calendar calendar = Calendar.getInstance();
-		switch (calendar.get(Calendar.MONTH)) {
-			case Calendar.JANUARY:
-				if (calendar.get(Calendar.WEEK_OF_MONTH) == 1)
-					holiday = Holiday.XMAS;
-				break;
-			case Calendar.APRIL:
-				int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-				if (dayOfMonth >= 2 && dayOfMonth <= 20)
-					holiday = Holiday.QMJ;
-				break;
-			//秦月的生日
-			case Calendar.MAY:
-				int dayOfMonth2 = calendar.get(Calendar.DAY_OF_MONTH);
-				if (dayOfMonth2 >= 13 && dayOfMonth2 <= 21)
-					birthday = DevBirthday.CHAPTER_BIRTHDAY;
-				break;
-			//
-			case Calendar.OCTOBER:
-				if (calendar.get(Calendar.WEEK_OF_MONTH) >= 2)
-					holiday = Holiday.HWEEN;
-				break;
-			case Calendar.NOVEMBER:
-				if (calendar.get(Calendar.DAY_OF_MONTH) == 1)
-					holiday = Holiday.HWEEN;
-				break;
-			case Calendar.DECEMBER:
-				if (calendar.get(Calendar.WEEK_OF_MONTH) >= 3)
-					holiday = Holiday.XMAS;
-				break;
-		}
-    }
-
-    protected ArrayList<Room> rooms;
-    protected Builder builder;
-    protected Room roomEntrance;
-    protected Room roomExit;
-
-    @Override
-    protected boolean build() {
-
+	
+	protected ArrayList<Room> rooms;
+	
+	protected Builder builder;
+	
+	protected Room roomEntrance;
+	protected Room roomExit;
+	
+	@Override
+	protected boolean build() {
+		
 		builder = builder();
-
+		
 		ArrayList<Room> initRooms = initRooms();
-		roomList = initRooms;
 		Random.shuffle(initRooms);
-
+		
 		do {
 			for (Room r : initRooms){
 				r.neigbours.clear();
@@ -190,177 +111,21 @@ public abstract class RegularLevel extends Level {
 			}
 			rooms = builder.build((ArrayList<Room>)initRooms.clone());
 		} while (rooms == null);
-
+		
 		return painter().paint(this, rooms);
-
+		
 	}
-    //开发团队的生日列表
-    // S直接参与Calendar类计算
-    // L参与Lunar-Java类计算
-    public enum DevBirthday {
-        DEV_BIRTHDAY,
-        //QinYue S-5.13
-        CHAPTER_BIRTHDAY,
-        //设寄师
-        DESIGN_BIRTHDAY,
-        //丹尼尔
-        ART_DC_BIRTHDAY,
-        //冷群
-        ART_LQ_BIRTHDAY,
-        //小蓝 S-3.26
-        ART_LB_BIRTHDAY,
-        //清扬 L-12.3
-        ART_CY_BIRTHDAY,
-    }
-
-	public enum AltHoliday {
-		NONE,
-		DWJ_2024
-	}
-
-    public enum Holiday {
-        NONE,
-        DWJ,
-        ZQJ,
-        HWEEN,//2nd week of october though first day of november
-        XMAS,
-		CJ,
-		QMJ
-    }
 	
 	protected ArrayList<Room> initRooms() {
 		ArrayList<Room> initRooms = new ArrayList<>();
-
 		initRooms.add ( roomEntrance = EntranceRoom.createEntrance());
 		initRooms.add( roomExit = ExitRoom.createExit());
 
-		//initRooms.add( roomExit = new SkeletonFishRoom());
-
-		//force max standard rooms and multiple by 1.5x for large levels
 		//force max standard rooms and multiple by 1.5x for large levels
 		int standards = standardRooms(feeling == Feeling.LARGE);
-
-		if (feeling == Feeling.BIGROOMS){
-			standards = (int)Math.ceil(standards * 2.75f);
-		} else if (feeling == Feeling.LARGE){
+		if (feeling == Feeling.LARGE){
 			standards = (int)Math.ceil(standards * 1.5f);
 		}
-
-
-
-		if(feeling == Feeling.DIEDROOM){
-			switch (branch){
-				case 0:
-					switch (depth) {
-						case 4:
-							initRooms.add(new GooRoom());
-						break;
-					}
-//				case 2:
-//				switch (depth) {
-//					case 4:
-//						//initRooms.add(new GooRoom());
-//						GooBossRoom gooRoom = GooBossRoom.randomGooRoom();
-//						initRooms.add(gooRoom);
-//						((FigureEightBuilder)builder).setLandmarkRoom(gooRoom);
-//						break;
-//					case 14:
-//						initRooms.add(new OldDM300Room());
-//						break;
-//				}
-				break;
-			}
-		}
-
-		if(RegularLevel.holiday == Holiday.ZQJ ){
-			if(Dungeon.depth == 17 && branch == 0){
-				initRooms.add(new HeartRoom());
-			}
-			if(Statistics.findMoon && Dungeon.depth == 18){
-				initRooms.add(new LoveRoom());
-			}
-		}
-
-		//20%
-		if (Dungeon.NxhyshopOnLevel() && branch == 0 && Random.Int(0,100) <= 40 || depth == 28 && !Statistics.bossRushMode) {
-			initRooms.add(new NxhyShopRoom());
-		}
-
-		if(depth>27 && depth <30){
-			if(Random.Float() < 0.5f){
-				initRooms.add(new PumpkinRoom());
-			}
-		}
-
-		if(!SPDSettings.KillDragon() && !Statistics.noClearKill && depth == 9 && Badges.isUnlocked(Badges.Badge.KILL_APPLE)){
-			initRooms.add(new FayiNaRoom());
-			initRooms.add(new DragonCaveRoom());
-		} else if(depth == 9 && SPDSettings.KillDragon()){
-			initRooms.add(new DragonCaveRoom());
-		}
-
-
-		if (Dungeon.NyzshopOnLevel() && branch == 0 || Statistics.bossRushMode && Dungeon.NyzshopOnLevel()) {
-			Buff.affect(hero, RandomBuff.class).set( (4 + Random.Int(9)+hero.STR/6+hero.HP/30)/Random.Int(1,2)+5, 1 );
-			initRooms.add(new NyzBombAndBooksRoom());
-		}
-
-		if (Dungeon.aqiLevel() && (Dungeon.isChallenged(AQUAPHOBIA)))
-			initRooms.add(new AquariumRoom());
-
-		if(Statistics.goldchestmazeCollected>=3 && Dungeon.depth == 9){
-			initRooms.add(new MagicDimandRoom());
-		}
-
-		//圣诞节
-		if (holiday == XMAS) {
-			if(Dungeon.AutoShopLevel()) {
-				initRooms.add(new AutoShopRoom());
-				Buff.affect(hero, AutoRandomBuff.class).set((10), 1);
-			}
-		} else if(Dungeon.isChallenged(EXSG)){
-			if(Dungeon.AutoShopLevel()) {
-				initRooms.add(new AutoShopRoom());
-				Buff.affect(hero, AutoRandomBuff.class).set((10), 1);
-			}
-		}
-
-		if (Dungeon.depth >= 26 && Random.Int(10) <= 4) {
-			initRooms.add(new BigEyeRoom());
-			initRooms.add(new CoinRoom());
-		} else if(Dungeon.depth<26 && Random.Int(10) == 1) {
-			initRooms.add(new EyeRoom());
-		}
-
-		if(Dungeon.exgoldLevel()&&Dungeon.isChallenged(CS)) initRooms.add(new GoldRoom());
-
-		if( Dungeon.depth<26 && Random.Int(30) == 1 && (Dungeon.isChallenged(DHXD) || Statistics.lanterfireactive )){
-			initRooms.add(new OilWellRoom());
-		}
-
-		if(feeling == Feeling.BLOOD){
-			initRooms.add(new BloodCrystalRoom());
-		}
-
-		if(feeling == Feeling.THREEWELL){
-			initRooms.add(new IdenityRoom());
-			initRooms.add(new RandomRoom());
-			initRooms.add(new HealWellRoom());
-		}
-
-		if(feeling == Feeling.LINKROOM ){
-			initRooms.add(new LinkRoom());
-		}
-
-		if(Statistics.RandMode){
-			initRooms.add(new RandomRoom());
-			if(depth == 1 && branch == 0){
-				initRooms.add(new NxhyShopRoom());
-			}
-		}
-
-
-
 		for (int i = 0; i < standards; i++) {
 			StandardRoom s;
 			do {
@@ -369,24 +134,13 @@ public abstract class RegularLevel extends Level {
 			i += s.sizeFactor()-1;
 			initRooms.add(s);
 		}
-
-//		if (!Badges.isUnlocked(Badges.Badge.ANCITY_THREE)) {
-			if (depth == 18 && !anCityQuestProgress && !Statistics.RandMode) {
-				initRooms.add(new DreamcatcherRoom());
-				DragonGirlBlue.Quest.spawned = true;
-				anCityQuestProgress = true;
-			}
-//		}
-
-		if (Dungeon.shopOnLevel() && branch == 0) {
+		
+		if (Dungeon.shopOnLevel())
 			initRooms.add(new ShopRoom());
-		} else if(Statistics.bossRushMode && branch == 8 && Dungeon.shopRushLevel()){
-			initRooms.add(new ShopRoom());
-		}
 
 		//force max special rooms and add one more for large levels
-		int specials = specialRooms(feeling == Feeling.LARGE || feeling == Feeling.BIGROOMS);
-		if (feeling == Feeling.LARGE || feeling == Feeling.BIGROOMS){
+		int specials = specialRooms(feeling == Feeling.LARGE);
+		if (feeling == Feeling.LARGE){
 			specials++;
 		}
 		SpecialRoom.initForFloor();
@@ -395,16 +149,13 @@ public abstract class RegularLevel extends Level {
 			if (s instanceof PitRoom) specials++;
 			initRooms.add(s);
 		}
-
-		if(depth<26){
-			int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
-			if (feeling == Feeling.SECRETS && depth < 26) secrets++;
-			for (int i = 0; i < secrets; i++) {
-				initRooms.add(SecretRoom.createRoom());
-			}
+		
+		int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
+		//one additional secret for secret levels
+		if (feeling == Feeling.SECRETS) secrets++;
+		for (int i = 0; i < secrets; i++) {
+			initRooms.add(SecretRoom.createRoom());
 		}
-
-
 		
 		return initRooms;
 	}
@@ -454,39 +205,20 @@ public abstract class RegularLevel extends Level {
 		}
 
 		int mobs = 3 + Dungeon.depth % 5 + Random.Int(3);
-
-		if (feeling == Feeling.BIGROOMS){
-			mobs = (int)Math.ceil(mobs * 1.75f);
-		}
-
-		if (feeling == Feeling.SKYCITY){
-			mobs = (int)Math.ceil(mobs * 0.25f);
-		}
-
 		if (feeling == Feeling.LARGE){
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
-
-		// 在特定挑战中怪物生成翻倍
-		if (Dungeon.isChallenged(MOREROOM) || !Dungeon.isChallenged(CS)) {
-			mobs += Random.NormalIntRange(1,3);
-		}
-
-		if(Dungeon.isChallenged(CS)){
-			mobs -= 1;
-		}
-
 		return mobs;
 	}
 	
 	@Override
 	protected void createMobs() {
-		//on floor 1, 10 pre-set mobs are created so the player can get level 2.
-		int mobsToSpawn = Dungeon.depth == 1 ? Dungeon.isChallenged(CS) ? 5 : 10 : mobLimit();
+		//on floor 1, 8 pre-set mobs are created so the player can get level 2.
+		int mobsToSpawn = Dungeon.depth == 1 ? 8 : mobLimit();
 
 		ArrayList<Room> stdRooms = new ArrayList<>();
 		for (Room room : rooms) {
-			if (room instanceof StandardRoom && room != roomEntrance) {
+			if (room instanceof StandardRoom) {
 				for (int i = 0; i < ((StandardRoom) room).mobSpawnWeight(); i++) {
 					stdRooms.add(room);
 				}
@@ -495,8 +227,16 @@ public abstract class RegularLevel extends Level {
 		Random.shuffle(stdRooms);
 		Iterator<Room> stdRoomIter = stdRooms.iterator();
 
+		//enemies cannot be within an 8-tile FOV of the entrance
+		// or a 6-tile open space distance from the entrance
+		boolean[] entranceFOV = new boolean[length()];
+		Point c = cellToPoint(entrance());
+		ShadowCaster.castShadow(c.x, c.y, width(), entranceFOV, losBlocking, 6);
+		PathFinder.buildDistanceMap(entrance(), BArray.not(solid, null), 8);
+
+		Mob mob = null;
 		while (mobsToSpawn > 0) {
-			Mob mob = createMob();
+			if (mob == null) mob = createMob();
 			Room roomToSpawn;
 			
 			if (!stdRoomIter.hasNext()) {
@@ -509,6 +249,7 @@ public abstract class RegularLevel extends Level {
 				mob.pos = pointToCell(roomToSpawn.random());
 				tries--;
 			} while (tries >= 0 && (findMob(mob.pos) != null
+					|| entranceFOV[mob.pos] || PathFinder.distance[mob.pos] != Integer.MAX_VALUE
 					|| !passable[mob.pos]
 					|| solid[mob.pos]
 					|| !roomToSpawn.canPlaceCharacter(cellToPoint(mob.pos), this)
@@ -519,6 +260,7 @@ public abstract class RegularLevel extends Level {
 			if (tries >= 0) {
 				mobsToSpawn--;
 				mobs.add(mob);
+				mob = null;
 
 				//chance to add a second mob to this room, except on floor 1
 				if (Dungeon.depth > 1 && mobsToSpawn > 0 && Random.Int(4) == 0){
@@ -529,6 +271,7 @@ public abstract class RegularLevel extends Level {
 						mob.pos = pointToCell(roomToSpawn.random());
 						tries--;
 					} while (tries >= 0 && (findMob(mob.pos) != null
+							|| entranceFOV[mob.pos] || PathFinder.distance[mob.pos] != Integer.MAX_VALUE
 							|| !passable[mob.pos]
 							|| solid[mob.pos]
 							|| !roomToSpawn.canPlaceCharacter(cellToPoint(mob.pos), this)
@@ -539,6 +282,7 @@ public abstract class RegularLevel extends Level {
 					if (tries >= 0) {
 						mobsToSpawn--;
 						mobs.add(mob);
+						mob = null;
 					}
 				}
 			}
@@ -614,31 +358,16 @@ public abstract class RegularLevel extends Level {
 	
 	@Override
 	protected void createItems() {
-
-
-
+		
 		// drops 3/4/5 items 60%/30%/10% of the time
 		int nItems = 3 + Random.chances(new float[]{6, 3, 1});
-
 
 		if (feeling == Feeling.LARGE){
 			nItems += 2;
 		}
-
-		if (feeling == Feeling.BIGROOMS){
-			nItems += 6;
-		}
-
-		if (feeling == Feeling.SKYCITY){
-			nItems -= 2;
-		}
-
-		//谜城资源量减半
-		if(Dungeon.isChallenged(CS)){
-			nItems = nItems/2;
-		}
-
+		
 		for (int i=0; i < nItems; i++) {
+
 			Item toDrop = Generator.random();
 			if (toDrop == null) continue;
 
@@ -698,6 +427,7 @@ public abstract class RegularLevel extends Level {
 					dropped.setHauntedIfCursed();
 				}
 			}
+			
 		}
 
 		for (Item item : itemsToSpawn) {
@@ -731,7 +461,7 @@ public abstract class RegularLevel extends Level {
 				}
 				drop( new Torch(), cell );
 				//add a second torch to help with the larger floor
-				if (feeling == Feeling.LARGE || feeling == Feeling.BIGROOMS){
+				if (feeling == Feeling.LARGE){
 					cell = randomDropCell();
 					if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 						map[cell] = Terrain.GRASS;
@@ -778,11 +508,14 @@ public abstract class RegularLevel extends Level {
 			}
 		Random.popGenerator();
 
-		//cached rations try to drop in a special room on floors 2/3/4/6/7/8, to a max of 4/6
+		//cached rations try to drop in a special room on floors 2/4/7, to a max of 2/3
+		//we incremented dropped by 2 for compatibility with pre-v2.4 saves (when the talent dropped 4/6 items)
 		Random.pushGenerator( Random.Long() );
 			if (Dungeon.hero.hasTalent(Talent.CACHED_RATIONS)){
 				Talent.CachedRationsDropped dropped = Buff.affect(Dungeon.hero, Talent.CachedRationsDropped.class);
-				if (dropped.count() < 2 + 2*Dungeon.hero.pointsInTalent(Talent.CACHED_RATIONS)){
+				int targetFloor = (int)(2 + dropped.count());
+				if (dropped.count() > 4) targetFloor++;
+				if (Dungeon.depth >= targetFloor && dropped.count() < 2 + 2*Dungeon.hero.pointsInTalent(Talent.CACHED_RATIONS)){
 					int cell;
 					int tries = 100;
 					boolean valid;
@@ -799,8 +532,8 @@ public abstract class RegularLevel extends Level {
 							map[cell] = Terrain.GRASS;
 							losBlocking[cell] = false;
 						}
-						drop(new SmallRation(), cell).type = Heap.Type.CHEST;
-						dropped.countUp(1);
+						drop(new SupplyRation(), cell).type = Heap.Type.CHEST;
+						dropped.countUp(2);
 					}
 				}
 			}
@@ -833,36 +566,98 @@ public abstract class RegularLevel extends Level {
 			}
 		Random.popGenerator();
 
+		//lore pages
+		//TODO a fair bit going on here, I might want to refactor/externalize this in the future
+		Random.pushGenerator( Random.Long() );
+			if (Document.ADVENTURERS_GUIDE.allPagesFound()){
+
+				int region = 1+(Dungeon.depth-1)/5;
+
+				Document regionDoc;
+				switch( region ){
+					default: regionDoc = null; break;
+					case 1: regionDoc = Document.SEWERS_GUARD; break;
+					case 2: regionDoc = Document.PRISON_WARDEN; break;
+					case 3: regionDoc = Document.CAVES_EXPLORER; break;
+					case 4: regionDoc = Document.CITY_WARLOCK; break;
+					case 5: regionDoc = Document.HALLS_KING; break;
+				}
+
+				if (regionDoc != null && !regionDoc.allPagesFound()) {
+
+					Dungeon.LimitedDrops limit = limitedDocs.get(regionDoc);
+
+					if (limit == null || !limit.dropped()) {
+
+						float totalPages = 0;
+						float pagesFound = 0;
+						String pageToDrop = null;
+						for (String page : regionDoc.pageNames()) {
+							totalPages++;
+							if (!regionDoc.isPageFound(page)) {
+								if (pageToDrop == null) {
+									pageToDrop = page;
+								}
+							} else {
+								pagesFound++;
+							}
+						}
+						float percentComplete = pagesFound / totalPages;
+
+						// initial value is the first floor in a region
+						int targetFloor = 5*(region-1) + 1;
+						targetFloor += Math.round(3*percentComplete);
+
+						//TODO maybe drop last page in boss floor with custom logic?
+						if (Dungeon.depth >= targetFloor){
+							DocumentPage page = RegionLorePage.pageForDoc(regionDoc);
+							page.page(pageToDrop);
+							int cell = randomDropCell();
+							if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
+								map[cell] = Terrain.GRASS;
+								losBlocking[cell] = false;
+							}
+							drop(page, cell);
+							if (limit != null) limit.drop();
+						}
+
+					}
+
+				}
+
+			}
+		Random.popGenerator();
+
 		//ebony mimics >:)
 		Random.pushGenerator(Random.Long());
-		if (Random.Float() < MimicTooth.ebonyMimicChance()){
-			ArrayList<Integer> candidateCells = new ArrayList<>();
-			if (Random.Int(2) == 0){
-				for (Heap h : heaps.valueList()){
-					if (h.type == Heap.Type.HEAP
-							&& !(room(h.pos) instanceof SpecialRoom)
-							&& findMob(h.pos) == null){
-						candidateCells.add(h.pos);
+			if (Random.Float() < MimicTooth.ebonyMimicChance()){
+				ArrayList<Integer> candidateCells = new ArrayList<>();
+				if (Random.Int(2) == 0){
+					for (Heap h : heaps.valueList()){
+						if (h.type == Heap.Type.HEAP
+								&& !(room(h.pos) instanceof SpecialRoom)
+								&& findMob(h.pos) == null){
+							candidateCells.add(h.pos);
+						}
 					}
-				}
-			} else {
-				if (Random.Int(5) == 0 && findMob(exit()) == null){
-					candidateCells.add(exit());
 				} else {
-					for (int i = 0; i < length(); i++) {
-						if (map[i] == Terrain.DOOR && findMob(i) == null) {
-							candidateCells.add(i);
+					if (Random.Int(5) == 0 && findMob(exit()) == null){
+						candidateCells.add(exit());
+					} else {
+						for (int i = 0; i < length(); i++) {
+							if (map[i] == Terrain.DOOR && findMob(i) == null) {
+								candidateCells.add(i);
+							}
 						}
 					}
 				}
+
+				int pos = Random.element(candidateCells);
+				mobs.add(Mimic.spawnAt(pos, EbonyMimic.class, false));
 			}
-
-			int pos = Random.element(candidateCells);
-			mobs.add(Mimic.spawnAt(pos, EbonyMimic.class, false));
-		}
 		Random.popGenerator();
-	}
 
+	}
 
 	private static HashMap<Document, Dungeon.LimitedDrops> limitedDocs = new HashMap<>();
 	static {
@@ -965,12 +760,11 @@ public abstract class RegularLevel extends Level {
 		for (Heap h : heaps.valueList()){
 			if (h.autoExplored) continue;
 
-			if (!h.seen || (h.type != Heap.Type.HEAP && h.type != Heap.Type.FOR_SALE && h.type != Heap.Type.CRYSTAL_CHEST && h.type != Heap.Type.BLACK && h.type != Heap.Type.FOR_ICE && h.type != Heap.Type.FOR_RUSH)){
+			if (!h.seen || (h.type != Heap.Type.HEAP && h.type != Heap.Type.FOR_SALE && h.type != Heap.Type.CRYSTAL_CHEST)){
 				return false;
 			}
-
 			for (Item i : h.items){
-				if (i instanceof Key ){
+				if (i instanceof Key){
 					return false;
 				}
 			}
@@ -1026,9 +820,9 @@ public abstract class RegularLevel extends Level {
 		rooms = new ArrayList<>( (Collection<Room>) ((Collection<?>) bundle.getCollection( "rooms" )) );
 		for (Room r : rooms) {
 			r.onLevelLoad( this );
-			if (r instanceof EntranceRoom ){
+			if (r.isEntrance()){
 				roomEntrance = r;
-			} else if (r instanceof ExitRoom ){
+			} else if (r.isExit()){
 				roomExit = r;
 			}
 		}
