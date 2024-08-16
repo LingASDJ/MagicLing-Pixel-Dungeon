@@ -72,10 +72,10 @@ public class FlockTrap extends Trap {
 					t.activate();
 				}
 				Dungeon.level.occupyCell(sheep);
-				Sample.INSTANCE.play(Assets.Sounds.PUFF);
-				Sample.INSTANCE.play(Assets.Sounds.SHEEP);
 			}
 		}
+		Sample.INSTANCE.play(Assets.Sounds.PUFF);
+		Sample.INSTANCE.play(Assets.Sounds.SHEEP);
 	}
 
 }
