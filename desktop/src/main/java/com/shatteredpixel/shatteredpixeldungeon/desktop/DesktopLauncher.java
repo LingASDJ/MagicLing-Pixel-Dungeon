@@ -26,14 +26,13 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3FileHandle;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Preferences;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsImpl;
-import com.shatteredpixel.shatteredpixeldungeon.update.UpdateImpl;
-import com.shatteredpixel.shatteredpixeldungeon.update.Updates;
+import com.shatteredpixel.shatteredpixeldungeon.services.updates.UpdateImpl;
+import com.shatteredpixel.shatteredpixeldungeon.services.updates.Updates;
 import com.watabou.noosa.Game;
 import com.watabou.utils.FileUtils;
 import com.watabou.utils.Point;
@@ -42,6 +41,7 @@ import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Locale;
 
 public class DesktopLauncher {
 
@@ -79,20 +79,31 @@ public class DesktopLauncher {
 
 				//shorten/simplify exception message to make it easier to fit into a message box
 				exceptionMsg = exceptionMsg.replaceAll("\\(.*:([0-9]*)\\)", "($1)");
-				exceptionMsg = exceptionMsg.replace("com.magiclingpc.cn", "");
+				exceptionMsg = exceptionMsg.replace("com.shatteredpixel.shatteredpixeldungeon.", "");
 				exceptionMsg = exceptionMsg.replace("com.watabou.", "");
 				exceptionMsg = exceptionMsg.replace("com.badlogic.gdx.", "");
-				exceptionMsg = exceptionMsg.replace("\t", "    ");
+				exceptionMsg = exceptionMsg.replace("\t", "  "); //shortens length of tabs
 
-				if (exceptionMsg.contains("无法打开窗口！")){
+				//replace ' and " with similar equivalents as tinyfd hates them for some reason
+				exceptionMsg = exceptionMsg.replace('\'', '’');
+				exceptionMsg = exceptionMsg.replace('"', '”');
+
+				if (exceptionMsg.length() > 1000){
+					exceptionMsg = exceptionMsg.substring(0, 1000) + "...";
+				}
+
+				if (exceptionMsg.contains("Couldn’t create window")){
 					TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
-							title + " wasn't able to initialize it's graphics display, sorry about that!\n\n" +
-									"This usually happens when a computer's graphics card does not support OpenGL 2.0+, or has misconfigured graphics drivers.\n\n" +
-									"If you're certain the game should be working on your computer, feel free to message the developer (Evan@ShatteredPixel.com)\n\n" +
-									"version: " + Game.version, "ok", "error", false);
+							title + " was not able to initialize its graphics display, sorry about that!\n\n" +
+									"This usually happens when your graphics card has misconfigured drivers or does not support openGL 2.0+.\n\n" +
+									"If you are certain the game should work on your computer, please message the developer (Evan@ShatteredPixel.com)\n\n" +
+									"version: " + Game.version + "\n" +
+									exceptionMsg,
+							"ok", "error", false);
 				} else {
-					TinyFileDialogs.tinyfd_messageBox(title + "魔绫像素地牢发生了意外的崩溃!",
-							title + "请将此处的代码截图发送给作者，QQ：2735951230" +
+					TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+							title + " has run into an error it cannot recover from and has crashed, sorry about that!\n\n" +
+									"If you could, please email this error message to the developer (Evan@ShatteredPixel.com):\n\n" +
 									"version: " + Game.version + "\n" +
 									exceptionMsg,
 							"ok", "error", false);
@@ -112,57 +123,58 @@ public class DesktopLauncher {
 			Game.versionCode = Integer.parseInt(System.getProperty("Implementation-Version"));
 		}
 
-
-
+		if (UpdateImpl.supportsUpdates()){
+			Updates.service = UpdateImpl.getUpdateService();
+		}
 		if (NewsImpl.supportsNews()){
 			News.service = NewsImpl.getNewsService();
-			Updates.service = UpdateImpl.getUpdateService();
 		}
 		
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		
 		config.setTitle( title );
-		
+
+		//if I were implementing this from scratch I would use the full implementation title for saves
+		// (e.g. /.shatteredpixel/shatteredpixeldungeon), but we have too much existing save
+		// date to worry about transferring at this point.
+		String vendor = DesktopLauncher.class.getPackage().getImplementationTitle();
+		if (vendor == null) {
+			vendor = System.getProperty("Implementation-Title");
+		}
+		vendor = vendor.split("\\.")[1];
+
 		String basePath = "";
+		Files.FileType baseFileType = null;
 		if (SharedLibraryLoader.isWindows) {
 			if (System.getProperties().getProperty("os.name").equals("Windows XP")) {
-				basePath = "Application Data/.shatteredpixel/Magic Ling Pixel Dungeon";
+				basePath = "Application Data/." + vendor + "/" + title + "/";
 			} else {
-				basePath = "AppData/Roaming/.shatteredpixel/Magic Ling Pixel Dungeon/";
+				basePath = "AppData/Roaming/." + vendor + "/" + title + "/";
 			}
+			baseFileType = Files.FileType.External;
 		} else if (SharedLibraryLoader.isMac) {
-			basePath = "Library/Application Support/Magic Ling Pixel Dungeon/";
+			basePath = "Library/Application Support/" + title + "/";
+			baseFileType = Files.FileType.External;
 		} else if (SharedLibraryLoader.isLinux) {
-			String XDGHome = System.getenv().get("XDG_DATA_HOME");
-			if (XDGHome == null) XDGHome = ".local/share/";
-			basePath = XDGHome + ".shatteredpixel/magicling-pixel-dungeon/";
+			String XDGHome = System.getenv("XDG_DATA_HOME");
+			if (XDGHome == null) XDGHome = System.getProperty("user.home") + "/.local/share";
 
-			//copy over files from old linux save DIR, pre-1.2.0
-			FileHandle oldBase = new Lwjgl3FileHandle(".shatteredpixel/magicling-pixel-dungeon/", Files.FileType.External);
-			FileHandle newBase = new Lwjgl3FileHandle(XDGHome + ".shatteredpixel/magicling-pixel-dungeon/", Files.FileType.External);
-			if (oldBase.exists()){
-				if (!newBase.exists()) {
-					oldBase.copyTo(newBase.parent());
-				}
-				oldBase.deleteDirectory();
-				oldBase.parent().delete(); //only regular delete, in case of saves from other PD versions
-			}
+			String titleLinux = title.toLowerCase(Locale.ROOT).replace(" ", "-");
+			basePath = XDGHome + "/." + vendor + "/" + titleLinux + "/";
+
+			baseFileType = Files.FileType.Absolute;
 		}
 
-		config.setPreferencesConfig( basePath, Files.FileType.External );
-		SPDSettings.set( new Lwjgl3Preferences( SPDSettings.DEFAULT_PREFS_FILE, basePath) );
-		FileUtils.setDefaultFileProperties( Files.FileType.External, basePath );
+		config.setPreferencesConfig( basePath, baseFileType );
+		SPDSettings.set( new Lwjgl3Preferences( new Lwjgl3FileHandle(basePath + SPDSettings.DEFAULT_PREFS_FILE, baseFileType) ));
+		FileUtils.setDefaultFileProperties( baseFileType, basePath );
 		
 		config.setWindowSizeLimits( 720, 400, -1, -1 );
 		Point p = SPDSettings.windowResolution();
 		config.setWindowedMode( p.x, p.y );
 
 		config.setMaximized(SPDSettings.windowMaximized());
-
-		//going fullscreen on launch is still buggy on macOS, so game enters it slightly later
-		if (SPDSettings.fullscreen() && !SharedLibraryLoader.isMac) {
-			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
-		}
+		config.setDecorated(!SPDSettings.fullscreen());
 		
 		//records whether window is maximized or not for settings
 		DesktopWindowListener listener = new DesktopWindowListener();
@@ -173,5 +185,4 @@ public class DesktopLauncher {
 
 		new Lwjgl3Application(new ShatteredPixelDungeon(new DesktopPlatformSupport()), config);
 	}
-
 }

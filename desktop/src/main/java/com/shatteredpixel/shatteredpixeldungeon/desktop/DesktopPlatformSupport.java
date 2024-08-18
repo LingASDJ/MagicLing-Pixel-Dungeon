@@ -22,19 +22,16 @@
 package com.shatteredpixel.shatteredpixeldungeon.desktop;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.watabou.input.ControllerHandler;
 import com.watabou.noosa.Game;
 import com.watabou.utils.PlatformSupport;
 import com.watabou.utils.Point;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,31 +46,42 @@ public class DesktopPlatformSupport extends PlatformSupport {
 	public void updateDisplaySize() {
 		if (previousSizes == null){
 			previousSizes = new Point[2];
-			previousSizes[0] = previousSizes[1] = new Point(Game.width, Game.height);
+			previousSizes[1] = SPDSettings.windowResolution();
 		} else {
 			previousSizes[1] = previousSizes[0];
-			previousSizes[0] = new Point(Game.width, Game.height);
 		}
-		if (!SPDSettings.fullscreen()) {
+		previousSizes[0] = new Point(Game.width, Game.height);
+		if (!SPDSettings.fullscreen() && !SPDSettings.windowMaximized()) {
 			SPDSettings.windowResolution( previousSizes[0] );
 		}
 	}
-
+	
 	@Override
 	public void updateSystemUI() {
 		Gdx.app.postRunnable( new Runnable() {
 			@Override
 			public void run () {
 				if (SPDSettings.fullscreen()){
-					Gdx.graphics.setFullscreenMode( Gdx.graphics.getDisplayMode() );
+					Gdx.graphics.setUndecorated( true );
+					Graphics.DisplayMode display = Gdx.graphics.getDisplayMode();
+					Gdx.graphics.setWindowedMode( display.width, display.height );
 				} else {
 					Point p = SPDSettings.windowResolution();
+					Gdx.graphics.setUndecorated( false );
+					if (SPDSettings.windowMaximized()){
+						//if we are going from fullscreen to maximized, then don't assign window res
+						Point newP = SPDSettings.windowResolution();
+						if (newP.x == p.x && newP.y == p.y){
+							return;
+						}
+					}
 					Gdx.graphics.setWindowedMode( p.x, p.y );
+					SPDSettings.windowResolution( p );
 				}
 			}
 		} );
 	}
-
+	
 	@Override
 	public boolean connectedToUnmeteredNetwork() {
 		return true; //no easy way to check this in desktop, just assume user doesn't care
@@ -81,43 +89,17 @@ public class DesktopPlatformSupport extends PlatformSupport {
 
 	@Override
 	public boolean supportsVibration() {
+		//only supports vibration via controller
 		return ControllerHandler.vibrationSupported();
 	}
 
-	//TODO backported openURI fix from libGDX-1.10.1-SNAPSHOT, remove when updating libGDX
-	public boolean openURI( String uri ){
-		if (SharedLibraryLoader.isMac) {
-			try {
-				(new ProcessBuilder("open", (new URI(uri).toString()))).start();
-				return true;
-			} catch (Throwable t) {
-				return false;
-			}
-		} else if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-			try {
-				Desktop.getDesktop().browse(new URI(uri));
-				return true;
-			} catch (Throwable t) {
-				return false;
-			}
-		} else if (SharedLibraryLoader.isLinux) {
-			try {
-				(new ProcessBuilder("xdg-open", (new URI(uri).toString()))).start();
-				return true;
-			} catch (Throwable t) {
-				return false;
-			}
-		}
-		return false;
-	}
-
 	/* FONT SUPPORT */
-
+	
 	//custom pixel font, for use with Latin and Cyrillic languages
 	private static FreeTypeFontGenerator basicFontGenerator;
 	//droid sans fallback, for asian fonts
 	private static FreeTypeFontGenerator asianFontGenerator;
-
+	
 	@Override
 	public void setupFontGenerators(int pageSize, boolean systemfont) {
 		//don't bother doing anything if nothing has changed
@@ -130,17 +112,19 @@ public class DesktopPlatformSupport extends PlatformSupport {
 		resetGenerators(false);
 		fonts = new HashMap<>();
 
-		basicFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixel_font.ttf"));
-		asianFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/fusion_pixel.ttf"));
-		fallbackFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/droid_sans.ttf"));
-
+		if (systemfont) {
+			basicFontGenerator = asianFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/droid_sans.ttf"));
+		} else {
+			basicFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixel_font.ttf"));
+			asianFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/droid_sans.ttf"));
+		}
+		
 		fonts.put(basicFontGenerator, new HashMap<>());
 		fonts.put(asianFontGenerator, new HashMap<>());
-		fonts.put(fallbackFontGenerator, new HashMap<>());
-
+		
 		packer = new PixmapPacker(pageSize, pageSize, Pixmap.Format.RGBA8888, 1, false);
 	}
-
+	
 	private static Matcher asianMatcher = Pattern.compile("\\p{InHangul_Syllables}|" +
 			"\\p{InCJK_Unified_Ideographs}|\\p{InCJK_Symbols_and_Punctuation}|\\p{InHalfwidth_and_Fullwidth_Forms}|" +
 			"\\p{InHiragana}|\\p{InKatakana}").matcher("");
@@ -153,7 +137,7 @@ public class DesktopPlatformSupport extends PlatformSupport {
 			return basicFontGenerator;
 		}
 	}
-
+	
 	//splits on newlines, underscores, and chinese/japaneses characters
 	private Pattern regularsplitter = Pattern.compile(
 			"(?<=\n)|(?=\n)|(?<=_)|(?=_)|" +
@@ -161,7 +145,7 @@ public class DesktopPlatformSupport extends PlatformSupport {
 					"(?<=\\p{InKatakana})|(?=\\p{InKatakana})|" +
 					"(?<=\\p{InCJK_Unified_Ideographs})|(?=\\p{InCJK_Unified_Ideographs})|" +
 					"(?<=\\p{InCJK_Symbols_and_Punctuation})|(?=\\p{InCJK_Symbols_and_Punctuation})");
-
+	
 	//additionally splits on words, so that each word can be arranged individually
 	private Pattern regularsplitterMultiline = Pattern.compile(
 			"(?<= )|(?= )|(?<=\n)|(?=\n)|(?<=_)|(?=_)|" +
@@ -169,7 +153,7 @@ public class DesktopPlatformSupport extends PlatformSupport {
 					"(?<=\\p{InKatakana})|(?=\\p{InKatakana})|" +
 					"(?<=\\p{InCJK_Unified_Ideographs})|(?=\\p{InCJK_Unified_Ideographs})|" +
 					"(?<=\\p{InCJK_Symbols_and_Punctuation})|(?=\\p{InCJK_Symbols_and_Punctuation})");
-
+	
 	@Override
 	public String[] splitforTextBlock(String text, boolean multiline) {
 		if (multiline) {
@@ -177,14 +161,5 @@ public class DesktopPlatformSupport extends PlatformSupport {
 		} else {
 			return regularsplitter.split(text);
 		}
-	}
-	@Override
-	public void updateGame(String url, UpdateCallback listener) {
-		// TODO
-	}
-
-	@Override
-	public void install(File file) {
-		// TODO
 	}
 }
