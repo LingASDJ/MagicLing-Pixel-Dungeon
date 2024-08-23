@@ -21,13 +21,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogReal;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nxhy;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Typhon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -42,9 +42,11 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndDailies;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndRanking;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndVictoryCongrats;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.audio.Music;
 import com.watabou.utils.GameMath;
 
 public class RankingsScene extends PixelScene {
@@ -63,7 +65,12 @@ public class RankingsScene extends PixelScene {
 		
 		super.create();
 
-		PixelScene.uiCamera.visible = false;
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.THEME_1, Assets.Music.THEME_2},
+				new float[]{1, 1},
+				false);
+
+		uiCamera.visible = false;
 		
 		int w = Camera.main.width;
 		int h = Camera.main.height;
@@ -86,7 +93,7 @@ public class RankingsScene extends PixelScene {
 		if (Rankings.INSTANCE.records.size() > 0) {
 
 			//attempts to give each record as much space as possible, ideally as much space as portrait mode
-			float rowHeight = GameMath.gate(ROW_HEIGHT_MIN, (PixelScene.uiCamera.height - 26)/Rankings.INSTANCE.records.size(), ROW_HEIGHT_MAX);
+			float rowHeight = GameMath.gate(ROW_HEIGHT_MIN, (uiCamera.height - 26)/Rankings.INSTANCE.records.size(), ROW_HEIGHT_MAX);
 
 			float left = (w - Math.min( MAX_ROW_WIDTH, w )) / 2 + GAP;
 			float top = (h - rowHeight  * Rankings.INSTANCE.records.size()) / 2;
@@ -160,6 +167,9 @@ public class RankingsScene extends PixelScene {
 
 		if (Dungeon.daily){
 			addToFront(new WndDailies());
+		} else if (Badges.isUnlocked(Badges.Badge.VICTORY) && !SPDSettings.victoryNagged()) {
+			SPDSettings.victoryNagged(true);
+			add(new WndVictoryCongrats());
 		}
 
 		fadeIn();
@@ -182,11 +192,6 @@ public class RankingsScene extends PixelScene {
 		private static final float GAP	= 4;
 		
 		private static final int[] TEXT_WIN	= {0xFFFF88, 0xB2B25F};
-		private static final int[] TEXT_WIN2	= {0xCF6E28, 0xC66c28};
-		private static final int[] TEXT_WIN3	= {0x6ECF28, 0xC6286c};
-
-		private static final int[] TEXT_WIN4	= {Window.Pink_COLOR, Window.DeepPK_COLOR};
-
 		private static final int[] TEXT_LOSE= {0xDDDDDD, 0x888888};
 		private static final int FLARE_WIN	= 0x888866;
 		private static final int FLARE_LOSE	= 0x666666;
@@ -201,21 +206,16 @@ public class RankingsScene extends PixelScene {
 		private BitmapText depth;
 		private Image classIcon;
 		private BitmapText level;
-
+		
 		public Record( int pos, boolean latest, Rankings.Record rec ) {
 			super();
-
+			
 			this.rec = rec;
-
+			
 			if (latest) {
 				flare = new Flare( 6, 24 );
 				flare.angularSpeed = 90;
-				if (rec.cause == Typhon.class){
-					flare.color( 0xCF6E28 );
-				} else {
-					flare.color( rec.win ? FLARE_WIN : FLARE_LOSE );
-				}
-
+				flare.color( rec.win ? FLARE_WIN : FLARE_LOSE );
 				addToBack( flare );
 			}
 
@@ -224,39 +224,17 @@ public class RankingsScene extends PixelScene {
 			} else
 				position.text(" ");
 			position.measure();
-
+			
 			desc.text( Messages.titleCase(rec.desc()) );
 
 			int odd = pos % 2;
-
-
-
+			
 			if (rec.win) {
-				if (rec.cause == Typhon.class) {
-					shield.copy(new ItemSprite(ItemSpriteSheet.CITY_HOOD));
-					position.hardlight(TEXT_WIN2[odd]);
-					desc.hardlight(TEXT_WIN2[odd]);
-					depth.hardlight(TEXT_WIN2[odd]);
-					level.hardlight(TEXT_WIN2[odd]);
-				} else if (rec.cause == YogReal.class) {
-					shield.copy(new ItemSprite(ItemSpriteSheet.SKELETONGOLD));
-					position.hardlight(TEXT_WIN3[odd]);
-					desc.hardlight(TEXT_WIN3[odd]);
-					depth.hardlight(TEXT_WIN3[odd]);
-					level.hardlight(TEXT_WIN3[odd]);
-				} else if (rec.cause == Nxhy.class) {
-					shield.copy(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD));
-					position.hardlight(TEXT_WIN4[odd]);
-					desc.hardlight(TEXT_WIN4[odd]);
-					depth.hardlight(TEXT_WIN4[odd]);
-					level.hardlight(TEXT_WIN4[odd]);
-				} else {
-					shield.copy( new ItemSprite(ItemSpriteSheet.AMULET) );
-					position.hardlight( TEXT_WIN[odd] );
-					desc.hardlight( TEXT_WIN[odd] );
-					depth.hardlight( TEXT_WIN[odd] );
-					level.hardlight( TEXT_WIN[odd] );
-				}
+				shield.copy( new ItemSprite(ItemSpriteSheet.AMULET, null) );
+				position.hardlight( TEXT_WIN[odd] );
+				desc.hardlight( TEXT_WIN[odd] );
+				depth.hardlight( TEXT_WIN[odd] );
+				level.hardlight( TEXT_WIN[odd] );
 			} else {
 				position.hardlight( TEXT_LOSE[odd] );
 				desc.hardlight( TEXT_LOSE[odd] );
@@ -272,6 +250,19 @@ public class RankingsScene extends PixelScene {
 					add(depth);
 				}
 
+				if (rec.ascending){
+					shield.copy( new ItemSprite(ItemSpriteSheet.AMULET, null) );
+					shield.hardlight(0.4f, 0.4f, 0.7f);
+				}
+
+			}
+
+			if (rec.daily){
+				shield.copy( Icons.get(Icons.CALENDAR) );
+				shield.hardlight(0.5f, 1f, 2f);
+			} else if (!rec.customSeed.isEmpty()){
+				shield.copy( Icons.get(Icons.SEED) );
+				shield.hardlight(1f, 1.5f, 0.67f);
 			}
 
 			if (rec.herolevel != 0){
@@ -279,30 +270,19 @@ public class RankingsScene extends PixelScene {
 				level.measure();
 				add(level);
 			}
-
+			
 			classIcon.copy( Icons.get( rec.heroClass ) );
 			if (rec.heroClass == HeroClass.ROGUE){
 				//cloak of shadows needs to be brightened a bit
 				classIcon.brightness(2f);
 			}
-
-			if (rec.daily){
-				shield.copy( Icons.get(Icons.CALENDAR) );
-				shield.hardlight(0.5f, 1f, 2f);
-			} else if (!rec.customSeed.isEmpty() && !rec.win){
-				shield.copy(new Image(new ItemSprite( ItemSpriteSheet.RIP, null )));
-			} else if (!rec.customSeed.isEmpty()){
-				shield.copy(new Image(new ItemSprite( ItemSpriteSheet.AMULET, null )));
-				shield.hardlight(Window.SHPX_COLOR);
-			}
-
 		}
 		
 		@Override
 		protected void createChildren() {
 			
 			super.createChildren();
-
+			
 			shield = new Image(new ItemSprite( ItemSpriteSheet.TOMB, null ));
 			add( shield );
 			
