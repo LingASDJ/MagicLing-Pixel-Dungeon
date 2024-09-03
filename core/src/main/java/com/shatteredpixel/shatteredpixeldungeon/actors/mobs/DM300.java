@@ -207,7 +207,7 @@ public class DM300 extends Boss {
 					if (turnsSinceLastAbility >= MIN_COOLDOWN){
 						//use a coneAOE to try and account for trickshotting angles
 						ConeAOE aim = new ConeAOE(new Ballistica(pos, enemy.pos, Ballistica.WONT_STOP), Float.POSITIVE_INFINITY, 30, Ballistica.STOP_SOLID);
-						if (aim.cells.contains(enemy.pos)) {
+						if (aim.cells.contains(enemy.pos) && !Char.hasProp(enemy, Property.INORGANIC)) {
 							lastAbility = GAS;
 							turnsSinceLastAbility = 0;
 
@@ -219,7 +219,7 @@ public class DM300 extends Boss {
 								Sample.INSTANCE.play(Assets.Sounds.GAS);
 								return true;
 							}
-						//if we can't gas, then drop rocks
+						//if we can't gas, or if target is inorganic then drop rocks
 						//unless enemy is already stunned, we don't want to stunlock them
 						} else if (enemy.paralysed <= 0) {
 							lastAbility = ROCKS;
@@ -248,6 +248,10 @@ public class DM300 extends Boss {
 						} else {
 							//more likely to use gas
 							lastAbility = Random.Int(4) != 0 ? GAS : ROCKS;
+						}
+
+						if (Char.hasProp(enemy, Property.INORGANIC)){
+							lastAbility = ROCKS;
 						}
 
 						//doesn't spend a turn if enemy is at a distance
