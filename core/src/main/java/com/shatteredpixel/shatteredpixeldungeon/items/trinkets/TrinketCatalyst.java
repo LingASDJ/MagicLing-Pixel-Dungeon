@@ -50,8 +50,7 @@ import java.util.Collection;
 public class TrinketCatalyst extends Item {
 
 	{
-
-		image = ItemSpriteSheet.SCROLL_CATALYST;
+		image = ItemSpriteSheet.TRINKET_CATA;
 
 		unique = true;
 	}
@@ -78,11 +77,9 @@ public class TrinketCatalyst extends Item {
 		}
 	}
 
-	public ArrayList<Trinket> rolledTrinkets = new ArrayList<>();
+	private ArrayList<Trinket> rolledTrinkets = new ArrayList<>();
 
 	private static final String ROLLED_TRINKETS = "rolled_trinkets";
-
-
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
@@ -137,14 +134,22 @@ public class TrinketCatalyst extends Item {
 		}
 	}
 
+	public static class RandomTrinket extends Item {
+
+		{
+			image = ItemSpriteSheet.TRINKET_HOLDER;
+		}
+
+	}
+
 	public static class WndTrinket extends Window {
 
 		private static final int WIDTH		= 120;
-		private static final int BTN_SIZE	= 32;
-		private static final int BTN_GAP	= 5;
+		private static final int BTN_SIZE	= 24;
+		private static final int BTN_GAP	= 4;
 		private static final int GAP		= 2;
 
-		public static final int NUM_TRINKETS = 3;
+		private static final int NUM_TRINKETS = 4; //last one is a random choice
 
 		public WndTrinket( TrinketCatalyst cata ){
 
@@ -160,23 +165,22 @@ public class TrinketCatalyst extends Item {
 			add( message );
 
 			//roll new trinkets if trinkets were not already rolled
-			while (cata.rolledTrinkets.size() < NUM_TRINKETS){
+			while (cata.rolledTrinkets.size() < NUM_TRINKETS-1){
 				cata.rolledTrinkets.add((Trinket) Generator.random(Generator.Category.TRINKET));
-			}
-			try {
-				Dungeon.saveAll();
-			} catch (IOException e) {
-				ShatteredPixelDungeon.reportException(e);
 			}
 
 			for (int i = 0; i < NUM_TRINKETS; i++){
-				ItemButton btnReward = new ItemButton(){
+				ItemButton btnReward = new ItemButton() {
 					@Override
 					protected void onClick() {
 						ShatteredPixelDungeon.scene().addToFront(new RewardWindow(item()));
 					}
 				};
-				btnReward.item(cata.rolledTrinkets.get(i));
+				if (i == NUM_TRINKETS-1){
+					btnReward.item(new RandomTrinket());
+				} else {
+					btnReward.item(cata.rolledTrinkets.get(i));
+				}
 				btnReward.setRect( (i+1)*(WIDTH - BTN_GAP) / NUM_TRINKETS - BTN_SIZE, message.top() + message.height() + BTN_GAP, BTN_SIZE, BTN_SIZE );
 				add( btnReward );
 
@@ -202,13 +206,18 @@ public class TrinketCatalyst extends Item {
 						RewardWindow.this.hide();
 						WndTrinket.this.hide();
 
+						Item result = item;
+						if (result instanceof RandomTrinket){
+							result = Generator.random(Generator.Category.TRINKET);
+						}
+
 						TrinketCatalyst cata = Dungeon.hero.belongings.getItem(TrinketCatalyst.class);
 
 						if (cata != null) {
 							cata.detach(Dungeon.hero.belongings.backpack);
 							Catalog.countUse(cata.getClass());
-							item.identify();
-							((AlchemyScene)ShatteredPixelDungeon.scene()).craftItem(null, item);
+							result.identify();
+							((AlchemyScene)ShatteredPixelDungeon.scene()).craftItem(null, result);
 						}
 					}
 				};
