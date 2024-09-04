@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,12 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.CorrosionParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FrostFlameParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.HalomethaneFlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SwordParticle;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
@@ -62,9 +59,6 @@ public class MagicMissile extends Emitter {
 	public static final int MAGIC_MISSILE   = 0;
 	public static final int FROST           = 1;
 	public static final int FIRE            = 2;
-	public static final int HALOFIRE            = 300;
-
-	public static final int FROSTFIRE           = 301;
 	public static final int CORROSION       = 3;
 	public static final int FOLIAGE         = 4;
 	public static final int FORCE           = 5;
@@ -73,14 +67,11 @@ public class MagicMissile extends Emitter {
 	public static final int RAINBOW         = 8;
 	public static final int EARTH           = 9;
 	public static final int WARD            = 10;
-	
 	public static final int SHAMAN_RED      = 11;
 	public static final int SHAMAN_BLUE     = 12;
 	public static final int SHAMAN_PURPLE   = 13;
-	public static final int TOXIC_VENT      = 14;
-	public static final int ELMO            = 15;
-	public static final int POISON          = 16;
-	public static final int BUBBLES         = 17;
+	public static final int ELMO            = 14;
+	public static final int POISON          = 15;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -96,9 +87,8 @@ public class MagicMissile extends Emitter {
 	public static final int SPARK_CONE      = 112;
 	public static final int BLOOD_CONE      = 113;
 
-	public static final int SWORDLING      = 114;
-
-	public static final int HEART_ANMY      = 115;
+	//use SPECK + the constant of the Speck you want. e.g. MagicMissile.SPECK + Speck.TOXIC
+	public static final int SPECK           = 1000;
 	
 	public void reset( int type, int from, int to, Callback callback ) {
 		reset( type,
@@ -137,6 +127,14 @@ public class MagicMissile extends Emitter {
 		sy = speed.y;
 		time = d.length() / SPEED;
 
+		//for now all specks share the same size and volume, this can easily be customized later if needed
+		if (type >= SPECK){
+			size( 10 );
+			pour( Speck.factory(type-SPECK), 0.02f);
+			revive();
+			return;
+		}
+
 		switch(type){
 			case MAGIC_MISSILE: default:
 				size( 4 );
@@ -148,14 +146,6 @@ public class MagicMissile extends Emitter {
 			case FIRE:
 				size( 4 );
 				pour( FlameParticle.FACTORY, 0.01f );
-				break;
-			case HALOFIRE:
-				size( 4 );
-				pour( HalomethaneFlameParticle.FACTORY, 0.01f );
-				break;
-			case FROSTFIRE:
-				size( 4 );
-				pour( FrostFlameParticle.FACTORY, 0.01f );
 				break;
 			case CORROSION:
 				size( 3 );
@@ -187,15 +177,6 @@ public class MagicMissile extends Emitter {
 				size( 4 );
 				pour( WardParticle.FACTORY, 0.01f );
 				break;
-			case SWORDLING:
-				size( 4 );
-				pour( SwordParticle.FACTORY, 0.01f );
-				break;
-			case HEART_ANMY:
-				size( 4 );
-				pour( Speck.factory(Speck.HEART), 0.01f );
-				break;
-				
 			case SHAMAN_RED:
 				size( 2 );
 				pour( ShamanParticle.RED, 0.01f );
@@ -208,10 +189,6 @@ public class MagicMissile extends Emitter {
 				size( 2 );
 				pour( ShamanParticle.PURPLE, 0.01f );
 				break;
-			case TOXIC_VENT:
-				size( 10 );
-				pour( Speck.factory(Speck.TOXIC), 0.02f );
-				break;
 			case ELMO:
 				size( 5 );
 				pour( ElmoParticle.FACTORY, 0.01f );
@@ -219,10 +196,6 @@ public class MagicMissile extends Emitter {
 			case POISON:
 				size( 3 );
 				pour( PoisonParticle.MISSILE, 0.01f );
-				break;
-			case BUBBLES:
-				size( 10 );
-				pour( Speck.factory(Speck.BUBBLE), 0.02f );
 				break;
 
 			case MAGIC_MISS_CONE:
