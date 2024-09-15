@@ -21,6 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -29,12 +32,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessNoMoney;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayMoneyMore;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.LuckyGlove;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -44,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkeeperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndRushTradeItem;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTradeItem;
 import com.watabou.noosa.Game;
@@ -79,22 +89,30 @@ public class Shopkeeper extends NPC {
 		if (turnsSinceHarmed >= 0){
 			turnsSinceHarmed ++;
 		}
-
+		if (!seenBefore && Dungeon.level.heroFOV[pos]) {
+			if (Dungeon.hero.buff(AscensionChallenge.class) != null) {
+				yell(Messages.get(this, "talk_ascent", Messages.titleCase(Dungeon.hero.name())));
+			}
+			seenBefore = true;
+		}
 		sprite.turnTo( pos, Dungeon.hero.pos );
 		spend( TICK );
 		return super.act();
 	}
-	
+
 	@Override
 	public void damage( int dmg, Object src ) {
-		processHarm();
 	}
-	
+
 	@Override
-	public boolean add( Buff buff ) {
-		if (buff.type == Buff.buffType.NEGATIVE){
-			processHarm();
-		}
+	public int defenseSkill( Char enemy ) {
+		return INFINITE_EVASION;
+	}
+
+
+
+	@Override
+	public boolean add(Buff buff ) {
 		return false;
 	}
 
@@ -138,13 +156,13 @@ public class Shopkeeper extends NPC {
 				}
 			}
 
-			//There is a 1 turn buffer before more damage/debuffs make the shopkeeper flee
-			//This is mainly to prevent stacked effects from causing an instant flee
+		//There is a 1 turn buffer before more damage/debuffs make the shopkeeper flee
+		//This is mainly to prevent stacked effects from causing an instant flee
 		} else if (turnsSinceHarmed >= 1) {
 			flee();
 		}
 	}
-
+	
 	public void flee() {
 		destroy();
 
@@ -155,7 +173,7 @@ public class Shopkeeper extends NPC {
 			CellEmitter.get(pos).burst(ElmoParticle.FACTORY, 6);
 		}
 	}
-
+	
 	@Override
 	public void destroy() {
 		super.destroy();
@@ -164,16 +182,11 @@ public class Shopkeeper extends NPC {
 				if (ShatteredPixelDungeon.scene() instanceof GameScene) {
 					CellEmitter.get(heap.pos).burst(ElmoParticle.FACTORY, 4);
 				}
-				if (heap.size() == 1) {
-					heap.destroy();
-				} else {
-					heap.items.remove(heap.size()-1);
-					heap.type = Heap.Type.HEAP;
-				}
+				heap.type = Heap.Type.HEAP;
 			}
 		}
 	}
-
+	
 	@Override
 	public boolean reset() {
 		return true;
@@ -181,9 +194,38 @@ public class Shopkeeper extends NPC {
 
 	//shopkeepers are greedy!
 	public static int sellPrice(Item item){
-		return item.value() * 5 * (Dungeon.depth / 5 + 1);
+		int price = item.value() * 5 * (Dungeon.depth / 5 + 1);
+
+		if(hero.buff(MagicGirlSayMoneyMore.class) != null){
+			if(item instanceof Ankh ||item instanceof Food || item instanceof PotionOfHealing){
+				price *= 2.5;
+			}
+		} else if (hero.buff(BlessNoMoney.class) != null) {
+			price *= 0.6;
+		}
+		if (Dungeon.hero.buff(AscensionChallenge.class) != null && Dungeon.shopOnLevel()){
+			price *= 3f;
+		}
+//		if(Dungeon.isDLC(Conducts.Conduct.MONEYLETGO)){
+//			price *= 0.5;
+//		}
+		return price;
 	}
 
+	public static int sellIcePrice(Item item){
+		int price = item.iceCoinValue();
+
+		if (Badges.isUnlocked(Badges.Badge.NYZ_SHOP)){
+			price *= 0.9f;
+		}
+
+		return price;
+	}
+
+	public static int sellRushPrice(Item item){
+		return item.RushValue();
+	}
+	
 	public static WndBag sell() {
 		return GameScene.selectItem( itemSelector );
 	}
@@ -211,7 +253,12 @@ public class Shopkeeper extends NPC {
 		public void onSelect( Item item ) {
 			if (item != null) {
 				WndBag parentWnd = sell();
-				GameScene.show( new WndTradeItem( item, parentWnd ) );
+				if(Statistics.bossRushMode){
+					GameScene.show( new WndRushTradeItem( item, parentWnd ) );
+				} else {
+					GameScene.show( new WndTradeItem( item, parentWnd ) );
+				}
+
 			}
 		}
 	};
@@ -245,7 +292,11 @@ public class Shopkeeper extends NPC {
 						} else if (index > 1){
 							GLog.i(Messages.get(Shopkeeper.this, "buyback"));
 							Item returned = buybackItems.remove(index-2);
-							Dungeon.gold -= returned.value();
+							if(hero.belongings.getItem(LuckyGlove.class)!=null && Math.random()<0.9) {
+								Dungeon.gold -= returned.value();
+							}else{
+								GLog.n(Messages.get(LuckyGlove.class,"lucky"));
+							}
 							Statistics.goldCollected -= returned.value();
 							if (!returned.doPickUp(Dungeon.hero)){
 								Dungeon.level.drop(returned, Dungeon.hero.pos);
