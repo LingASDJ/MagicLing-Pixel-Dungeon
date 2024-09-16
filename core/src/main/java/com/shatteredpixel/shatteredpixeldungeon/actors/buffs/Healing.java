@@ -33,20 +33,20 @@ import com.watabou.utils.GameMath;
 public class Healing extends Buff {
 
 	private int healingLeft;
-	
+
 	private float percentHealPerTick;
 	private int flatHealPerTick;
 
 	private boolean healingLimited = false;
-	
+
 	{
 		//unlike other buffs, this one acts after the hero and takes priority against other effects
 		//healing is much more useful if you get some of it off before taking damage
 		actPriority = HERO_PRIO - 1;
-		
+
 		type = buffType.POSITIVE;
 	}
-	
+
 	@Override
 	public boolean act(){
 
@@ -60,19 +60,19 @@ public class Healing extends Buff {
 
 		target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healingThisTick()), FloatingText.HEALING);
 		healingLeft -= healingThisTick();
-		
+
 		if (healingLeft <= 0){
 			if (target instanceof Hero) {
 				((Hero) target).resting = false;
 			}
 			detach();
 		}
-		
+
 		spend( TICK );
-		
+
 		return true;
 	}
-	
+
 	private int healingThisTick(){
 		int heal = (int)GameMath.gate(1,
 				Math.round(healingLeft * percentHealPerTick) + flatHealPerTick,
@@ -96,23 +96,23 @@ public class Healing extends Buff {
 			healingLeft = Math.round(healingLeft*VialOfBlood.totalHealMultiplier());
 		}
 	}
-	
+
 	public void increaseHeal( int amount ){
 		healingLeft += amount;
 	}
-	
+
 	@Override
 	public void fx(boolean on) {
 		if (on) target.sprite.add( CharSprite.State.HEALING );
 		else    target.sprite.remove( CharSprite.State.HEALING );
 	}
-	
+
 	private static final String LEFT = "left";
 	private static final String PERCENT = "percent";
 	private static final String FLAT = "flat";
 
 	private static final String HEALING_LIMITED = "healing_limited";
-	
+
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
@@ -121,7 +121,7 @@ public class Healing extends Buff {
 		bundle.put(FLAT, flatHealPerTick);
 		bundle.put(HEALING_LIMITED, healingLimited);
 	}
-	
+
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
@@ -130,7 +130,7 @@ public class Healing extends Buff {
 		flatHealPerTick = bundle.getInt(FLAT);
 		healingLimited = bundle.getBoolean(HEALING_LIMITED);
 	}
-	
+
 	@Override
 	public int icon() {
 		return BuffIndicator.HEALING;
@@ -140,7 +140,7 @@ public class Healing extends Buff {
 	public String iconTextDisplay() {
 		return Integer.toString(healingLeft);
 	}
-	
+
 	@Override
 	public String desc() {
 		return Messages.get(this, "desc", healingThisTick(), healingLeft);

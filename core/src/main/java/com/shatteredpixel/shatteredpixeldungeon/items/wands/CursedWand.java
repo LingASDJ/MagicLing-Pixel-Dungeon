@@ -324,7 +324,7 @@ public class CursedWand {
 		@Override
 		public void FX(Item origin, Char user, Ballistica bolt, Callback callback) {
 			MagicMissile.boltFromChar(user.sprite.parent,
-					MagicMissile.SPECK + Speck.BUBBLE,
+					MagicMissile.SPARK_CONE + Speck.BUBBLE,
 					user.sprite,
 					bolt.collisionPos,
 					callback);

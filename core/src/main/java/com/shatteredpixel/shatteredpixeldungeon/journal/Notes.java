@@ -66,7 +66,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Notes {
-	
+
 	public static abstract class Record implements Comparable<Record>, Bundlable {
 
 		//TODO currently notes can only relate to branch = 0, add branch support here if that changes
@@ -87,17 +87,17 @@ public class Notes {
 		public abstract String title();
 
 		public abstract String desc();
-		
+
 		@Override
 		public abstract boolean equals(Object obj);
-		
+
 		@Override
 		public int compareTo( Record another ) {
 			return another.depth() - depth();
 		}
-		
+
 		private static final String DEPTH	= "depth";
-		
+
 		@Override
 		public void restoreFromBundle( Bundle bundle ) {
 			depth = bundle.getInt( DEPTH );
@@ -108,7 +108,7 @@ public class Notes {
 			bundle.put( DEPTH, depth );
 		}
 	}
-	
+
 	public enum Landmark {
 		CHASM_FLOOR,
 		WATER_FLOOR,
@@ -132,16 +132,20 @@ public class Notes {
 		WANDMAKER,
 		TROLL,
 		IMP,
+		SHOP2,
+		REDAGRON,
+
+		SMALLB,
 
 		DEMON_SPAWNER;
 	}
-	
+
 	public static class LandmarkRecord extends Record {
-		
+
 		protected Landmark landmark;
-		
+
 		public LandmarkRecord() {}
-		
+
 		public LandmarkRecord(Landmark landmark, int depth ) {
 			this.landmark = landmark;
 			this.depth = depth;
@@ -152,36 +156,36 @@ public class Notes {
 				default:
 					return Icons.STAIRS.get();
 
-				case CHASM_FLOOR:
-					return Icons.STAIRS_CHASM.get();
-				case WATER_FLOOR:
-					return Icons.STAIRS_WATER.get();
-				case GRASS_FLOOR:
-					return Icons.STAIRS_GRASS.get();
-				case DARK_FLOOR:
-					return Icons.STAIRS_DARK.get();
-				case LARGE_FLOOR:
-					return Icons.STAIRS_LARGE.get();
-				case TRAPS_FLOOR:
-					return Icons.STAIRS_TRAPS.get();
-				case SECRETS_FLOOR:
-					return Icons.STAIRS_SECRETS.get();
+//				case CHASM_FLOOR:
+//					return Icons.STAIRS_CHASM.get();
+//				case WATER_FLOOR:
+//					return Icons.STAIRS_WATER.get();
+//				case GRASS_FLOOR:
+//					return Icons.STAIRS_GRASS.get();
+//				case DARK_FLOOR:
+//					return Icons.STAIRS_DARK.get();
+//				case LARGE_FLOOR:
+//					return Icons.STAIRS_LARGE.get();
+//				case TRAPS_FLOOR:
+//					return Icons.STAIRS_TRAPS.get();
+//				case SECRETS_FLOOR:
+//					return Icons.STAIRS_SECRETS.get();
 
 				case SHOP:
 					if (depth == 20)    return new Image(new ImpSprite());
 					else                return new Image(new ShopkeeperSprite());
-				case ALCHEMY:
-					return Icons.get(Icons.ALCHEMY);
-				case GARDEN:
-					return Icons.get(Icons.GRASS);
-				case DISTANT_WELL:
-					return Icons.get(Icons.DISTANT_WELL);
-				case WELL_OF_HEALTH:
-					return Icons.get(Icons.WELL_HEALTH);
-				case WELL_OF_AWARENESS:
-					return Icons.get(Icons.WELL_AWARENESS);
-				case SACRIFICIAL_FIRE:
-					return Icons.get(Icons.SACRIFICE_ALTAR);
+//				case ALCHEMY:
+//					return Icons.get(Icons.ALCHEMY);
+//				case GARDEN:
+//					return Icons.get(Icons.GRASS);
+//				case DISTANT_WELL:
+//					return Icons.get(Icons.DISTANT_WELL);
+//				case WELL_OF_HEALTH:
+//					return Icons.get(Icons.WELL_HEALTH);
+//				case WELL_OF_AWARENESS:
+//					return Icons.get(Icons.WELL_AWARENESS);
+//				case SACRIFICIAL_FIRE:
+//					return Icons.get(Icons.SACRIFICE_ALTAR);
 				case STATUE:
 					return new Image(new StatueSprite());
 
@@ -260,32 +264,32 @@ public class Notes {
 					&& landmark == ((LandmarkRecord) obj).landmark
 					&& depth() == ((LandmarkRecord) obj).depth();
 		}
-		
+
 		private static final String LANDMARK	= "landmark";
-		
+
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			landmark = Landmark.valueOf(bundle.getString(LANDMARK));
 		}
-		
+
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
 			bundle.put( LANDMARK, landmark.name() );
 		}
 	}
-	
+
 	public static class KeyRecord extends Record {
-		
+
 		protected Key key;
-		
+
 		public KeyRecord() {}
-		
+
 		public KeyRecord( Key key ){
 			this.key = key;
 		}
-		
+
 		@Override
 		public int depth() {
 			return key.depth;
@@ -316,7 +320,7 @@ public class Notes {
 		public String desc() {
 			return key.desc();
 		}
-		
+
 		public Class<? extends Key> type(){
 			return key.getClass();
 		}
@@ -329,25 +333,25 @@ public class Notes {
 		public int quantity(){
 			return key.quantity();
 		}
-		
+
 		public void quantity(int num){
 			key.quantity(num);
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			return (obj instanceof KeyRecord)
 					&& key.isSimilar(((KeyRecord) obj).key);
 		}
-		
+
 		private static final String KEY	= "key";
-		
+
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			key = (Key) bundle.get(KEY);
 		}
-		
+
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
@@ -415,8 +419,9 @@ public class Notes {
 		@Override
 		public Image icon() {
 			switch (type){
-				case TEXT: default:
-					return Icons.SCROLL_COLOR.get();
+//				case TEXT: default:
+//					return Icons.SCROLL_COLOR.get();
+				default:
 				case DEPTH:
 					return Icons.STAIRS.get();
 				case ITEM:
@@ -502,7 +507,7 @@ public class Notes {
 	}
 	
 	private static ArrayList<Record> records;
-	
+
 	public static void reset() {
 		records = new ArrayList<>();
 	}
@@ -516,7 +521,7 @@ public class Notes {
 		bundle.put( RECORDS, records );
 		bundle.put( NEXT_CUSTOM_ID, nextCustomID );
 	}
-	
+
 	public static void restoreFromBundle( Bundle bundle ) {
 		records = new ArrayList<>();
 		nextCustomID = bundle.getInt( NEXT_CUSTOM_ID );
@@ -524,7 +529,7 @@ public class Notes {
 			records.add( (Record) rec );
 		}
 	}
-	
+
 	public static boolean add( Landmark landmark ) {
 		LandmarkRecord l = new LandmarkRecord( landmark, Dungeon.depth );
 		if (!records.contains(l)) {
@@ -542,7 +547,7 @@ public class Notes {
 	public static boolean remove( Landmark landmark ) {
 		return records.remove( new LandmarkRecord(landmark, Dungeon.depth) );
 	}
-	
+
 	public static boolean add( Key key ){
 		KeyRecord k = new KeyRecord(key);
 		if (!records.contains(k)){
@@ -555,7 +560,7 @@ public class Notes {
 			return true;
 		}
 	}
-	
+
 	public static boolean remove( Key key ){
 		KeyRecord k = new KeyRecord( key );
 		if (records.contains(k)){
@@ -569,7 +574,7 @@ public class Notes {
 		}
 		return false;
 	}
-	
+
 	public static int keyCount( Key key ){
 		KeyRecord k = new KeyRecord( key );
 		if (records.contains(k)){
@@ -597,7 +602,7 @@ public class Notes {
 		}
 		return false;
 	}
-	
+
 	public static <T extends Record> ArrayList<T> getRecords( Class<T> recordType ){
 		ArrayList<T> filtered = new ArrayList<>();
 		for (Record rec : records){

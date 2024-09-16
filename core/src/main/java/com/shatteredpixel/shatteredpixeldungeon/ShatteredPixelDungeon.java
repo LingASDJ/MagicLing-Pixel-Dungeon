@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,14 +33,20 @@ import com.watabou.utils.PlatformSupport;
 
 public class ShatteredPixelDungeon extends Game {
 
+	private static String log = "";
+	public static void appendLog(String string) {
+		log += "\n\n" + string;
+	}
+
 	//variable constants for specific older versions of shattered, used for data conversion
-	public static final int v1_2_3 = 628; //v1.2.3 is kept for now, for old rankings score logic
+	//versions older than v1.2.3 are no longer supported, and data from them is ignored
+	public static final int v1_2_3  = 628;
+	public static final int v1_3_2  = 648;
+	public static final int v1_4_3  = 668;
 
-	//savegames from versions older than v1.4.3 are no longer supported, and data from them is ignored
-	public static final int v1_4_3 = 668;
-
-	public static final int v2_0_2 = 700;
-	public static final int v2_1_4 = 737; //iOS was 737, other platforms were 736
+	public static final int v2_0_2  = 700;
+	public static final int v2_1_4  = 737; //iOS was 737, other platforms were 736
+	public static final int v2_2_0  = 20231030;
 	public static final int v2_2_1 = 755; //iOS was 755 (also called v2.2.2), other platforms were 754
 	public static final int v2_3_2 = 768;
 	public static final int v2_4_2 = 782;
@@ -55,7 +61,7 @@ public class ShatteredPixelDungeon extends Game {
 				"com.shatteredpixel.shatteredpixeldungeon.levels.Level$Respawner" );
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability.class,
-				"com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AnkhInvulnerability" );
+				"com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability" );
 
 		//pre-v2.4.0
 		com.watabou.utils.Bundle.addAlias(
@@ -75,10 +81,10 @@ public class ShatteredPixelDungeon extends Game {
 				"com.shatteredpixel.shatteredpixeldungeon.items.spells.AquaBlast" );
 
 		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance.EntranceRoom.class,
+				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EntranceRoom.class,
 				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EntranceRoom" );
 		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.exit.ExitRoom.class,
+				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ExitRoom.class,
 				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ExitRoom" );
 
 		//pre-v2.3.0
@@ -87,6 +93,19 @@ public class ShatteredPixelDungeon extends Game {
 				"com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb$MagicalBomb" );
 
 		//pre-v2.2.0
+
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.StreamerKnife.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.RiverSlade" );
+
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.IceLingSword.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip" );
+
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WitheWoodSword.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarHammer" );
+
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.BlacksmithRoom.QuestEntrance.class,
 				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.BlacksmithRoom$QuestEntrance" );
@@ -108,6 +127,24 @@ public class ShatteredPixelDungeon extends Game {
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.RotGardenRoom.class,
 				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.RotGardenRoom" );
+
+		//pre-v1.3.0
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding.class,
+				"com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm$FallBleed" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal.class,
+				"com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal.Seed.class,
+				"com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil$Seed" );
+
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Dazzling.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Exhausting" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Fragile" );
 	}
 	
 	@Override
@@ -182,6 +219,15 @@ public class ShatteredPixelDungeon extends Game {
 
 		updateDisplaySize();
 
+	}
+
+	public static void switchForceFade(Class<? extends PixelScene> c){
+		switchForceFade(c, null);
+	}
+
+	public static void switchForceFade(Class<? extends PixelScene> c, SceneChangeCallback callback) {
+		PixelScene.forceFade = true;
+		switchScene( c, callback );
 	}
 	
 	@Override
