@@ -21,6 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.branch;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Statistics.lanterfireactive;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -31,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShadowBox;
+import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -38,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.shatteredpixel.shatteredpixeldungeon.levels.nosync.DeepShadowLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
@@ -74,7 +81,7 @@ public class InterlevelScene extends PixelScene {
 	private static float fadeTime;
 	
 	public enum Mode {
-		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, RESET, NONE
+		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, RESET, NONE,EXBOSS,GOBACK,FRGIRLBOSS,ANCITYBOSS,DR,GARDEN,AMULET,YOG
 	}
 	public static Mode mode;
 
@@ -109,11 +116,33 @@ public class InterlevelScene extends PixelScene {
 	{
 		inGameScene = true;
 	}
-	
-	@Override
+
+	private static final int NUM_TIPS = 60;
+
+	private static ArrayList<Integer> tipset;
+	private RenderedTextBlock tip;
+
+	private void newTipSet()
+	{
+		tipset = new ArrayList<>();
+		for(int i = 1; i <= NUM_TIPS; i++)
+			tipset.add(i);
+	}
+
 	public void create() {
 		super.create();
-		
+
+		if(tipset == null || tipset.isEmpty())
+			newTipSet();
+
+		int tip_i = tipset.remove(Random.Int(tipset.size()));
+
+		tip = PixelScene.renderTextBlock(Messages.get(this, "dialog_" + tip_i), 9);
+		tip.maxWidth((int)Math.round(Camera.main.width * 0.8));
+		tip.setPos((Camera.main.width - tip.width()) / 2, (Camera.main.height - tip.height()) / 2);
+		align(tip);
+		add(tip);
+
 		String loadingAsset;
 		int loadingDepth;
 		fadeTime = NORM_FADE;
@@ -128,13 +157,13 @@ public class InterlevelScene extends PixelScene {
 				seed = GamesInProgress.check(GamesInProgress.curSlot).seed;
 				break;
 			case DESCEND:
-				if (Dungeon.hero == null){
+			case FRGIRLBOSS:
+				if (hero == null){
 					loadingDepth = 1;
 					fadeTime = SLOW_FADE;
 				} else {
-					if (curTransition != null)  loadingDepth = curTransition.destDepth;
-					else                        loadingDepth = Dungeon.depth+1;
-					if (Statistics.deepestFloor >= loadingDepth) {
+					loadingDepth = Dungeon.depth+1;
+					if (!(Statistics.deepestFloor < loadingDepth)) {
 						fadeTime = FAST_FADE;
 					} else if (loadingDepth == 6 || loadingDepth == 11
 							|| loadingDepth == 16 || loadingDepth == 21 || loadingDepth == 26) {
@@ -153,6 +182,27 @@ public class InterlevelScene extends PixelScene {
 			case RETURN:
 				loadingDepth = returnDepth;
 				break;
+			case EXBOSS:
+				//scrollSpeed = -25;
+				loadingDepth = returnDepth;
+				break;
+		}
+		if (Dungeon.depth == 0)         	loadingAsset = Assets.Interfaces.LOADING_GOLD;
+		else if (loadingDepth <= 5)     loadingAsset = Assets.Interfaces.LOADING_SEWERS;
+		else if (loadingDepth <= 10)    loadingAsset = Assets.Interfaces.LOADING_PRISON;
+		else if (loadingDepth <= 15)    loadingAsset = Assets.Interfaces.LOADING_COLD;
+		else if (loadingDepth <= 20)    loadingAsset = Assets.Interfaces.LOADING_CITY;
+		else if (loadingDepth <= 25)    loadingAsset = Assets.Interfaces.LOADING_HALLS;
+		else if (loadingDepth <= 30)    loadingAsset = Assets.Interfaces.LOADING_HOLLOW;
+		else                            loadingAsset = Assets.Interfaces.SHADOW;
+
+		//场景过渡速度
+		//本地调试+桌面
+		if (DeviceCompat.isDebug() && DeviceCompat.isDesktop()){
+			fadeTime = 0.1f;
+		} else {
+			//打包后的环境
+			fadeTime = 0.75f;
 		}
 
 		//flush the texture cache whenever moving between regions, helps reduce memory load
@@ -251,7 +301,6 @@ public class InterlevelScene extends PixelScene {
 		im.scale.x = Camera.main.height/5f;
 		im.scale.y = Camera.main.width;
 		add(im);
-
 		String text = Messages.get(Mode.class, mode.name());
 		
 		loadingText = PixelScene.renderTextBlock( text, 9 );
@@ -407,6 +456,10 @@ public class InterlevelScene extends PixelScene {
 
 						switch (mode) {
 							case DESCEND:
+							case ANCITYBOSS:
+							case AMULET:
+							case GARDEN:
+							case YOG:
 								descend();
 								break;
 							case ASCEND:
@@ -600,7 +653,7 @@ public class InterlevelScene extends PixelScene {
 
 	private void descend() throws IOException {
 
-		if (Dungeon.hero == null) {
+		if (hero == null) {
 			Mob.clearHeldAllies();
 			Dungeon.init();
 			GameLog.wipe();
@@ -611,7 +664,7 @@ public class InterlevelScene extends PixelScene {
 			if (DeviceCompat.isDebug()){
 				int trueDepth = Dungeon.depth;
 				int trueBranch = Dungeon.branch;
-				for (int i = 1; i < trueDepth + (trueBranch == 0 ? 0 : 1); i++){
+				for (int i = 0; i < trueDepth + (trueBranch == 0 ? 0 : 1); i++){
 					if (!Dungeon.levelHasBeenGenerated(i, 0)){
 						Dungeon.depth = i;
 						Dungeon.branch = 0;
@@ -641,7 +694,11 @@ public class InterlevelScene extends PixelScene {
 
 			LevelTransition destTransition = level.getTransition(curTransition.destType);
 			curTransition = null;
-			Dungeon.switchLevel( level, destTransition.cell() );
+			if(Dungeon.depth == 14 && branch == 0 && Statistics.difficultyDLCEXLevel>1 || Statistics.RandMode && level instanceof DeepShadowLevel ){
+				Dungeon.switchLevel( level, 847 );
+			} else {
+				Dungeon.switchLevel( level, destTransition.cell() );
+			}
 		}
 
 	}
@@ -651,7 +708,7 @@ public class InterlevelScene extends PixelScene {
 		
 		Mob.holdAllies( Dungeon.level );
 		
-		Buff.affect( Dungeon.hero, Chasm.Falling.class );
+		Buff.affect( hero, Chasm.Falling.class );
 		Dungeon.saveAll();
 
 		Level level;
@@ -680,7 +737,12 @@ public class InterlevelScene extends PixelScene {
 
 		LevelTransition destTransition = level.getTransition(curTransition.destType);
 		curTransition = null;
-		Dungeon.switchLevel( level, destTransition.cell() );
+		if(Dungeon.depth == 14 && branch == 0 && Statistics.difficultyDLCEXLevel>1 || Statistics.RandMode && level instanceof DeepShadowLevel){
+			Dungeon.switchLevel( level, 495 );
+		} else {
+			Dungeon.switchLevel( level, destTransition.cell() );
+		}
+
 	}
 	
 	private void returnTo() throws IOException {
@@ -711,22 +773,22 @@ public class InterlevelScene extends PixelScene {
 			Dungeon.switchLevel( Dungeon.loadLevel( GamesInProgress.curSlot ), -1 );
 		} else {
 			Level level = Dungeon.loadLevel( GamesInProgress.curSlot );
-			Dungeon.switchLevel( level, Dungeon.hero.pos );
+			Dungeon.switchLevel( level, hero.pos );
 		}
 	}
-	
+
 	private void resurrect() {
-		
+
 		Mob.holdAllies( Dungeon.level );
 
 		Level level;
 		if (Dungeon.level.locked) {
 			ArrayList<Item> preservedItems = Dungeon.level.getItemsToPreserveFromSealedResurrect();
 
-			Dungeon.hero.resurrect();
+			hero.resurrect();
 			level = Dungeon.newLevel();
-			Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
-			if (Dungeon.hero.pos == -1) Dungeon.hero.pos = level.entrance();
+			hero.pos = level.randomRespawnCell(hero);
+			if (hero.pos == -1) hero.pos = level.entrance();
 
 			for (Item i : preservedItems){
 				int pos = level.randomRespawnCell(null);
@@ -742,26 +804,54 @@ public class InterlevelScene extends PixelScene {
 			BArray.setFalse(level.heroFOV);
 			BArray.setFalse(level.visited);
 			BArray.setFalse(level.mapped);
-			int invPos = Dungeon.hero.pos;
+			int invPos = hero.pos;
 			int tries = 0;
 			do {
-				Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
+				hero.pos = level.randomRespawnCell(hero);
 				tries++;
 
-			//prevents spawning on traps or plants, prefers farther locations first
-			} while (level.traps.get(Dungeon.hero.pos) != null
-					|| (level.plants.get(Dungeon.hero.pos) != null && tries < 500)
-					|| level.trueDistance(invPos, Dungeon.hero.pos) <= 30 - (tries/10));
+				//prevents spawning on traps or plants, prefers farther locations first
+			} while (level.traps.get(hero.pos) != null
+					|| (level.plants.get(hero.pos) != null && tries < 500)
+					|| level.trueDistance(invPos, hero.pos) <= 30 - (tries/10));
 
 			//directly trample grass
-			if (level.map[Dungeon.hero.pos] == Terrain.HIGH_GRASS || level.map[Dungeon.hero.pos] == Terrain.FURROWED_GRASS){
-				level.map[Dungeon.hero.pos] = Terrain.GRASS;
+			if (level.map[hero.pos] == Terrain.HIGH_GRASS || level.map[hero.pos] == Terrain.FURROWED_GRASS){
+				level.map[hero.pos] = Terrain.GRASS;
 			}
-			Dungeon.hero.resurrect();
-			level.drop(new LostBackpack(), invPos);
+			hero.resurrect();
+			Ankh ankh = null;
+			if(Statistics.ankhToExit){
+
+				for (Ankh i : hero.belongings.getAllItems(Ankh.class)) {
+					if (ankh == null || i.isBlessed()) {
+						ankh = i;
+					}
+				}
+
+				if (hero.lanterfire > 40) {
+					level.drop(new LostBackpack(), level.entrance());
+				} else if( !lanterfireactive || !Dungeon.isChallenged(DHXD)){
+					level.drop(new LostBackpack(), level.entrance());
+				}
+			} else {
+
+				for (Ankh i : hero.belongings.getAllItems(Ankh.class)) {
+					if (ankh == null || i.isBlessed()) {
+						ankh = i;
+					}
+				}
+
+				if (hero.lanterfire > 40) {
+					level.drop(new LostBackpack(), invPos);
+				} else if( !lanterfireactive || !Dungeon.isChallenged(DHXD)){
+					level.drop(new LostBackpack(), invPos);
+				}
+
+			}
 		}
 
-		Dungeon.switchLevel( level, Dungeon.hero.pos );
+		Dungeon.switchLevel( level, hero.pos );
 	}
 
 	private void reset() throws IOException {

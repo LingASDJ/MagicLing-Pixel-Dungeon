@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -31,11 +32,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.lightblack.OilLantern;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
@@ -48,7 +49,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWea
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
-import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -67,28 +67,33 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
 	@Override
 	protected boolean usableOnItem(Item item) {
-		//all melee weapons, except pickaxe when in a mining level
-		if (item instanceof MeleeWeapon){
-			return !(item instanceof Pickaxe && Dungeon.level instanceof MiningLevel);
-
-		//all missile weapons except untipped darts
-		} else if (item instanceof MissileWeapon){
-			return item.getClass() != Dart.class;
-
-		//all regular or exotic potions. No brews or elixirs
-		} else if (item instanceof Potion){
-			return !(item instanceof Elixir || item instanceof Brew);
-
-		//all regular or exotic scrolls, except itself
-		} else if (item instanceof Scroll){
-			return item != this || item.quantity() > 1;
-
-		//all rings, wands, artifacts, trinkets, seeds, and runestones
-		} else {
-			return item instanceof Ring || item instanceof Wand || item instanceof Artifact
-					|| item instanceof Trinket || item instanceof Plant.Seed
-					|| item instanceof Runestone;
+		if(item instanceof MeleeWeapon) {
+			Generator.Category c = Generator.wepTiers[((MeleeWeapon) item).tier - 1];
+			int canChangeWeapon = 0;
+			int lastWeaponIndex = 0;
+			for(int i=0;i<c.probs.length;i++) {
+				if(c.probs[i] > 0){
+					canChangeWeapon++;
+					lastWeaponIndex = i;
+				}
+			}
+			if( canChangeWeapon > 1 )
+				return true;
+			else if( canChangeWeapon == 1 ){//针对只有一把武器能生成的情况，避免后续代码死循环导致的卡死
+				return item.getClass().getSimpleName() != c.classes[lastWeaponIndex].getSimpleName();
+			}else {//针对无法正常生成的武器
+				return false;
+			}
 		}
+		return (item instanceof MissileWeapon && (!(item instanceof Dart) || item instanceof TippedDart)) ||
+				(item instanceof Potion && !(item instanceof Elixir || item instanceof Brew)) ||
+				//the extra check here prevents a single scroll being used on itself
+				(item instanceof Scroll && (!(item instanceof ScrollOfTransmutation) || item.quantity() > 1)) ||
+				item instanceof Ring || item instanceof Trinket
+				|| item instanceof Wand ||
+				item instanceof Plant.Seed ||
+				item instanceof Runestone ||
+				item instanceof Artifact && !(item instanceof OilLantern);
 	}
 	
 	@Override
@@ -123,7 +128,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 					item.detach(Dungeon.hero.belongings.backpack);
 					if (!result.collect()) {
 						Dungeon.level.drop(result, curUser.pos).sprite.drop();
-					} else if (result.stackable && Dungeon.hero.belongings.getSimilar(result) != null){
+					} else if (Dungeon.hero.belongings.getSimilar(result) != null){
 						result = Dungeon.hero.belongings.getSimilar(result);
 					}
 				}
@@ -139,7 +144,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			}
 			Transmuting.show(curUser, item, result);
 			curUser.sprite.emitter().start(Speck.factory(Speck.CHANGE), 0.2f, 10);
-			GLog.p( Messages.get(this, "morph") );
+			GLog.p( Messages.get(this, (item instanceof Artifact && result instanceof Ring)?"empty":"morph") );
 		}
 		
 	}
@@ -161,6 +166,8 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			return changeWand( (Wand)item );
 		} else if (item instanceof Plant.Seed) {
 			return changeSeed((Plant.Seed) item);
+		} else if (item instanceof Trinket) {
+			return changeTrinket((Trinket) item);
 		} else if (item instanceof Runestone) {
 			return changeStone((Runestone) item);
 		} else if (item instanceof Artifact) {
@@ -183,14 +190,12 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			} else {
 				return a;
 			}
-		} else if (item instanceof Trinket) {
-			return changeTrinket( (Trinket)item );
 		} else {
 			return null;
 		}
 	}
 	
-	private static MagesStaff changeStaff( MagesStaff staff ){
+	public static MagesStaff changeStaff( MagesStaff staff ){
 		Class<?extends Wand> wandClass = staff.wandClass();
 		
 		if (wandClass == null){
@@ -208,7 +213,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return staff;
 	}
 
-	private static TippedDart changeTippedDart( TippedDart dart ){
+	public static TippedDart changeTippedDart( TippedDart dart ){
 		TippedDart n;
 		do {
 			n = TippedDart.randomTipped(1);
@@ -217,17 +222,22 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return n;
 	}
 	
-	private static Weapon changeWeapon( Weapon w ) {
+	public static Weapon changeWeapon( Weapon w ) {
 		Weapon n;
 		Generator.Category c;
 		if (w instanceof MeleeWeapon) {
-			c = Generator.wepTiers[((MeleeWeapon)w).tier - 1];
+			//针对特殊武器修复：例如终焉的武器阶数是可以成长的
+			c = Generator.wepTiers[ ((MeleeWeapon) w).tier <= 6 ? ((MeleeWeapon) w).tier-1 : 5 ];
 		} else {
 			c = Generator.misTiers[((MissileWeapon)w).tier - 1];
 		}
 		
 		do {
-			n = (Weapon)Generator.randomUsingDefaults(c);
+			if(Statistics.RandMode){
+				n = Generator.randomWeapon(true);
+			} else {
+				n = (Weapon)Generator.randomUsingDefaults(c);
+			}
 		} while (Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 
 		n.level(0);
@@ -252,7 +262,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		
 	}
 	
-	private static Ring changeRing( Ring r ) {
+	public static Ring changeRing( Ring r ) {
 		Ring n;
 		do {
 			n = (Ring)Generator.randomUsingDefaults( Generator.Category.RING );
@@ -274,7 +284,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return n;
 	}
 	
-	private static Artifact changeArtifact( Artifact a ) {
+	public static Artifact changeArtifact( Artifact a ) {
 		Artifact n;
 		do {
 			n = Generator.randomArtifact();
@@ -301,7 +311,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return null;
 	}
 
-	private static Trinket changeTrinket( Trinket t ){
+	public static Trinket changeTrinket(Trinket t){
 		Trinket n;
 		do {
 			n = (Trinket)Generator.random(Generator.Category.TRINKET);
@@ -315,7 +325,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return n;
 	}
 	
-	private static Wand changeWand( Wand w ) {
+	public static Wand changeWand( Wand w ) {
 		Wand n;
 		do {
 			n = (Wand)Generator.randomUsingDefaults( Generator.Category.WAND );
@@ -338,7 +348,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return n;
 	}
 	
-	private static Plant.Seed changeSeed( Plant.Seed s ) {
+	public static Plant.Seed changeSeed( Plant.Seed s ) {
 		Plant.Seed n;
 		
 		do {
@@ -347,8 +357,21 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		
 		return n;
 	}
+
+//	public static Trinket changeTrinket( Trinket t ){
+//		Trinket n;
+//		do {
+//			n = (Trinket)Generator.random(Generator.Category.TRINKET);
+//		} while ( Challenges.isItemBlocked(n) || n.getClass() == t.getClass());
+//
+//		n.level(t.trueLevel());
+//		n.levelKnown = t.levelKnown;
+//		n.cursed = t.cursed;
+//
+//		return n;
+//	}
 	
-	private static Runestone changeStone( Runestone r ) {
+	public static Runestone changeStone( Runestone r ) {
 		Runestone n;
 		
 		do {
@@ -358,7 +381,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		return n;
 	}
 
-	private static Scroll changeScroll( Scroll s ) {
+	public static Scroll changeScroll( Scroll s ) {
 		if (s instanceof ExoticScroll) {
 			return Reflection.newInstance(ExoticScroll.exoToReg.get(s.getClass()));
 		} else {
@@ -366,7 +389,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		}
 	}
 
-	private static Potion changePotion( Potion p ) {
+	public static Potion changePotion( Potion p ) {
 		if	(p instanceof ExoticPotion) {
 			return Reflection.newInstance(ExoticPotion.exoToReg.get(p.getClass()));
 		} else {
@@ -381,6 +404,6 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
 	@Override
 	public int energyVal() {
-		return isKnown() ? 10 * quantity : super.energyVal();
+		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 }
