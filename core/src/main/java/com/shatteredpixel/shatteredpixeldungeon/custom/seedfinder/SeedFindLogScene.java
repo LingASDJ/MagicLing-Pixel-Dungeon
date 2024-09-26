@@ -15,7 +15,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.ColorBlock;
-import com.watabou.noosa.Group;
 import com.watabou.noosa.ui.Component;
 
 import java.util.Arrays;
@@ -70,17 +69,17 @@ public class SeedFindLogScene extends PixelScene {
                     try {
                         floor = Integer.parseInt(fl);
                     } catch (
-                            NumberFormatException e) {
+                            NumberFormatException ignored) {
                     }
                 }
 
-                if (positive && text != "" && floorOption) {
-                    String[] itemList = floorOption ? Arrays.copyOfRange(text.split("\n"), 1, text.split("\n").length) : text.split("\n");
+                if (positive && !text.isEmpty() && floorOption) {
+                    String[] itemList = Arrays.copyOfRange(text.split("\n"), 1, text.split("\n").length);
 
                     Component content = list.content();
                     content.clear();
 
-                    r = PixelScene.renderTextBlock("abc",7);
+                    r = PixelScene.renderTextBlock("abc",9);
                     r.maxWidth(w - 40);
                     r.setPos(20,20);
                     ShatteredPixelDungeon.scene().addToFront(r);
@@ -119,11 +118,11 @@ public class SeedFindLogScene extends PixelScene {
                     thread.start();
 
 
-                } else if (!positive && text != "") {
+                } else if (!positive && !text.isEmpty()) {
                     text = DungeonSeed.formatText(text);
                     long seed = DungeonSeed.convertFromText(text);
 
-                    RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),26,SPDSettings.challenges()),9);
+                    RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),26),9);
                     renderedTextBlock.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
                     content.add(renderedTextBlock);
                     content.setSize( fullWidth, renderedTextBlock.bottom()+10 );
@@ -148,30 +147,13 @@ public class SeedFindLogScene extends PixelScene {
         btnExit.setPos(Camera.main.width - btnExit.width(), 0);
         add(btnExit);
 
-        //fadeIn();
-    }
-//
-//    @Override
-//    protected void onBackPressed() {
-//        ShatteredPixelDungeon.switchScene(TitleScene.class);
-//    }
-
-    public boolean isAllDigits(String str) {
-        return str != null && str.matches("\\d+");
-    }
-
-
-    private void addLine(float y, Group content) {
-        ColorBlock line = new ColorBlock(Camera.main.width, 1, 0xFF333333);
-        line.y = y;
-        content.add(line);
+        fadeIn();
     }
 
     @Override
-    public void update() {
-        super.update();
+    protected void onBackPressed() {
+        ShatteredPixelDungeon.switchScene(TitleScene.class);
     }
-
 
     public static class CreditsBlock extends Component {
 

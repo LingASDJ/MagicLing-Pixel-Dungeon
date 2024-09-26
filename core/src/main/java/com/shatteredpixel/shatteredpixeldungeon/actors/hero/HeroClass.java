@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Smok
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.galaxy.SliverLockSword;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.CustomWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.LevelTeleporter;
@@ -59,7 +60,6 @@ import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.SpawnMissile;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.SpawnRingOrWand;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.SpawnWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TerrainPlacer;
-import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -217,11 +217,24 @@ public enum HeroClass {
 		Dungeon.LimitedDrops.HERB_BAG.drop();
 		new KingBag().quantity(1).identify().collect();
 		Dungeon.LimitedDrops.KING_BAG.drop();
+
+		//插个眼
+
+		//if(Dungeon.isDLC(Conducts.Conduct.HARD)){
+			//new PropBag().quantity(1).identify().collect();
+//
+			////Prop.randomProp().collect();
+			//new RapidEarthRoot().collect();
+			//new WenStudyingPaperOne().collect();
+			//new YanStudyingPaperTwo().collect();
+			//Prop.randomProp().collect();
+		//}
+		Dungeon.LimitedDrops.PROP_BAG.drop();
+
 		Waterskin waterskin = new Waterskin();
 		waterskin.collect();
 
-		new Amulet().quantity(1).identify().collect();
-		//new SliverLockSword().quantity(1).identify().collect();
+		new SliverLockSword().quantity(1).identify().collect();
 
 		new ScrollOfIdentify().identify();
 		//new KingGold().quantity(1).identify().collect();
