@@ -1,44 +1,41 @@
 buildscript {
     repositories {
-        google()
         mavenCentral()
-        maven {
-            url = uri("https://storage.googleapis.com/r8-releases/raw")
-        }
+        google()
     }
     dependencies {
-        //gradle version packaged with AGP 8.5 causes crashes on Android 4.4-
-        //this won't be needed once the bundled version is 8.7.2+
-        classpath 'com.android.tools:r8:8.7.4-dev'
-        classpath 'com.android.tools.build:gradle:8.5.1'
+        classpath 'com.android.tools.build:gradle:7.0.4'
+
+        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
     }
 }
 
 allprojects {
 
     ext {
-        appName = 'Shattered Pixel Dungeon'
-        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon'
+        appName = 'Magic Ling Pixel Dungeon'
+        appPackageName = 'com.ansdomagiclingpixeldungeon.ling'
 
-        appVersionCode = 794
-        appVersionName = '2.5.0'
+        appVersionCode = 2024081803
+        appVersionName = '0.7.8.0--SD'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
-        appAndroidCompileSDK = 33 //compile SDK is still 33 atm as we're sticking with AGP 8.0.2
-        appAndroidMinSDK = 14
-        appAndroidTargetSDK = 34
+        appAndroidCompileSDK = 33
+        appAndroidMinSDK = 19
+        appAndroidTargetSDK = 33
 
-        gdxVersion = '1.12.1'
-        gdxControllersVersion = '2.2.4-SNAPSHOT'
-        robovmVersion = '2.3.21'
+        gdxControllersVersion = '2.2.1'
+
+        gdxVersion = '1.10.0'
     }
+
     version = appVersionName
 
     repositories {
-        google()
         mavenCentral()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        google()
     }
 
 }
