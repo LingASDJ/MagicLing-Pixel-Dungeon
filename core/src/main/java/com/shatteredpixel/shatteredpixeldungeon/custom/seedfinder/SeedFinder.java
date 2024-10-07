@@ -236,7 +236,7 @@ public class SeedFinder {
 		SPDSettings.customSeed(seed);
 		Dungeon.hero = null;
 		Dungeon.daily = Dungeon.dailyReplay = false;
-		//Dungeon.initSeed();
+		Dungeon.initSeed();
 		GamesInProgress.selectedClass = HeroClass.WARRIOR;
 		Dungeon.init();
 
