@@ -21,24 +21,36 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Clipboard;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.StartScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Button;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.noosa.Game;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.FileUtils;
 
+import java.io.IOException;
 import java.util.Locale;
 
 public class WndGameInProgress extends Window {
@@ -48,12 +60,13 @@ public class WndGameInProgress extends Window {
 	private int GAP	  = 6;
 	
 	private float pos;
+	Clipboard clipboard;
 	
 	public WndGameInProgress(final int slot){
-		
+		clipboard = Gdx.app.getClipboard();
 		final GamesInProgress.Info info = GamesInProgress.check(slot);
-		
-		String className = null;
+		String className;
+		assert info != null;
 		if (info.subClass != HeroSubClass.NONE){
 			className = info.subClass.title();
 		} else {
@@ -62,29 +75,122 @@ public class WndGameInProgress extends Window {
 		
 		IconTitle title = new IconTitle();
 		title.icon( HeroSprite.avatar(info.heroClass, info.armorTier) );
-		title.label((Messages.get(this, "title", info.level, className)).toUpperCase(Locale.ENGLISH));
+
+		if (info.name.isEmpty()) {
+			title.label(Messages.get(this, "title", info.level, className.toUpperCase(Locale.ENGLISH)));
+		} else {
+			String csname = info.name +
+					"\n" +
+					Messages.get(this, "title", info.level, className);
+			title.label(csname.toUpperCase(Locale.ENGLISH));
+		}
+
+
 		title.color(Window.TITLE_COLOR);
 		title.setRect( 0, 0, WIDTH, 0 );
 		add(title);
 		
+		//manually produces debug information about a run, mainly useful for levelgen errors
+		Button debug = new Button();
+		debug.setRect(0, 0, title.imIcon.width(), title.imIcon.height);
+		add(debug);
+		
 		if (info.challenges > 0) GAP -= 2;
 		
 		pos = title.bottom() + GAP;
-		
+
+		RedButton btnGameInfo;
+
 		if (info.challenges > 0) {
 			RedButton btnChallenges = new RedButton( Messages.get(this, "challenges") ) {
 				@Override
 				protected void onClick() {
-					Game.scene().add( new WndChallenges( info.challenges, false ) );
+					Game.scene().add( new WndChallenges( info.challenges, false,null ) );
 				}
 			};
 			btnChallenges.icon(Icons.get(Icons.CHANGES));
 			float btnW = btnChallenges.reqWidth() + 2;
-			btnChallenges.setRect( (WIDTH - btnW)/2, pos, btnW , 18 );
+			btnChallenges.setRect( ((WIDTH - btnW)/2)+3.5f, pos, btnW , 18 );
 			add( btnChallenges );
-			
-			pos = btnChallenges.bottom() + GAP;
+
+			btnGameInfo = new RedButton( Messages.get(this, "gameinfo") ) {
+				@Override
+				protected void onClick() {
+					try {
+						Bundle bundle = FileUtils.bundleFromFile(GamesInProgress.gameFile(slot));
+						String ing =
+								Messages.get(WndGameInProgress.class,"gameversion") +(info.version == 0 ? "NULL": info.version)+"\n\n"+
+										Messages.get(WndGameInProgress.class,"gameseed")+ DungeonSeed.convertToCode(bundle.getLong("seed"))+"\n\n"+
+										Messages.get(WndGameInProgress.class,"gamegold") + bundle.getInt("gold") +"\n\n"+
+										Messages.get(WndGameInProgress.class,"gamenayzi") + bundle.getInt("naiyaziCollected")+
+										Messages.get(WndGameInProgress.class,"gamenayzis") +"\n\n"+
+										Messages.get(WndGameInProgress.class,"gamemimic") + bundle.getInt("goldchest") +"\n\n"+
+										Messages.get(WndGameInProgress.class,"gameinof");
+						ShatteredPixelDungeon.scene().addToFront(new WndMessage(ing));
+					} catch (IOException ignored) {
+					}
+				}
+			};
+			btnGameInfo.icon(new ItemSprite(ItemSpriteSheet.SEED_SKYBLUEFIRE));
+			btnGameInfo.setRect( btnChallenges.right()+2, pos, btnGameInfo.reqWidth() + 1 , 18 );
+			add( btnGameInfo );
+		} else {
+
+			btnGameInfo = new RedButton( Messages.get(this, "gameinfo") ) {
+				@Override
+				protected void onClick() {
+					try {
+						Bundle bundle = FileUtils.bundleFromFile(GamesInProgress.gameFile(slot));
+						String ing =
+								Messages.get(WndGameInProgress.class,"gameversion") + Game.version+"\n\n"+
+										Messages.get(WndGameInProgress.class,"gameseed")+ DungeonSeed.convertToCode(bundle.getLong("seed"))+"\n\n"+
+										Messages.get(WndGameInProgress.class,"gamegold") + bundle.getInt("gold") +"\n\n"+
+										Messages.get(WndGameInProgress.class,"gamenayzi") + bundle.getInt("naiyaziCollected")+
+										Messages.get(WndGameInProgress.class,"gamenayzis") +"\n\n"+
+										Messages.get(WndGameInProgress.class,"gamemimic") + bundle.getInt("goldchest") +"\n\n"+
+										Messages.get(WndGameInProgress.class,"gameinof");
+						ShatteredPixelDungeon.scene().addToFront(new WndMessage(ing));
+					} catch (IOException ignored) {
+					}
+				}
+			};
+			btnGameInfo.icon(new ItemSprite(ItemSpriteSheet.SEED_SKYBLUEFIRE));
+			btnGameInfo.setRect( 20, pos, btnGameInfo.reqWidth() + 1 , 18 );
+			add( btnGameInfo );
 		}
+
+
+
+		RedButton buttonSeed = new RedButton(M.L(WndGameInProgress.class, "copy_seed"), 8){
+			@Override
+			protected void onClick() {
+				super.onClick();
+
+				boolean seedType = (info.challenges & Challenges.MOREROOM) != 0;
+
+				clipboard.setContents(M.L(WndGameInProgress.class, "seed_copy",info.customSeed.isEmpty() ? DungeonSeed.convertToCode(info.seed) : info.customSeed,(seedType ? "B" : "A"),info.version));
+
+				Game.runOnRenderThread(() -> ShatteredPixelDungeon.scene().add(new WndMessage(M.L(WndGameInProgress.class, "seed_copied",info.customSeed.isEmpty() ? DungeonSeed.convertToCode(info.seed) : info.customSeed,(seedType ? "B" : "A"),info.version))));
+			}
+		};
+		add(buttonSeed);
+		boolean multiLine=btnGameInfo.right()+buttonSeed.reqWidth()>WIDTH;
+		float btnX;
+		btnX = multiLine?2:btnGameInfo.right()+2;
+		buttonSeed.setRect(btnX, pos, buttonSeed.reqWidth() + 1, 18);
+
+//		RedButton btDLC = new RedButton( Messages.get(this, "dlc") ) {
+//			@Override
+//			protected void onClick() {
+//				//
+//			}
+//		};
+//		btDLC.icon(new ItemSprite(ItemSpriteSheet.DIFFCULTBOOT));
+//		btDLC.alpha(0.7f);
+//		btDLC.setRect( 80, title.y, 40 , 18 );
+//		//add( btDLC );
+
+		pos = buttonSeed.bottom() + GAP;
 		
 		pos += GAP;
 
@@ -95,17 +201,14 @@ public class WndGameInProgress extends Window {
 		if (info.shld > 0)  statSlot( Messages.get(this, "health"), info.hp + "+" + info.shld + "/" + info.ht );
 		else                statSlot( Messages.get(this, "health"), (info.hp) + "/" + info.ht );
 		statSlot( Messages.get(this, "exp"), info.exp + "/" + Hero.maxExp(info.level) );
+
+		//tatSlot( Messages.get(this, "icehp"), (info.icehp) + "/" + 100 );
 		
 		pos += GAP;
 		statSlot( Messages.get(this, "gold"), info.goldCollected );
 		statSlot( Messages.get(this, "depth"), info.maxDepth );
-		if (info.daily) {
-			if (info.dailyReplay) {
-				statSlot(Messages.get(this, "replay_for"), "_" + info.customSeed + "_");
-			} else {
-				statSlot(Messages.get(this, "daily_for"), "_" + info.customSeed + "_");
-			}
-		} else if (!info.customSeed.isEmpty()){
+
+		if (!info.customSeed.isEmpty()){
 			statSlot( Messages.get(this, "custom_seed"), "_" + info.customSeed + "_" );
 		} else {
 			statSlot( Messages.get(this, "dungeon_seed"), DungeonSeed.convertToCode(info.seed) );
@@ -120,9 +223,8 @@ public class WndGameInProgress extends Window {
 				
 				GamesInProgress.curSlot = slot;
 				
-				Dungeon.hero = null;
-				Dungeon.daily = Dungeon.dailyReplay = false;
-				ActionIndicator.clearAction();
+				hero = null;
+				ActionIndicator.action = null;
 				InterlevelScene.mode = InterlevelScene.Mode.CONTINUE;
 				ShatteredPixelDungeon.switchScene(InterlevelScene.class);
 			}
@@ -150,11 +252,11 @@ public class WndGameInProgress extends Window {
 		};
 
 		cont.icon(Icons.get(Icons.ENTER));
-		cont.setRect(0, pos, WIDTH/2 -1, 20);
+		cont.setRect(0, pos, WIDTH/2f -1, 20);
 		add(cont);
 
 		erase.icon(Icons.get(Icons.CLOSE));
-		erase.setRect(WIDTH/2 + 1, pos, WIDTH/2 - 1, 20);
+		erase.setRect(WIDTH/2f + 1, pos, WIDTH/2f - 1, 20);
 		add(erase);
 		
 		resize(WIDTH, (int)cont.bottom()+1);
@@ -165,12 +267,9 @@ public class WndGameInProgress extends Window {
 		RenderedTextBlock txt = PixelScene.renderTextBlock( label, 8 );
 		txt.setPos(0, pos);
 		add( txt );
-
-		int size = 8;
-		if (value.length() >= 14) size -=2;
-		if (value.length() >= 18) size -=1;
-		txt = PixelScene.renderTextBlock( value, size );
-		txt.setPos(WIDTH * 0.55f, pos + (6 - txt.height())/2);
+		
+		txt = PixelScene.renderTextBlock( value, 8 );
+		txt.setPos(WIDTH * 0.6f, pos);
 		PixelScene.align(txt);
 		add( txt );
 		

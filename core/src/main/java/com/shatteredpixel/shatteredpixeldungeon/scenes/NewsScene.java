@@ -57,7 +57,7 @@ public class NewsScene extends PixelScene {
 	public void create() {
 		super.create();
 
-		uiCamera.visible = false;
+		PixelScene.uiCamera.visible = false;
 
 		int w = Camera.main.width;
 		int h = Camera.main.height;
@@ -85,7 +85,7 @@ public class NewsScene extends PixelScene {
 		float top = 18;
 
 		displayingNoArticles = !News.articlesAvailable();
-		if (displayingNoArticles || Messages.lang() != Languages.ENGLISH) {
+		if (displayingNoArticles || Messages.lang() != Languages.CHINESE) {
 
 			Component newsInfo = new NewsInfo();
 			newsInfo.setRect(left, 20, fullWidth, 0);
@@ -145,7 +145,8 @@ public class NewsScene extends PixelScene {
 			@Override
 			protected void onClick() {
 				super.onClick();
-				ShatteredPixelDungeon.platform.openURI("https://ShatteredPixel.com");
+				String link = "https://mlpd.spldream.com";
+				ShatteredPixelDungeon.platform.openURI(link);
 			}
 		};
 		btnSite.icon(Icons.get(Icons.NEWS));
@@ -178,13 +179,13 @@ public class NewsScene extends PixelScene {
 		protected void createChildren() {
 			bg = Chrome.get(Chrome.Type.GREY_BUTTON_TR);
 			add(bg);
-			
+
 			String message = "";
 
-			if (Messages.lang() != Languages.ENGLISH){
+			if (Messages.lang() != Languages.CHINESE){
 				message += Messages.get(this, "english_warn");
 			}
-			
+
 			if (!News.articlesAvailable()){
 				if (SPDSettings.news()) {
 					if (SPDSettings.WiFi() && !Game.platform.connectedToUnmeteredNetwork()) {
@@ -220,7 +221,7 @@ public class NewsScene extends PixelScene {
 			}
 
 			if (message.startsWith("\n\n")) message = message.replaceFirst("\n\n", "");
-			
+
 			text = PixelScene.renderTextBlock(message, 6);
 			text.hardlight(CharSprite.WARNING);
 			add(text);
@@ -262,17 +263,17 @@ public class NewsScene extends PixelScene {
 			super(Chrome.Type.GREY_BUTTON_TR, article.title, 6);
 			this.article = article;
 
-			icon(News.parseArticleIcon(article));
+			icon(News.parseArticleIcon(article,true));
 			long lastRead = SPDSettings.newsLastRead();
 			if (lastRead > 0 && article.date.getTime() > lastRead) {
-				textColor(Window.SHPX_COLOR);
+				textColor(Window.Pink_COLOR);
 			}
 
 			date = new BitmapText( News.parseArticleDate(article), pixelFont);
 			date.scale.set(PixelScene.align(0.5f));
 			date.hardlight( 0x888888 );
 			date.measure();
-			add(date);
+			//add(date);
 		}
 
 		@Override
@@ -304,18 +305,18 @@ public class NewsScene extends PixelScene {
 	private static class WndArticle extends WndTitledMessage {
 
 		public WndArticle(NewsArticle article ) {
-			super(News.parseArticleIcon(article), article.title, article.summary);
+			super(News.parseArticleIcon(article,false), article.title, article.summary);
 
 			RedButton link = new RedButton(Messages.get(NewsScene.class, "read_more")){
 				@Override
 				protected void onClick() {
 					super.onClick();
-					ShatteredPixelDungeon.platform.openURI(article.URL);
+					String link = article.URL;
+					ShatteredPixelDungeon.platform.openURI(link);
 				}
 			};
-			link.setRect(0, height + 2, width, BTN_HEIGHT);
-			add(link);
-			resize(width, (int) link.bottom());
+			link.setHeight(BTN_HEIGHT);
+			//addToBottom(link);
 		}
 
 
