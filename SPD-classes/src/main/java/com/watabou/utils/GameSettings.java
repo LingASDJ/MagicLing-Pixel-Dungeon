@@ -197,13 +197,51 @@ public class GameSettings {
 		get().flush();
 	}
 
-	public static void modify( String key, String target, String value ) {
+	public static void modifyArray( String key, String target, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
 		int index;
 
 		if( str != null && ( ( index = stringArray.indexOf( target ) ) != -1 ) ) {
 			stringArray.replace(index, index + stringArray.indexOf(";", index) + 1, value);
+
+			get().putString(key, stringArray.toString());
+			get().flush();
+		}
+	}
+
+	public static void modifyArrayElement( String key, String target, int index, String value ) {
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+		int start;
+		index -= 1;
+
+		if( str != null && ( ( start = stringArray.indexOf( target ) ) != -1 ) ) {
+			int end = stringArray.indexOf(";", start) + 1;
+			int count = 0;
+			int startIndex = 0;
+			int endIndex = 0;
+
+			StringBuilder tempStr = new StringBuilder( stringArray.substring(start,end) );
+			for(int i=0; i < ( end - start ); i++) {
+				if ( tempStr.charAt( i ) == ',' ) {
+					if( count == index ){
+						break;
+					}else {
+						startIndex = i;
+						count++;
+					}
+				}
+			}
+
+			endIndex = tempStr.indexOf(",", startIndex + 1 );
+			if(endIndex == -1)
+				endIndex = tempStr.length();
+			startIndex = index == 0 ? 0 : startIndex + 1;
+
+			tempStr.replace(startIndex, endIndex, value);
+
+			stringArray.replace(start, end, tempStr.toString());
 
 			get().putString(key, stringArray.toString());
 			get().flush();
