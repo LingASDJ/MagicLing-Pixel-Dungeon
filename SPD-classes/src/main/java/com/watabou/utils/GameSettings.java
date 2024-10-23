@@ -216,7 +216,7 @@ public class GameSettings {
 		int start;
 		index -= 1;
 
-		if( str != null && ( ( start = stringArray.indexOf( target ) ) != -1 ) ) {
+		if( str != null && ( ( start = stringArray.indexOf( target ) ) != -1 ) && index >= 0 ) {
 			int end = stringArray.indexOf(";", start) + 1;
 			int count = 0;
 			int startIndex = 0;
