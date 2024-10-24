@@ -187,7 +187,7 @@ public class GameSettings {
 		StringBuilder stringArray = new StringBuilder( str );
 
 		for( String target : itemArray ) {
-			String[] result = exist(str, target);
+			String[] result = exist(stringArray.toString(), target);
 			int start = Integer.valueOf(result[0]);
 			int end = Integer.valueOf(result[1]);
 
