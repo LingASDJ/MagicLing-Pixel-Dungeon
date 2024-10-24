@@ -186,10 +186,13 @@ public class GameSettings {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
 
-		int index;
 		for( String target : itemArray ) {
-			if ( ( index = stringArray.indexOf( target ) ) != -1 ) {
-				stringArray.delete( index, index + stringArray.indexOf( ";", index ) + 1 );
+			String[] result = exist(str, target);
+			int start = Integer.valueOf(result[0]);
+			int end = Integer.valueOf(result[1]);
+
+			if (end > 0) {
+				stringArray.delete( start, end );
 			}
 		}
 
@@ -200,10 +203,20 @@ public class GameSettings {
 	public static void modifyArray( String key, String target, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
-		int index;
+		String[] result = exist(str,target);
+		int start = Integer.valueOf( result[0] );
+		int end = Integer.valueOf( result[1] );
 
-		if( str != null && ( ( index = stringArray.indexOf( target ) ) != -1 ) ) {
-			stringArray.replace(index, index + stringArray.indexOf(";", index) + 1, value);
+		if (end > 0) {
+			StringBuilder tempStr = new StringBuilder(value);
+			int length = tempStr.length() - 1;
+
+			if ( value.lastIndexOf(",") == length )
+				tempStr.deleteCharAt( length ).append(";");
+			if ( tempStr.lastIndexOf(";") != length )
+				tempStr.append(";");
+
+			stringArray.replace(start, end, tempStr.toString());
 
 			get().putString(key, stringArray.toString());
 			get().flush();
@@ -213,21 +226,21 @@ public class GameSettings {
 	public static void modifyArrayElement( String key, String target, int index, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
-		int start;
-		index -= 1;
+		String[] result = exist(str,target);
+		int start = Integer.valueOf( result[0] );
+		int end = Integer.valueOf( result[1] );
 
-		if( str != null && ( ( start = stringArray.indexOf( target ) ) != -1 ) && index >= 0 ) {
-			int end = stringArray.indexOf(";", start) + 1;
+		if( end > 0 ){
 			int count = 0;
 			int startIndex = 0;
 			int endIndex = 0;
+			StringBuilder tempStr = new StringBuilder( result[2] );
 
-			StringBuilder tempStr = new StringBuilder( stringArray.substring(start,end) );
-			for(int i=0; i < ( end - start ); i++) {
-				if ( tempStr.charAt( i ) == ',' ) {
-					if( count == index ){
+			for (int i = 0; i < ( end - start ); i++) {
+				if (tempStr.charAt(i) == ',') {
+					if (count == index) {
 						break;
-					}else {
+					} else {
 						startIndex = i;
 						count++;
 					}
@@ -240,7 +253,6 @@ public class GameSettings {
 			startIndex = index == 0 ? 0 : startIndex + 1;
 
 			tempStr.replace(startIndex, endIndex, value);
-
 			stringArray.replace(start, end, tempStr.toString());
 
 			get().putString(key, stringArray.toString());
@@ -249,6 +261,31 @@ public class GameSettings {
 	}
 
 	public static boolean query( String key, String target ) {
-		return get().getString( key, "" ).indexOf( target ) != -1;
+		return Integer.valueOf( exist(key,target)[1] ) > 0;
+	}
+
+	public static String[] exist( String str, String target ) {
+		StringBuilder stringArray = new StringBuilder( str );
+		int start = -1;
+		boolean check = false;
+		String targetString = null;
+		int end = -1;
+
+		if (str != null && ((start = stringArray.indexOf(target)) != -1)) {
+			while ( !check ) {
+				end = stringArray.indexOf(";", start) + 1;
+				if( end <= 0 )
+					break;
+
+				targetString = stringArray.substring(start, end);
+
+				if( target.equals( targetString.split(",")[0] ) )
+					check = true;
+				else
+					start = end;
+			}
+		}
+
+		return new String[]{ String.valueOf( start ), String.valueOf( end ), targetString };
 	}
 }
