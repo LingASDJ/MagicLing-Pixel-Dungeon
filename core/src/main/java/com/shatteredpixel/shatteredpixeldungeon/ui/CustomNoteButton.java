@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournalItem;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
@@ -252,10 +251,10 @@ public class CustomNoteButton extends IconButton {
 		}
 	};
 
-	public static class CustomNoteWindow extends WndJournalItem {
+	public static class CustomNoteWindow extends WndTitledMessage {
 
 		public CustomNoteWindow(Notes.CustomRecord rec) {
-			super(rec.icon(), rec.title(), rec.desc());
+			super(rec.icon(), rec.title(), rec.desc(), WIDTH_MIN);
 
 			RedButton title = new RedButton( Messages.get(CustomNoteWindow.class, "edit_title") ){
 				@Override
@@ -324,6 +323,8 @@ public class CustomNoteButton extends IconButton {
 			};
 			add(delete);
 			delete.setRect(0, title.bottom()+1, width, 16);
+
+			addToBottom(delete, 20, 0);
 
 			resize(width, (int)delete.bottom());
 		}

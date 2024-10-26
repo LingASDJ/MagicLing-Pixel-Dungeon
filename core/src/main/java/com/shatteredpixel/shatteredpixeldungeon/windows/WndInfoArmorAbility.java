@@ -37,7 +37,7 @@ import java.util.function.Function;
 public class WndInfoArmorAbility extends WndTitledMessage {
 
 	public WndInfoArmorAbility(HeroClass cls, ArmorAbility ability, Function<ArmorAbility, LinkedHashMap<Talent, Integer>> initializeArmorTalents){
-		super( new HeroIcon(ability), Messages.titleCase(ability.name()), ability.desc());
+		super( new HeroIcon(ability), Messages.titleCase(ability.name()), ability.desc(),WIDTH_MIN);
 
 		@SuppressWarnings("NewApi")
 		LinkedHashMap<Talent, Integer> talents = initializeArmorTalents.apply(ability);
@@ -46,7 +46,7 @@ public class WndInfoArmorAbility extends WndTitledMessage {
 
 		TalentsPane.TalentTierPane talentPane = new TalentsPane.TalentTierPane(talents, 4, TalentButton.Mode.INFO);
 		talentPane.title.text( Messages.titleCase(Messages.get(WndHeroInfo.class, "talents")));
-		//addToBottom(talentPane, 5, 0);
+		addToBottom(talentPane, 5, 0);
 	}
 	public WndInfoArmorAbility(HeroClass cls,ArmorAbility ability) {
 		this(cls,ability, WndInfoArmorAbility::initializeTalents);
