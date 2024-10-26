@@ -108,7 +108,7 @@ public class LevelRules {
                 switch (depth) {
                     case 0:
                         if(Dungeon.isChallenged(CS)){
-                            return new ZeroLevel();
+                            return new PacmanHollowActorLevel();
                         } else {
                             return new ZeroCityLevel();
                         }
