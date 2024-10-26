@@ -41,7 +41,7 @@ public class BrownBat extends Mob {
         spriteClass = BatSprite.BatEDSprite.class;
 
         HP = HT = 15;
-        defenseSkill = 24;
+        defenseSkill = 9;
         baseSpeed = 1.3f;
 
         EXP = 7;

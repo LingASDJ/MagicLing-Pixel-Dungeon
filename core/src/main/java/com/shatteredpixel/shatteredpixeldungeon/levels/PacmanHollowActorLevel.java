@@ -22,7 +22,7 @@ public class PacmanHollowActorLevel extends Level {
     private static final int HEIGHT = 24;
 
     private static final int W = WALL;
-    private static final int K =Terrain.WATER;
+    private static final int K = EMPTY_SP;
     private static final int G= Terrain.HIGH_GRASS;
 
     private static final int I =Terrain.STATUE;

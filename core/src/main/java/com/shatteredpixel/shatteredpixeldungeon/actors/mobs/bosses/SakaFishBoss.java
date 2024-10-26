@@ -178,7 +178,7 @@ public class SakaFishBoss extends Boss {
         if(level==AncientMysteryCityBossLevel.State.FALL_BOSS)
             return Random.NormalIntRange(30, 55);
         else
-            return Random.NormalIntRange(20, 30);
+            return Random.NormalIntRange(27, 37);
     }
 
     @Override
@@ -197,7 +197,7 @@ public class SakaFishBoss extends Boss {
     @Override
     public int drRoll() {
         AncientMysteryCityBossLevel.State level = ((AncientMysteryCityBossLevel)Dungeon.level).pro();
-        return level == AncientMysteryCityBossLevel.State.FALL_BOSS ? 10 : 35;
+        return level == AncientMysteryCityBossLevel.State.FALL_BOSS ? 10 : 25;
     }
 
 

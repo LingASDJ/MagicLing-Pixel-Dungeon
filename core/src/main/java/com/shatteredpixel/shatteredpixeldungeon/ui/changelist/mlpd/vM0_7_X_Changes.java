@@ -8,6 +8,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.PasswordBadgeBanner;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ApprenticeWitchSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrivusStarFruitsSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM720Sprite;
@@ -17,6 +18,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.DragonGirlBlueSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DwarfGeneralSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireCrystalSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireDragonSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.FrankensteinSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostHalloweenSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HollowKnightSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -48,8 +51,8 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V078_90_Changes(changeInfos);
         add_V0770_Changes(changeInfos);
-
         add_V0765_Changes(changeInfos);
         add_V0760_Changes(changeInfos);
         add_V0755_Changes(changeInfos);
@@ -77,6 +80,81 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V078_90_Changes( ArrayList<ChangeInfo> changeInfos ) {
+        ChangeInfo changes = new ChangeInfo("v0.7.8-v0.7.9", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CHANGES), ("底层迭代"),
+                ("魔绫像素地牢现在迭代至2.5.0破碎底层")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CATALOG), ("平衡案3.1 上半部分"),
+                ("实现了平衡案3.1上半部分，具体如下：\n\n" +
+                        "【武器调整】：\n\n" +
+                        "1.月刃：攻击延迟改为0.45回合，变为4阶武器\n\n" +
+                        "2.吸血鬼刀：面板提升至3-15，成长改为2-2\n\n" +
+                        "3.碧灰：改为5阶武器，攻击延迟改为0.40\n\n" +
+                        "4.荆棘：去除所谓的低等级负面，去除加距离，附加恐惧回合变为等同等级的回合数，诅咒棱晶不可对其使用，触发惩罚的等级改为11级，生命树出现概率改为35%\n\n" +
+                        "5.冰鱼：配方改为:冰合剂+烤鲱鱼+注魔棱晶。双鱼成长改为3-7，攻击延迟改为1\n\n" +
+                        "6.涤罪：延迟改为1.76，成长改为1-6，基础面板改2-25，每杀一个敌人减0.0067的延迟，计数上限为100，每杀2个怪成长一点上下限，计数上限为26\n\n" +
+                        "7.糯米大剑:基础属性改为大剑属性\n\n"),
+                        ("【挑战调整】：\n\n" +
+                        "1.灯火：在开启黑暗挑战的情况下，灯火消耗速度翻倍(已处理，目前为x2)\n\n" +
+                        "2.药水癔症：负面效果的触发概率变为95%，除大饼外无正面效果。"),
+                        "【怪物调整】：\n\n" +
+                        "1.甲鱼:减少第一阶段10护盾，攻击上升7\n\n" +
+                        "2.火魔女的属性决定于最大深度而不是抢劫深度\n\n" +
+                        "3.棕色蝙蝠：闪避变为与正常二区怪物一致\n\n" +
+                        "4.黄昏史莱姆：25%概率上燃烧\n\n" +
+                        "5.冰老鼠：护甲改为1-3\n\n" +
+                        "6.火苍蝇：护甲改为1-4\n\n" +
+                        "7.重甲豺狼：血量改为80，亡语护盾改为75%血上线"));
+
+        changes = new ChangeInfo("预载", false, null);
+        changes.hardlight(Window.CBLACK);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ApprenticeWitchSprite(), ("新怪物:见习魔女"),
+                ("魔法学院的劣等生，见习中的魔女。\n\n该数据已预载，将在万圣后启用。")));
+
+        changes.addButton(new ChangeButton(new FrankensteinSprite(), ("新怪物:残梦魔偶"),
+                ("它在寻找它的创造者，以及，撕碎所有拥有生命的气息。\n\n该数据已预载，将在万圣后启用。")));
+
+        changes.addButton(new ChangeButton(new GhostHalloweenSprite(), ("新怪物:鬼魂"),
+                ("令人捉摸不透的亡魂……。\n\n该数据已预载，将在万圣后启用。")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
+                ("1.部分素材优化迭代\n" +
+                        "2.部分文案优化\n" +
+                        "3.部分细节优化更新")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.7.9.0版本:\n\n" +
+                        "1.修复部分炼金合成异常\n" +
+                        "2.修复中部群反馈的一些bug\n" +
+                        "3.其他bug修正\n"));
+
+//        changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
+//        changes.hardlight(Window.R_COLOR);
+//        changeInfos.add(changes);
+//
+//        changes.addButton(new ChangeButton(new ShopkKingSprite(), ("商店Boss优化"),
+//                ("不再出现敌法精英效果加成，并且激素涌动有效时长减少")));
+//
+//        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
+//                ("查找器移除，日后作为网页版上线。若仍要查询种子，请到开发者模式使用物品查询器观看")));
+
+
     }
 
     public static void add_V0770_Changes( ArrayList<ChangeInfo> changeInfos ) {
