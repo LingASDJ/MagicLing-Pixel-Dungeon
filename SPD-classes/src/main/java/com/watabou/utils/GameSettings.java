@@ -126,6 +126,20 @@ public class GameSettings {
 			return defValue;
 		}
 	}
+
+	public static String[] getStringArray( String key ) {
+		try {
+			String s = get().getString( key, "" );
+			if ( s != null && s.length() > Integer.MAX_VALUE ) {
+				return new String[0];
+			} else {
+				return s.split( ";" );
+			}
+		} catch (Exception e) {
+			Game.reportException(e);
+			return new String[0];
+		}
+	}
 	
 	public static void put( String key, int value ) {
 		get().putInteger(key, value);
@@ -146,5 +160,132 @@ public class GameSettings {
 		get().putString(key, value);
 		get().flush();
 	}
-	
+
+	public static void put( String key, String[] value ) {
+		int length = value.length;
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+
+		for(int i = 0; i < length; i++) {
+			if( query(key, value[i].split(",")[0]) )
+				continue;
+
+			if (value[i].indexOf(";") != -1) {
+				stringArray.append(value[i]);
+			}else {
+				stringArray.append(value[i]).append(";");
+			}
+		}
+
+		get().putString(key, stringArray.toString());
+		get().flush();
+	}
+
+	public static void delete( String key, String value ) {
+		String[] itemArray = value.split( ";" );
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+
+		for( String target : itemArray ) {
+			String[] result = exist(stringArray.toString(), target);
+			int start = Integer.valueOf(result[0]);
+			int end = Integer.valueOf(result[1]);
+
+			if (end > 0) {
+				stringArray.delete( start, end );
+			}
+		}
+
+		get().putString(key, stringArray.toString());
+		get().flush();
+	}
+
+	public static void modifyArray( String key, String target, String value ) {
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+		String[] result = exist(str,target);
+		int start = Integer.valueOf( result[0] );
+		int end = Integer.valueOf( result[1] );
+
+		if (end > 0) {
+			StringBuilder tempStr = new StringBuilder(value);
+			int length = tempStr.length() - 1;
+
+			if ( value.lastIndexOf(",") == length )
+				tempStr.deleteCharAt( length ).append(";");
+			if ( tempStr.lastIndexOf(";") != length )
+				tempStr.append(";");
+
+			stringArray.replace(start, end, tempStr.toString());
+
+			get().putString(key, stringArray.toString());
+			get().flush();
+		}
+	}
+
+	public static void modifyArrayElement( String key, String target, int index, String value ) {
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+		String[] result = exist(str,target);
+		int start = Integer.valueOf( result[0] );
+		int end = Integer.valueOf( result[1] );
+
+		if( end > 0 ){
+			int count = 0;
+			int startIndex = 0;
+			int endIndex = 0;
+			StringBuilder tempStr = new StringBuilder( result[2] );
+
+			for (int i = 0; i < ( end - start ); i++) {
+				if (tempStr.charAt(i) == ',') {
+					if (count == index) {
+						break;
+					} else {
+						startIndex = i;
+						count++;
+					}
+				}
+			}
+
+			endIndex = tempStr.indexOf(",", startIndex + 1 );
+			if(endIndex == -1)
+				endIndex = tempStr.length();
+			startIndex = index == 0 ? 0 : startIndex + 1;
+
+			tempStr.replace(startIndex, endIndex, value);
+			stringArray.replace(start, end, tempStr.toString());
+
+			get().putString(key, stringArray.toString());
+			get().flush();
+		}
+	}
+
+	public static boolean query( String key, String target ) {
+		return Integer.valueOf( exist(key,target)[1] ) > 0;
+	}
+
+	public static String[] exist( String str, String target ) {
+		StringBuilder stringArray = new StringBuilder( str );
+		int start = -1;
+		boolean check = false;
+		String targetString = null;
+		int end = -1;
+
+		if (str != null && ((start = stringArray.indexOf(target)) != -1)) {
+			while ( !check ) {
+				end = stringArray.indexOf(";", start) + 1;
+				if( end <= 0 )
+					break;
+
+				targetString = stringArray.substring(start, end);
+
+				if( target.equals( targetString.split(",")[0] ) )
+					check = true;
+				else
+					start = end;
+			}
+		}
+
+		return new String[]{ String.valueOf( start ), String.valueOf( end ), targetString };
+	}
 }
