@@ -154,7 +154,7 @@ public class DesktopPlatformSupport extends PlatformSupport {
 		fonts = new HashMap<>();
 
 		basicFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/pixel_font.ttf"));
-		asianFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/fusion_pixel.ttf"));
+		asianFontGenerator = SPDSettings.systemFont() ?  new FreeTypeFontGenerator(Gdx.files.internal("fonts/droid_sans.ttf")) : new FreeTypeFontGenerator(Gdx.files.internal("fonts/fusion_pixel.ttf"));
 		fallbackFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/droid_sans.ttf"));
 
 		fonts.put(basicFontGenerator, new HashMap<>());
