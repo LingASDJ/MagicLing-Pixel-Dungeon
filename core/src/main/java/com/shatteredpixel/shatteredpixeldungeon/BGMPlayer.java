@@ -25,6 +25,10 @@ public class BGMPlayer {
         }
     }
 
+    public static void endBGM(){
+        Music.INSTANCE.end();
+    }
+
     public static void playBGMWithDepth() {
         if (Dungeon.hero != null) {
             if (Dungeon.hero.buff(LockedFloor.class) != null) {
