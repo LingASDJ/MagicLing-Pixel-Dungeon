@@ -435,6 +435,8 @@ public class WndSettings extends WndTabbed {
 		ColorBlock sep2;
 		CheckBox chkFont;
 
+		OptionSlider quickslots;
+
 		@Override
 		protected void createChildren() {
 			title = PixelScene.renderTextBlock(Messages.get(this, "title"), 9);
@@ -663,6 +665,22 @@ public class WndSettings extends WndTabbed {
 			chkFont.checked(SPDSettings.systemFont());
 			add(chkFont);
 
+			quickslots = new OptionSlider(Messages.get(this, "quickslots"), "" + Constants.MIN_QUICKSLOTS,
+					"" + Constants.MAX_QUICKSLOTS, Constants.MIN_QUICKSLOTS, Constants.MAX_QUICKSLOTS) {
+				@Override
+				protected void onChange() {
+					SPDSettings.quickslots(getSelectedValue());
+					if(SPDSettings.quickSwapper()){
+						Toolbar.updateLayout();
+					} else {
+						ToobarV.updateLayout();
+					}
+
+				}
+			};
+			quickslots.setSelectedValue(SPDSettings.quickslots());
+			add(quickslots);
+
 			btnKeyBindings = new RedButton(Messages.get(this, "key_bindings")){
 				@Override
 				protected void onClick() {
@@ -680,6 +698,8 @@ public class WndSettings extends WndTabbed {
 			title.setPos((width - title.width())/2, y + GAP);
 			sep1.size(width, 1);
 			sep1.y = title.bottom() + 3*GAP;
+
+
 
 			height = sep1.y + 1;
 
@@ -712,7 +732,23 @@ public class WndSettings extends WndTabbed {
 			sep2.size(width, 1);
 			sep2.y = height + GAP;
 
-			chkFont.setRect(0, sep2.y + 1 + GAP, width, BTN_HEIGHT);
+
+			if(!SPDSettings.quickSwapper()){
+				quickslots.active = false;
+				quickslots.visible = false;
+			}
+
+			if ((Game.scene() == null || Game.scene().getClass() != GameScene.class) && SPDSettings.quickSwapper()) {
+				chkFont.setRect(0, sep2.y + 1 + GAP, width, BTN_HEIGHT);
+				quickslots.visible = false;
+				quickslots.active = false;
+			} else {
+				chkFont.setRect(0, sep2.y + 1 + GAP, width/2, BTN_HEIGHT);
+				quickslots.setRect(width/2, sep2.y + 1 + GAP, width/2, BTN_HEIGHT);
+			}
+
+
+
 			height = chkFont.bottom();
 
 			if (!isDesktop()) {
@@ -729,11 +765,10 @@ public class WndSettings extends WndTabbed {
 	private static class ExtendTab extends Component {
 
 		RenderedTextBlock title;
-		RenderedTextBlock wxts;
+
 		ColorBlock sep1;
 		CheckBox ClassUI;
 		OptionSlider optSplashScreen;
-		OptionSlider quickslots;
 
 		CheckBox optFPSLimit;
 
@@ -791,26 +826,6 @@ public class WndSettings extends WndTabbed {
 			};
 			optIcon.checked(SPDSettings.V2IconDamage());
 			add(optIcon);
-
-			quickslots = new OptionSlider(Messages.get(this, "quickslots"), "" + Constants.MIN_QUICKSLOTS,
-					"" + Constants.MAX_QUICKSLOTS, Constants.MIN_QUICKSLOTS, Constants.MAX_QUICKSLOTS) {
-				@Override
-				protected void onChange() {
-					SPDSettings.quickslots(getSelectedValue());
-					if(SPDSettings.quickSwapper()){
-						Toolbar.updateLayout();
-					} else {
-						ToobarV.updateLayout();
-					}
-
-				}
-			};
-			quickslots.setSelectedValue(SPDSettings.quickslots());
-			add(quickslots);
-
-			wxts = PixelScene.renderTextBlock(Messages.get(this, "wxts"), 6);
-			wxts.hardlight(GREEN_COLOR);
-			add(wxts);
 		}
 
 		@Override
@@ -824,40 +839,19 @@ public class WndSettings extends WndTabbed {
 
 			bottom = sep1.y + 1;
 
-			if(!SPDSettings.quickSwapper()){
-				quickslots.active = false;
-				quickslots.visible = false;
-			}
-
 			if (width > 200){
 				ClassUI.setRect(0, bottom, width, SLIDER_HEIGHT);
 				optSplashScreen.setRect(0, ClassUI.bottom() + GAP, width, SLIDER_HEIGHT);
 				optFPSLimit.setRect(0, optSplashScreen.bottom() + GAP, width/2, SLIDER_HEIGHT);
 				optIcon.setRect(optFPSLimit.right(), optSplashScreen.bottom() + GAP, width/2, SLIDER_HEIGHT);
-				if ((Game.scene() == null || Game.scene().getClass() != GameScene.class) && SPDSettings.quickSwapper()) {
-					quickslots.visible = false;
-					wxts.visible = false;
-				} else {
-					optSplashScreen.setRect(0, ClassUI.bottom() + GAP, width/2, SLIDER_HEIGHT);
-					quickslots.setRect(optSplashScreen.right(), ClassUI.bottom()+GAP, width/2, SLIDER_HEIGHT);
-					wxts.visible = false;
-				}
 			} else {
 					ClassUI.setRect(0, bottom + GAP, width, SLIDER_HEIGHT);
 					optSplashScreen.setRect(0, ClassUI.bottom() + GAP, width, SLIDER_HEIGHT);
 					optFPSLimit.setRect(0, optSplashScreen.bottom() + GAP, width, SLIDER_HEIGHT);
 					optIcon.setRect(0, optFPSLimit.bottom() + GAP, width, SLIDER_HEIGHT);
-				if ((Game.scene() == null || Game.scene().getClass() != GameScene.class) && SPDSettings.quickSwapper()) {
-					quickslots.visible = false;
-				} else {
-					quickslots.setRect(0, optIcon.bottom() + GAP, width, SLIDER_HEIGHT);
-
-				}
-				wxts.visible = false;
-				//GameScene
 			}
 
-			height = quickslots.bottom();
+			height = optIcon.bottom();
 		}
 
 	}
@@ -1030,21 +1024,6 @@ public class WndSettings extends WndTabbed {
 			};
 			RTC_itch.checked(SPDSettings.UPos());
 			add(RTC_itch);
-
-//			timeOut = new OptionSlider(Messages.get(this, "time_out"),
-//					"4s",
-//					"30s",
-//					4, 30) {
-//				@Override
-//				protected void onChange() {
-//					if (getSelectedValue() != SPDSettings.timeOutSeed()) {
-//						SPDSettings.timeOutSeed(getSelectedValue());
-//					}
-//				}
-//			};
-//			timeOut.setSelectedValue(SPDSettings.timeOutSeed());
-//			add(timeOut);
-
 		}
 
 		@Override
@@ -1060,12 +1039,16 @@ public class WndSettings extends WndTabbed {
 
 			if (width > 200){
 				LockFing.setRect(0, bottom, width, SLIDER_HEIGHT);
+				ATBSwitch.setRect(0, LockFing.bottom() + GAP, width/2, SLIDER_HEIGHT);
+				VSBwitch.setRect(width/2, LockFing.bottom() + GAP, width/2, SLIDER_HEIGHT);
+				RTC_itch.setRect(0, VSBwitch.bottom() + GAP, width, SLIDER_HEIGHT);
             } else {
 				LockFing.setRect(0, bottom + GAP, width, SLIDER_HEIGHT);
+				ATBSwitch.setRect(0, LockFing.bottom() + GAP, width, SLIDER_HEIGHT);
+				VSBwitch.setRect(0, ATBSwitch.bottom() + GAP, width, SLIDER_HEIGHT);
+				RTC_itch.setRect(0, VSBwitch.bottom() + GAP, width, SLIDER_HEIGHT);
             }
-            ATBSwitch.setRect(0, LockFing.bottom() + GAP, width, SLIDER_HEIGHT);
-            VSBwitch.setRect(0, ATBSwitch.bottom() + GAP, width, SLIDER_HEIGHT);
-			RTC_itch.setRect(0, VSBwitch.bottom() + GAP, width, SLIDER_HEIGHT);
+
 
             height = RTC_itch.bottom();
 		}
