@@ -127,7 +127,7 @@ public class GameSettings {
 		}
 	}
 
-	public static String[] getStringArray( String key ) {
+	public static String[] getAllStringArray( String key ) {
 		try {
 			String s = get().getString( key, "" );
 			if ( s != null && s.length() > Integer.MAX_VALUE ) {
@@ -203,7 +203,7 @@ public class GameSettings {
 	public static void modifyArray( String key, String target, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
-		String[] result = exist(str,target);
+		String[] result = exist( str, target );
 		int start = Integer.valueOf( result[0] );
 		int end = Integer.valueOf( result[1] );
 
@@ -226,7 +226,52 @@ public class GameSettings {
 	public static void modifyArrayElement( String key, String target, int index, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
-		String[] result = exist(str,target);
+		String[] result = exist( str, target );
+		int start = Integer.valueOf( result[0] );
+		int end = Integer.valueOf( result[1] );
+
+		if( end > 0 ){
+			int count = 0;
+			int startIndex = 0;
+			int endIndex = 0;
+			StringBuilder tempStr = new StringBuilder( result[2] );
+			int elementCount = result[2].split(",").length;
+
+			for (int i = 0; i < ( end - start ); i++) {
+				if (tempStr.charAt(i) == ',') {
+					if (count == index) {
+						break;
+					} else {
+						startIndex = i;
+						count++;
+					}
+				}
+			}
+
+			endIndex = tempStr.indexOf(",", startIndex + 1 );
+			if(endIndex == -1)
+				endIndex = tempStr.length();
+			startIndex = index == 0 ? 0 : startIndex + 1;
+			int charResult = start + endIndex;
+			int charIndex = charResult == str.length() ? charResult - 1 : charResult;
+
+			if( ( stringArray.charAt( end - 1 ) == ';' || stringArray.charAt( charIndex ) == ',' ) && ( value.charAt( value.length() - 1 ) == ';' || value.charAt( value.length() - 1 ) == ',' ) )
+				value = value.substring( 0, value.length() - 1 );
+			if( index == elementCount - 1 && stringArray.charAt( end - 1 ) == ';' && value.charAt( value.length() - 1 ) != ';' )
+				tempStr.append(";");
+
+			tempStr.replace(startIndex, endIndex, value);
+			stringArray.replace(start, end, tempStr.toString());
+
+			get().putString(key, stringArray.toString());
+			get().flush();
+		}
+	}
+
+	public static String getArrayElement( String key, String target, int index ) {
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+		String[] result = exist( stringArray.toString(), target );
 		int start = Integer.valueOf( result[0] );
 		int end = Integer.valueOf( result[1] );
 
@@ -252,12 +297,22 @@ public class GameSettings {
 				endIndex = tempStr.length();
 			startIndex = index == 0 ? 0 : startIndex + 1;
 
-			tempStr.replace(startIndex, endIndex, value);
-			stringArray.replace(start, end, tempStr.toString());
-
-			get().putString(key, stringArray.toString());
-			get().flush();
+			return tempStr.substring(startIndex, endIndex).toString();
 		}
+
+		return null;
+	}
+
+	public static String getArray( String key, String target ) {
+		String str = get().getString( key, "" );
+		StringBuilder stringArray = new StringBuilder( str );
+		String[] result = exist( stringArray.toString(), target );
+
+		if( Integer.valueOf( result[1] ) > 0 ){
+			return result[2];
+		}
+
+		return null;
 	}
 
 	public static boolean query( String key, String target ) {
@@ -271,7 +326,7 @@ public class GameSettings {
 		String targetString = null;
 		int end = -1;
 
-		if (str != null && ((start = stringArray.indexOf(target)) != -1)) {
+		if ( str != null && ( ( start = stringArray.indexOf( target ) ) != -1 ) ) {
 			while ( !check ) {
 				end = stringArray.indexOf(";", start) + 1;
 				if( end <= 0 )
@@ -279,10 +334,15 @@ public class GameSettings {
 
 				targetString = stringArray.substring(start, end);
 
-				if( target.equals( targetString.split(",")[0] ) )
+				if ( target.equals( targetString.split(",")[0] ) ) {
 					check = true;
-				else
+					if( targetString.contains(";") && !targetString.contains(",") ){
+						end -= 1;
+						targetString = stringArray.substring( start, end );
+					}
+				}else {
 					start = end;
+				}
 			}
 		}
 
