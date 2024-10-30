@@ -120,12 +120,15 @@ public class PrisonLevel extends RegularLevel {
 		return Assets.Environment.WATER_PRISON;
 	}
 
+	/**
+	 * MUSIC MODE
+	 */
 	@Override
 	public void playLevelMusic() {
 		if (Wandmaker.Quest.active() || Statistics.amuletObtained){
-			Music.INSTANCE.play(Assets.Music.PRISON_TENSE, true);
+			BGMPlayer.playBGM(Assets.Music.PRISON_TENSE, true);
 		} else {
-			BGMPlayer.playBGMWithDepth();
+			BGMPlayer.playBGM(Assets.BGM_2, true);
 		}
 		wandmakerQuestWasActive = Wandmaker.Quest.active();
 	}

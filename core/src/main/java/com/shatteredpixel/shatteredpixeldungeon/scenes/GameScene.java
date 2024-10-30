@@ -1159,6 +1159,9 @@ public class GameScene extends PixelScene {
 
 		BGMPlayer.playBGMWithDepth();
 
+		//TODO
+		//Dungeon.level.playLevelMusic();
+
 		SPDSettings.lastClass(Dungeon.hero.heroClass.ordinal());
 
 		super.create();
@@ -1553,25 +1556,6 @@ public class GameScene extends PixelScene {
 			Dungeon.droppedItems.remove(Dungeon.depth);
 		}
 
-//		ArrayList<Item> ported = Dungeon.portedItems.get( Dungeon.depth );
-//		if (ported != null){
-//			//TODO currently items are only ported to boss rooms, so this works well
-//			//might want to have a 'near entrance' function if items can be ported elsewhere
-//			int pos;
-//			//try to find a tile with no heap, otherwise just stick items onto a heap.
-//			int tries = 100;
-//			do {
-//				pos = Dungeon.level.randomRespawnCell( null );
-//				tries--;
-//			} while (tries > 0 && Dungeon.level.heaps.get(pos) != null);
-//			for (Item item : ported) {
-//				Dungeon.level.drop( item, pos ).type = Heap.Type.CHEST;
-//			}
-//			Dungeon.level.heaps.get(pos).type = Heap.Type.CHEST;
-//			Dungeon.level.heaps.get(pos).sprite.link(); //sprite reset to show chest
-//			Dungeon.portedItems.remove( Dungeon.depth );
-//		}
-
 		Dungeon.hero.next();
 
 		switch (InterlevelScene.mode) {
@@ -1589,19 +1573,16 @@ public class GameScene extends PixelScene {
 				Camera.main.snapTo(hero.center().x,
 						hero.center().y + DungeonTilemap.SIZE * (defaultZoom / Camera.main.zoom));
 				break;
-//			case EXBOSS:
-//				Camera.main.snapTo(hero.center().x/2,
-//						hero.center().y/4 + DungeonTilemap.SIZE * (defaultZoom/Camera.main.zoom));
-			//break;
 			default:
 				Camera.main.snapTo(hero.center().x, hero.center().y);
 		}
 		Camera.main.panTo(hero.center(), 2.5f);
 
 		if (InterlevelScene.mode != InterlevelScene.Mode.NONE) {
-			String abcd = null;
-			if (Dungeon.depth == Statistics.deepestFloor
-					&& (InterlevelScene.mode == InterlevelScene.Mode.DESCEND || InterlevelScene.mode == InterlevelScene.Mode.FALL)) {
+
+			if (Dungeon.depth == Statistics.deepestFloor &&
+					(InterlevelScene.mode == InterlevelScene.Mode.DESCEND ||
+							InterlevelScene.mode == InterlevelScene.Mode.FALL)) {
 				if (Dungeon.depth == -30) {
 					GLog.h(Messages.get(this, "ancity"), Dungeon.depth);
 				} else if (Dungeon.depth == -15) {
@@ -1621,10 +1602,7 @@ public class GameScene extends PixelScene {
 				}
 
 				Sample.INSTANCE.play(Assets.Sounds.DESCEND);
-//				TODO P3
-//				if(Dungeon.sbbossLevel()){
-//					tell(Messages.get(Slyl.class, "tips"));
-//				}
+
 				for (Char ch : Actor.chars()) {
 					if (ch instanceof DriedRose.GhostHero) {
 						((DriedRose.GhostHero) ch).sayAppeared();

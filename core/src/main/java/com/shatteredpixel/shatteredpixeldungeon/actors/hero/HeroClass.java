@@ -219,16 +219,15 @@ public enum HeroClass {
 		Dungeon.LimitedDrops.KING_BAG.drop();
 
 		//插个眼
-
-		//if(Dungeon.isDLC(Conducts.Conduct.HARD)){
-			//new PropBag().quantity(1).identify().collect();
-//
-			////Prop.randomProp().collect();
-			//new RapidEarthRoot().collect();
-			//new WenStudyingPaperOne().collect();
-			//new YanStudyingPaperTwo().collect();
-			//Prop.randomProp().collect();
-		//}
+		/*	if(Dungeon.isDLC(Conducts.Conduct.HARD)){
+				//new PropBag().quantity(1).identify().collect();
+				//Prop.randomProp().collect();
+				//new RapidEarthRoot().collect();
+				//new WenStudyingPaperOne().collect();
+				//new YanStudyingPaperTwo().collect();
+				//Prop.randomProp().collect();
+			}
+		*/
 		Dungeon.LimitedDrops.PROP_BAG.drop();
 
 		Waterskin waterskin = new Waterskin();
@@ -306,16 +305,6 @@ public enum HeroClass {
 				initDuelist( hero );
 				break;
 		}
-
-//		if (SPDSettings.quickslotWaterskin()) {
-//			for (int s = 0; s < QuickSlot.SIZE; s++) {
-//				if (Dungeon.quickslot.getItem(s) == null) {
-//					Dungeon.quickslot.setSlot(s, waterskin);
-//					break;
-//				}
-//			}
-//		}
-
 	}
 
 	public Badges.Badge masteryBadge() {
@@ -328,8 +317,6 @@ public enum HeroClass {
 				return Badges.Badge.MASTERY_ROGUE;
 			case HUNTRESS:
 				return Badges.Badge.MASTERY_HUNTRESS;
-//			case DUELIST:
-//				return Badges.Badge.MASTERY_DUELIST;
 		}
 		return null;
 	}
@@ -455,21 +442,6 @@ public enum HeroClass {
 		}
 	}
 
-	public String splashArt(){
-		switch (this) {
-			case WARRIOR: default:
-				return Assets.Splashes.WARRIOR;
-			case MAGE:
-				return Assets.Splashes.MAGE;
-			case ROGUE:
-				return Assets.Splashes.ROGUE;
-			case HUNTRESS:
-				return Assets.Splashes.HUNTRESS;
-			case DUELIST:
-				return Assets.Splashes.DUELIST;
-		}
-	}
-	
 	public boolean isUnlocked(){
 		//always unlock on debug builds
 		if (DeviceCompat.isDebug()) return true;

@@ -45,12 +45,12 @@ public class PotionOfHaste extends Potion {
 		identify();
 
 		if(Dungeon.isChallenged(EXSG) && Random.Float()>=0.95f) {
-			Buff.affect(hero, Cripple.class, 8f);
-			GLog.w( Messages.get(this, "energy_speed") );
-		} else {
 			GLog.w( Messages.get(this, "energetic") );
 			Buff.prolong( hero, Haste.class, Haste.DURATION);
 			SpellSprite.show(hero, SpellSprite.HASTE, 1, 1, 0);
+		} else {
+			Buff.affect(hero, Cripple.class, 8f);
+			GLog.w( Messages.get(this, "energy_speed") );
 		}
 	}
 	

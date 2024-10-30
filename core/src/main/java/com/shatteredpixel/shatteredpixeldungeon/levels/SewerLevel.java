@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -66,6 +67,10 @@ public class SewerLevel extends RegularLevel {
 		color2 = 0x59994a;
 	}
 
+	@Override
+	public void playLevelMusic(){
+		BGMPlayer.playBGM(Assets.BGM_1, true);
+	}
 	
 	@Override
 	protected int standardRooms(boolean forceMax) {

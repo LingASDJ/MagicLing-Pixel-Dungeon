@@ -18,6 +18,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.WaloKe;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestItem;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
+import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
@@ -264,8 +265,10 @@ public class GameRules {
 
                 }
 
-                if(!(item instanceof Bag || item instanceof DLCItem|| item instanceof TestItem || item instanceof Trinket || item instanceof TestBooks|| item instanceof SpiritBow
-                || item instanceof Potion || item instanceof Scroll || item instanceof Waterskin || item.unique) && result !=null){
+                if(!(item instanceof Bag || item instanceof DLCItem|| item instanceof TestItem ||
+                        item instanceof Trinket || item instanceof TestBooks|| item instanceof SpiritBow
+                || item instanceof Potion || item instanceof Scroll || item instanceof Waterskin ||
+                        item instanceof Ankh || item instanceof MagesStaff  || item.unique) && result !=null){
                     item.detach(Dungeon.hero.belongings.backpack);
                 }
 
