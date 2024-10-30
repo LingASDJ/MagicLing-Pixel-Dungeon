@@ -49,14 +49,14 @@ public class PotionOfStrength extends Potion {
 	public void apply( Hero hero ) {
 		identify();
 		if(Dungeon.isChallenged(EXSG) && Random.Float()>=0.95f) {
+			hero.STR++;
+			hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "msg_1"));
+			GLog.p(Messages.get(this, "msg_2"));
+		} else {
 			hero.STR--;
 			hero.sprite.showStatus(CharSprite.NEGATIVE, Messages.get(this, "esg_1"));
 			GLog.n(Messages.get(this, "esg_2"));
 			Buff.affect(hero, Frost.class, 10f);
-		} else {
-			hero.STR++;
-			hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "msg_1"));
-			GLog.p(Messages.get(this, "msg_2"));
 		}
 
 		Badges.validateStrengthAttained();

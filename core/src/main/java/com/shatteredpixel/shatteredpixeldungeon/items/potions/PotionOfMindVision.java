@@ -45,19 +45,18 @@ public class PotionOfMindVision extends Potion {
 
 		if(Dungeon.isChallenged(EXSG) && Random.Float()>=0.95f) {
 			identify();
-			Buff.affect(hero, Blindness.class, 5f);
-			GLog.n(Messages.get(this, "no_eye"));
-		} else {
-			identify();
 			Buff.affect( hero, MindVision.class, MindVision.DURATION );
 			SpellSprite.show(hero, SpellSprite.VISION, 1, 0.77f, 0.9f);
 			Dungeon.observe();
-
-			if (Dungeon.level.mobs.size() > 0) {
+			if (!Dungeon.level.mobs.isEmpty()) {
 				GLog.i( Messages.get(this, "see_mobs") );
 			} else {
 				GLog.i( Messages.get(this, "see_none") );
 			}
+		} else {
+			identify();
+			Buff.affect(hero, Blindness.class, 5f);
+			GLog.n(Messages.get(this, "no_eye"));
 		}
 
 

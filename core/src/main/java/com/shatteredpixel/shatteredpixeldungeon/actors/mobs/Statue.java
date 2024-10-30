@@ -23,7 +23,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -85,6 +84,14 @@ public class Statue extends Mob {
 	}
 	
 	@Override
+	protected boolean act() {
+		if (Dungeon.level.heroFOV[pos]) {
+			Notes.add( Notes.Landmark.STATUE );
+		}
+		return super.act();
+	}
+
+	@Override
 	public int damageRoll() {
 		return weapon.damageRoll(this);
 	}
@@ -106,18 +113,7 @@ public class Statue extends Mob {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, Dungeon.depth + weapon.defenseFactor(this));
-	}
-	
-	@Override
-	public boolean add(Buff buff) {
-		if (super.add(buff)) {
-			if (state == PASSIVE && buff.type == Buff.buffType.NEGATIVE) {
-				state = HUNTING;
-			}
-			return true;
-		}
-		return false;
+		return Random.NormalIntRange(0, Dungeon.depth + weapon.defenseFactor(this));
 	}
 
 	@Override
@@ -154,15 +150,8 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public Notes.Landmark landmark() {
-		return levelGenStatue ? Notes.Landmark.STATUE : null;
-	}
-
-	@Override
 	public void destroy() {
-		if (landmark() != null) {
-			Notes.remove( landmark() );
-		}
+		Notes.remove( Notes.Landmark.STATUE );
 		super.destroy();
 	}
 
@@ -179,11 +168,7 @@ public class Statue extends Mob {
 
 	@Override
 	public String description() {
-		String desc = Messages.get(this, "desc");
-		if (weapon != null){
-			desc += "\n\n" + Messages.get(this, "desc_weapon", weapon.name());
-		}
-		return desc;
+		return Messages.get(this, "desc", weapon.name());
 	}
 	
 	{
