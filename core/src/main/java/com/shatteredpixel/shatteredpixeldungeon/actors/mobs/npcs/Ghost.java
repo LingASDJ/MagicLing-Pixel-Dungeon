@@ -21,8 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -34,8 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FetidRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollTrickster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LamellarArmor;
@@ -59,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndSadGhost;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -142,7 +139,7 @@ public class Ghost extends NPC {
 
 		Sample.INSTANCE.play( Assets.Sounds.GHOST );
 
-		if (c != hero){
+		if (c != Dungeon.hero){
 			return super.interact(c);
 		}
 
@@ -174,20 +171,6 @@ public class Ghost extends NPC {
 						}
 					});
 
-					int newPos = -1;
-					for (int i = 0; i < 10; i++) {
-						newPos = Dungeon.level.randomRespawnCell( this );
-						if (newPos != -1) {
-							break;
-						}
-					}
-					if (newPos != -1) {
-
-						CellEmitter.get(pos).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
-						pos = newPos;
-						sprite.place(pos);
-						sprite.visible = Dungeon.level.heroFOV[pos];
-					}
 				}
 			}
 		} else {
@@ -197,13 +180,13 @@ public class Ghost extends NPC {
 			switch (Quest.type){
 				case 1: default:
 					questBoss = new FetidRat();
-					txt_quest = Messages.get(this, "rat_1", hero.name()); break;
+					txt_quest = Messages.get(this, "rat_1", Messages.titleCase(Dungeon.hero.name())); break;
 				case 2:
 					questBoss = new GnollTrickster();
-					txt_quest = Messages.get(this, "gnoll_1", hero.name()); break;
+					txt_quest = Messages.get(this, "gnoll_1", Messages.titleCase(Dungeon.hero.name())); break;
 				case 3:
 					questBoss = new GreatCrab();
-					txt_quest = Messages.get(this, "crab_1", hero.name()); break;
+					txt_quest = Messages.get(this, "crab_1", Messages.titleCase(Dungeon.hero.name())); break;
 			}
 
 			questBoss.pos = Dungeon.level.randomRespawnCell( this );
@@ -214,7 +197,20 @@ public class Ghost extends NPC {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						GameScene.show( new WndQuest( Ghost.this, txt_quest ) );
+						GameScene.show( new WndQuest( Ghost.this, txt_quest ){
+							@Override
+							public void hide() {
+								super.hide();
+								Music.INSTANCE.fadeOut(1f, new Callback() {
+									@Override
+									public void call() {
+										if (Dungeon.level != null) {
+											Dungeon.level.playLevelMusic();
+										}
+									}
+								});
+							}
+						} );
 					}
 				});
 			}
