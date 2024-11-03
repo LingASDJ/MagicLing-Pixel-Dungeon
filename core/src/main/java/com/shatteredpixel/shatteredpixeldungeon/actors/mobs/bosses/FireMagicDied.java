@@ -709,8 +709,6 @@ public class FireMagicDied extends Boss implements Callback, Hero.Doom {
             BossHealthBar.bleed(true);
             ((FireMagicGirlSprite)sprite).spray(true);
         }
-        LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-        if (lock != null) lock.addTime(dmg*2);
 
         if (phase == 1) {
             int dmgTaken = preHP - HP;
