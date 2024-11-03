@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
 
 public class RoseShiled extends FlavourBuff {
@@ -45,9 +46,19 @@ public class RoseShiled extends FlavourBuff {
 
     @Override
     public void fx(boolean on) {
-        if (on) target.sprite.add(CharSprite.State.ROSESHIELDED);
-        else target.sprite.remove(CharSprite.State.ROSESHIELDED);
+
+        if (!target.buffs(ChampionEnemy.class).isEmpty()) return;
+
+        if (on) {
+            target.sprite.add(CharSprite.State.ROSESHIELDED);
+            target.sprite.aura(Window.Pink_COLOR);
+        } else {
+            target.sprite.remove(CharSprite.State.ROSESHIELDED);
+            target.sprite.clearAura();
+        }
     }
+
+
 
     @Override
     public int icon() {
