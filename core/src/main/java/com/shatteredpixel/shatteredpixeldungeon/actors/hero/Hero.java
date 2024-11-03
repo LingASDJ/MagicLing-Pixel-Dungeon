@@ -228,6 +228,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.minilevels.DragonFestivalMiniLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
@@ -2178,21 +2179,26 @@ public class Hero extends Char {
 
 		Mob target = null;
 		for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])) {
+			if (fieldOfView[ m.pos ] && m.landmark() != null){
+				Notes.add(m.landmark());
+			}
+
 			if (fieldOfView[ m.pos ] && m.alignment == Alignment.ENEMY) {
 				visible.add(m);
 				if (!visibleEnemies.contains( m )) {
 					newMob = true;
 				}
 
-				if (!mindVisionEnemies.contains(m) && QuickSlotButton.autoAim(m) != -1){
-					if (target == null){
+				//only do a simple check for mind visioned enemies, better performance
+				if ((!mindVisionEnemies.contains(m) && QuickSlotButton.autoAim(m) != -1)
+						|| (mindVisionEnemies.contains(m) && new Ballistica( pos, m.pos, Ballistica.PROJECTILE ).collisionPos == m.pos)) {
+					if (target == null) {
 						target = m;
 					} else if (distance(target) > distance(m)) {
 						target = m;
 					}
 					if (m instanceof Snake && Dungeon.level.distance(m.pos, pos) <= 4
 							&& !Document.ADVENTURERS_GUIDE.isPageRead(Document.GUIDE_EXAMINING)){
-						GLog.p(Messages.get(Guidebook.class, "hint"));
 						GameScene.flashForDocument(Document.ADVENTURERS_GUIDE, Document.GUIDE_EXAMINING);
 						//we set to read here to prevent this message popping up a bunch
 						Document.ADVENTURERS_GUIDE.readPage(Document.GUIDE_EXAMINING);
@@ -2210,11 +2216,10 @@ public class Hero extends Char {
 		}
 
 		if (newMob) {
-			interrupt();
 			if (resting){
 				Dungeon.observe();
-				resting = false;
 			}
+			interrupt();
 		}
 
 		visibleEnemies = visible;

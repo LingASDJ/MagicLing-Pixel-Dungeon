@@ -56,6 +56,11 @@ public class ExitRoom extends StandardRoom {
 	}
 
 	@Override
+	public boolean canMerge(Level l, Room other, Point p, int mergeTerrain) {
+		return false;
+	}
+
+	@Override
 	public boolean isExit() {
 		return true;
 	}
