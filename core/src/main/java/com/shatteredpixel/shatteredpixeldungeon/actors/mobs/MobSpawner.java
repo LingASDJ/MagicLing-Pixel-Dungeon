@@ -78,7 +78,14 @@ public class MobSpawner extends Actor {
 	}
 
 	public static ArrayList<Class<? extends Mob>> getMobRotation(int depth ){
-		ArrayList<Class<? extends Mob>> mobs = standardMobRotation( depth );
+		ArrayList<Class<? extends Mob>> mobs;
+
+		if(!(Dungeon.isChallenged(RLPT)) || Dungeon.depth < 6 && Dungeon.isChallenged(RLPT)){
+			mobs = standardMobRotation( depth );
+		} else {
+			mobs = rlptMobDied( depth );
+		}
+
 		addRareMobs(depth, mobs);
 		swapMobAlts(mobs);
 
@@ -269,6 +276,7 @@ public class MobSpawner extends Actor {
 	}
 
 	private static ArrayList<Class<? extends Mob>> rlptMobDied(int i) {
+		//子层
 		if(Dungeon.branch!=0){
 			switch (Dungeon.branch){
 				case 1:
@@ -294,6 +302,8 @@ public class MobSpawner extends Actor {
 
 			}
 		}
+
+		//本地层
 		switch (i) {
 			case 6:
 				return new ArrayList<>(Arrays.asList(Skeleton.class,
@@ -485,8 +495,8 @@ public class MobSpawner extends Actor {
 					cl = Acidic.class;
 				} else if (cl == Spinner.class) {
 					cl = GnollShiled.class;
-//				} else if (cl == RedSwarm.class) {
-//					cl = RedNecromancer.class;
+				} else if (cl == RedSwarm.class) {
+					cl = RedNecromancer.class;
 				} else if (cl == Elemental.class && Dungeon.isChallenged(RLPT)) {
 					cl = RandomBlueFireDE.class;
 				} else if (cl == FireGhost.class && Dungeon.isChallenged(RLPT)) {

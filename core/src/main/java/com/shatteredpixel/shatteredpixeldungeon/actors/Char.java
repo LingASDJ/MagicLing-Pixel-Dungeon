@@ -21,9 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
@@ -47,11 +50,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ElementalBuff.BaseBuff.ScaryBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ElementalBuff.DamageBuff.ScaryDamageBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HaloFireImBlue;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
@@ -89,9 +96,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrivusFruits;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.DwarfGeneral;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.IconFloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
@@ -220,7 +230,7 @@ public abstract class Char extends Actor {
 		} else if (c instanceof Hero
 				&& alignment == Alignment.ALLY
 				&& !hasProp(this, Property.IMMOVABLE)
-				&& Dungeon.level.distance(pos, c.pos) <= 2*Dungeon.hero.pointsInTalent(Talent.ALLY_WARP)){
+				&& Dungeon.level.distance(pos, c.pos) <= 2* hero.pointsInTalent(Talent.ALLY_WARP)){
 			return true;
 		} else {
 			return false;
@@ -253,7 +263,7 @@ public abstract class Char extends Actor {
 		}
 
 		//warp instantly with allies in this case
-		if (c == Dungeon.hero && Dungeon.hero.hasTalent(Talent.ALLY_WARP)){
+		if (c == hero && hero.hasTalent(Talent.ALLY_WARP)){
 			PathFinder.buildDistanceMap(c.pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
 			if (PathFinder.distance[pos] == Integer.MAX_VALUE){
 				return true;
@@ -283,12 +293,12 @@ public abstract class Char extends Actor {
 
 		c.spend( 1 / c.speed() );
 
-		if (c == Dungeon.hero){
-			if (Dungeon.hero.subClass == HeroSubClass.FREERUNNER){
-				Buff.affect(Dungeon.hero, Momentum.class).gainStack();
+		if (c == hero){
+			if (hero.subClass == HeroSubClass.FREERUNNER){
+				Buff.affect(hero, Momentum.class).gainStack();
 			}
 
-			Dungeon.hero.busy();
+			hero.busy();
 		}
 
 		return true;
@@ -390,8 +400,8 @@ public abstract class Char extends Actor {
 			Preparation prep = buff(Preparation.class);
 			if (prep != null){
 				dmg = prep.damageRoll(this);
-				if (this == Dungeon.hero && Dungeon.hero.hasTalent(Talent.BOUNTY_HUNTER)) {
-					Buff.affect(Dungeon.hero, Talent.BountyHunterTracker.class, 0.0f);
+				if (this == hero && hero.hasTalent(Talent.BOUNTY_HUNTER)) {
+					Buff.affect(hero, Talent.BountyHunterTracker.class, 0.0f);
 				}
 			} else {
 				dmg = damageRoll();
@@ -511,9 +521,9 @@ public abstract class Char extends Actor {
 			}
 
 			if (!enemy.isAlive() && visibleFight) {
-				if (enemy == Dungeon.hero) {
+				if (enemy == hero) {
 
-					if (this == Dungeon.hero) {
+					if (this == hero) {
 						return true;
 					}
 
@@ -524,7 +534,7 @@ public abstract class Char extends Actor {
 					Dungeon.fail( this );
 					GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
 
-				} else if (this == Dungeon.hero) {
+				} else if (this == hero) {
 					GLog.i( Messages.capitalize(Messages.get(Char.class, "defeat", enemy.name())) );
 				}
 			}
@@ -851,29 +861,92 @@ public abstract class Char extends Actor {
 			if (src instanceof Pickaxe)                                 icon = FloatingText.PICK_DMG;
 
 			//special case for sniper when using ranged attacks
-			if (src == Dungeon.hero
-					&& Dungeon.hero.subClass == HeroSubClass.SNIPER
-					&& !Dungeon.level.adjacent(Dungeon.hero.pos, pos)
-					&& Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon){
+			if (src == hero
+					&& hero.subClass == HeroSubClass.SNIPER
+					&& !Dungeon.level.adjacent(hero.pos, pos)
+					&& hero.belongings.attackingWeapon() instanceof MissileWeapon){
 				icon = FloatingText.PHYS_DMG_NO_BLOCK;
 			}
 
-			if (src instanceof Hunger)                                  icon = FloatingText.HUNGER;
-			if (src instanceof Burning)                                 icon = FloatingText.BURNING;
-			if (src instanceof Chill || src instanceof Frost)           icon = FloatingText.FROST;
-			if (src instanceof GeyserTrap || src instanceof StormCloud) icon = FloatingText.WATER;
-			if (src instanceof Burning)                                 icon = FloatingText.BURNING;
-			if (src instanceof Electricity)                             icon = FloatingText.SHOCKING;
-			if (src instanceof Bleeding)                                icon = FloatingText.BLEEDING;
-			if (src instanceof ToxicGas)                                icon = FloatingText.TOXIC;
-			if (src instanceof Corrosion)                               icon = FloatingText.CORROSION;
-			if (src instanceof Poison)                                  icon = FloatingText.POISON;
-			if (src instanceof Ooze)                                    icon = FloatingText.OOZE;
-			if (src instanceof Viscosity.DeferedDamage)                 icon = FloatingText.DEFERRED;
-			if (src instanceof Corruption)                              icon = FloatingText.CORRUPTION;
-			if (src instanceof AscensionChallenge)                      icon = FloatingText.AMULET;
+			if (AntiMagic.RESISTS.contains(src.getClass())) {
+				icon = IconFloatingText.MAGIC_DMG;
+			}
+			if (src instanceof Pickaxe) {
+				icon = IconFloatingText.PICK_DMG;
+			}
+			if (src == hero && hero.subClass == HeroSubClass.SNIPER && !Dungeon.level.adjacent(hero.pos, this.pos) && (hero.belongings.attackingWeapon() instanceof MissileWeapon)) {
+				icon = IconFloatingText.PHYS_DMG_NO_BLOCK;
+			}
+			if (src instanceof Hunger) {
+				icon = IconFloatingText.HUNGER;
+			}
+			if (src instanceof Burning) {
+				icon = IconFloatingText.BURNING;
+			}
+			if ((src instanceof Chill) || (src instanceof Frost)) {
+				icon = IconFloatingText.FROST;
+			}
+			if ((src instanceof GeyserTrap) || (src instanceof StormCloud)) {
+				icon = IconFloatingText.WATER;
+			}
+			if (src instanceof Burning) {
+				icon = IconFloatingText.BURNING;
+			}
+			if (src instanceof Electricity) {
+				icon = IconFloatingText.SHOCKING;
+			}
+			if (src instanceof Bleeding) {
+				icon = IconFloatingText.BLEEDING;
+			}
+			if (src instanceof ToxicGas) {
+				icon = IconFloatingText.TOXIC;
+			}
+			if (src instanceof CrivusFruits.DiedBlobs) {
+				icon = IconFloatingText.REDGAS;
+			}
 
-			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
+			if (src instanceof HalomethaneBurning) {
+				icon = IconFloatingText.HALO;
+			}
+
+			if (src instanceof FrostBurning) {
+				icon = IconFloatingText.ICEFIRE;
+			}
+
+			if(src instanceof ScaryBuff){
+				icon = IconFloatingText.HEARTDEMON;
+			}
+
+			if (src instanceof Corrosion) {
+				icon = IconFloatingText.CORROSION;
+			}
+			if (src instanceof Poison) {
+				icon = IconFloatingText.POISON;
+			}
+			if (src instanceof Ooze) {
+				icon = IconFloatingText.OOZE;
+			}
+			if (src instanceof Viscosity.DeferedDamage) {
+				icon = IconFloatingText.DEFERRED;
+			}
+			if (src instanceof Corruption) {
+				icon = IconFloatingText.CORRUPTION;
+			}
+			if (src instanceof AscensionChallenge) {
+				icon = IconFloatingText.AMULET;
+			}
+			if (src instanceof ScaryDamageBuff || src instanceof DwarfGeneral.Wither) {
+				icon = IconFloatingText.HEARTDEMON_DMG;
+			}
+
+			if(SPDSettings.V2IconDamage()){
+				sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
+			} else {
+				sprite.showStatus(HP > HT / 2 ?
+								CharSprite.WARNING :
+								CharSprite.NEGATIVE,
+						Integer.toString(dmg + shielded));
+			}
 		}
 
 		if (HP < 0) HP = 0;
@@ -1117,7 +1190,7 @@ public abstract class Char extends Actor {
 
 		pos = step;
 
-		if (this != Dungeon.hero) {
+		if (this != hero) {
 			sprite.visible = Dungeon.level.heroFOV[pos];
 		}
 
