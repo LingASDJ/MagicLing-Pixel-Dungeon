@@ -9,6 +9,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.levels.ShopBossLevel.FALS
 import static com.shatteredpixel.shatteredpixeldungeon.levels.ShopBossLevel.TRUEPosition;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -680,6 +681,13 @@ public class FireMagicDied extends Boss implements Callback, Hero.Doom {
         boolean bleeding = (HP*2 <= HT);
 
         super.damage(dmg, src);
+
+        LockedFloor lock = hero.buff(LockedFloor.class);
+        if (lock != null){
+            if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
+            else                                                    lock.addTime(dmg*1f);
+        }
+
         int hpBracket = HT / 8;
 
         int curbracket = hpBracket == 0 ? 1 : HP / hpBracket;
