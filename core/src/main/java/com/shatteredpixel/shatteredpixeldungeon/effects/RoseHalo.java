@@ -39,7 +39,7 @@ public class RoseHalo extends Halo {
             }
         }
 
-        if (visible = target.visible) {
+        if (visible == target.visible) {
             PointF p = target.center();
             point( p.x, p.y );
         }
