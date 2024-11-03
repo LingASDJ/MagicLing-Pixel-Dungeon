@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -86,30 +85,49 @@ public class Stylus extends Item {
 		return true;
 	}
 
-	private void inscribe( Armor armor ) {
+	private void inscribe( Item item ) {
+		if (item instanceof Armor) {
+			Armor armor = (Armor) item;
+			if (!armor.isIdentified()) {
+				GLog.w(Messages.get(this, "identify"));
+				return;
+			} else if (armor.cursed || armor.hasCurseGlyph()) {
+				GLog.w(Messages.get(this, "cursed"));
+				return;
+			}
 
-		if (!armor.isIdentified() ){
-			GLog.w( Messages.get(this, "identify"));
-			return;
-		} else if (armor.cursed || armor.hasCurseGlyph()){
-			GLog.w( Messages.get(this, "cursed"));
-			return;
+			detach(curUser.belongings.backpack);
+
+			GLog.w(Messages.get(this, "inscribed"));
+
+			armor.inscribe();
+
+			curUser.sprite.operate(curUser.pos);
+			curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
+			Enchanting.show(curUser, armor);
+			Sample.INSTANCE.play(Assets.Sounds.BURNING);
+
+			curUser.spend(TIME_TO_INSCRIBE);
+			curUser.busy();
+		}else if (item instanceof BrokenSeal){
+			if (item.cursed || ((BrokenSeal)item).hasCurseGlyph()) {
+				GLog.w(Messages.get(this, "cursed"));
+				return;
+			}
+
+			detach(curUser.belongings.backpack);
+
+			GLog.w(Messages.get(this, "inscribed"));
+			((BrokenSeal)item).inscribe();
+
+			curUser.sprite.operate(curUser.pos);
+			curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
+			Enchanting.show(curUser, item);
+			Sample.INSTANCE.play(Assets.Sounds.BURNING);
+
+			curUser.spend(TIME_TO_INSCRIBE);
+			curUser.busy();
 		}
-
-		detach(curUser.belongings.backpack);
-		Catalog.countUse(getClass());
-
-		GLog.w( Messages.get(this, "inscribed"));
-
-		armor.inscribe();
-
-		curUser.sprite.operate(curUser.pos);
-		curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
-		Enchanting.show(curUser, armor);
-		Sample.INSTANCE.play(Assets.Sounds.BURNING);
-
-		curUser.spend(TIME_TO_INSCRIBE);
-		curUser.busy();
 	}
 
 	@Override
@@ -137,7 +155,7 @@ public class Stylus extends Item {
 		@Override
 		public void onSelect( Item item ) {
 			if (item != null) {
-				Stylus.this.inscribe( (Armor)item );
+				Stylus.this.inscribe( item );
 			}
 		}
 	};
