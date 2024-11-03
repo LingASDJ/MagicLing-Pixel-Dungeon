@@ -62,20 +62,13 @@ public class Gold extends Item {
 
 		Catalog.setSeen(getClass());
 
-		Dungeon.gold += quantity;
-		Statistics.goldCollected += quantity;
-		Badges.validateGoldCollected();
-
-
 		if(quantity > 49 && Statistics.bossRushMode ){
 			Dungeon.rushgold += quantity/50;
 
 			GameScene.pickUp( this, pos );
 			hero.spendAndNext( TIME_TO_PICK_UP );
 			hero.sprite.showStatus(CharSprite.NEGATIVE, Messages.get(this, "ling",quantity/50));
-			Sample.INSTANCE.play( Assets.Sounds.GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
-			updateQuickslot();
-		} else {
+        } else {
 			Dungeon.gold += quantity;
 			Statistics.goldCollected += quantity;
 			Badges.validateGoldCollected();
@@ -84,11 +77,11 @@ public class Gold extends Item {
 			hero.sprite.showStatusWithIcon( CharSprite.NEUTRAL, Integer.toString(quantity), FloatingText.GOLD );
 			hero.spendAndNext( TIME_TO_PICK_UP );
 
-			Sample.INSTANCE.play( Assets.Sounds.GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
-			updateQuickslot();
-		}
+        }
+        Sample.INSTANCE.play( Assets.Sounds.GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
+        updateQuickslot();
 
-		return true;
+        return true;
 	}
 	
 	@Override
