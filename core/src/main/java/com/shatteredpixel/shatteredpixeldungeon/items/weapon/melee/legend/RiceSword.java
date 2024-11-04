@@ -55,10 +55,15 @@ public class RiceSword extends MeleeWeapon {
     public int max(int lvl) {
         Hunger hungerBuff = hero.buff(Hunger.class);
 
-        if(hero.buff(WellFed.class) != null){
-            return 5*(tier+1) + lvl * hungerBuff.hungerDamage() + lvl;
+        if(hero != null){
+            if(hero.buff(WellFed.class) != null){
+                return 5*(tier+1) + lvl * hungerBuff.hungerDamage() + lvl;
+            } else {
+                return 5*(tier+1) + lvl * hungerBuff.hungerNoWEDamage() + lvl;
+            }
         } else {
-            return 5*(tier+1) + lvl * hungerBuff.hungerNoWEDamage() + lvl;
+            return 5*(tier+1) + lvl * lvl;
         }
+
     }
 }
