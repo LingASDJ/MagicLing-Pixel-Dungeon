@@ -1,6 +1,5 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder;
 
-import com.badlogic.gdx.Gdx;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -11,16 +10,13 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.ui.Component;
 
-import java.util.Arrays;
-
-public class SeedFindLogScene extends PixelScene {
+public class SeedALRLogScene extends PixelScene {
 
     public ScrollPane list;
     public String s;
@@ -56,72 +52,22 @@ public class SeedFindLogScene extends PixelScene {
         Component content = list.content();
         content.clear();
 
-        ShatteredPixelDungeon.scene().addToFront( wndTextInput = new WndTextInput(Messages.get(this, "title"), Messages.get(this, "body"), SPDSettings.seeditemsText(), 1000, true, Messages.get(this, "find"),null) {
+        ShatteredPixelDungeon.scene().addToFront( wndTextInput = new WndTextInput(Messages.get(this, "title"), Messages.get(this, "body"), Messages.get(this, "initial_value", SPDSettings.seedfinderFloors()), 1000, true, Messages.get(this, "clear"),null) {
             @Override
             public void onSelect(boolean positive, String text) {
-                int floor = SPDSettings.seedfinderFloors();
-                boolean floorOption = false;
-                String up_to_floor = "floor end";
-                String strFloor = "floor";
+                if (positive) {
 
-                SPDSettings.seeditemsText(text);
-
-                if (text.contains(up_to_floor)) {
-                    floorOption = true;
-                    String fl = text.split(strFloor)[0].trim();
-                    floor = Integer.parseInt(fl);
-                }
-
-                if (positive && text != "" && floorOption) {
-                    String[] itemList = floorOption ? Arrays.copyOfRange(text.split("\n"), 1, text.split("\n").length) : text.split("\n");
-
-                    Component content = list.content();
-                    content.clear();
-
-                    r = PixelScene.renderTextBlock("abc",7);
-                    r.maxWidth(w - 40);
-                    r.setPos(20,20);
-                    ShatteredPixelDungeon.scene().addToFront(r);
-
-                    list.setRect( 0, 0, w, h );
-                    list.scrollTo(0, 0);
-
-                    final int finalFloor = floor;
-                    thread = new Thread(() -> {
-                        s = new SeedFinder().findSeed(itemList, finalFloor);
-                        Gdx.app.postRunnable(() -> {
-                            r.destroy();
-
-                            txt = new CreditsBlock(true, Window.TITLE_COLOR,s);
-                            txt.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
-
-                            if (!thread.isInterrupted()) {
-                                content.add(txt);
-                                content.setSize( fullWidth, txt.bottom()+10 );
-                            }
-
-                            if (list.isActive()) {
-                                list.setRect( 0, 0, w, h );
-                                list.scrollTo(0, 0);
-                            }
-
-                        });
-                    });
-                    thread.start();
-
-
-                } else if (!positive && text != "") {
                     text = DungeonSeed.formatText(text);
                     long seed = DungeonSeed.convertFromText(text);
 
-                    RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),26,SPDSettings.challenges()),9);
+                    RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),SPDSettings.seedfinderFloors(),SPDSettings.challenges()),6);
                     renderedTextBlock.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
                     content.add(renderedTextBlock);
                     content.setSize( fullWidth, renderedTextBlock.bottom()+10 );
                     list.setRect( 0, 0, w, h );
                     list.scrollTo(0, 0);
 
-                }else {
+                } else {
                     SPDSettings.customSeed("");
                     ShatteredPixelDungeon.switchNoFade(TitleScene.class);
                 }

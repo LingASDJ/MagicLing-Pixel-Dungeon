@@ -870,7 +870,7 @@ public class WndSettings extends WndTabbed {
 			add(title);
 
 			numFloors = new OptionSlider(Messages.get(this, "floors_slider") + " (" + SPDSettings.seedfinderFloors() + ")",
-					"1", "31", 1, 31) {
+					"1", "31", 1, 15) {
 				@Override
 				protected void onChange() {
 					SPDSettings.seedfinderFloors(getSelectedValue());

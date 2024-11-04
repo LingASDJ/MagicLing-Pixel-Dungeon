@@ -21,8 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
+import com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder.SeedFindLogScene;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.Constants;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.watabou.noosa.Game;
@@ -993,7 +995,7 @@ public class SPDSettings extends GameSettings {
 	}
 
 	public static int seedfinderFloors() {
-		return getInt( KEY_FLOORS, 7, 1, 31 );
+		return getInt( KEY_FLOORS, 8, 1, 15 );
 	}
 
 	public static void seeditemsText(String value) {
@@ -1001,7 +1003,7 @@ public class SPDSettings extends GameSettings {
 	}
 
 	public static String seeditemsText() {
-		return getString(KEY_SEEDITEMS_TEXT, "焰浪法杖 +1");
+		return getString(KEY_SEEDITEMS_TEXT, Messages.get(SeedFindLogScene.class,"initial_value",seedfinderFloors()));
 	}
 
 	public static void seedinputText(String value) {
