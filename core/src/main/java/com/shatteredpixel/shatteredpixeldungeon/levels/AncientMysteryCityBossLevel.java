@@ -284,7 +284,7 @@ public class AncientMysteryCityBossLevel extends Level{
             if (timeFreeze != null) timeFreeze.disarmPresses();
             Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
             if (timeBubble != null) timeBubble.disarmPresses();
-            InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+            InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
             InterlevelScene.curTransition = new LevelTransition();
             InterlevelScene.curTransition.destDepth = depth-1;
             InterlevelScene.curTransition.destType = LevelTransition.Type.BRANCH_EXIT;
