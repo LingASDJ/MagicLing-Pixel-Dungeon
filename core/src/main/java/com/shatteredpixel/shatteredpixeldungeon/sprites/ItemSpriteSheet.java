@@ -1384,6 +1384,16 @@ public class ItemSpriteSheet {
             assignIconRect( POTION_SRTDIED,   6, 7 );
         }
 
+        private static final int CPTION_NOSTR =                            xy(1, 9);  //16 slots
+        public static final int CPOTION_NOSTR   = CPTION_NOSTR;
+        public static final int CPOTION_NOLEG   = CPTION_NOSTR+1;
+        public static final int CPOTION_NODIED  = CPTION_NOSTR+2;
+        public static final int CPOTION_NOEYE   = CPTION_NOSTR+3;
+
+        static {
+            assignIconRect( CPTION_NOSTR,     8, 7 );
+        }
+
         //16 free slots
 
 

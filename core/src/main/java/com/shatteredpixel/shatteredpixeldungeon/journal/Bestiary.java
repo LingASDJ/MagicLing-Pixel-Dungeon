@@ -81,7 +81,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.PhantomPiranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.PylonCS;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RandomBlueFireDE;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RedMurderer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RedSwarm;
@@ -393,7 +392,7 @@ public enum Bestiary {
 				Elemental.ChaosElemental.class, Senior.class,
 				Acidic.class,
 
-				RandomBlueFireDE.class, RedMurderer.class,
+				RedMurderer.class,
 
 				TormentedSpirit.class, PhantomPiranha.class,
 				CrystalMimic.class, ArmoredStatue.class);
