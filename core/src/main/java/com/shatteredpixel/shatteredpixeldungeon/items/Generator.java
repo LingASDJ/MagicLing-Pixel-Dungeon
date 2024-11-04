@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.custom.AncityArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
@@ -116,6 +117,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfClairvoyance
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDeepSleep;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDisarming;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFear;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
@@ -472,9 +474,11 @@ public class Generator {
 					StoneOfClairvoyance.class,
 					StoneOfAggression.class,
 					StoneOfBlast.class,
-					StoneOfAugmentation.class  //1 is sold in each shop
+					StoneOfAugmentation.class,
+					StoneOfFear.class,
+					//1 is sold in each shop
 			};
-			STONE.defaultProbs = new float[]{0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0};
+			STONE.defaultProbs = new float[]{0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0, 5};
 			STONE.probs = STONE.defaultProbs.clone();
 
 			WAND.classes = new Class<?>[]{
@@ -603,7 +607,7 @@ public class Generator {
 					BloodthirstyThorn.class,
 					EndingBlade.class,
 					FireFishSword.class,
-					SliverLockSword.class
+					SliverLockSword.class,
 			};
 			WEP_T6.probs = new float[]{1, 0, 0, 0, Statistics.RandMode ? 1 : 0, 0};
 
@@ -614,8 +618,10 @@ public class Generator {
 					MailArmor.class,
 					ScaleArmor.class,
 					PlateArmor.class,
-					LamellarArmor.class};
-			ARMOR.probs = new float[]{0, 0, 0, 0, 0, 0};
+					LamellarArmor.class,
+					AncityArmor.class,
+			};
+			ARMOR.probs = new float[]{0, 0, 0, 0, 0, 0, 0};
 
 			//see Generator.randomMissile
 			MISSILE.classes = new Class<?>[]{};
@@ -918,7 +924,8 @@ public class Generator {
 			Category.WEP_T2,
 			Category.WEP_T3,
 			Category.WEP_T4,
-			Category.WEP_T5
+			Category.WEP_T5,
+			Category.WEP_T6,
 	};
 
 	public static MeleeWeapon randomWeapon(){

@@ -241,6 +241,8 @@ public class SpawnWeapon extends TestItem{
                         return Crushing.class;
                     case 5:
                         return TimeReset.class;
+//                    case 6:
+//                        return DeadBomb.class;
                     default:
                         return null;
                 }

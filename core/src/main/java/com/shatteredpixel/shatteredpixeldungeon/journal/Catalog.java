@@ -69,16 +69,22 @@ import com.shatteredpixel.shatteredpixeldungeon.items.books.questbookslist.Diman
 import com.shatteredpixel.shatteredpixeldungeon.items.books.questbookslist.HollowCityBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cake;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CrivusFruitsFood;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.LightFood;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.RedCrab;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.RiceDumplings;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SakaMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Switch;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
@@ -123,6 +129,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.DeviceCompat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -171,7 +178,7 @@ public enum Catalog {
 	//should only be used when initializing
 	private void addItems( Class<?>... items){
 		for (Class<?> item : items){
-			seen.put(item, false);
+			seen.put(item, DeviceCompat.isDebug() && DeviceCompat.isDesktop());
 			useCount.put(item, 0);
 		}
 	}
@@ -199,6 +206,7 @@ public enum Catalog {
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T3.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T4.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T5.classes);
+		MELEE_WEAPONS.addItems(Generator.Category.WEP_T6.classes);
 
 		ARMOR.addItems(Generator.Category.ARMOR.classes);
 
@@ -246,7 +254,16 @@ public enum Catalog {
 
 		FOOD.addItems( Food.class, Pasty.class, MysteryMeat.class, ChargrilledMeat.class,
 				StewedMeat.class, FrozenCarpaccio.class, SmallRation.class, Berry.class,
-				SupplyRation.class, Blandfruit.class, PhantomMeat.class, MeatPie.class );
+				Blandfruit.class, PhantomMeat.class, MeatPie.class,
+				Switch.class, Cake.class, LightFood.class, RedCrab.class,
+				SakaMeat.class, CrivusFruitsFood.class,  SmallRation.BlackMoon.class,
+
+				//DWJ
+				RiceDumplings.RiceDumplingsBottle.class,
+				RiceDumplings.RiceDumplingsLink.class,
+				RiceDumplings.RiceDumplingsOrange.class,
+				RiceDumplings.RiceDumplingsPink.class,
+				RiceDumplings.RiceDumplingsRed.class);
 
 		EXOTIC_POTIONS.addItems(ExoticPotion.exoToReg.keySet().toArray(new Class[0]));
 
