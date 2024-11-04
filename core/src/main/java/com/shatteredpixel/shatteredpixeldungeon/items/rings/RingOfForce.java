@@ -47,7 +47,7 @@ public class RingOfForce extends Ring {
 	protected RingBuff buff( ) {
 		return new Force();
 	}
-	
+
 	public static int armedDamageBonus( Char ch ){
 		return getBuffedBonus( ch, Force.class);
 	}
@@ -64,7 +64,7 @@ public class RingOfForce extends Ring {
 			return false;
 		}
 	}
-	
+
 	// *** Weapon-like properties ***
 
 	private static float tier(int str){
@@ -83,7 +83,7 @@ public class RingOfForce extends Ring {
 			float tier = tier(hero.STR());
 			int dmg = Hero.heroDamageIntRange(min(level, tier), max(level, tier));
 			if (hero.buff(BrawlersStance.class) != null
-				&& hero.buff(BrawlersStance.class).active){
+					&& hero.buff(BrawlersStance.class).active){
 				// 3+tier base dmg, roughly +60%->45% dmg at T1->5
 				// lvl*((4+2*tier)/8) scaling, +50% dmg
 				dmg += Math.round(3+tier+(level*((4+2*tier)/8f)));
@@ -101,7 +101,7 @@ public class RingOfForce extends Ring {
 
 		return Math.max( 0, Math.round(
 				tier +  //base
-				lvl     //level scaling
+						lvl     //level scaling
 		));
 	}
 
@@ -111,7 +111,7 @@ public class RingOfForce extends Ring {
 
 		return Math.max( 0, Math.round(
 				5*(tier+1) +    //base
-				lvl*(tier+1)    //level scaling
+						lvl*(tier+1)    //level scaling
 		));
 	}
 
@@ -226,7 +226,7 @@ public class RingOfForce extends Ring {
 		String info = super.info();
 
 		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST
-			&& (anonymous || isIdentified() || isEquipped(Dungeon.hero))){
+				&& (anonymous || isIdentified() || isEquipped(Dungeon.hero))){
 			//0 if unidentified, solo level if unequipped, combined level if equipped
 			int level = isIdentified() ? (isEquipped(Dungeon.hero) ? getBuffedBonus(Dungeon.hero, Force.class) : soloBuffedBonus()) : 0;
 			float tier = tier(Dungeon.hero.STR());
@@ -243,7 +243,7 @@ public class RingOfForce extends Ring {
 
 	public static boolean fightingUnarmed( Hero hero ){
 		if (hero.belongings.attackingWeapon() == null
-			|| hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
+				|| hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
 			return true;
 		}
 		if (hero.belongings.thrownWeapon != null || hero.belongings.abilityWeapon != null){
@@ -279,7 +279,7 @@ public class RingOfForce extends Ring {
 
 	public static boolean unarmedGetsWeaponAugment(Hero hero ){
 		if (hero.belongings.attackingWeapon() == null
-			|| hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
+				|| hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
 			return false;
 		}
 		BrawlersStance stance = hero.buff(BrawlersStance.class);

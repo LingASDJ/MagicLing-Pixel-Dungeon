@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -474,13 +475,26 @@ public class MeleeWeapon extends Weapon {
 		public boolean act() {
 			if (charges < chargeCap()){
 				if (Regeneration.regenOn()){
-					partialCharge += 1/(40f-(chargeCap()-charges)); // 40 to 30 turns per charge
+					//60 to 45 turns per charge
+					float chargeToGain = 1/(60f-1.5f*(chargeCap()-charges));
+
+					//40 to 30 turns per charge for champion
+					if (Dungeon.hero.subClass == HeroSubClass.CHAMPION){
+						chargeToGain *= 1.5f;
+					}
+
+					//50% slower charge gain with brawler's stance enabled, even if buff is inactive
+					if (Dungeon.hero.buff(RingOfForce.BrawlersStance.class) != null){
+						chargeToGain *= 0.50f;
+					}
+
+					partialCharge += chargeToGain;
 				}
 
 				int points = ((Hero)target).pointsInTalent(Talent.WEAPON_RECHARGING);
 				if (points > 0 && target.buff(Recharging.class) != null || target.buff(ArtifactRecharge.class) != null){
-					//1 every 10 turns at +1, 6 turns at +2
-					partialCharge += 1/(14f - 4f*points);
+					//1 every 15 turns at +1, 10 turns at +2
+					partialCharge += 1/(20f - 5f*points);
 				}
 
 				if (partialCharge >= 1){
@@ -490,24 +504,6 @@ public class MeleeWeapon extends Weapon {
 				}
 			} else {
 				partialCharge = 0;
-			}
-
-			if (Dungeon.hero.subClass == HeroSubClass.CHAMPION
-					&& secondCharges < secondChargeCap()) {
-				if (Regeneration.regenOn()) {
-					// 80 to 60 turns per charge without talent
-					// up to 53.333 to 40 turns per charge at max talent level
-					secondPartialCharge += secondChargeMultiplier() / (40f-(secondChargeCap()-secondCharges));
-				}
-
-				if (secondPartialCharge >= 1) {
-					secondCharges++;
-					secondPartialCharge--;
-					updateQuickslot();
-				}
-
-			} else {
-				secondPartialCharge = 0;
 			}
 
 			if (ActionIndicator.action != this && Dungeon.hero.subClass == HeroSubClass.CHAMPION) {
