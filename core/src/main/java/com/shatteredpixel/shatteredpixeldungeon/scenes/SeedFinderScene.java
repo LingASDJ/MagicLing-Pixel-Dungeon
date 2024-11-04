@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder.SeedALRLogScene;
 import com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder.SeedFindLogScene;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BannerSprites;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -34,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndError;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndSettings;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.BitmapText;
@@ -110,7 +112,7 @@ public class SeedFinderScene extends PixelScene {
 		StyledButton btnSeedfinder = new StyledButton(GREY_TR, Messages.get(this, "seedfinder_button")){
 			@Override
 			protected void onClick() {
-				ShatteredPixelDungeon.switchNoFade(SeedFinderScene.class);
+				ShatteredPixelDungeon.switchNoFade(SeedALRLogScene.class);
 			}
 		};
 		btnSeedfinder.icon(Icons.get(Icons.MAGNIFY));
@@ -119,7 +121,7 @@ public class SeedFinderScene extends PixelScene {
 		StyledButton btnScoutDaily = new StyledButton(GREY_TR, Messages.get(this, "scout_daily")) {
 			@Override
 			protected void onClick() {
-
+				Game.scene().add( new WndError( "敬请期待" ) );
 			}
 		};
 		btnScoutDaily.icon(Icons.get(Icons.ENTER));
@@ -129,7 +131,7 @@ public class SeedFinderScene extends PixelScene {
 		StyledButton btnCatalog = new StyledButton(GREY_TR, Messages.get(this, "item_catalog")){
 			@Override
 			protected void onClick() {
-				ShatteredPixelDungeon.scene().addToFront(new JournalScene());
+				ShatteredPixelDungeon.switchNoFade(EXJournalScene.class);
 			}
 		};
 		btnCatalog.icon(new ItemSprite(ItemSpriteSheet.POTION_AZURE));
