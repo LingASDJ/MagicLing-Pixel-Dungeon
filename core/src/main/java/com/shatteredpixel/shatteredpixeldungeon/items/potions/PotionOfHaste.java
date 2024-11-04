@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.EXSG;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
@@ -32,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.utils.Random;
 
 public class PotionOfHaste extends Potion {
 	
@@ -44,16 +44,27 @@ public class PotionOfHaste extends Potion {
 	public void apply(Hero hero) {
 		identify();
 
-		if(Dungeon.isChallenged(EXSG) && Random.Float()>=0.95f) {
+		if(Dungeon.isChallenged(EXSG)) {
+			Buff.affect(hero, Cripple.class, 8f);
+			GLog.n( Messages.get(this, "energy_speed") );
+		} else {
 			GLog.w( Messages.get(this, "energetic") );
 			Buff.prolong( hero, Haste.class, Haste.DURATION);
 			SpellSprite.show(hero, SpellSprite.HASTE, 1, 1, 0);
-		} else {
-			Buff.affect(hero, Cripple.class, 8f);
-			GLog.w( Messages.get(this, "energy_speed") );
+
 		}
 	}
-	
+
+	@Override
+	public String name() {
+		return Dungeon.isChallenged(Challenges.EXSG) && isIdentified() ? Messages.get(this, "namex") : isIdentified() ?  Messages.get(this, "name") : super.name();
+	}
+
+	@Override
+	public String desc() {
+		return Dungeon.isChallenged(Challenges.EXSG) && isIdentified() ? Messages.get(this, "descx") : isIdentified() ?  Messages.get(this, "desc") : super.desc();
+	}
+
 	@Override
 	public int value() {
 		return isKnown() ? 40 * quantity : super.value();
