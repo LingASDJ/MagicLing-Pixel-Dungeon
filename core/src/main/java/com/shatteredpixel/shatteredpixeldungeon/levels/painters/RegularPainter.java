@@ -450,29 +450,37 @@ public abstract class RegularPainter extends Painter {
 		}
 
 		//no more than one trap every 5 valid tiles.
-		nTraps = Math.min(nTraps, validCells.size()/5);
+
+		nTraps = l.feeling == Level.Feeling.BIGTRAP ? Math.min(nTraps,
+				validCells.size()/4) : Math.min(nTraps,
+				validCells.size()/5);
 
 		//5x traps on traps level feeling, but the extra traps are all visible
-		for (int i = 0; i < (l.feeling == Level.Feeling.TRAPS ? 5*nTraps : nTraps); i++) {
-
-			Trap trap = Reflection.newInstance(trapClasses[Random.chances( trapChances )]);
+		for (int i = 0; i < (l.feeling == Level.Feeling.BIGTRAP ? 16 * nTraps : l.feeling == Level.Feeling.TRAPS ?
+				5*nTraps :
+				nTraps); i++) {
 
 			Integer trapPos;
-			if (trap.avoidsHallways && !validNonHallways.isEmpty()){
-				trapPos = Random.element(validNonHallways);
-			} else {
-				trapPos = Random.element(validCells);
+			Trap trap = Reflection.newInstance(trapClasses[Random.chances( trapChances )]);
+			if(trap != null){
+				if (trap.avoidsHallways && !validNonHallways.isEmpty()){
+					trapPos = Random.element(validNonHallways);
+				} else {
+					trapPos = Random.element(validCells);
+				}
+				//removes the integer object, not at the index
+				validCells.remove(trapPos);
+				validNonHallways.remove(trapPos);
+
+				if (i < nTraps) trap.hide();
+				else            trap.reveal();
+
+				if(trapPos != null){
+					l.setTrap( trap, trapPos );
+					//some traps will not be hidden
+					l.map[trapPos] = trap.visible ? Terrain.TRAP : Terrain.SECRET_TRAP;
+				}
 			}
-			//removes the integer object, not at the index
-			validCells.remove(trapPos);
-			validNonHallways.remove(trapPos);
-
-			if (i < nTraps) trap.hide();
-			else            trap.reveal();
-
-			l.setTrap( trap, trapPos );
-			//some traps will not be hidden
-			l.map[trapPos] = trap.visible ? Terrain.TRAP : Terrain.SECRET_TRAP;
 		}
 	}
 
