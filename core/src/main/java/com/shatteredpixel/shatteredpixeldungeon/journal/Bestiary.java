@@ -56,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Eye;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FetidRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FireGhost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FlameB01;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FlameC02;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FlowerSlime;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Ghoul;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
@@ -147,6 +148,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.YetYog;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.pets.MiniSaka;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.spical.DM275;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.spical.GnollHero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.spical.GreenSlting;
@@ -234,6 +236,7 @@ public enum Bestiary {
 	RARE,
 	QUEST,
 	NEUTRAL,
+
 	ALLY,
 	TRAP,
 	PLANT;
@@ -276,8 +279,7 @@ public enum Bestiary {
 		FOREST.addEntities(
 				Rat.class, FlowerSlime.class, Katydid.class,
 				Gnoll.class, ClearElemental.class, Crab.class, Swarm.class,
-				Slime_Red.class, Slime_Orange.class, CausticSlime.class,
-				GreenSlting.class);
+				Slime_Red.class, Slime_Orange.class, GreenSlting.class);
 
 		FOREST_BOSS.addEntities(
 				//Boss T1
@@ -311,7 +313,8 @@ public enum Bestiary {
 				FireGhost.class, RedSwarm.class,
 				Spinner.class, Brute.class,DM275.class,
 
-				FlameB01.class, GnollShiled.class, SkullShaman.class);
+				FlameB01.class, FlameC02.class,
+				GnollShiled.class, SkullShaman.class);
 
 		ICECAVE_BOSS.addEntities(
 				//Boss T1
@@ -406,7 +409,7 @@ public enum Bestiary {
 		ALLY.addEntities(MirrorImage.class, PrismaticImage.class,
 				DriedRose.GhostHero.class,
 				WandOfWarding.Ward.class, WandOfWarding.Ward.WardSentry.class, WandOfLivingEarth.EarthGuardian.class,
-				ShadowClone.ShadowAlly.class, SmokeBomb.NinjaLog.class, SpiritHawk.HawkAlly.class);
+				ShadowClone.ShadowAlly.class, SmokeBomb.NinjaLog.class, SpiritHawk.HawkAlly.class, MiniSaka.class);
 
 		TRAP.addEntities(WornDartTrap.class, PoisonDartTrap.class, DisintegrationTrap.class, GatewayTrap.class,
 				ChillingTrap.class, BurningTrap.class, ShockingTrap.class, AlarmTrap.class, GrippingTrap.class, TeleportationTrap.class, OozeTrap.class,
