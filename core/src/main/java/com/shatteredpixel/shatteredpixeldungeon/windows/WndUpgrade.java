@@ -23,17 +23,16 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatshield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
@@ -202,13 +201,13 @@ public class WndUpgrade extends Window {
 					bottom);
 		}
 
-		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST
-				&& toUpgrade instanceof MeleeWeapon && ((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelFrom) != null){
-			bottom = fillFields(Messages.get(toUpgrade, "upgrade_ability_stat_name"),
-					((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelFrom),
-					((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelTo),
-					bottom);
-		}
+//		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST
+//				&& toUpgrade instanceof MeleeWeapon && ((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelFrom) != null){
+//			bottom = fillFields(Messages.get(MeleeWeapon.class, "upgrade_ability_stat_name"),
+//					((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelFrom),
+//					((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelTo),
+//					bottom);
+//		}
 
 		//blocking (armor and shields)
 		if (toUpgrade instanceof Armor){
@@ -239,6 +238,11 @@ public class WndUpgrade extends Window {
 			bottom = fillFields(Messages.get(this, "weight"),
 					Integer.toString((((Armor) toUpgrade).STRReq(levelFrom))),
 					Integer.toString((((Armor) toUpgrade).STRReq(levelTo))),
+					bottom);
+		}
+
+		if (toUpgrade instanceof Trinket){
+			bottom = fillFields(Messages.get(this, "lvl"),"","",
 					bottom);
 		}
 
