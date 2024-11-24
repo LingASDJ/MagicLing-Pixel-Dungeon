@@ -178,7 +178,7 @@ public class ChaoticCenser extends Trinket {
 	private static void produceGas(){
 		int level = trinketLevel(ChaoticCenser.class);
 
-		if (level < 0 || level > 3){
+		if (level < 0 || level > 6){
 			return;
 		}
 
@@ -195,7 +195,7 @@ public class ChaoticCenser extends Trinket {
 				gasToSpawn = Random.element(UNCOMMON_GASSES.keySet());
 				gasQuantity = UNCOMMON_GASSES.get(gasToSpawn);
 				break;
-			case 2:
+			case 2:case 3:case 4:case 5:case 6:
 				gasToSpawn = Random.element(RARE_GASSES.keySet());
 				gasQuantity = RARE_GASSES.get(gasToSpawn);
 				break;
@@ -216,6 +216,9 @@ public class ChaoticCenser extends Trinket {
 				case 1: candidateCells.put(i, 1f); break;
 				case 2: candidateCells.put(i, 3f); break;
 				case 3: candidateCells.put(i, 2f); break;
+				case 4: candidateCells.put(i, 4f); break;
+				case 5: candidateCells.put(i, 6f); break;
+				case 6: candidateCells.put(i, 8f); break;
 			}
 		}
 
@@ -242,12 +245,15 @@ public class ChaoticCenser extends Trinket {
 
 	}
 
-	private static final float[][] GAS_CAT_CHANCES = new float[4][3];
+	private static final float[][] GAS_CAT_CHANCES = new float[7][3];
 	static {
 		GAS_CAT_CHANCES[0] = new float[]{70, 25, 5};
 		GAS_CAT_CHANCES[1] = new float[]{60, 30, 10};
 		GAS_CAT_CHANCES[2] = new float[]{50, 35, 15};
 		GAS_CAT_CHANCES[3] = new float[]{40, 40, 20};
+		GAS_CAT_CHANCES[4] = new float[]{30, 50, 40};
+		GAS_CAT_CHANCES[5] = new float[]{10, 70, 60};
+		GAS_CAT_CHANCES[6] = new float[]{20, 80, 80};
 	}
 
 	private static final HashMap<Class<? extends Blob>, Float> COMMON_GASSES = new HashMap<>();
