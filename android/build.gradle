@@ -23,8 +23,7 @@ android {
         minSdkVersion appAndroidMinSDK
         targetSdkVersion appAndroidTargetSDK
 
-        resConfigs "en_US", "cs", "tr", "ca", "ko", "pl", "it", "ja",
-                "eo", "ru", "zh_CN", "de", "fr", "es", "pt", "fi", "hu", "in"
+        resourceConfigurations += ['en_US', 'cs', 'de', 'el', 'es', 'fr', 'hu', 'in', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'tr', 'uk', 'vi', 'zh_CN']
     }
 
     buildTypes {
@@ -76,9 +75,6 @@ dependencies {
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
-
-    //接入多DEX
-    implementation 'com.android.support:multidex:1.0.3'
 
     //LIBGDX资源
     //noinspection GradleDependency
