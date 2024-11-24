@@ -86,6 +86,12 @@ public class VialOfBlood extends Trinket {
 					return 2 + Math.round(0.07f*maxHP);
 				case 3:
 					return 1 + Math.round(0.05f*maxHP);
+				case 4:
+					return 1 + Math.round(0.04f*maxHP);
+				case 5:
+					return 1 + Math.round(0.03f*maxHP);
+				case 6:
+					return 1 + Math.round(0.02f*maxHP);
 			}
 		}
 	}
