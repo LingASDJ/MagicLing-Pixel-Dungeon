@@ -11,6 +11,10 @@
 # mapping file can be found in core/build/outputs/mapping after running a release build
 -keepattributes SourceFile,LineNumberTable
 
+# JackSon stuff
+-dontwarn java.beans.ConstructorProperties
+-dontwarn java.beans.Transient
+
 # libGDX stuff
 -dontwarn android.support.**
 -dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
