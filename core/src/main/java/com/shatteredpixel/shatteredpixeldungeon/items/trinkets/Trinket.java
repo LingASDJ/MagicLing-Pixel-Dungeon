@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.trinkets;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
@@ -40,7 +41,7 @@ public abstract class Trinket extends Item {
 
 	@Override
 	public boolean isUpgradable() {
-		return false;
+		return Dungeon.isDLC(Conducts.Conduct.DEV) && level<6;
 	}
 
 	protected abstract int upgradeEnergyCost();
