@@ -95,8 +95,12 @@ public class ItemSpriteSheet {
 
     public static final int RED_BLOOD   = UNCOLLECTIBLE+12;
 
+    public static final int GLASS_CI   = UNCOLLECTIBLE+13;
 
     public static final int ICEGOLD   = UNCOLLECTIBLE+14;
+
+    public static final int BEST_RAT  = UNCOLLECTIBLE+15;
+
     static{
         assignItemRect(GOLD,        15, 13);
         assignItemRect(ENERGY,      16, 16);
@@ -111,6 +115,8 @@ public class ItemSpriteSheet {
 
         assignItemRect(GREEN_DARK,      12, 13);
         assignItemRect(RED_BLOOD,       12, 14);
+
+        assignItemRect(BEST_RAT,       15, 14);
     }
 
     private static final int CONTAINERS     =                               xy(1, 3);   //16 slots

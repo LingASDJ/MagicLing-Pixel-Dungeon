@@ -589,9 +589,7 @@ public class WndJournal extends WndTabbed {
 			}
 			itemButtons[EQUIP_IDX].icon(new ItemSprite(ItemSpriteSheet.WEAPON_HOLDER));
 			itemButtons[CONSUM_IDX].icon(new ItemSprite(ItemSpriteSheet.POTION_HOLDER));
-
-			//DX
-			itemButtons[BESTIARY_IDX].icon(new ItemSprite(ItemSpriteSheet.SCROLL_HOLDER));
+			itemButtons[BESTIARY_IDX].icon(new ItemSprite(ItemSpriteSheet.BEST_RAT));
 
 			grid = new ScrollingGridPane(){
 				@Override
