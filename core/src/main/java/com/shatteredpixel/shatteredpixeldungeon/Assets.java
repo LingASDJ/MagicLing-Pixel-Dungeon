@@ -581,6 +581,9 @@ public class Assets {
 
 		public static final String CFAS	= "sprites/boss/FruitsCrivus.png";
 
+		public static final String QLPH	= "sprites/boss/crivus2.png";
+		public static final String QLPH_LASHER	= "sprites/boss/crivus2lasher.png";
+
 		public static final String CFZS	= "sprites/boss/overworld/qliphoth_ex.png";
 		public static final String CLGR	= "sprites/boss/overworld/clearelemt_guard.png";
 		public static final String NECROREDEX	= "sprites/boss/rednecromancer_ex.png";

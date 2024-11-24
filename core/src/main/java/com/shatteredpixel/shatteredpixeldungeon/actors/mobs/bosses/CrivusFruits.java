@@ -347,7 +347,7 @@ public class CrivusFruits extends Boss {
                         if (!ch.isImmune(this.getClass())) {
                             if( hero.buff(LockedFloor.class) != null ) {
                                 ch.damage(hero.buff(LockedFloor.class) != null ? damage : 0, this);
-                                Statistics.bossScores[0] -= 200;
+                                Statistics.bossScores[0] -= 60;
                             }
                         }
                     }
