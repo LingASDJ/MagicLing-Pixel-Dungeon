@@ -128,13 +128,13 @@ public class LevelRules {
                                 Statistics.ExFruit = true;
                                 return new ForestHardBossLevel();
                             } else {
-                                return new ForestBossLevel();
+                                return new ForestPoisonBossLevel();
                             }
                         } else if(Badges.isUnlocked(Badges.Badge.KILL_CLSISTER) && Random.Float()<=0.2f) {
                             Statistics.ExFruit = true;
                             return new ForestHardBossLevel();
                         } else {
-                            return new ForestBossLevel();
+                            return new ForestPoisonBossLevel();
                         }
                     case 6:
                     case 7:
