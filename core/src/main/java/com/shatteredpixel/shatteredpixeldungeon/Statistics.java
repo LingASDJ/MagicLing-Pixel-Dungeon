@@ -37,6 +37,8 @@ public class Statistics {
 	public static boolean CatFirst = false;
 	public static boolean snow = false;
 
+	public static int gdzHelpDungeon;
+
 	//小叶12挑首次对话
 	public static boolean SmallLeafGet = false;
 	public static boolean noClearKill = false;
@@ -51,6 +53,9 @@ public class Statistics {
 	public static boolean GameKillFireDargon = false;
 
 	public static int wcDialogLevel;
+
+
+	public static int gdzDialogLevel;
 
 
 	public static boolean youNoItem = false;
@@ -344,6 +349,7 @@ public class Statistics {
 
 	private static final String HKLEVEL      = "hklevel";
 	private static final String WKLEVEL      = "wklevel";
+	private static final String GZLEVEL      = "gzlevel";
 
 
 	private static final String EXBOSS1		= "EXBOSS1";
@@ -385,6 +391,7 @@ public class Statistics {
 
 		zeroItemLevel = 0;
 		hcDialogLevel = 0;
+		gdzHelpDungeon = 0;
 		youNoItem = false;
 		unLockedFireDargon = false;
 
@@ -401,6 +408,7 @@ public class Statistics {
 
 		difficultyDLCEXLevel = 0;
 		wcDialogLevel = 0;
+		gdzDialogLevel = 0;
         bossRushMode = false;
 		RandMode = false;
 
@@ -512,6 +520,8 @@ public class Statistics {
 
 		bundle.put(WKLEVEL,wcDialogLevel);
 
+		bundle.put(GZLEVEL,gdzDialogLevel);
+
 		bundle.put(LOVX,deadGo);
 
 		bundle.put(SIDERLING, GetFoodLing);
@@ -525,6 +535,8 @@ public class Statistics {
 		bundle.put("ARLing",ARLing);
 
 		bundle.put("CAT",CatFirst);
+
+		bundle.put("GDZ",gdzHelpDungeon);
 
 		bundle.put("SMALLEAFTGET",SmallLeafGet);
 
@@ -686,7 +698,11 @@ public class Statistics {
 
 		wcDialogLevel = bundle.getInt(WKLEVEL);
 
+		gdzDialogLevel = bundle.getInt(GZLEVEL);
+
 		CatFirst = bundle.getBoolean("CAT");
+
+		gdzHelpDungeon = bundle.getInt("GDZ");
 
 		SmallLeafGet = bundle.getBoolean("SMALLEAFTGET");
 
