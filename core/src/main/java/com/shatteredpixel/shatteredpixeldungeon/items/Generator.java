@@ -204,6 +204,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Spear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarScythe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WashCrime;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WhiteBlastSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WitheWoodSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.DiedCrossBow;
@@ -593,13 +594,14 @@ public class Generator {
 					Gauntlet.class,
 					//超模武器
 					IceSan.class,
+					WhiteBlastSword.class,
 
 			};
 
 			PaswordBadges.loadGlobal();
 			List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered(true);
 
-			WEP_T5.probs = new float[]{6, 3, 3, 3, 3, 3, 3, 4, SPDSettings.isItemUnlock(DiedCrossBow.class.getSimpleName()) ? 1.5f : 0, 2, SPDSettings.isItemUnlock(SaiPlus.class.getSimpleName()) ? 1f : 0, 0, SPDSettings.KillDwarf() ? 1.2f : 0, 4, passwordbadges.contains(PaswordBadges.Badge.UNLOCK_RICESWORD) ? 1.4f : SPDSettings.isItemUnlock(RiceSword.class.getSimpleName()) ? 1.4f : 0, Statistics.RandMode ? 5 : 0};
+			WEP_T5.probs = new float[]{6, 3, 3, 3, 3, 3, 3, 4, SPDSettings.isItemUnlock(DiedCrossBow.class.getSimpleName()) ? 1.5f : 0, 2, SPDSettings.isItemUnlock(SaiPlus.class.getSimpleName()) ? 1f : 0, 0, SPDSettings.KillDwarf() ? 1.2f : 0, 4, passwordbadges.contains(PaswordBadges.Badge.UNLOCK_RICESWORD) ? 1.4f : SPDSettings.isItemUnlock(RiceSword.class.getSimpleName()) ? 1.4f : 0, Statistics.RandMode ? 5 : 0, 5};
 
 			WEP_T6.classes = new Class<?>[]{
 					IceFishSword.class,
