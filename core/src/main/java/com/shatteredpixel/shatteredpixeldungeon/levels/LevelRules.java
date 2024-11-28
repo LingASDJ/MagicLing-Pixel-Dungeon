@@ -28,6 +28,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.levels.minilevels.DragonCaveLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.minilevels.DragonFestivalMiniLevel;
@@ -118,9 +119,14 @@ public class LevelRules {
                     case 4:
                         return new SewerLevel();
                     case 5:
-                        if(Statistics.ExFruit){
+                        if(SPDSettings.level1boss() == 1){
+                            return new ForestPoisonBossLevel();
+                        } else if(SPDSettings.level1boss() == 3){
+                            Statistics.ExFruit = true;
                             return new ForestHardBossLevel();
-                        } else if(Challenges.activeChallenges()>8){
+                        } else if(Statistics.ExFruit){
+                            return new ForestHardBossLevel();
+                        } else if(Challenges.activeChallenges()>8 && SPDSettings.level1boss()==1){
                             if (!Badges.isUnlocked(Badges.Badge.KILL_CLSISTER)){
                                 Statistics.ExFruit = true;
                                 return new ForestHardBossLevel();
