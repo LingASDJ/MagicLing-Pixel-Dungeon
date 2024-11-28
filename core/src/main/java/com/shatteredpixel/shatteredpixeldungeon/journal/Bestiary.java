@@ -117,8 +117,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.AnomaloCaris;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.ThreeLeafBug;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.Turtle;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.ArmyFlag;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrivusFruits;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrivusFruitsLasher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrystalDiedTower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.DCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.DiamondKnight;
@@ -129,6 +127,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.DwarfMaster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.DwarfSolider;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.FireDragon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.FireMagicDied;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.Qliphoth;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.QliphothLasher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.RoomStone;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.SakaFishBoss;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.TPDoor;
@@ -283,7 +283,7 @@ public enum Bestiary {
 
 		FOREST_BOSS.addEntities(
 				//Boss T1
-				CrivusFruits.class, CrivusFruitsLasher.class,
+				Qliphoth.class, QliphothLasher.class,
 				//Boss T2
 				CrivusStarFruits.class, CrivusStarFruitsLasher.class,
 				//Boss T3
@@ -291,7 +291,8 @@ public enum Bestiary {
 				DiedClearElemet.ClearElemetalBlood.class,
 				DiedClearElemet.ClearElemetalGold.class,
 				DiedClearElemet.ClearElemetalGreen.class,
-				DiedClearElemet.ClearElemetalPure.class);
+				DiedClearElemet.ClearElemetalPure.class,
+				DiedClearElemet.ClearElemetalDark.class);
 
 		ICEPRISON.addEntities(
 				Skeleton.class, BrownBat.class, Thief.class,
