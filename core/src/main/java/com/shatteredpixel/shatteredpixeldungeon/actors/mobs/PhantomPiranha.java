@@ -21,10 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrivusFruits;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -40,7 +42,9 @@ public class PhantomPiranha extends Piranha {
 
 	{
 		spriteClass = PhantomPiranhaSprite.class;
-
+		if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+			immunities.add( CrivusFruits.DiedBlobs.class );
+		}
 		loot = PhantomMeat.class;
 		lootChance = 1f;
 	}

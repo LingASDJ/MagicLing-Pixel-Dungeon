@@ -1,10 +1,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.watabou.utils.Random.getRandomElement;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
@@ -20,6 +22,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -27,7 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ForestPoisonBossLevel extends Level {
 
@@ -50,39 +58,39 @@ public class ForestPoisonBossLevel extends Level {
     private int status = 0;
 
     private static final int[] Hard_map = {
-            E,E,E,E,E,E,E,E,S,S,S,S,S,S,S,W,W,W,S,S,S,S,S,S,S,E,E,E,E,E,E,E,E,
-            E,E,E,E,E,J,J,S,S,S,S,S,S,J,W,W,R,W,W,J,S,S,S,S,S,S,J,J,E,E,E,E,E,
-            E,E,E,E,J,J,S,S,S,S,S,S,J,W,W,R,M,R,W,W,J,S,S,S,S,S,S,J,J,E,E,E,E,
-            E,E,E,J,J,S,S,S,S,S,S,J,W,W,Q,Q,E,Q,Q,W,W,J,S,S,S,S,S,S,J,J,E,E,E,
-            E,E,J,J,S,S,S,S,S,S,J,W,W,Q,Q,Q,E,Q,Q,Q,W,W,J,S,S,S,S,S,S,J,J,E,E,
-            E,J,J,S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,E,Q,Q,Q,Q,W,W,J,S,S,S,S,S,S,J,J,E,
-            E,J,S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,W,W,J,S,S,S,S,S,S,J,E,
-            E,S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,Q,Q,E,Q,Q,W,Q,Q,Q,W,W,J,S,S,S,S,S,S,E,
-            S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,Q,Q,Q,D,Q,W,J,W,Q,Q,Q,W,W,J,S,S,S,S,S,S,
-            S,S,S,S,S,J,W,W,Q,J,Q,Q,Q,Q,Q,Q,E,Q,Q,W,Q,Q,Q,J,Q,W,W,J,S,S,S,S,S,
-            S,S,S,S,J,W,W,Q,Q,Q,J,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,J,Q,Q,Q,W,W,J,S,S,S,S,
-            S,S,S,J,W,W,Q,Q,Q,Q,Q,J,Q,Q,Q,Q,E,Q,Q,Q,Q,J,Q,Q,Q,Q,Q,W,W,J,S,S,S,
-            S,S,J,W,W,Q,Q,Q,Q,W,Q,Q,J,Q,Q,Q,E,Q,Q,Q,J,Q,Q,Q,Q,Q,Q,Q,W,W,J,S,S,
-            S,J,W,W,Q,Q,Q,Q,W,J,W,Q,Q,J,J,E,J,E,J,J,Q,Q,Q,Q,Q,Q,Q,Q,Q,W,W,J,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,W,W,W,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,S,S,W,W,R,W,W,S,S,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,S,W,W,R,M,R,W,W,S,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,W,W,Q,Q,E,Q,Q,W,W,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,W,W,Q,Q,Q,E,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,E,Q,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,Q,Q,E,Q,Q,W,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,Q,Q,Q,D,Q,W,J,W,Q,Q,Q,W,W,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,W,W,Q,J,Q,Q,Q,Q,Q,Q,E,Q,Q,W,Q,Q,Q,J,Q,W,W,S,S,S,S,S,S,
+            S,S,S,S,S,W,W,Q,Q,Q,J,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,J,Q,Q,Q,W,W,S,S,S,S,S,
+            S,S,S,S,W,W,Q,Q,Q,Q,Q,J,Q,Q,Q,Q,E,Q,Q,Q,Q,J,Q,Q,Q,Q,Q,W,W,S,S,S,S,
+            S,S,S,W,W,Q,Q,Q,Q,W,Q,Q,J,Q,Q,Q,E,Q,Q,Q,J,Q,Q,Q,Q,Q,Q,Q,W,W,S,S,S,
+            S,S,W,W,Q,Q,Q,Q,W,J,W,Q,Q,J,J,E,J,E,J,J,Q,Q,Q,Q,Q,Q,Q,Q,Q,W,W,S,S,
             S,W,W,Q,Q,Q,Q,Q,Q,W,Q,Q,Q,J,E,E,E,E,E,J,Q,Q,Q,Q,Q,Q,Q,Q,Q,Q,W,W,S,
             W,W,R,Q,Q,Q,Q,Q,Q,Q,Q,Q,Q,E,E,Q,Q,Q,E,E,Q,Q,Q,Q,Q,Q,Q,Q,Q,Q,R,W,W,
             W,R,E,E,E,E,E,E,D,E,E,E,E,J,E,Q,J,Q,E,J,E,E,E,E,D,E,E,E,E,E,E,R,W,
             W,W,R,Q,Q,Q,Q,Q,Q,Q,Q,Q,Q,E,E,Q,Q,Q,E,E,Q,Q,Q,Q,Q,Q,Q,Q,Q,Q,R,W,W,
             S,W,W,Q,Q,Q,Q,Q,Q,Q,Q,Q,Q,J,E,E,E,E,E,J,Q,Q,Q,W,Q,Q,Q,Q,Q,Q,W,W,S,
-            S,J,W,W,Q,Q,Q,Q,Q,Q,Q,Q,Q,J,J,E,J,E,J,J,Q,Q,W,J,W,Q,Q,Q,Q,W,W,J,S,
-            S,S,J,W,W,Q,Q,Q,Q,Q,Q,Q,J,Q,Q,Q,E,Q,Q,Q,J,Q,Q,W,Q,Q,Q,Q,W,W,J,S,S,
-            S,S,S,J,W,W,Q,Q,Q,Q,Q,J,Q,Q,Q,Q,E,Q,Q,Q,Q,J,Q,Q,Q,Q,Q,W,W,J,S,S,S,
-            S,S,S,S,J,W,W,Q,Q,Q,J,Q,Q,W,Q,Q,E,Q,Q,Q,Q,Q,J,Q,Q,Q,W,W,J,S,S,S,S,
-            S,S,S,S,S,J,W,W,Q,J,Q,Q,W,J,W,Q,D,Q,Q,Q,Q,Q,Q,J,Q,W,W,J,S,S,S,S,S,
-            S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,W,Q,Q,E,Q,Q,Q,Q,Q,Q,Q,W,W,J,S,S,S,S,S,S,
-            E,S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,Q,W,W,J,S,S,S,S,S,S,E,
-            E,J,S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,W,W,J,S,S,S,S,S,S,J,E,
-            E,J,J,S,S,S,S,S,S,J,W,W,Q,Q,Q,Q,E,Q,Q,Q,Q,W,W,J,S,S,S,S,S,S,J,J,E,
-            E,E,J,J,S,S,S,S,S,S,J,W,W,Q,Q,Q,E,Q,Q,Q,W,W,J,S,S,S,S,S,S,J,J,E,E,
-            E,E,E,J,J,S,S,S,S,S,S,J,W,W,Q,Q,E,Q,Q,W,W,J,S,S,S,S,S,S,J,J,E,E,E,
-            E,E,E,E,J,J,S,S,S,S,S,S,J,W,W,R,E,R,W,W,J,S,S,S,S,S,S,J,J,E,E,E,E,
-            E,E,E,E,E,J,J,S,S,S,S,S,S,J,W,W,R,W,W,J,S,S,S,S,S,S,J,J,E,E,E,E,E,
-            E,E,E,E,E,E,E,E,S,S,S,S,S,S,S,W,W,W,S,S,S,S,S,S,S,E,E,E,E,E,E,E,E,
+            S,S,W,W,Q,Q,Q,Q,Q,Q,Q,Q,Q,J,J,E,J,E,J,J,Q,Q,W,J,W,Q,Q,Q,Q,W,W,S,S,
+            S,S,S,W,W,Q,Q,Q,Q,Q,Q,Q,J,Q,Q,Q,E,Q,Q,Q,J,Q,Q,W,Q,Q,Q,Q,W,W,S,S,S,
+            S,S,S,S,W,W,Q,Q,Q,Q,Q,J,Q,Q,Q,Q,E,Q,Q,Q,Q,J,Q,Q,Q,Q,Q,W,W,S,S,S,S,
+            S,S,S,S,S,W,W,Q,Q,Q,J,Q,Q,W,Q,Q,E,Q,Q,Q,Q,Q,J,Q,Q,Q,W,W,S,S,S,S,S,
+            S,S,S,S,S,S,W,W,Q,J,Q,Q,W,J,W,Q,D,Q,Q,Q,Q,Q,Q,J,Q,W,W,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,W,Q,Q,E,Q,Q,Q,Q,Q,Q,Q,W,W,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,Q,E,Q,Q,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,W,W,Q,Q,Q,Q,E,Q,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,W,W,Q,Q,Q,E,Q,Q,Q,W,W,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,W,W,Q,Q,E,Q,Q,W,W,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,S,W,W,R,E,R,W,W,S,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,S,S,W,W,R,W,W,S,S,S,S,S,S,S,S,S,S,S,S,S,S,
+            S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,W,W,W,S,S,S,S,S,S,S,S,S,S,S,S,S,S,S,
     };
 
     private static final int[] end = {
@@ -163,9 +171,18 @@ public class ForestPoisonBossLevel extends Level {
         740,773,806,744,777,810
     };
 
+    private List<Integer> wood_a_pos = new ArrayList<>(Arrays.asList(471,437,405,439));
+    private List<Integer> wood_b_pos = new ArrayList<>(Arrays.asList(739,771,805,773));
+    private List<Integer> wood_c_pos = new ArrayList<>(Arrays.asList(649,617,651,683));
+    private List<Integer> wood_d_pos = new ArrayList<>(Arrays.asList(250,282,316,284));
     @Override
     public void occupyCell( Char ch ) {
         super.occupyCell(ch);
+
+        int randomElement_A = getRandomElement(wood_a_pos);
+        int randomElement_B = getRandomElement(wood_b_pos);
+        int randomElement_C = getRandomElement(wood_c_pos);
+        int randomElement_D = getRandomElement(wood_d_pos);
 
         int entrance = 82;
 
@@ -173,6 +190,22 @@ public class ForestPoisonBossLevel extends Level {
             seal();
             status++;
             CellEmitter.get(entrance).start(FlameParticle.FACTORY, 0.1f, 10);
+            if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+
+                set( randomElement_A, Terrain.BARRICADE );
+                GameScene.updateMap( randomElement_A );
+
+                set( randomElement_B, Terrain.BARRICADE );
+                GameScene.updateMap( randomElement_B );
+
+                set( randomElement_C, Terrain.BARRICADE );
+                GameScene.updateMap( randomElement_C );
+
+                set( randomElement_D, Terrain.BARRICADE );
+                GameScene.updateMap( randomElement_D );
+                Dungeon.level.drop(new Bomb(),hero.pos);
+                Dungeon.level.drop(new Bomb(),hero.pos);
+            }
         }
 
         for (Mob boss : Dungeon.level.mobs.toArray(new Mob[0])) {
@@ -236,7 +269,7 @@ public class ForestPoisonBossLevel extends Level {
             QliphothLasher qliphothLasher = new QliphothLasher();
 
             Buff.affect( hero, MindVision.class, 5f );
-
+            Buff.affect(qliphothLasher,Qliphoth.Lasher_Damage.class);
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
                 if(mob instanceof Qliphoth){
                     MagicMissile.boltFromChar( mob.sprite.parent,
@@ -314,6 +347,19 @@ public class ForestPoisonBossLevel extends Level {
         Qliphoth boss = new Qliphoth();
         boss.pos = 544;
         mobs.add( boss );
+    }
+
+    @Override
+        public int randomRespawnCell( Char ch ) {
+        int pos = 148; //random cell adjacent to the entrance.
+        int cell;
+        do {
+            cell = pos + PathFinder.NEIGHBOURS8[Random.Int(8)];
+        } while (!passable[cell]
+                || (Char.hasProp(ch, Char.Property.LARGE) && !openSpace[cell])
+                || Actor.findChar(cell) != null);
+        return cell;
+    
     }
 
     @Override
