@@ -215,6 +215,7 @@ public class ItemSpriteSheet {
         assignItemRect(ARCANE_BOMB,     10, 13);
         assignItemRect(SHRAPNEL_BOMB,   10, 13);
         assignItemRect(BLACK_KEY,   	8, 14);
+        assignItemRect(CRYSTAL_QUESTION,   	15, 11);
     }
 
 
@@ -245,6 +246,8 @@ public class ItemSpriteSheet {
     public static final int QUARTERSTAFF    = WEP_TIER2+3;
     public static final int DIRK            = WEP_TIER2+4;
     public static final int SICKLE          = WEP_TIER2+5;
+
+    public static final int	WHITE_BAST		= WEP_TIER2+6;
 
     public static final int	ENDDIED			= WEP_TIER2+7;
     static{
@@ -529,7 +532,9 @@ public class ItemSpriteSheet {
         assignItemRect(ARTIFACT_ROSE3,      14, 14);
 
         assignItemRect(Gold_Iron,           16, 16);
-        assignItemRect(REDWHITEROSE,      15, 15);
+        assignItemRect(REDWHITEROSE,        15, 15);
+        assignItemRect(MIME_TWO,            11, 14);
+        assignItemRect(MIME_THREE,          15, 16);
     }
 
     //16 free slots
@@ -615,7 +620,7 @@ public class ItemSpriteSheet {
         for (int i = POTIONS; i < POTIONS+16; i++)
             assignItemRect(i, 14, 15);
         assignItemRect(POTION_CATALYST, 13, 15);
-        assignItemRect(LIQUID_METAL,    13, 15);
+        assignItemRect(LIQUID_METAL,    8, 14);
     }
 
     private static final int EXOTIC_POTIONS =                               xy(1, 23);  //16 slots
@@ -681,8 +686,10 @@ public class ItemSpriteSheet {
     public static final int ELIXIR_ICY      = ELIXIRS+5;
     public static final int ELIXIR_ARCANE   = ELIXIRS+6;
     static{
-        for (int i = BREWS; i < BREWS+16; i++)
-            assignItemRect(i, 16, 16);
+        assignItemRect( ELIXIR_DRAGON,    16, 16);
+        assignItemRect( ELIXIR_ICY,    9, 15);
+        assignItemRect( WATERSOUL,    16, 16);
+        assignItemRect( REDDRAGON,    12, 16);
     }
 
     //16 free slots
@@ -800,7 +807,7 @@ public class ItemSpriteSheet {
         assignItemRect(RiceDumplingsRed,    14, 14);
         assignItemRect(RiceDumplingsPink,    14, 14);
         assignItemRect(RiceDumplingsOrange,    14, 14);
-        assignItemRect(RiceDumplingsLink,    14, 13);
+        assignItemRect(RiceDumplingsLink,    14, 14);
         assignItemRect(RiceDumplingsBottle,    14, 14);
 
         assignItemRect(Fish_A,    16, 12);
@@ -928,21 +935,19 @@ public class ItemSpriteSheet {
 
     static{
         assignItemRect(WATERSKIN,        16, 16);
-        assignItemRect(POUCH,       14, 15);
+        assignItemRect(POUCH,       16, 16);
         assignItemRect(DG6,       14, 14);
         assignItemRect(DG17,       14, 14);
         assignItemRect(DG19,       14, 14);
         assignItemRect(HOLDER,      16, 16);
-        assignItemRect(BANDOLIER,   15, 16);
+        assignItemRect(BANDOLIER,   16, 16);
         assignItemRect(HOLSTER,     15, 16);
         assignItemRect(DRAGONKINGHALOFIRE, 12, 14);
-        assignItemRect(REDDRAGON, 15, 16);
         assignItemRect(ANTILIGHT, 15, 16);
         assignItemRect(LANTERNA, 10, 16);
         assignItemRect(LANTERNB, 10, 16);
         assignItemRect(SKPOTION, 13, 15);
         assignItemRect(SKNANO, 15, 14);
-        assignItemRect(WATERSOUL, 14, 16);
         assignItemRect(WRALIPS, 14, 12);
         assignItemRect(SDBlade, 15, 15);
     }
@@ -1002,6 +1007,7 @@ public class ItemSpriteSheet {
         assignItemRect(DARKCRYSTAL,9,9);
         assignItemRect(HITLCRYSTAL,9,9);
         assignItemRect(DRAGONSHILED,12,16);
+        assignItemRect(BOOKSQINYUE,12,14);
     }
     //16 free slots                                                  //16 free slots
 
@@ -1122,10 +1128,10 @@ public class ItemSpriteSheet {
         assignItemRect(PETRIFIED_SEED,  15, 14);
         assignItemRect(EXOTIC_CRYSTALS, 13, 9);
         assignItemRect(MOSSY_CLUMP,     15, 14);
-        assignItemRect(SUNDIAL,         15, 11);
+        assignItemRect(SUNDIAL,         16, 12);
         assignItemRect(CLOVER,          15, 14);
         assignItemRect(TRAP_MECHANISM,  15, 15);
-        assignItemRect(MIMIC_TOOTH,     11,  15);
+        assignItemRect(MIMIC_TOOTH,     14,  15);
         assignItemRect(WONDROUS_RESIN,  15, 14);
         assignItemRect(EYE_OF_NEWT,     14, 13);
         assignItemRect(TRINT_PLOCHR,     16, 11);
@@ -1157,10 +1163,10 @@ public class ItemSpriteSheet {
         assignItemRect(MISC_ROLLPOTION,       12, 14);
         assignItemRect(MISC_EXFALLING,       14, 16);
 
-        assignItemRect(SOS_0,       14, 6);
-        assignItemRect(SOS_1,       14, 6);
-        assignItemRect(SOS_2,       14, 6);
-        assignItemRect(SOS_3,       14, 6);
+        assignItemRect(SOS_0,       15, 6);
+        assignItemRect(SOS_1,       15, 6);
+        assignItemRect(SOS_2,       15, 6);
+        assignItemRect(SOS_3,       15, 6);
 
         assignItemRect(FLARE,       14, 15);
     }
