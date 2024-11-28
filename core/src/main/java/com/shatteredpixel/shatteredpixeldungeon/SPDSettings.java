@@ -52,12 +52,12 @@ public class SPDSettings extends GameSettings {
 		return getInt( KEY_QUICKSLOTS, 4, Constants.MIN_QUICKSLOTS, Constants.MAX_QUICKSLOTS);
 	}
 
-	public static void level3boss( int value ){
+	public static void level1boss(int value ){
 		put( KEY_L3BOSS, value );
 	}
 
-	public static int level3boss(){
-		return getInt( KEY_L3BOSS, 1, 1, 3);
+	public static int level1boss(){
+		return getInt( KEY_L3BOSS, 2, 1, 3);
 	}
 
 	public static void TimeLimit(boolean value) {
@@ -157,7 +157,7 @@ public class SPDSettings extends GameSettings {
 
 	private static final String KEY_ICE = "hice";
 
-	private static final String KEY_UP_ICE = "iceupdate_55";
+	private static final String KEY_UP_ICE = "iceupdate_56";
 
 	private static final String KEY_DARK	= "dark_ui";
 
