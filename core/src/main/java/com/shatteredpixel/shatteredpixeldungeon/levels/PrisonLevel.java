@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -31,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.ClearElemtGuard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.ClearElemtGuardNPC;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.Gudazi;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.HalomethaneFlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -85,6 +88,11 @@ public class PrisonLevel extends RegularLevel {
 	@Override
 	protected void createMobs() {
 		Wandmaker.Quest.spawnWandmaker(this, roomEntrance);
+		if(Dungeon.depth == 9 && Dungeon.branch == 0 && Statistics.gdzHelpDungeon == 2){
+			Gudazi npc20 = new Gudazi();
+			npc20.pos = exit()-1;
+			mobs.add(npc20);
+		}
 		super.createMobs();
 	}
 
@@ -153,7 +161,7 @@ public class PrisonLevel extends RegularLevel {
 	@Override
 	public void occupyCell(Char ch) {
 		super.occupyCell(ch);
-		if (ch == Dungeon.hero) {
+		if (ch == hero) {
 			updateWandmakerQuestMusic();
 		}
 	}
