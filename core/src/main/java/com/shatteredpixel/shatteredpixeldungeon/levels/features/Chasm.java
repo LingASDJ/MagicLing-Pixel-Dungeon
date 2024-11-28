@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.features;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -28,10 +30,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CrossTownProc;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrossDiedTower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.CrivusStarFruits;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFeatherFall;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
@@ -86,6 +93,16 @@ public class Chasm implements Hero.Doom {
 								if (index == 0 && elapsed > 0.2f) {
 									if (Dungeon.hero.pos == heroPos) {
 										jumpConfirmed = true;
+										for (Buff buff : hero.buffs()) {
+											if (buff instanceof CrossTownProc) {
+												buff.detach();
+											}
+										}
+										for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
+											if (mob instanceof CrossDiedTower) {
+												mob.die( true );
+											}
+										}
 										hero.resume();
 									}
 								}
@@ -97,25 +114,46 @@ public class Chasm implements Hero.Doom {
 	}
 	
 	public static void heroFall( int pos ) {
-		
+
 		jumpConfirmed = false;
 				
 		Sample.INSTANCE.play( Assets.Sounds.FALLING );
 
 		Level.beforeTransition();
-
-		if (Dungeon.hero.isAlive()) {
+		if(Dungeon.depth == 5 && Dungeon.branch == 0 && Statistics.ExFruit || Dungeon.depth == 4 && Statistics.bossRushMode) {
+			int SafePos = 0;
+			switch (Random.NormalIntRange(0, 4)) {
+				case 0:
+					SafePos = 325;
+					break;
+				case 1:
+					SafePos = 301;
+					break;
+				case 2:
+					SafePos = 861;
+					break;
+				case 3:
+					SafePos = 855;
+					break;
+			}
+			ScrollOfTeleportation.appear(hero, SafePos);
+			Dungeon.hero.interrupt();
+			Dungeon.observe();
+			if (Statistics.crivusfruitslevel2) {
+				hero.damage(3, CrivusStarFruits.class);
+			}
+		} else if(Statistics.DwarfMasterKing && Dungeon.depth == 19 && !Statistics.dwarfKill) {
+			GLog.n(Messages.get(Imp.class,"mustdown"));
+		} else if (Dungeon.hero.isAlive() && Dungeon.branch == 0 && Dungeon.depth!=30|| Statistics.bossRushMode) {
 			Dungeon.hero.interrupt();
 			InterlevelScene.mode = InterlevelScene.Mode.FALL;
-			if (Dungeon.level instanceof RegularLevel) {
-				Room room = ((RegularLevel)Dungeon.level).room( pos );
-				InterlevelScene.fallIntoPit = room != null && room instanceof WeakFloorRoom;
+			if (Dungeon.level instanceof RegularLevel && Dungeon.branch == 0) {
+				Room room = ((RegularLevel) Dungeon.level).room(pos);
+				InterlevelScene.fallIntoPit = room instanceof WeakFloorRoom;
 			} else {
 				InterlevelScene.fallIntoPit = false;
 			}
-			Game.switchScene( InterlevelScene.class );
-		} else {
-			Dungeon.hero.sprite.visible = false;
+			Game.switchScene(InterlevelScene.class);
 		}
 	}
 
@@ -130,7 +168,7 @@ public class Chasm implements Hero.Doom {
 	public static void heroLand() {
 		
 		Hero hero = Dungeon.hero;
-		
+
 		ElixirOfFeatherFall.FeatherBuff b = hero.buff(ElixirOfFeatherFall.FeatherBuff.class);
 		
 		if (b != null){
@@ -152,7 +190,6 @@ public class Chasm implements Hero.Doom {
 
 	public static void mobFall( Mob mob ) {
 		if (mob.isAlive()) mob.die( Chasm.class );
-		
 		if (mob.sprite != null) ((MobSprite)mob.sprite).fall();
 	}
 	
