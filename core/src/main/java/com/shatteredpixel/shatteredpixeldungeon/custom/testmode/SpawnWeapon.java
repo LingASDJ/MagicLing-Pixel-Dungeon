@@ -22,6 +22,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Bloomi
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crushing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.DeadBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.HaloBlazing;
@@ -241,8 +242,8 @@ public class SpawnWeapon extends TestItem{
                         return Crushing.class;
                     case 5:
                         return TimeReset.class;
-//                    case 6:
-//                        return DeadBomb.class;
+                    case 6:
+                        return DeadBomb.class;
                     default:
                         return null;
                 }
@@ -539,7 +540,7 @@ public class SpawnWeapon extends TestItem{
                 case 2:
                     return 6;
                 case 3:
-                    return 6;
+                    return 7;
                 case 4:
                     return 8;
             }
