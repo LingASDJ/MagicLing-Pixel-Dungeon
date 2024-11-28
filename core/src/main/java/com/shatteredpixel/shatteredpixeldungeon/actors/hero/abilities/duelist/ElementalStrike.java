@@ -72,6 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Bloomi
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crushing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.DeadBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.HaloBlazing;
@@ -79,6 +80,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kineti
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.TimeReset;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Unstable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampiric;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -131,6 +133,9 @@ public class ElementalStrike extends ArmorAbility {
 
 		effectTypes.put(HaloBlazing.class,     MagicMissile.HALOFIRE);
 		effectTypes.put(Crushing.class,     MagicMissile.RAINBOW_CONE);
+
+		effectTypes.put(TimeReset.class,     MagicMissile.POISON);
+		effectTypes.put(DeadBomb.class,     MagicMissile.BLOOD_CONE);
 
 		effectTypes.put(null,               MagicMissile.MAGIC_MISS_CONE);
 	}
