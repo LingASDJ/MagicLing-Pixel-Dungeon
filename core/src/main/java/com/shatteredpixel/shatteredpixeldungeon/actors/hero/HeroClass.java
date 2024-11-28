@@ -165,6 +165,8 @@ public enum HeroClass {
 
 		if (Challenges.activeChallenges() >= 10) {
 			hero.lanterfire = 100 - Challenges.activeChallenges() * 4;
+		} else if (Dungeon.isChallenged(Challenges.DHXD)) {
+			hero.lanterfire = 60;
 		}
 
 //		if(SPDSettings.Cheating()){

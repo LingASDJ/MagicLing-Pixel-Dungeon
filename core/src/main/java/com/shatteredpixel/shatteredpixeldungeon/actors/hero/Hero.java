@@ -97,6 +97,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.InvisibilityRing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LanFireStats;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LighS;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
@@ -609,6 +610,7 @@ public class Hero extends Char {
 
 		if( lanterfireactive || Dungeon.isChallenged(DHXD)){
 			Buff.affect( this, Nyctophobia.class );
+			Buff.affect( this, LanFireStats.class );
 			if(Dungeon.depth != 0){
 				Buff.affect( this, LighS.class );
 			}
@@ -1079,14 +1081,18 @@ public class Hero extends Char {
 
 		if (Challenges.activeChallenges() >= 10 && !lanterfireactive && !Dungeon.isDLC(Conducts.Conduct.DEV) || Dungeon.isChallenged(DHXD) && !lanterfireactive) {
 			//灯火前行 4.0
-			hero.lanterfire = 100 - min(Challenges.activeChallenges() * 4, 45);
+			if(Dungeon.isChallenged(DHXD)){
+				hero.lanterfire = 60 - min(Challenges.activeChallenges() * 4, 5);
+			} else {
+				hero.lanterfire = 100 - min(Challenges.activeChallenges() * 4, 45);
+			}
 
 			new OilLantern().quantity(1).identify().collect();
 
 			lanterfireactive = true;
 
 			Buff.affect( this, Nyctophobia.class );
-
+			Buff.affect( this, LanFireStats.class );
 			if(lanterfire>50){
 				switch (Random.Int(5)) {
 					case 0:
@@ -3529,7 +3535,8 @@ public class Hero extends Char {
 	}
 
 	public void healLantern(int value) {
-		lanterfire = min(lanterfire + value, 100);
+		//寂灭灯火1.0
+		lanterfire = min(lanterfire + value, Dungeon.isChallenged(DHXD) ? 60 : 100);
 		hero.sprite.showStatus(0x00ff00, String.valueOf(value));
 	}
 
