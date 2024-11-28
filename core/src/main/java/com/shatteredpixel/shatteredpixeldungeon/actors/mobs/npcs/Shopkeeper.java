@@ -201,7 +201,7 @@ public class Shopkeeper extends NPC {
 				price *= 2.5;
 			}
 		} else if (hero.buff(BlessNoMoney.class) != null) {
-			price *= 0.6;
+			price *= 0.6f;
 		}
 		if (Dungeon.hero.buff(AscensionChallenge.class) != null && Dungeon.shopOnLevel()){
 			price *= 3f;
