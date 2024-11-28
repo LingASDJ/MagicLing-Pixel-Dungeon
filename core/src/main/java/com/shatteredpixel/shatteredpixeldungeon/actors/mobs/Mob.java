@@ -190,6 +190,8 @@ public abstract class Mob extends Char {
 			hero.damageLantern(5);
 		} else if (this instanceof BlackHost && chance <= 0.85f && hero.lanterfire < 90) {
 			hero.damageLantern(5);
+		} else if(chance <= 0.35f && hero.lanterfire<20) {
+			hero.damageLantern(Random.NormalIntRange(1,3));
 		}
 	}
 
@@ -1032,10 +1034,7 @@ public abstract class Mob extends Char {
 
     @Override
 	public void die( Object cause ) {
-
 		discovered = true;
-
-
 
 		if (cause == Chasm.class){
 			//50% chance to round up, 50% to round down
