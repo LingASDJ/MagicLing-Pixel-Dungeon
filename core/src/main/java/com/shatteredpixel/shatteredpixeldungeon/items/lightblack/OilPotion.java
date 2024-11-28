@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.lightblack;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -43,6 +45,6 @@ public class OilPotion extends Item {
 
     @Override
     public int value() {
-        return quantity * 20;
+        return Dungeon.isChallenged(DHXD) ? quantity * 80 : quantity * 20;
     }
 }
