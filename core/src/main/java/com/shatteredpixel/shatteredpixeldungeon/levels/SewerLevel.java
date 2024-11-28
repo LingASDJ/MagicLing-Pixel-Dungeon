@@ -25,15 +25,23 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.AoReadyDragon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.DiedClearElemet;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nxhy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.Gudazi;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfAnmy;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.JunglePainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -59,6 +67,10 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SewerLevel extends RegularLevel {
 
@@ -124,10 +136,47 @@ public class SewerLevel extends RegularLevel {
 						1, 1, 1, 1, 1};
 	}
 
+	private Mob Clearly() {
+		List<Class<? extends Mob>> mobTypes = new ArrayList<>();
+		mobTypes.add(DiedClearElemet.ClearElemetalBlood.class);
+		mobTypes.add(DiedClearElemet.ClearElemetalDark.class);
+		mobTypes.add(DiedClearElemet.ClearElemetalGreen.class);
+		mobTypes.add(DiedClearElemet.ClearElemetalPure.class);
+		mobTypes.add(DiedClearElemet.ClearElemetalGold.class);
+		Random.shuffle(mobTypes);
+		Class<? extends Mob> selectedMobType = mobTypes.get(0);
+		Mob mob = null;
+        try {
+            mob = selectedMobType.getDeclaredConstructor().newInstance();
+			Buff.affect(mob, WandOfAnmy.AllyToRestart.class);
+			mob.alignment = Char.Alignment.ALLY;
+			mob.pos = entrance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException ignored) {
+        }
+
+		return mob;
+	}
+
 	@Override
 	protected void createMobs() {
 		Ghost.Quest.spawn( this,roomExit );
 		super.createMobs();
+		if(depth == 4 && Badges.isUnlocked(Badges.Badge.KILL_FIRE_DRAGON)){
+			for (int i = 0; i < 2; i++) {
+				Mob testActor = Clearly();
+				mobs.add(testActor);
+			}
+			AoReadyDragon aoReadyDragon = new AoReadyDragon();
+			aoReadyDragon.pos = exit();
+			mobs.add(aoReadyDragon);
+		}
+
+		if(Dungeon.depth == 4 && Dungeon.branch == 0 && Statistics.gdzHelpDungeon == 1){
+			Gudazi npc20 = new Gudazi();
+			npc20.pos = entrance()-1;
+			mobs.add(npc20);
+		}
 	}
 
 	@Override
