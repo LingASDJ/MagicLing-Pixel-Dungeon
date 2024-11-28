@@ -21,8 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -55,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Bloomi
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crushing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.DeadBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.ExplosionX;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
@@ -142,8 +144,8 @@ abstract public class Weapon extends KindOfWeapon {
 			damage = enchantment.proc( this, attacker, defender, damage );
 		}
 		
-		if (!levelKnown && attacker == Dungeon.hero) {
-			float uses = Math.min( availableUsesToID, Talent.itemIDSpeedFactor(Dungeon.hero, this) );
+		if (!levelKnown && attacker == hero) {
+			float uses = Math.min( availableUsesToID, Talent.itemIDSpeedFactor(hero, this) );
 			availableUsesToID -= uses;
 			usesLeftToID -= uses;
 			if (usesLeftToID <= 0) {
@@ -218,7 +220,7 @@ abstract public class Weapon extends KindOfWeapon {
 	@Override
 	public boolean collect(Bag container) {
 		if(super.collect(container)){
-			if (Dungeon.hero != null && Dungeon.hero.isAlive() && isIdentified() && enchantment != null){
+			if (hero != null && hero.isAlive() && isIdentified() && enchantment != null){
 				Catalog.setSeen(enchantment.getClass());
 			}
 			return true;
@@ -229,7 +231,7 @@ abstract public class Weapon extends KindOfWeapon {
 
 	@Override
 	public Item identify(boolean byHero) {
-		if (enchantment != null && byHero && Dungeon.hero != null && Dungeon.hero.isAlive()){
+		if (enchantment != null && byHero && hero != null && hero.isAlive()){
 			Catalog.setSeen(enchantment.getClass());
 		}
 		return super.identify(byHero);
@@ -398,8 +400,8 @@ abstract public class Weapon extends KindOfWeapon {
 		if (ench == null || !ench.curse()) curseInfusionBonus = false;
 		enchantment = ench;
 		updateQuickslot();
-		if (ench != null && isIdentified() && Dungeon.hero != null
-				&& Dungeon.hero.isAlive() && Dungeon.hero.belongings.contains(this)){
+		if (ench != null && isIdentified() && hero != null
+				&& hero.isAlive() && hero.belongings.contains(this)){
 			Catalog.setSeen(ench.getClass());
 		}
 		return this;
@@ -450,12 +452,12 @@ abstract public class Weapon extends KindOfWeapon {
 		public static final Class<?>[] uncommon = new Class<?>[]{
 				Blocking.class, Blooming.class, Elastic.class,
 				Lucky.class, Projecting.class, Unstable.class,
-				HaloBlazing.class};
+				HaloBlazing.class, DeadBomb.class};
 
 		public static final Class<?>[] rare = new Class<?>[]{
 				Corrupting.class, Grim.class, Vampiric.class,
 				Crushing.class, TimeReset.class,
-				//DeadBomb.class,
+
 		};
 
 		public static final float[] typeChances = new float[]{
