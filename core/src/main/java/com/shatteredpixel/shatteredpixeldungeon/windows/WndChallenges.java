@@ -21,9 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
-import static com.shatteredpixel.shatteredpixeldungeon.Challenges.MOREROOM;
-
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -125,7 +122,7 @@ public class WndChallenges extends Window {
 			cb.active = editable;
 
 			for (int ch : Challenges.MASKS) {
-				if ((Dungeon.challenges & ch) != 0 && ch <= MOREROOM && ch != DHXD) {
+				if ((Dungeon.challenges & ch) != 0) {
 					getSelectedButtonCount();
 				}
 			}
@@ -300,6 +297,20 @@ public class WndChallenges extends Window {
 										Messages.get(Challenges.class, challenge+"_desc"))
 						);
 				}
+				protected boolean onLongClick() {
+
+					String more = Messages.get(Challenges.class, challenge+"_moredesc");
+					if (more.contains("Ms:")) {
+						more = Messages.get(Challenges.class, "nomore");
+					}
+
+					ShatteredPixelDungeon.scene().add(
+							new WndTitledMessage(new Image(ChallengeInfo.this.icon),
+									Messages.titleCase(Messages.get(Challenges.class, challenge)),
+									more));
+					return true;
+				}
+
 			};
 			add( info );
 			check = new ChallengeButton();
