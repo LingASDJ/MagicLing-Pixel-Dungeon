@@ -364,7 +364,7 @@ public class CrivusFruits extends Boss {
 
         @Override
         public void onDeath() {
-            //
+            Dungeon.fail( getClass() );
         }
     }
 
