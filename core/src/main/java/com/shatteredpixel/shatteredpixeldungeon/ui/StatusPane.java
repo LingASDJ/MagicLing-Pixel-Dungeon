@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import static com.shatteredpixel.shatteredpixeldungeon.SPDSettings.ClassPage;
 import static com.shatteredpixel.shatteredpixeldungeon.SPDSettings.ClassUI;
@@ -127,7 +128,6 @@ public class StatusPane extends Component {
 	public PageIndicatorB pageb;
 
 	public BossSelectIndicator bossselect;
-	public JoinIndicator joinxxx;
 	public LanterFireCator lanter;
 
 	public static String asset = Assets.Interfaces.STATUS_DARK;
@@ -270,10 +270,6 @@ public class StatusPane extends Component {
 		if(!(Statistics.RandMode || Statistics.bossRushMode)){
 			add(bossselect);
 		}
-
-
-		joinxxx=new JoinIndicator();
-		add(joinxxx);
 
 		lanter=new LanterFireCator();
 		add(lanter);
@@ -486,11 +482,11 @@ public class StatusPane extends Component {
 
 		int maxHunger = (int) Hunger.STARVING;
 		float maxPureSole = hero.lanterfire;
-		int mtPureSole = 100;
+		int mtPureSole = Dungeon.isChallenged(DHXD) ? 60 : 100;
 
 		//冰血聪明 x
 		int maxLFSHp = hero.lanterfire;
-		int mjsLFSHp = 100;
+		int mjsLFSHp = Dungeon.isChallenged(DHXD) ? 60 : 100;
 
 		int health = hero.HP;
 		int shield = hero.shielding();
@@ -528,7 +524,7 @@ public class StatusPane extends Component {
 			float b =  0.93f+0.57f*Math.max(0f, (float)Math.sin( time));
 
 			float lanter = hero.lanterfire;
-			lanterText.text(lanter+"/"+100);
+			lanterText.text(lanter+"/"+ (Dungeon.isChallenged(DHXD) ? 60 : 100));
 			lanterText.scale.set(PixelScene.align(0.5f));
 			lanterText.x = 3;
 			lanterText.y = 25;
@@ -564,13 +560,10 @@ public class StatusPane extends Component {
 		if (ClassPage()) {
 			page.setPos(0, 40);
 			pageb.setPos(0, 1000);
-			joinxxx.setPos(0, 52);
-			bossselect.setPos(0, 78);
+			bossselect.setPos(0, 52);
 		} else {
 			page.setPos(0, 1000);
 			pageb.setPos(0, 40);
-
-			joinxxx.setPos(0, 1000);
 			bossselect.setPos(0, 1000);
 		}
 
