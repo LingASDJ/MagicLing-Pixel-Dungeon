@@ -46,7 +46,7 @@ public class DeadBomb extends Weapon.Enchantment {
 
     public String desc() {
         int weapon;
-        if(hero != null){
+        if(hero != null && hero.belongings.weapon != null){
             weapon = hero.belongings.weapon.level() * 5;
         } else {
             weapon = 0;
