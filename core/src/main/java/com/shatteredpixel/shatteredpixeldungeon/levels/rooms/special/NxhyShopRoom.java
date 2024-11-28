@@ -3,6 +3,7 @@
 //
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.lanterfireactive;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -162,7 +163,9 @@ public class NxhyShopRoom extends SpecialRoom {
             itemsToSpawn2.add(new PotionOfMastery());
         }
 
-        if(lanterfireactive) {
+        if(Dungeon.isChallenged(DHXD)){
+            itemsToSpawn2.add(new OilPotion());
+        } else if(lanterfireactive) {
             if(Challenges.activeChallenges() > 6){
                 itemsToSpawn2.add(new OilPotion());
                 itemsToSpawn2.add(new OilPotion());
