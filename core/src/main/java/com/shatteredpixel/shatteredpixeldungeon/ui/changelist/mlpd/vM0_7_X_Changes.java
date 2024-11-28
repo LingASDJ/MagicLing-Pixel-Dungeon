@@ -20,6 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.FireCrystalSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireDragonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FrankensteinSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostHalloweenSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GudaziSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HollowKnightSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -32,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.NyzSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PianoLeSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PiraLandSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QinWolfSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.QliphothSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RedNecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SakaFishBossSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkKingSprite;
@@ -39,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkeeperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SmallLeafSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WhiteGirlSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.YetYogSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ZakoSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
@@ -51,6 +54,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V07990_Changes(changeInfos);
         add_V078_90_Changes(changeInfos);
         add_V0770_Changes(changeInfos);
         add_V0765_Changes(changeInfos);
@@ -80,6 +84,53 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V07990_Changes( ArrayList<ChangeInfo> changeInfos ) {
+        ChangeInfo changes = new ChangeInfo("v0.7.9.9", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new GudaziSprite(),("新NPC:古达子"),
+                ("来自远方的旅客，来到雪景小镇篝火这里。")));
+
+        changes.addButton(new ChangeButton(new ZakoSprite(),("新NPC:喵音·椛"),
+                ("团宠，别惹她生气")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WHITE_BAST), ("新武器：白浪刺剑"),
+                ("我的灯将净化邪恶！ 我的剑将劈开海潮！ 我的眼将找出真相！ 我的心会作出判决。")));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SAI,
+                new ItemSprite.Glowing( Window.GDX_COLOR )), "新附魔：审判",
+                "这个附魔会使审判之力从武器中释放而出，能够至多标记一个敌人，并在这个敌人死亡时将其最大生命值的若干转为一次对所有可见敌人进行一次同等的物理伤害。"));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.CHALLANEESICON_15), ("新挑战:寂灭灯火"),
+                ("灯火现在正式成为挑战，具体查阅挑战说明。")));
+
+        Image s = new QliphothSprite();
+        s.scale.set(PixelScene.align(0.74f));
+        changes.addButton(new ChangeButton(s, ("新Boss：克里弗斯之果2代"),
+                ("它们编织成一张大网，将所有不慎跌落谷底的生命体供给给中间那粒鲜红的果实。果子重做，祝各位玩的愉快")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
+                ("1.部分素材优化迭代\n" +
+                        "2.部分文案优化\n" +
+                        "3.部分细节优化更新\n" +
+                        "4.现在饰品可以在开发者模式中升级")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.7.9.8版本:\n\n" +
+                        "1.修复部分炼金合成异常\n" +
+                        "2.修复中部群反馈的一些bug\n" +
+                        "3.其他bug修正"));
     }
 
     public static void add_V078_90_Changes( ArrayList<ChangeInfo> changeInfos ) {
