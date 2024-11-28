@@ -20,10 +20,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ClearElemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.PhantomPiranha;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
@@ -111,23 +114,26 @@ public class Qliphoth extends Boss {
         return super.isAlive() || state_boss<2;
     }
 
+    private boolean onlyFish;
     @Override
     protected boolean act() {
+
+        for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+            if (mob instanceof PhantomPiranha) {
+               onlyFish = true;
+            } else {
+                onlyFish = false;
+            }
+        }
+
         if(state_boss >=2){
             GameScene.add(Blob.seed(pos,100, CrivusFruits.DiedBlobs.class));
         } else {
             GameScene.add(Blob.seed(pos,120, CrivusFruits.DiedBlobs.class));
         }
 
-
-        //Hard
-        if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
-
-        } else {
-            //Normal
-            for (int i : SuperAttack_Pos) {
-                GameScene.add(Blob.seed(i,10, Invisibility_Fogs.class));
-            }
+        for (int i : SuperAttack_Pos) {
+            GameScene.add(Blob.seed(i,10, Invisibility_Fogs.class));
         }
 
         if(state_boss == 1 && HP<=60){
@@ -145,9 +151,44 @@ public class Qliphoth extends Boss {
                         new Callback() {
                             @Override
                             public void call() {
-                                Dungeon.level.drop(new PotionOfPurity.PotionOfPurityLing(),i);
+                                if(!(Dungeon.isChallenged(Challenges.STRONGER_BOSSES))) {
+                                    Dungeon.level.drop(new PotionOfPurity.PotionOfPurityLing(),i);
+                                } else {
+                                    int randomPos;
+                                    if(Random.Float()>0.5f){
+                                        randomPos = 650;
+                                    } else {
+                                        randomPos = 438;
+                                    }
+                                    Dungeon.level.drop(new PotionOfPurity.PotionOfPurityLing(),randomPos);
+                                }
                             }
                 });
+            }
+
+            if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+                for (int iz : SC) {
+
+                    for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+                        if (mob instanceof Qliphoth) {
+                            MagicMissile.boltFromChar(mob.sprite.parent,
+                                    MagicMissile.HALOFIRE,
+                                    new MissileSprite(),
+                                    iz,
+                                    new Callback() {
+                                        @Override
+                                        public void call() {
+                                            PhantomPiranha csp = new PhantomPiranha();
+                                            csp.HT = csp.HP = 30;
+                                            csp.state = csp.WANDERING;
+                                            csp.pos = iz;
+                                            GameScene.add(csp);
+                                        }
+                                    });
+                        }
+                    }
+
+                }
             }
         }
 
@@ -165,7 +206,9 @@ public class Qliphoth extends Boss {
                         new Callback() {
                             @Override
                             public void call() {
-                                Dungeon.level.drop(new FishingSpear(),i);
+                                if(!(Dungeon.isChallenged(Challenges.STRONGER_BOSSES))) {
+                                    Dungeon.level.drop(new FishingSpear(), i);
+                                }
                                 Dungeon.level.drop(new FishingSpear(),i);
                             }
                         });
@@ -176,10 +219,19 @@ public class Qliphoth extends Boss {
         return super.act();
     }
 
+    public static int[] CS = new int[]{
+            541,547
+    };
+
+    public static int[] SC = new int[]{
+            408,680
+    };
+
     private void summon_Lasher(){
         for (int i : ForestBoss2_LasherPos) {
             QliphothLasher qliphothLasher = new QliphothLasher();
             qliphothLasher.HT = qliphothLasher.HP = 20;
+            Buff.affect(qliphothLasher,Qliphoth.Lasher_Damage.class);
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                 if (mob instanceof Qliphoth) {
                     MagicMissile.boltFromChar(mob.sprite.parent,
@@ -197,6 +249,32 @@ public class Qliphoth extends Boss {
                 }
             }
         }
+
+        if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+            for (int iz : CS) {
+
+                for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+                    if (mob instanceof Qliphoth) {
+                        MagicMissile.boltFromChar(mob.sprite.parent,
+                                MagicMissile.HALOFIRE,
+                                new MissileSprite(),
+                                iz,
+                                new Callback() {
+                                    @Override
+                                    public void call() {
+                                        ClearElemental csp = new ClearElemental();
+                                        csp.HT = csp.HP = 30;
+                                        Buff.affect(csp, CrivusFruits.CFBarrior.class).setShield(30);
+                                        csp.state = csp.WANDERING;
+                                        csp.pos = iz;
+                                        GameScene.add(csp);
+                                    }
+                                });
+                    }
+                }
+
+            }
+        }
         Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
         this.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
         GameScene.flash(0x808c8c8c);
@@ -204,7 +282,7 @@ public class Qliphoth extends Boss {
 
     @Override
     public boolean isInvulnerable(Class effect) {
-        return this.HP > 60 && effect != Lasher_Damage.class;
+        return this.HP > 60 && effect != Lasher_Damage.class || onlyFish;
     }
 
     @Override
@@ -299,12 +377,13 @@ public class Qliphoth extends Boss {
 
         @Override
         public boolean act(boolean enemyInFOV, boolean justAlerted) {
-            if (enemyInFOV) {
+            if (enemyInFOV && !(Dungeon.isChallenged(Challenges.STRONGER_BOSSES))) {
                 PathFinder.buildDistanceMap(enemy.pos, Dungeon.level.water, viewDistance);
                 enemyInFOV = PathFinder.distance[pos] != Integer.MAX_VALUE;
-            }
+            } else {
 
-            return super.act(enemyInFOV, justAlerted);
+            }
+            return super.act(enemyInFOV,justAlerted);
         }
     }
 
@@ -331,6 +410,11 @@ public class Qliphoth extends Boss {
     public void die(Object cause) {
         super.die(cause);
         boolean heroKilled = false;
+
+        if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && !SprintableModeBoolean){
+            Dungeon.level.drop(new IceCyanBlueSquareCoin(10),pos);
+        }
+
         for (int i = 0; i < PathFinder.NEIGHBOURS49.length; i++) {
             Char ch = findChar( pos + PathFinder.NEIGHBOURS49[i] );
             if (ch != null && ch.isAlive()) {
@@ -341,6 +425,12 @@ public class Qliphoth extends Boss {
                 if (ch == Dungeon.hero && !ch.isAlive()) {
                     heroKilled = true;
                 }
+            }
+        }
+
+        for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+            if (mob instanceof PhantomPiranha) {
+                mob.die( cause );
             }
         }
 
@@ -378,7 +468,7 @@ public class Qliphoth extends Boss {
             Dungeon.level.drop( new LifeTreeSword(), pos ).sprite.drop();
             if(SPDSettings.BossWeaponCount1() >= 3){
                 SPDSettings.BossWeaponCount1(0);
-                GLog.w(Messages.get(this,"weapon"));
+                GLog.w(Messages.get(CrivusFruits.class,"weapon"));
             }
         } else {
             Dungeon.level.drop( new Food(), pos ).sprite.drop();
@@ -419,8 +509,8 @@ public class Qliphoth extends Boss {
         }
     }
 
-    private static final String STATE_BOSS   = "state_lasher_boss";
-    private static final String TELEPORT_BOSS   = "teleport_boss";
+    private static final String STATE_BOSS     = "state_lasher_boss";
+    private static final String TELEPORT_BOSS  = "teleport_boss";
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -437,6 +527,28 @@ public class Qliphoth extends Boss {
         boss_teleport = bundle.getInt(TELEPORT_BOSS);
         if (state != SLEEPING) BossHealthBar.assignBoss(this);
         if ((HP*2 <= HT)) BossHealthBar.bleed(true);
+    }
+
+    private void pullEnemy( Char enemy, int pullPos ){
+        enemy.pos = pullPos;
+        enemy.sprite.place(pullPos);
+        Dungeon.level.occupyCell(enemy);
+        Cripple.prolong(enemy, Cripple.class, 4f);
+        if (enemy == Dungeon.hero) {
+            Dungeon.hero.interrupt();
+            Dungeon.observe();
+            GameScene.updateFog();
+        }
+    }
+
+
+    @Override
+    public String description() {
+        String desc = super.description();
+        if (onlyFish) {
+            desc += "\n\n" + Messages.get(this, "onlyFish");
+        }
+        return desc;
     }
 
     public static class Invisibility_Fogs extends Blob implements Hero.Doom {
@@ -491,5 +603,7 @@ public class Qliphoth extends Boss {
         @Override
         public void onDeath() {}
     }
+
+
 
 }

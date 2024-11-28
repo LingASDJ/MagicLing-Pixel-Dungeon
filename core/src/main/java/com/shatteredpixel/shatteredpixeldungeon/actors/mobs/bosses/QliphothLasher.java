@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -13,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -29,7 +31,7 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class QliphothLasher extends Mob {
+public class QliphothLasher extends Mob implements Hero.Doom {
 
     public int state_lasher_boss;
 
@@ -79,11 +81,6 @@ public class QliphothLasher extends Mob {
             HP = Math.min(HT, HP + 2);
         }
 
-        //Boss level 3
-        if(state_lasher_boss == 2){
-            //TODO 绝命
-        }
-
         //Boss level 2
         if(state_lasher_boss == 1){
             for (int i : PathFinder.NEIGHBOURS8) {
@@ -96,11 +93,7 @@ public class QliphothLasher extends Mob {
         }
 
         onZapComplete();
-        spend(3f);
-
-        if(hero.buff(Qliphoth.Lasher_Damage.class) == null){
-            Buff.affect(this,Qliphoth.Lasher_Damage.class);
-        }
+        spend(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 4f : 3f);
 
         return super.act();
     }
@@ -114,7 +107,12 @@ public class QliphothLasher extends Mob {
                         reset(sprite, enemy.pos, new Forest_Kill(), new Callback() {
                             @Override
                             public void call() {
-                                onAttackComplete();
+                                if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+                                    Sample.INSTANCE.play( Assets.Sounds.ZAP );
+                                    enemy.damage(damageRoll(), new DM100.LightningBolt());
+                                } else {
+                                    onAttackComplete();
+                                }
                                 next();
                             }
                         }
@@ -168,7 +166,7 @@ public class QliphothLasher extends Mob {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 2);
+        return super.drRoll() + (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? Random.NormalIntRange(2,5) : Random.NormalIntRange(0, 2));
     }
 
     private static final String STATE_LASHER_BOSS   = "state_lasher_boss";
@@ -186,6 +184,11 @@ public class QliphothLasher extends Mob {
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put(STATE_LASHER_BOSS, state_lasher_boss);
+    }
+
+    @Override
+    public void onDeath() {
+        Dungeon.fail( getClass() );
     }
 
     private class Hunting extends Mob.Hunting{
