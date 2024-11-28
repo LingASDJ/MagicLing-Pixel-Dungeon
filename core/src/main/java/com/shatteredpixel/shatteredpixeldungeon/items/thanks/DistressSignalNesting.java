@@ -1,12 +1,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.thanks;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.noosa.MovieClip;
-import com.watabou.noosa.TextureFilm;
 
 public class DistressSignalNesting extends Item {
 
@@ -32,33 +28,6 @@ public class DistressSignalNesting extends Item {
                 break;
         }
         return image;
-    }
-
-    @Override
-    public void frames(ItemSprite itemSprite){
-        if(animation) {
-            itemSprite.texture(Assets.Sprites.ANIMATIONS_SOS);
-            TextureFilm frames = new TextureFilm(itemSprite.texture, 16, 16);
-            MovieClip.Animation idle = new MovieClip.Animation(14, true);
-            switch (level()){
-                default:
-                case 0:
-                    idle.frames( frames,0,0,1,1,2,2,2,3,3,4,4,5,5);
-                    break;
-                case 1:
-                    idle.frames( frames,7,7,8,8,9,9,10,10,11,11,12,12,13,13);
-                    break;
-                case 2:
-                    idle.frames( frames,14,14,15,15,16,16,17,17,18,18,19,19,20,20);
-                    break;
-                case 3:
-                    idle.frames( frames,21,21,22,22,23,23,24,24,25,25,26,26,27,27);
-                    break;
-            }
-            itemSprite.play(idle);
-        } else {
-            itemSprite.view(image(),glowing());
-        }
     }
 
     @Override
