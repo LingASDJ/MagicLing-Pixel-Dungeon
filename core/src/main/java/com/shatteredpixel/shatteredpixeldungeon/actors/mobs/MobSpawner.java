@@ -23,8 +23,10 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CHAMPION_ENEMIES;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.RLPT;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.SBSG;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -468,8 +470,12 @@ public class MobSpawner extends Actor {
 	//switches out regular mobs for their alt versions when appropriate
 	private static void swapMobAlts(ArrayList<Class<?extends Mob>> rotation){
 		float altChance = 1/50f * RatSkull.exoticChanceMultiplier();
+
+		//寂灭灯火1.0
+		float lanterChance = Dungeon.isChallenged(DHXD) && hero.lanterfire < 30 ? 0.9f : -1;
+
 		for (int i = 0; i < rotation.size(); i++){
-			if (Random.Float() < altChance || Dungeon.isChallenged(CS) && (!Dungeon.isChallenged(SBSG) || !Dungeon.isChallenged(CHAMPION_ENEMIES)) && Random.Float() < altChance) {
+			if (Random.Float() < altChance || Dungeon.isChallenged(CS) && (!Dungeon.isChallenged(SBSG) || !Dungeon.isChallenged(CHAMPION_ENEMIES)) && Random.Float() < altChance || Random.Float() < lanterChance ) {
 				Class<? extends Mob> cl = rotation.get(i);
 				if (cl == FlowerSlime.class) {
 					cl = Albino.class;
