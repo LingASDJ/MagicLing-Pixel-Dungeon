@@ -6,13 +6,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Venom;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
 
@@ -50,32 +50,38 @@ public class VenomGas extends Blob {
                     if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
                         if (!ch.isImmune(this.getClass()))
                             //Buff.affect(ch, Venom.class).set(2f, strength, source);
-                            //原效果
-                            ch.damage(damage,this);
-                            if(ch.isAlive()){
-                                boolean matched = false;
-                                int index = -1;
-                                for(int in=0; in<enemies.size();in++ ){
-                                    if(enemies.get(in) == ch){
-                                        matched = true;
-                                        damageTotal.set(in,damageTotal.get(in)+damage);
-                                        index = in;
-                                    };
-                                }
-                                if(!matched){
-                                    enemies.add(ch);
-                                    damageTotal.add(damage);
-                                }
-
-                                if(index != -1){
-                                    if(damageTotal.get(index)> (8 * standardDamage)){
-                                        Buff.affect(ch, Blindness.class,1f);
-                                        if(damageTotal.get(index)> (20 * standardDamage)){
-                                            Buff.affect(ch, Paralysis.class, 1f);
+                        {
+                            Char finalCh = ch;
+                            Game.runOnRenderThread(new Callback() {
+                                @Override
+                                public void call() {
+                                    finalCh.damage(damage,this);
+                                    if(finalCh.isAlive()){
+                                        boolean matched = false;
+                                        int index = -1;
+                                        for(int in=0; in<enemies.size();in++ ){
+                                            if(enemies.get(in) == finalCh){
+                                                matched = true;
+                                                damageTotal.set(in,damageTotal.get(in)+damage);
+                                                index = in;
+                                            };
+                                        }
+                                        if(!matched){
+                                            enemies.add(finalCh);
+                                            damageTotal.add(damage);
+                                        }
+                                        if(index != -1){
+                                            if(damageTotal.get(index)> (8 * standardDamage)){
+                                                Buff.affect(finalCh, Blindness.class,1f);
+                                                if(damageTotal.get(index)> (20 * standardDamage)){
+                                                    Buff.affect(finalCh, Paralysis.class, 1f);
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
+                            });
+                        }
                     }
                 }
             }
