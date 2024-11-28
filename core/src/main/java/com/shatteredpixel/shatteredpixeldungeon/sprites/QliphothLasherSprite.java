@@ -22,7 +22,7 @@ public class QliphothLasherSprite extends MobSprite {
         run.frames( frames, 0);
 
         attack = new Animation( 24, false );
-        attack.frames( frames, 0, 1, 2, 2, 1 );
+        attack.frames( frames, 1, 2 );
 
         die = new Animation( 12, false );
         die.frames( frames, 3, 4, 5, 6 );
