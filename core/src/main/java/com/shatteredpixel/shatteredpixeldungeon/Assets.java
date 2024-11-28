@@ -437,6 +437,7 @@ public class Assets {
 		public static final String SMLF = "splashes/smallleaf_portraits.png";
 		public static final String SMLS = "splashes/card_smallleaf_portraits.png";
 
+		public static final String GDZ= "splashes/gdz_portraits.png";
 
 		public static final String PIANO = "splashes/piano_portraits.png";
 
@@ -474,6 +475,8 @@ public class Assets {
 
 		public static final String MOON = "splashes/moon_portraits.png";
 
+		public static final String COON = "splashes/⑨.png";
+
 		public static final String LMOON = "splashes/lowmoon_portraits.png";
 
 		public static final String FYNX = "splashes/guard_portraits.png";
@@ -493,8 +496,10 @@ public class Assets {
 		public static final String KEEPERKING	= "sprites/npc/ShopKing.png";
 		public static final String YETYOG	= "sprites/npc/yet_yog.png";
 
-		public static final String MINT	= "sprites/npc/mint.png";
 		public static final String YUYE	= "sprites/npc/yuye.png";
+		public static final String MINT	= "sprites/npc/mint.png";
+		public static final String ZAKO	= "sprites/npc/zako.png";
+		public static final String GUDAZI	= "sprites/npc/gdz.png";
 		public static final String DEEP	= "sprites/npc/deepsea.png";
 		public static final String QUESTION	= "sprites/npc/question.png";
 
@@ -612,6 +617,12 @@ public class Assets {
 		public static final String AMULET	= "sprites/amulet.png";
 		public static final String JAMULET	= "sprites/jamulet.png";
 		public static final String COLDRAT	= "sprites/coldrat.png";
+
+
+		public static final String AOREADY	= "sprites/aodragon.png";
+
+		public static final String HEALRIGH	= "sprites/healfire.png";
+
 		public static final String REDSWARM	= "sprites/RedSearm.png";
 		public static final String REN		= "Npcs/ren.png";
 		public static final String DragonBlueGirl		= "Npcs/smallblue.png";
