@@ -101,7 +101,7 @@ public class BlessGoRead extends ClearLanterBuff {
     @Override
     public void tintIcon(Image icon) {
 
-        if(hero.lanterfire<90 && !Statistics.noGoReadHungry){
+        if(hero.lanterfire< (Dungeon.isChallenged(Challenges.DHXD)? 59 :90) && !Statistics.noGoReadHungry){
             icon.hardlight(Window.CYELLOW);
         } else if (Statistics.noGoReadHungry) {
             icon.hardlight(0x993333);
