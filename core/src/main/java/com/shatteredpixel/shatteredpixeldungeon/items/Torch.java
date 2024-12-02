@@ -22,7 +22,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LighS;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
@@ -30,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.lightblack.OilLantern;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTorch;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 
@@ -55,6 +60,25 @@ public class Torch extends Item {
 		actions.add( AC_LIGHT );
 		return actions;
 	}
+
+	public void Refill(OilLantern torch) {
+		torch.plingks++;
+		detach(Dungeon.hero.belongings.backpack);
+	}
+
+	@Override
+	public boolean doPickUp(Hero hero, int pos) {
+		if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion) {
+			OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
+			if(lantern!=null){
+				Refill(lantern);
+				GLog.p(Messages.get(Torch.class,"lanterfireactive",Math.min(Math.max(55 - (10 * Statistics.deepestFloor / 5) - Challenges.activeChallenges() / 4, 10), 100)));
+			} else {
+				GLog.p(Messages.get(Torch.class,"youmustload"));
+			}
+        }
+        return true;
+    }
 	
 	@Override
 	public void execute( Hero hero, String action ) {
@@ -62,21 +86,32 @@ public class Torch extends Item {
 		super.execute( hero, action );
 		
 		if (action.equals( AC_LIGHT )) {
-			
-			hero.spend( TIME_TO_LIGHT );
-			hero.busy();
-			
-			hero.sprite.operate( hero.pos );
-			
-			detach( hero.belongings.backpack );
-			Catalog.countUse(getClass());
-			
-			Buff.affect(hero, Light.class, Light.DURATION);
-			Sample.INSTANCE.play(Assets.Sounds.BURNING);
-			
-			Emitter emitter = hero.sprite.centerEmitter();
-			emitter.start( FlameParticle.FACTORY, 0.2f, 3 );
-			
+
+			if(Statistics.lanterfireactive){
+				OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
+				if(lantern!=null){
+					Refill(lantern);
+					GLog.p(Messages.get(Torch.class,"lanterfireactive",Math.min(Math.max(55 - (10 * Statistics.deepestFloor / 5) - Challenges.activeChallenges() / 4, 10), 100)));
+				} else {
+					GLog.p(Messages.get(Torch.class,"youmustload"));
+				}
+
+			} else if (Dungeon.hero.buff(LighS.class) != null || Dungeon.hero.buff(MagicTorch.MagicLight.class) != null) {
+				GLog.n(Messages.get(Torch.class,"mustload"));
+			} else {
+				hero.spend( TIME_TO_LIGHT );
+				hero.busy();
+
+				hero.sprite.operate( hero.pos );
+
+				detach( hero.belongings.backpack );
+
+				Buff.affect(hero, Light.class, Light.DURATION);
+				Sample.INSTANCE.play(Assets.Sounds.BURNING);
+
+				Emitter emitter = hero.sprite.centerEmitter();
+				emitter.start( FlameParticle.FACTORY, 0.2f, 3 );
+			}
 		}
 	}
 	
