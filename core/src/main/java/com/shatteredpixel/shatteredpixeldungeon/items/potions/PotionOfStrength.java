@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 public class PotionOfStrength extends Potion {
 
 	{
-		icon = Dungeon.isChallenged(EXSG) ? ItemSpriteSheet.Icons.CPOTION_NOSTR : ItemSpriteSheet.Icons.POTION_STRENGTH;
+		icon = ItemSpriteSheet.Icons.POTION_STRENGTH;
 
 		unique = true;
 

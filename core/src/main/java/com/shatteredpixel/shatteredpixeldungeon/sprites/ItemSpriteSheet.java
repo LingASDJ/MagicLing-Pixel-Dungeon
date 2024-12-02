@@ -1403,7 +1403,11 @@ public class ItemSpriteSheet {
         public static final int CPOTION_NOEYE   = CPTION_NOSTR+3;
 
         static {
-            assignIconRect( CPTION_NOSTR,     8, 7 );
+            assignIconRect( CPTION_NOSTR,     9, 9 );
+            assignIconRect( CPOTION_NOLEG,     9, 9 );
+            assignIconRect( CPOTION_NODIED,     9, 9 );
+            assignIconRect( CPOTION_NOEYE,     9, 9 );
+
         }
 
         //16 free slots
