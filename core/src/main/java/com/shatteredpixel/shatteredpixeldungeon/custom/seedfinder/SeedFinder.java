@@ -1,5 +1,4 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder;
-
 import com.badlogic.gdx.Gdx;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
@@ -169,7 +168,7 @@ public class SeedFinder {
 
 		// 如果秒数是5的倍数，生成新的 seedDigits
 		if (seconds % 5 == 0 && seconds != 0 && SPDSettings.PlusSearch()) {  // 排除秒数为0的情况
-			seedDigits = Integer.toString(Random.Int(9999999));
+			seedDigits = Integer.toString(Random.Int(0,2147483647));
 		}
 
 		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
@@ -388,8 +387,8 @@ public class SeedFinder {
 	}
 
 	public String logSeedItems(String seed, int floors,int challenges) {
-
-		SPDSettings.customSeed(seed);
+		String text = DungeonSeed.formatText(seed);
+		SPDSettings.customSeed(text);
 		GamesInProgress.selectedClass = HeroClass.WARRIOR;
 		SPDSettings.challenges(challenges);
 		Dungeon.init();
