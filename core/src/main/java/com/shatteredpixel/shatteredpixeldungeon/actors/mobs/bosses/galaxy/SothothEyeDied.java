@@ -368,7 +368,7 @@ public class SothothEyeDied extends Boss {
                 GameScene.add(csp);
             }
 
-            Buff.affect( this, CrivusFruits.CFBarrior.class ).setShield(hero.belongings.weapon.max());
+            Buff.affect( this, CrivusFruits.CFBarrior.class ).setShield(hero.belongings.weapon != null ? hero.belongings.weapon.max() : 50);
 
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
                 if (mob instanceof SothothLasher
