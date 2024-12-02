@@ -135,9 +135,9 @@ public class WhiteBlastSword extends MeleeWeapon implements ActionIndicator.Acti
                 GameScene.add(Blob.seed(targetingPos, 1, LastBlobs.class));
             }
         }
-        curUser.spend( Actor.TICK );
-        curUser.busy();
-        curUser.sprite.operate( curUser.pos );
+        hero.spend( Actor.TICK );
+        hero.busy();
+        hero.sprite.operate( curUser.pos );
         Sample.INSTANCE.play( Assets.Sounds.HIT_SLASH );
         BuffIndicator.refreshHero();
         attack_Teleology = 0;
