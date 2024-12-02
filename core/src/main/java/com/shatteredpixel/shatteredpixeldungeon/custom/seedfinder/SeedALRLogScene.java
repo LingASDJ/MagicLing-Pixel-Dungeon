@@ -1,5 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder;
 
+import com.badlogic.gdx.Gdx;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -10,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.watabou.noosa.Camera;
@@ -60,12 +62,32 @@ public class SeedALRLogScene extends PixelScene {
                     text = DungeonSeed.formatText(text);
                     long seed = DungeonSeed.convertFromText(text);
 
-                    RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),SPDSettings.seedfinderFloors(),SPDSettings.challenges()),6);
-                    renderedTextBlock.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
-                    content.add(renderedTextBlock);
-                    content.setSize( fullWidth, renderedTextBlock.bottom()+10 );
-                    list.setRect( 0, 0, w, h );
-                    list.scrollTo(0, 0);
+                    r = PixelScene.renderTextBlock("Loading....",9);
+                    r.maxWidth(w - 40);
+                    r.setPos(width/2f,20);
+                    ShatteredPixelDungeon.scene().addToFront(r);
+
+                    thread = new Thread(() -> {
+                        s = new SeedFinder().logSeedItems(Long.toString(seed),SPDSettings.seedfinderFloors(),SPDSettings.challenges());
+                        Gdx.app.postRunnable(() -> {
+                            r.destroy();
+
+                            txt = new SeedALRLogScene.CreditsBlock(true, Window.TITLE_COLOR,s);
+                            txt.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
+
+                            if (!thread.isInterrupted()) {
+                                content.add(txt);
+                                content.setSize( fullWidth, txt.bottom()+10 );
+                            }
+
+                            if (list.isActive()) {
+                                list.setRect( 0, 0, w, h );
+                                list.scrollTo(0, 0);
+                            }
+
+                        });
+                    });
+                    thread.start();
 
                 } else {
                     SPDSettings.customSeed("");

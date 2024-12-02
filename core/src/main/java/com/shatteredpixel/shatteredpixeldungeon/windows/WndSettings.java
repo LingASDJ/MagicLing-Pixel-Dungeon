@@ -36,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrossDiedSprites;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
@@ -47,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.DeviceCompat;
@@ -862,6 +865,7 @@ public class WndSettings extends WndTabbed {
 		OptionSlider numFloors;
 		RedButton btnChallenges;
 		RedButton btnMode;
+		CheckBox PlusSearch;
 
 		@Override
 		protected void createChildren() {
@@ -872,7 +876,7 @@ public class WndSettings extends WndTabbed {
 			boolean isDesktop = DeviceCompat.isDesktop();
 
 			numFloors = new OptionSlider(Messages.get(this, "floors_slider") + " (" + SPDSettings.seedfinderFloors() + ")",
-					"1", isDesktop ? "15": "26", 1,  isDesktop ? 15 : 26) {
+					"1", "30", 1,  30) {
 				@Override
 				protected void onChange() {
 					SPDSettings.seedfinderFloors(getSelectedValue());
@@ -941,6 +945,33 @@ public class WndSettings extends WndTabbed {
 				}
 			};
 			add(btnMode);
+
+			PlusSearch = new CheckBox( Messages.get(this, "plus_search") ) {
+				@Override
+				protected void onClick() {
+					super.onClick();
+					if (checked()) {
+						checked(!checked());
+						ShatteredPixelDungeon.scene().add(new WndOptions(new Image(new ItemSprite(ItemSpriteSheet.SEED_AIKELAIER)),
+								Messages.get(SeedfinderTab.class, "plus"),
+								Messages.get(SeedfinderTab.class, "plus_desc"),
+								Messages.get(DisplayTab.class, "okay"),
+								Messages.get(DisplayTab.class, "cancel")) {
+							@Override
+							protected void onSelect(int index) {
+								if (index == 0) {
+									checked(!checked());
+									SPDSettings.PlusSearch(checked());
+								}
+							}
+						});
+					} else {
+						SPDSettings.PlusSearch(checked());
+					}
+				}
+			};
+			PlusSearch.checked(SPDSettings.PlusSearch());
+			add(PlusSearch);
 		}
 
 		@Override
@@ -958,6 +989,7 @@ public class WndSettings extends WndTabbed {
 
 			btnChallenges.setRect(0, numFloors.bottom() + GAP, width / 2 - 1, BTN_HEIGHT);
 			btnMode.setRect(width/2 + 1, numFloors.bottom() + GAP, width / 2, BTN_HEIGHT);
+			PlusSearch.setRect(0, btnChallenges.bottom() + GAP, width, BTN_HEIGHT);
 		}
 
 	}
