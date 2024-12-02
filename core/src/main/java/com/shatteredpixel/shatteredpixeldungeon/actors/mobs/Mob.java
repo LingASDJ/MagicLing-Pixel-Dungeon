@@ -191,7 +191,7 @@ public abstract class Mob extends Char {
 		} else if (this instanceof BlackHost && chance <= 0.85f && hero.lanterfire < 90) {
 			hero.damageLantern(5);
 		} else if(chance <= 0.35f && hero.lanterfire<20) {
-			hero.damageLantern(Random.NormalIntRange(1,3));
+			hero.damageLantern(Random.NormalIntRange(1,Challenges.activeChallenges()/5));
 		}
 	}
 
