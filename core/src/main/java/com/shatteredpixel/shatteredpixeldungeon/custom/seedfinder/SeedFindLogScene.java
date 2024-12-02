@@ -6,13 +6,11 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.SeedFinderScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.ColorBlock;
@@ -56,7 +54,7 @@ public class SeedFindLogScene extends PixelScene {
         Component content = list.content();
         content.clear();
 
-        ShatteredPixelDungeon.scene().addToFront( wndTextInput = new WndTextInput(Messages.get(this, "title"), Messages.get(this, "body"), SPDSettings.seeditemsText(), 1000, true, Messages.get(this, "find"),null) {
+        ShatteredPixelDungeon.scene().addToFront( wndTextInput = new WndTextInput(Messages.get(this, "title"), Messages.get(this, "body"), SPDSettings.seeditemsText(), 1000, true, Messages.get(this, "find"), Messages.get(this, "format")) {
             @Override
             public void onSelect(boolean positive, String text) {
                 int floor = SPDSettings.seedfinderFloors();
@@ -69,10 +67,10 @@ public class SeedFindLogScene extends PixelScene {
                 if (text.contains(up_to_floor)) {
                     floorOption = true;
                     String fl = text.split(strFloor)[0].trim();
-                    floor = Integer.parseInt(fl);
+                    floor =Math.min(Integer.parseInt(fl), 30);
                 }
 
-                if (positive && text != "" && floorOption) {
+                if (positive && !text.isEmpty() && floorOption) {
                     String[] itemList = floorOption ? Arrays.copyOfRange(text.split("\n"), 1, text.split("\n").length) : text.split("\n");
 
                     Component content = list.content();
@@ -108,22 +106,9 @@ public class SeedFindLogScene extends PixelScene {
                         });
                     });
                     thread.start();
-
-
-                } else if (!positive && text != "") {
-                    text = DungeonSeed.formatText(text);
-                    long seed = DungeonSeed.convertFromText(text);
-
-                    RenderedTextBlock renderedTextBlock = PixelScene.renderTextBlock(new SeedFinder().logSeedItems(Long.toString(seed),26,SPDSettings.challenges()),9);
-                    renderedTextBlock.setRect((Camera.main.width - colWidth)/2f, 12, colWidth, 0);
-                    content.add(renderedTextBlock);
-                    content.setSize( fullWidth, renderedTextBlock.bottom()+10 );
-                    list.setRect( 0, 0, w, h );
-                    list.scrollTo(0, 0);
-
-                }else {
-                    SPDSettings.customSeed("");
-                    ShatteredPixelDungeon.switchNoFade(TitleScene.class);
+                } else {
+                    SPDSettings.seeditemsText(Messages.get(SeedFindLogScene.class, "initial_value"));
+                    ShatteredPixelDungeon.switchScene(SeedFinderScene.class);
                 }
             }
         });

@@ -157,7 +157,7 @@ public class SPDSettings extends GameSettings {
 
 	private static final String KEY_ICE = "hice";
 
-	private static final String KEY_UP_ICE = "iceupdate_56";
+	private static final String KEY_UP_ICE = "iceupdate_60";
 
 	private static final String KEY_DARK	= "dark_ui";
 
@@ -974,7 +974,7 @@ public class SPDSettings extends GameSettings {
 	//Seedfinder
 
 	public static final String KEY_FLOORS	= "number_of_floors";
-	public static final String KEY_USEROOMS	= "use_rooms";
+	public static final String KEY_PLUSSEACH = "use_rooms";
 	public static final String KEY_IGNOREBLACKLIST	= "ignore_blacklist";
 
 	public static final String KEY_LOGTRINKETS	= "logging_option_trinkets";
@@ -995,7 +995,7 @@ public class SPDSettings extends GameSettings {
 	}
 
 	public static int seedfinderFloors() {
-		return getInt( KEY_FLOORS, 8, 1, 15 );
+		return getInt( KEY_FLOORS, 8, 1, 30 );
 	}
 
 	public static void seeditemsText(String value) {
@@ -1022,12 +1022,12 @@ public class SPDSettings extends GameSettings {
 		return getBoolean(KEY_CONDITION, false);
 	}
 
-	public static void useRooms( boolean value ) {
-		put( KEY_USEROOMS, value );
+	public static void PlusSearch( boolean value ) {
+		put(KEY_PLUSSEACH, value );
 	}
 
-	public static boolean useRooms() {
-		return getBoolean( KEY_USEROOMS, false );
+	public static boolean PlusSearch() {
+		return getBoolean(KEY_PLUSSEACH, false );
 	}
 
 	public static void ignoreBlacklist( boolean value ) {

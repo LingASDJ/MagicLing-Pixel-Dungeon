@@ -151,22 +151,25 @@ public class SeedFinder {
 	public void startTimer() {
 		startTime = System.currentTimeMillis();
 		running = true;
+		seedDigits = Integer.toString(Random.Int(500000));
 	}
-
+	String seedDigits;
 	// 获取已耗时
 	@SuppressWarnings("DefaultLocale")
     public String getElapsedTime() {
-		if (!running) {
-			return "计时器未启动";
-		}
 		long elapsedMillis = System.currentTimeMillis() - startTime;
 		long seconds = (elapsedMillis / 1000) % 60;
 		long minutes = (elapsedMillis / (1000 * 60)) % 60;
 		long hours = (elapsedMillis / (1000 * 60 * 60)) % 24;
+		if (!running) {
+			return "计时器未启动";
+		}
 
 		// 判断是否超过 30 秒
-		if (elapsedMillis > 30000) {
-			return String.format("%02d:%02d:%02d", hours, minutes, seconds) +  "\n\n { 警告:查询时间过长,你应该考虑重新搜索或使用模糊查询{";
+
+		// 如果秒数是5的倍数，生成新的 seedDigits
+		if (seconds % 5 == 0 && seconds != 0 && SPDSettings.PlusSearch()) {  // 排除秒数为0的情况
+			seedDigits = Integer.toString(Random.Int(9999999));
 		}
 
 		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
@@ -174,8 +177,6 @@ public class SeedFinder {
 
 	public String findSeed(String[] wanted, int floor) {
 		itemList = new ArrayList<>(Arrays.asList(wanted));
-
-		String seedDigits = Integer.toString(Random.Int(500000));
 		findingStatus = FINDING.CONTINUE;
 		Options.condition = SPDSettings.seedfinderConditionANY() ? Condition.ANY : Condition.ALL;
 
@@ -194,6 +195,7 @@ public class SeedFinder {
 				}
 				if (!SeedFindLogScene.thread.isInterrupted()) {
 					SeedFindLogScene.r.text("正在查询种子中……\n\n查找模式："+Options.condition + "\n\n挑战代码：" + SPDSettings.challenges() + "\n\n查找耗时：" + getElapsedTime() + "\n\n种子代码："+ i1);
+					SeedFindLogScene.r.setPos(SeedFindLogScene.uiCamera.width/3f, SeedFindLogScene.uiCamera.height/3f);
 				}
 			});
 			if (testSeedALL(seedDigits + i, floor)) {
