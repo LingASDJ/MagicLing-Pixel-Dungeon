@@ -394,13 +394,13 @@ public class Ghost extends NPC {
 			}
 		}
 
-		public static void spawnBossRush( ItemLevel level ) {
+		public static void spawnBossRush( ItemLevel level, Room room ) {
 			if (!spawned && Dungeon.depth == 3) {
 
 				Ghost ghost = new Ghost();
 				do {
-					ghost.pos = level.randomRespawnCell( ghost );
-				} while (ghost.pos == -1);
+					ghost.pos = level.pointToCell(room.random());
+				} while (ghost.pos == -1 || level.solid[ghost.pos] || ghost.pos == level.exit());
 				level.mobs.add( ghost );
 
 				spawned = true;
