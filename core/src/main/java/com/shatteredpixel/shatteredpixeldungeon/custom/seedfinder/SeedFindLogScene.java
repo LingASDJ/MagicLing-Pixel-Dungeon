@@ -29,6 +29,21 @@ public class SeedFindLogScene extends PixelScene {
 
     public WndTextInput wndTextInput;
 
+
+    /**
+     * 安全检查用户输入的数据
+     * @param str
+     * @param defaultValue
+     * @return
+     */
+    public static int safeParseInt(String str, int defaultValue) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
     @Override
     public void create() {
         super.create();
@@ -67,7 +82,7 @@ public class SeedFindLogScene extends PixelScene {
                 if (text.contains(up_to_floor)) {
                     floorOption = true;
                     String fl = text.split(strFloor)[0].trim();
-                    floor =Math.min(Integer.parseInt(fl), 30);
+                    floor = Math.min(safeParseInt(fl, 15), 30);
                 }
 
                 if (positive && !text.isEmpty() && floorOption) {
