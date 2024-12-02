@@ -2066,62 +2066,10 @@ public class Hero extends Char {
 			int RH = resistHealth;
 
 			if(ankh != null && canResist){
-				GameScene.show(new WndOptions(new ItemSprite(ItemSpriteSheet.ANKH),
-						Messages.get(Talent.PAIN_SCAR,"title"),
-						Messages.get(Talent.PAIN_SCAR,"desc"),
-						Messages.get(Talent.PAIN_SCAR,"prompt"),
-						Messages.get(Talent.PAIN_SCAR,"cancel")){
-					@Override
-					protected void onSelect(int index){
-						super.onSelect(index);
-						if( index == 0 ){
-							switch(pointsInTalent(Talent.PAIN_SCAR)){
-								case 1:
-									HT -= 20;
-									buff(Berserk.class).reducePower(0.2f);
-									GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
-									resistHealth +=20;
-									return;
-								case 2:
-									HT -= 15;
-									buff(Berserk.class).reducePower(0.15f);
-									GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
-									resistHealth += 15;
-									return;
-								case 3:
-									HT -= 10;
-									buff(Berserk.class).reducePower(0.1f);
-									GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
-									resistHealth += 10;
-									return;
-							}
-						}else if(index == 1 ){
-							die(src);
-						}
-					}
-				});
+				WarriorDead(src);
 				return;
 			} else if (canResist) {
-				switch(pointsInTalent(Talent.PAIN_SCAR)){
-					case 1:
-						HT -= 20;
-						buff(Berserk.class).reducePower(0.2f);
-						GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
-						resistHealth +=20;
-						return;
-					case 2:
-						HT -= 15;
-						buff(Berserk.class).reducePower(0.15f);
-						GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
-						resistHealth += 15;
-						return;
-					case 3:
-						HT -= 10;
-						buff(Berserk.class).reducePower(0.1f);
-						GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
-						resistHealth += 10;
-						return;
-				}
+				WarriorHPLimit();
 			}
 			if(RH < resistHealth) return;
 
@@ -3557,6 +3505,71 @@ public class Hero extends Char {
 	public float talentProc(){
 		if (hasTalent(Talent.RUNIC_TRANSFERENCE) && (pointsInTalent(Talent.RUNIC_TRANSFERENCE)>1)) return 1.25f;
 		return super.talentProc();
+	}
+
+	private void WarriorDead(Object src){
+		Game.runOnRenderThread(new Callback() {
+			@Override
+			public void call() {
+				GameScene.show(new WndOptions(new ItemSprite(ItemSpriteSheet.ANKH),
+						Messages.get(Talent.PAIN_SCAR,"title"),
+						Messages.get(Talent.PAIN_SCAR,"desc"),
+						Messages.get(Talent.PAIN_SCAR,"prompt"),
+						Messages.get(Talent.PAIN_SCAR,"cancel")){
+					@Override
+					protected void onSelect(int index){
+						super.onSelect(index);
+						if( index == 0 ){
+							switch(pointsInTalent(Talent.PAIN_SCAR)){
+								case 1:
+									HT -= 20;
+									buff(Berserk.class).reducePower(0.2f);
+									GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
+									resistHealth +=20;
+									return;
+								case 2:
+									HT -= 15;
+									buff(Berserk.class).reducePower(0.15f);
+									GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
+									resistHealth += 15;
+									return;
+								case 3:
+									HT -= 10;
+									buff(Berserk.class).reducePower(0.1f);
+									GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
+									resistHealth += 10;
+									return;
+                            }
+						}else if(index == 1 ){
+							die(src);
+						}
+					}
+				});
+			}
+		});
+	}
+
+	private void WarriorHPLimit(){
+		switch(pointsInTalent(Talent.PAIN_SCAR)){
+			case 1:
+				HT -= 20;
+				buff(Berserk.class).reducePower(0.2f);
+				GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
+				resistHealth +=20;
+				return;
+			case 2:
+				HT -= 15;
+				buff(Berserk.class).reducePower(0.15f);
+				GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
+				resistHealth += 15;
+				return;
+			case 3:
+				HT -= 10;
+				buff(Berserk.class).reducePower(0.1f);
+				GLog.n(Messages.get(Talent.PAIN_SCAR,"resistDeath"));
+				resistHealth += 10;
+				return;
+		}
 	}
 
 	public interface Doom {
