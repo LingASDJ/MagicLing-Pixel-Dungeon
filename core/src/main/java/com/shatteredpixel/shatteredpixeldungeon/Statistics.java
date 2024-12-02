@@ -43,6 +43,8 @@ public class Statistics {
 	public static boolean SmallLeafGet = false;
 	public static boolean noClearKill = false;
 
+	public static boolean AutoOilPotion= false;
+
 	public static int zeroItemLevel;
 
 	public static int hcDialogLevel;
@@ -375,6 +377,7 @@ public class Statistics {
 
 		SmallLeafGet = false;
 		noClearKill = false;
+		Statistics.AutoOilPotion = false;
 
         HealingIsDied = 0;
 
@@ -542,6 +545,8 @@ public class Statistics {
 
 		bundle.put("NOCLEAR",noClearKill);
 
+		bundle.put("OILAUTO",AutoOilPotion);
+
 		bundle.put("SNOW",snow);
 
 		bundle.put(DM720FIGHT,dm720Fight);
@@ -707,6 +712,8 @@ public class Statistics {
 		SmallLeafGet = bundle.getBoolean("SMALLEAFTGET");
 
 		noClearKill = bundle.getBoolean("NOCLEAR");
+
+		AutoOilPotion = bundle.getBoolean("OILAUTO");
 
 		doNotLookLing = bundle.getBoolean(LOCD);
 

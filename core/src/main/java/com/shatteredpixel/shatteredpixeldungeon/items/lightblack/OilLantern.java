@@ -32,6 +32,9 @@ public class OilLantern extends Artifact {
     public static final String AC_SNUFF = "SNUFF";
     private static final String CHARGE = "charge";
     private static final String FLASKS = "flasks";
+    public static final String AC_AUTO = "AUTO";
+
+    public static final String AC_NUTO = "NUTO";
 
     private static final String PLASKS = "plasks";
 
@@ -134,11 +137,31 @@ public class OilLantern extends Artifact {
             actions.remove(AC_THROW);
         }
 
+        if(Statistics.AutoOilPotion){
+            actions.remove(AC_AUTO);
+            actions.add(AC_NUTO);
+        } else {
+            actions.add(AC_AUTO);
+            actions.remove(AC_NUTO);
+        }
+
         return actions;
     }
 
     public void execute(Hero hero, String action) {
         switch (action) {
+            case AC_AUTO:
+                if(!Statistics.AutoOilPotion){
+                    GLog.p(Messages.get(this,"auto"));
+                    Statistics.AutoOilPotion = true;
+                }
+                break;
+            case AC_NUTO:
+                if(Statistics.AutoOilPotion){
+                    GLog.w(Messages.get(this,"no_auto"));
+                    Statistics.AutoOilPotion = false;
+                }
+                break;
             case AC_LIGHT:
                 if (hero.buff(LostInventory.class) == null) {
                     if (this.charge > 0) {

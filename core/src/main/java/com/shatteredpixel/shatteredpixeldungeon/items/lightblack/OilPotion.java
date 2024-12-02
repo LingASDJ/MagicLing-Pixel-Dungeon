@@ -3,9 +3,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items.lightblack;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import java.util.ArrayList;
 
@@ -37,6 +40,22 @@ public class OilPotion extends Item {
             if(lantern != null) Refill(lantern);
         }
     }
+
+    @Override
+    public boolean doPickUp(Hero hero, int pos) {
+        if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion) {
+            OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
+            if(lantern != null) {
+                Refill(lantern);
+                GLog.i(Messages.get(OilLantern.class, "lanterreload"));
+            } else {
+                GLog.i(Messages.get(OilLantern.class, "must"));
+            }
+
+        }
+        return true;
+    }
+
 
     public void Refill(OilLantern lantern) {
         lantern.flasks++;
