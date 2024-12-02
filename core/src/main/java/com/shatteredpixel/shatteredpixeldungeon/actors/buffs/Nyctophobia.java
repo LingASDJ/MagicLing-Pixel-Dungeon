@@ -10,7 +10,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.ClearLanterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayCursed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayKill;
@@ -54,26 +53,26 @@ public class Nyctophobia extends Buff implements Hero.Doom {
 
         @Override
         public boolean act() {
-            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
-                ArrayList<Integer> candidates = new ArrayList<>();
-                int minDist = Math.round(Dungeon.hero.viewDistance/3f);
-                for (int i = 0; i < Dungeon.level.length(); i++){
-                    if (Dungeon.level.heroFOV[i]
-                            && !Dungeon.level.solid[i]
-                            && Actor.findChar( i ) == null
-                            && Dungeon.level.distance(i, Dungeon.hero.pos) > minDist){
-                        candidates.add(i);
+            if(!Dungeon.bossLevel() || !Dungeon.sbbossLevel()){
+                for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+                    if(!(mob instanceof NPC)) {
+                        ArrayList<Integer> candidates = new ArrayList<>();
+                        int minDist = Math.round(Dungeon.hero.viewDistance / 3f);
+                        for (int i = 0; i < Dungeon.level.length(); i++) {
+                            if (Dungeon.level.heroFOV[i]
+                                    && !Dungeon.level.solid[i]
+                                    && Actor.findChar(i) == null
+                                    && Dungeon.level.distance(i, Dungeon.hero.pos) > minDist) {
+                                candidates.add(i);
+                            }
+                        }
+                        if (!candidates.isEmpty()) {
+                            ScrollOfTeleportation.teleportToLocation(mob, Random.element(candidates));
+                            Sample.INSTANCE.play(Assets.Sounds.CURSED);
+                        }
                     }
-                }
-                if (!candidates.isEmpty()){
-                    if(!(mob instanceof NPC) || !mob.properties.contains(Char.Property.BOSS) || !mob.properties.contains(Char.Property.MINIBOSS)){
-                        ScrollOfTeleportation.teleportToLocation(mob, Random.element(candidates));
-                        Sample.INSTANCE.play(Assets.Sounds.CURSED);
-                    }
-
                 }
             }
-
             spend(30f);
             return true;
         }
