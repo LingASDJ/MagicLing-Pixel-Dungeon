@@ -61,7 +61,6 @@ public class ItemLevel extends RegularLevel {
 
     @Override
     protected void createItems() {
-        Ghost.Quest.spawnBossRush( this );
        switch (depth){
            //T1 补给层
            case 3:  case 5: case 7: case 8: case 10:
@@ -123,6 +122,7 @@ public class ItemLevel extends RegularLevel {
 
     @Override
     protected void createMobs() {
+        Ghost.Quest.spawnBossRush( this,roomExit );
         if(Statistics.difficultyDLCEXLevel==4){
             super.createMobs();
         }
