@@ -6,7 +6,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
@@ -145,8 +144,10 @@ public class DiedMonkSprite extends MobSprite {
     @Override
     public void update() {
         super.update();
-        spray.pos(center());
-        spray.visible = visible;
+        if(spray != null){
+            spray.pos(center());
+            spray.visible = visible;
+        }
     }
 
     @Override
