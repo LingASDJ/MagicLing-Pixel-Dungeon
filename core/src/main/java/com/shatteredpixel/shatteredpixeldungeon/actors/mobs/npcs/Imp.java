@@ -275,7 +275,7 @@ public class Imp extends NPC {
 			Statistics.questScores[3] = 4000;
 			Notes.remove( Notes.Landmark.IMP );
 
-			if(!SPDSettings.KillDwarf()){
+			if(!SPDSettings.KillDwarf() && Game.scene().getClass() == GameScene.class){
 
 				Game.runOnRenderThread(new Callback() {
 					@Override
