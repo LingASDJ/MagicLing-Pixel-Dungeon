@@ -23,8 +23,8 @@ public class DeadBomb extends Weapon.Enchantment {
             Buff.detach(defender, DeadBomb.TargetDead.class);
             boolean kill = true;
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-                if (mob.alignment != Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos] && kill) {
-                    int dmg = (int) (defender.HT * ((40 + hero.belongings.weapon.level() * 5) / 100.0));
+                if (mob.alignment != Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos] && kill && (!defender.properties.contains(Char.Property.BOSS) || !defender.properties.contains(Char.Property.MINIBOSS))) {
+                    int dmg = (int) (defender.HT * ((40 + (hero.belongings.weapon != null ? hero.belongings.weapon.level() : 2 * 5) / 100.0)));
                     int maxDamage = (int) (defender.HT * (135) / 100.0);
                     dmg = Math.round(dmg * AscensionChallenge.statModifier(mob));
                     dmg = mob.defenseProc(mob,dmg);
