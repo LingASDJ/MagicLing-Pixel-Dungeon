@@ -472,7 +472,7 @@ public class MobSpawner extends Actor {
 		float altChance = 1/50f * RatSkull.exoticChanceMultiplier();
 
 		//寂灭灯火1.0
-		float lanterChance = Dungeon.isChallenged(DHXD) && hero.lanterfire < 30 ? 0.9f : -1;
+		float lanterChance = Dungeon.isChallenged(DHXD) && hero.lanterfire < 30 ? 0.35f : -1;
 
 		for (int i = 0; i < rotation.size(); i++){
 			if (Random.Float() < altChance || Dungeon.isChallenged(CS) && (!Dungeon.isChallenged(SBSG) || !Dungeon.isChallenged(CHAMPION_ENEMIES)) && Random.Float() < altChance || Random.Float() < lanterChance ) {
