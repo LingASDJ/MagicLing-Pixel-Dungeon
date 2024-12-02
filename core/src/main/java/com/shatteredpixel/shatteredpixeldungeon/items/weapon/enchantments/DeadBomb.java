@@ -33,8 +33,7 @@ public class DeadBomb extends Weapon.Enchantment {
                     mob.damage(dmg,this);
                 }
             }
-        }
-        if(Random.Int(100)<= 36 + weapon.level() && (!defender.properties.contains(Char.Property.BOSS) || !defender.properties.contains(Char.Property.MINIBOSS)) ) {
+        } else if(Random.Int(100)<= 36 + weapon.level() && (!defender.properties.contains(Char.Property.BOSS) || !defender.properties.contains(Char.Property.MINIBOSS)) ) {
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
                 if (mob.buff(DeadBomb.TargetDead.class) == null) {
                     Buff.affect(defender, TargetDead.class);
