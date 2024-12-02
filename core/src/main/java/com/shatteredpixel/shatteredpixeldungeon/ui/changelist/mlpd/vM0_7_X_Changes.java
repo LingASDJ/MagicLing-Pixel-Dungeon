@@ -87,7 +87,46 @@ public class vM0_7_X_Changes {
     }
 
     public static void add_V07990_Changes( ArrayList<ChangeInfo> changeInfos ) {
-        ChangeInfo changes = new ChangeInfo("v0.7.9.9", true, "");
+
+        ChangeInfo changes = new ChangeInfo("v0.7.9.9-SP1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SEED_AIKELAIER), ("查种器V3登场"),
+                ("查种器V3登场，更强大的查种，更快的搜索！\n\n" +
+                        "1.基于JDK21引擎，查种速度大幅度提升\n" +
+                        "2.强力搜查模式 现在登场\n" +
+                        "3.修复查种部分界面异常Bug\n" +
+                        "4.修复以字符串查种子的显示异常\n" +
+                        "5.追加格式复原，不清楚格式可以点击这个")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.LANTERNB), ("寂灭灯火V1.1"),
+                (
+                        "1.新增自动装填模式\n" +
+                        "2.修复寂灭循环的一些传送异常\n" +
+                                "3.稀有怪生成率调成35%")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_ON), ("药水癔症"),
+                ("药水癔症已经进行了一定的改进，详见挑战说明。")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.7.9.9版本:\n\n" +
+                        "1.修复中部群反馈的一些bug\n" +
+                        "2.其他闪退bug修正"));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SAI,
+                new ItemSprite.Glowing( Window.GDX_COLOR )), "附魔：审判",
+                "修复审判带来的一些异常问题"));
+
+        changes = new ChangeInfo("v0.7.9.9", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
