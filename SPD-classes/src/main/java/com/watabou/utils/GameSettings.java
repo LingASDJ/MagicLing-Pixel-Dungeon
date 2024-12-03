@@ -182,8 +182,8 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 删除xml设置文件中指定关键字 key 里的指定主键 value 所对应的数组;允许批量删除，在value中以";"作为主键之间的分隔符
-	 * @Pramas String,String
+	 * @Comments 删除xml设置文件中指定关键字 key 里的指定主键 value 所对应的数组;允许批量删除，在value中以";"作为主键之间的分隔符
+	 * @Parameters key,value
 	 * @NativeName: delete
 	 * @NativeFunction: void delete(String,String)
 	 */
@@ -207,8 +207,8 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 修改xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组，value为修改后的数组
-	 * @Pramas String,String,String
+	 * @Comments 修改xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组，value为修改后的数组
+	 * @Parameters key,target,value
 	 * @NativeName: modifyArray
 	 * @NativeFunction: void modifyArray(String,String,String)
 	 */
@@ -236,8 +236,8 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 修改xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组中的第 index 个元素，value为修改后的元素
-	 * @Pramas String,String,int,String
+	 * @Comments 修改xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组中的第 index 个元素，value为修改后的元素
+	 * @Parameters key,target,index,value
 	 * @NativeName: modifyArrayElement
 	 * @NativeFunction: void modifyArrayElement(String,String,int,String)
 	 */
@@ -287,8 +287,8 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 获取xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组中的第 index 个元素
-	 * @Pramas String,String,int
+	 * @Comments 获取xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组中的第 index 个元素
+	 * @Parameters key,target,index
 	 * @NativeName: getArrayElement
 	 * @NativeFunction: String getArrayElement(String,String,int)
 	 */
@@ -328,8 +328,8 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 获取xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组
-	 * @Pramas String,String
+	 * @Comments 获取xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组
+	 * @Parameters key,target
 	 * @NativeName: getArray
 	 * @NativeFunction: String getArray(String,String)
 	 */
@@ -346,8 +346,8 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 查询xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组是否存在
-	 * @Pramas String,String
+	 * @Comments 查询xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组是否存在
+	 * @Parameters key,target
 	 * @NativeName: query
 	 * @NativeFunction: boolean query(String,String)
 	 */
@@ -356,10 +356,10 @@ public class GameSettings {
 	}
 
 	/*
-	 * @Breif 查询字符串 str 中是否包含指定主键 target 所对应的数组，并返回一个字符串数组
+	 * @Comments 查询字符串 str 中是否包含指定主键 target 所对应的数组，并返回一个字符串数组
 	 * 返回值内容:
 	 * 指定主键 target 所对应的数组的起始位置，终止位置，数组本身
-	 * @Pramas String,String
+	 * @Parameters str,target
 	 * @NativeName: exist
 	 * @NativeFunction: String[] exist(String,String)
 	 */
