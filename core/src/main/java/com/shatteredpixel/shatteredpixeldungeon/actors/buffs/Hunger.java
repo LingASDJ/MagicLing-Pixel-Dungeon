@@ -21,9 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.IconFloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
@@ -33,17 +35,19 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 
 public class Hunger extends Buff implements Hero.Doom {
-
+	public static final float STARVINGR	= 20f;
 	private static final float STEP	= 10f;
 
 	public static final float HUNGRY	= 300f;
 	public static final float STARVING	= 450f;
 
+	public static final float ARVING	= 300f;
 	private float level;
 	private float partialDamage;
 
@@ -64,16 +68,33 @@ public class Hunger extends Buff implements Hero.Doom {
 		partialDamage = bundle.getFloat(PARTIALDAMAGE);
 	}
 
+	/** 额外饥饿加剧
+	 * Author:JDSA Ling
+	 * Date:2023-12-24
+	 * @param value 传额外饥饿整形值
+	 */
+	public void damgeExtraHungry(int value) {
+		float newLevel = level + STEP;
+		newLevel -= Math.min(newLevel + value, 450f);
+		target.sprite.showStatusWithIcon(CharSprite.NEGATIVE, String.valueOf(value), IconFloatingText.HUNGRY_EXTRA);
+		level -= newLevel;
+	}
+
 	@Override
 	public boolean act() {
 
 		if (Dungeon.level.locked
 				|| target.buff(WellFed.class) != null
-				|| SPDSettings.intro()
-				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null){
+				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null || Dungeon.depth == 0){
 			spend(STEP);
 			return true;
 		}
+
+//		//TODO 高于90% +2 血量
+//		if(hero.buff(BlessGoRead.class) != null && level >= 405f && hero.HP != hero.HT){
+//			Buff.affect(hero, HealingXP.class).setHeal((int) (2), 0, 0);
+//			spend(2f);
+//		}
 
 		if (target.isAlive() && target instanceof Hero) {
 
@@ -94,6 +115,10 @@ public class Hunger extends Buff implements Hero.Doom {
 				if (newLevel >= STARVING) {
 
 					GLog.n( Messages.get(this, "onstarving") );
+					hero.resting = false;
+
+					if(!Statistics.noGoReadHungry) Statistics.noGoReadHungry = true;
+
 					hero.damage( 1, this );
 
 					hero.interrupt();
@@ -107,6 +132,7 @@ public class Hunger extends Buff implements Hero.Doom {
 					}
 
 				}
+
 				level = newLevel;
 
 			}
@@ -129,6 +155,13 @@ public class Hunger extends Buff implements Hero.Doom {
 	}
 
 	public void satisfy( float energy ) {
+
+		Artifact.ArtifactBuff buff = target.buff( HornOfPlenty.hornRecharge.class );
+		if (buff != null && buff.isCursed()){
+			energy *= 0.67f;
+			GLog.n( Messages.get(this, "cursedhorn") );
+		}
+
 		affectHunger( energy, false );
 	}
 
@@ -144,8 +177,6 @@ public class Hunger extends Buff implements Hero.Doom {
 			return;
 		}
 
-		float oldLevel = level;
-
 		level -= energy;
 		if (level < 0 && !overrideLimits) {
 			level = 0;
@@ -153,17 +184,6 @@ public class Hunger extends Buff implements Hero.Doom {
 			float excess = level - STARVING;
 			level = STARVING;
 			partialDamage += excess * (target.HT/1000f);
-			if (partialDamage > 1f){
-				target.damage( (int)partialDamage, this );
-				partialDamage -= (int)partialDamage;
-			}
-		}
-
-		if (oldLevel < HUNGRY && level >= HUNGRY){
-			GLog.w( Messages.get(this, "onhungry") );
-		} else if (oldLevel < STARVING && level >= STARVING){
-			GLog.n( Messages.get(this, "onstarving") );
-			target.damage( 1, this );
 		}
 
 		BuffIndicator.refreshHero();
@@ -173,17 +193,48 @@ public class Hunger extends Buff implements Hero.Doom {
 		return level >= STARVING;
 	}
 
+	public boolean isDied() {
+		float newLevel = level + STEP;
+		return newLevel >= HUNGRY && level < HUNGRY;
+	}
+
 	public int hunger() {
 		return (int)Math.ceil(level);
+	}
+
+	public int hungerDamage() {
+		int hunger;
+		Hunger hungerBuff = hero.buff(Hunger.class);
+		if(hungerBuff != null){
+			hunger = (int) Math.max(0, STARVING - hunger());
+		} else {
+			hunger = 100;
+		}
+
+		return hunger/50;
+	}
+
+	public int hungerNoWEDamage(){
+		int hunger;
+		Hunger hungerBuff = hero.buff(Hunger.class);
+		if(hungerBuff != null){
+			hunger = (int) Math.max(0, STARVING - hunger());
+		} else {
+			hunger = 75;
+		}
+		return hunger/75;
 	}
 
 	@Override
 	public int icon() {
 		if (level < HUNGRY) {
+			if(Statistics.noGoReadHungry) Statistics.noGoReadHungry = false;
 			return BuffIndicator.NONE;
 		} else if (level < STARVING) {
+			if(Statistics.noGoReadHungry) Statistics.noGoReadHungry = false;
 			return BuffIndicator.HUNGER;
 		} else {
+			if(!Statistics.noGoReadHungry) Statistics.noGoReadHungry = true;
 			return BuffIndicator.STARVATION;
 		}
 	}
@@ -216,7 +267,7 @@ public class Hunger extends Buff implements Hero.Doom {
 
 		Badges.validateDeathFromHunger();
 
-		Dungeon.fail( this );
+		Dungeon.fail( getClass() );
 		GLog.n( Messages.get(this, "ondeath") );
 	}
 }

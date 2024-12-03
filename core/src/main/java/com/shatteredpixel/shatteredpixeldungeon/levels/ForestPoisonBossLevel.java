@@ -296,16 +296,22 @@ public class ForestPoisonBossLevel extends Level {
     public void unseal() {
         super.unseal();
         setMapEnd();
+
         for (Heap heap : Dungeon.level.heaps.valueList()) {
+            List<Item> toRemove = new ArrayList<>();
             for (Item item : heap.items) {
-                if(!(item instanceof PotionOfPurity.PotionOfPurityLing)){
+                if (!(item instanceof PotionOfPurity.PotionOfPurityLing)) {
                     item.doPickUp(hero, 962);
-                    heap.destroy();
+                    toRemove.add(item);  // 收集待删除的元素
                 } else {
-                    heap.destroy();
+                    toRemove.add(item);  // 同样收集待删除的元素
                 }
             }
+            // 删除所有收集到的元素
+            heap.items.removeAll(toRemove);
+            heap.destroy();  // 销毁 heap
         }
+
         changeMap(end);
 
         GameScene.flash(0x80cc0000);

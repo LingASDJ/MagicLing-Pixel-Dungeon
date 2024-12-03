@@ -1367,7 +1367,7 @@ public abstract class Mob extends Char {
 			target = enemy.pos;
 
 			if (Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
-				for (Mob mob : Dungeon.level.mobs) {
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 					if (Dungeon.level.distance(pos, mob.pos) <= 8 && mob.state != mob.HUNTING) {
 						mob.beckon( target );
 					}

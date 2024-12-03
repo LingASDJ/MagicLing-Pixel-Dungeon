@@ -107,8 +107,8 @@ public class ClearElemtGuard extends Statue {
         //5s延迟后，恢复SANS状态
         yell(Messages.get(ClearElemtGuard.class,"kill"));
         Mob mob = new ClearElemtGuardNPC();
-        mob.pos = level.exit()-1;
-        ScrollOfTeleportation.appear( hero,level.exit()-1 );
+        mob.pos = level.exit();
+        ScrollOfTeleportation.appear( hero,level.exit() );
         GameScene.add(mob);
     }
 

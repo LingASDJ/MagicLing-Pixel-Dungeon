@@ -333,7 +333,12 @@ public class SkyGoo extends Boss implements Callback {
 		}
 
 		if(HP<=120){
-			dmg = (int) Math.ceil( dmg * Math.max( Math.pow( 0.7, 120/HP ), 0.5 ) );
+			if (HP == 0) {
+				// 如果 HP 为零，可以选择一个默认值，例如设为 1 或者做其他处理
+				dmg = (int) Math.ceil(dmg * Math.max(Math.pow(0.7, 120 / 30), 0.5));  // 使用 30 作为默认值
+			} else {
+				dmg = (int) Math.ceil(dmg * Math.max(Math.pow(0.7, 120 / HP), 0.5));
+			}
 		}
 		boolean bleeding = (this.HP*2 <= this.HT);
 		super.damage(dmg, src);

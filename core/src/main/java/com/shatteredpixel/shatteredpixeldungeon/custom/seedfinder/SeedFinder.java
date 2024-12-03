@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.seedfinder;
+
 import com.badlogic.gdx.Gdx;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -179,6 +181,7 @@ public class SeedFinder {
 		findingStatus = FINDING.CONTINUE;
 		Options.condition = SPDSettings.seedfinderConditionANY() ? Condition.ANY : Condition.ALL;
 
+
 		String result="NONE";
 		for (int i = Random.Int(9999999);
 			 i < DungeonSeed.TOTAL_SEEDS && findingStatus == FINDING.CONTINUE ; i++) {
@@ -246,6 +249,7 @@ public class SeedFinder {
 	}
 
 	private boolean testSeedALL(String seed, int floors) {
+		Dungeon.isDLC(Conducts.Conduct.SEED);
 		SPDSettings.customSeed(seed);
 		Dungeon.hero = null;
 		Dungeon.daily = Dungeon.dailyReplay = false;

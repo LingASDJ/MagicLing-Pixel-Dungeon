@@ -162,43 +162,35 @@ public enum HeroClass {
 	}
 
 	public void initHero( Hero hero ) {
+		if (!Dungeon.isDLC(Conducts.Conduct.SEED)) {
+			if (Challenges.activeChallenges() >= 10) {
+				hero.lanterfire = 100 - Challenges.activeChallenges() * 4;
+			} else if (Dungeon.isChallenged(Challenges.DHXD)) {
+				hero.lanterfire = 60;
+			}
 
-		if (Challenges.activeChallenges() >= 10) {
-			hero.lanterfire = 100 - Challenges.activeChallenges() * 4;
-		} else if (Dungeon.isChallenged(Challenges.DHXD)) {
-			hero.lanterfire = 60;
-		}
+			if (RegularLevel.birthday == RegularLevel.DevBirthday.DEV_BIRTHDAY) {
+				new CrystalLing().quantity(1).identify().collect();
+				Buff.affect(hero, BlessLing.class).set((100), 1);
+			}
 
-//		if(SPDSettings.Cheating()){
-//			hero.HT = hero.HP = 114514;
-//			hero.exp = -1919810;
-//			hero.lvl = 100;
-//		}
-		//Buff.affect(hero, BlessImmune.class, ChampionHero.DURATION*123456f);
+			if (Dungeon.isChallenged(Challenges.AQUAPHOBIA)) {
+				new WaterSoul().quantity(4).identify().collect();
+			}
 
-		//GLog.n(String.valueOf(Statistics.commonrelaycall));
+			if (Badges.isUnlocked(Badges.Badge.NYZ_SHOP)) {
+				Dungeon.gold += 320;
+				Buff.affect(hero, RandomBuff.class).set((5), 1);
+			}
 
-		if(RegularLevel.birthday == RegularLevel.DevBirthday.DEV_BIRTHDAY){
-			new CrystalLing().quantity(1).identify().collect();
-			Buff.affect(hero, BlessLing.class).set( (100), 1 );
-		}
-
-		if (Dungeon.isChallenged(Challenges.AQUAPHOBIA)) {
-			new WaterSoul().quantity(4).identify().collect();
-		}
-
-		if ( Badges.isUnlocked(Badges.Badge.NYZ_SHOP)){
-			Dungeon.gold += 320;
-			Buff.affect(hero, RandomBuff.class).set( (5), 1 );
-		}
-
-		//Buff.affect(hero, ScaryDamageBuff.class).set((50),1);
-		PaswordBadges.loadGlobal();
-		List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered( true );
-		if(passwordbadges.contains(PaswordBadges.Badge.EXSG)){
-			Dungeon.gold += 400;
-			if(!Dungeon.isDLC(Conducts.Conduct.DEV)) {
-				new IceCyanBlueSquareCoin().quantity(3).identify().collect();
+			//Buff.affect(hero, ScaryDamageBuff.class).set((50),1);
+			PaswordBadges.loadGlobal();
+			List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered(true);
+			if (passwordbadges.contains(PaswordBadges.Badge.EXSG)) {
+				Dungeon.gold += 400;
+				if (!Dungeon.isDLC(Conducts.Conduct.DEV)) {
+					new IceCyanBlueSquareCoin().quantity(3).identify().collect();
+				}
 			}
 		}
 
@@ -219,16 +211,6 @@ public enum HeroClass {
 		new KingBag().quantity(1).identify().collect();
 		Dungeon.LimitedDrops.KING_BAG.drop();
 
-		//插个眼
-		/*	if(Dungeon.isDLC(Conducts.Conduct.HARD)){
-				//new PropBag().quantity(1).identify().collect();
-				//Prop.randomProp().collect();
-				//new RapidEarthRoot().collect();
-				//new WenStudyingPaperOne().collect();
-				//new YanStudyingPaperTwo().collect();
-				//Prop.randomProp().collect();
-			}
-		*/
 		Dungeon.LimitedDrops.PROP_BAG.drop();
 
 		Waterskin waterskin = new Waterskin();
