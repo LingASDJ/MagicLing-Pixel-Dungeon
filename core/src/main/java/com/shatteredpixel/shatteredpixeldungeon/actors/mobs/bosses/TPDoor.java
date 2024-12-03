@@ -1,7 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -28,6 +27,9 @@ import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TPDoor extends Mob {
 
@@ -174,15 +176,19 @@ public class TPDoor extends Mob {
                                                     if(Dungeon.level.locked) Dungeon.level.unseal();
                                                     InterlevelScene.mode = InterlevelScene.Mode.RESET;
                                                     Game.switchScene(InterlevelScene.class);
-                                                    for (Heap heap : level.heaps.valueList()) {
+                                                    for (Heap heap : Dungeon.level.heaps.valueList()) {
+                                                        List<Item> toRemove = new ArrayList<>();
                                                         for (Item item : heap.items) {
                                                             if(!(item instanceof MIME)){
                                                                 item.doPickUp(hero, hero.pos);
-                                                                heap.destroy();
+                                                                toRemove.add(item);  // 收集待删除的元素
                                                             } else {
-                                                                heap.destroy();
+                                                                toRemove.add(item);  // 同样收集待删除的元素
                                                             }
                                                         }
+                                                        // 删除所有收集到的元素
+                                                        heap.items.removeAll(toRemove);
+                                                        heap.destroy();  // 销毁 heap
                                                     }
                                                 } else {
                                                     kill = 0;

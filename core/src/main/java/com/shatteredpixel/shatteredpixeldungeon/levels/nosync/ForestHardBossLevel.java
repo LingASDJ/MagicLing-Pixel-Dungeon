@@ -1,7 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.nosync;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.crivusfruitslevel2;
 import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.CHASM;
 import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.CRYSTAL_DOOR;
@@ -49,6 +48,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ForestHardBossLevel extends Level {
     private static final int WIDTH = 33;
@@ -100,15 +102,19 @@ public class ForestHardBossLevel extends Level {
 
                     changeMap(boss_CHASM_Map);
 
-                    for (Heap heap : level.heaps.valueList()) {
+                    for (Heap heap : Dungeon.level.heaps.valueList()) {
+                        List<Item> toRemove = new ArrayList<>();
                         for (Item item : heap.items) {
                             if (!(item instanceof PotionOfPurity.PotionOfPurityLing)) {
                                 item.doPickUp(hero, hero.pos);
-                                heap.destroy();
+                                toRemove.add(item);  // 收集待删除的元素
                             } else {
-                                heap.destroy();
+                                toRemove.add(item);  // 同样收集待删除的元素
                             }
                         }
+                        // 删除所有收集到的元素
+                        heap.items.removeAll(toRemove);
+                        heap.destroy();  // 销毁 heap
                     }
 
 

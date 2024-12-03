@@ -177,7 +177,7 @@ public class WhiteBlastSword extends MeleeWeapon implements ActionIndicator.Acti
                         if (!ch.isImmune(this.getClass())) {
                             ch.damage(damage, this);
                             Buff.affect( ch, Vertigo.class,8f);
-                            int poisonLevel = 2 + hero.belongings.weapon.level();
+                            int poisonLevel = 2 + (hero.belongings.weapon != null ? hero.belongings.weapon.level() : 4);
                             Buff.affect( ch, Poison.class ).set(poisonLevel);
                             for (Blob blob : blobs) {
                                 blob.clear(i);

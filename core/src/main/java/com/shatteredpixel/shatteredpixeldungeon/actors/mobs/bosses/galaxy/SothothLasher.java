@@ -99,7 +99,7 @@ public class SothothLasher extends Mob implements Callback {
     private void zap() {
         spend( TIME_TO_ZAP );
 
-        if (hit( this, enemy, true )) {
+        if (hit( this, enemy, true ) && enemy != null) {
 
             int dmg = Random.NormalIntRange( 8, 24 );
             enemy.damage( dmg, new Eye.DeathGaze());

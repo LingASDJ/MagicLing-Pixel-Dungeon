@@ -40,10 +40,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.ItemLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
@@ -60,7 +58,6 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
-import com.watabou.utils.Reflection;
 
 public class Ghost extends NPC {
 
@@ -312,44 +309,6 @@ public class Ghost extends NPC {
 			}
 		}
 
-		private static void ghostQuest() {
-
-			float itemLevelRoll = Random.Float();
-			int itemLevel;
-
-			if (itemLevelRoll < 0.26f) {
-				itemLevel = 0;  // 物品等级为0
-			} else if (itemLevelRoll < 0.51f) {
-				itemLevel = 1;  // 物品等级为1
-			} else if (itemLevelRoll < 0.66f) {
-				itemLevel = 2;  // 物品等级为2
-			} else if (itemLevelRoll < 0.76f) {
-				itemLevel = 3;  // 物品等级为3
-				// 如果没有解锁特定徽章，则更新统计数据
-				if (!Badges.isUnlocked(Badges.Badge.GHOSTDAGE)) {
-					Statistics.dageCollected = 1;
-				}
-			} else {
-				// 物品等级为4
-				itemLevel = 4;
-				// 如果没有解锁另一个特定徽章，则更新统计数据
-				if (!Badges.isUnlocked(Badges.Badge.DAGETO)) {
-					Statistics.dageCollected = 2;
-				}
-			}
-
-			// 20%的基础概率决定是否附魔，附魔状态在这里不会立即暴露
-			float enchantRoll = Random.Float();
-			if (enchantRoll < 0.2f * ParchmentScrap.enchantChanceMultiplier()) {
-				enchant = Weapon.Enchantment.random();  // 随机选择一个武器附魔
-				glyph = Armor.Glyph.random();  // 随机选择一个护甲符文
-			}
-
-			// 升级武器和护甲到确定的等级
-			weapon.upgrade(itemLevel);
-			armor.upgrade(itemLevel);
-		}
-
 		public static void spawn( SewerLevel level, Room room ) {
 			if (!spawned && Dungeon.depth > 1 && Random.Int( 5 - Dungeon.depth ) == 0) {
 
@@ -368,8 +327,8 @@ public class Ghost extends NPC {
 				processed = false;
 				depth = Dungeon.depth;
 
-				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				switch (Random.chances(new float[]{0, 0, 10, 6, 3, 1,8})){
+				//48%:tier2, 29%:tier3, 14%:tier4, 4%:tier5 2%:tier6
+				switch (Random.chances(new float[]{0, 0, 10, 6, 3, 1, 0.5f})){
 					default:
 					case 2: armor = new LeatherArmor(); break;
 					case 3: armor = new MailArmor();    break;
@@ -379,16 +338,48 @@ public class Ghost extends NPC {
 				}
 				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
 				int wepTier = Random.chances(new float[]{0, 0, 10, 6, 3, 1});
-				Generator.Category c = Generator.wepTiers[wepTier - 1];
-				weapon = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
-				food = new SmallRation.BlackMoon();
-				//26%:+0, 25%:+1, 15%:+2, 10%:+3, 5%:+4
-				ghostQuest();
+				weapon = (Weapon) Generator.random(Generator.wepTiers[wepTier - 1]);
 
-				//10% to be enchanted. We store it separately so enchant status isn't revealed early
-				if (Random.Int(10) == 0){
-					enchant = Weapon.Enchantment.random();
-					glyph = Armor.Glyph.random();
+				//clear weapon's starting properties
+				weapon.level(0);
+				weapon.enchant(null);
+				weapon.cursed = false;
+
+				//50%:+0, 30%:+1, 15%:+2, 5%:+3
+				float itemLevelRoll = Random.Float();
+				int itemLevel;
+				if (itemLevelRoll < 0.26f) {
+					itemLevel = 0;  // 物品等级为0
+				} else if (itemLevelRoll < 0.51f) {
+					itemLevel = 1;  // 物品等级为1
+				} else if (itemLevelRoll < 0.66f) {
+					itemLevel = 2;  // 物品等级为2
+				} else if (itemLevelRoll < 0.76f) {
+					itemLevel = 3;  // 物品等级为3
+					// 如果没有解锁特定徽章，则更新统计数据
+					if (!Badges.isUnlocked(Badges.Badge.GHOSTDAGE)) {
+						Statistics.dageCollected = 1;
+					}
+				} else {
+					// 物品等级为4
+					itemLevel = 4;
+					// 如果没有解锁另一个特定徽章，则更新统计数据
+					if (!Badges.isUnlocked(Badges.Badge.DAGETO)) {
+						Statistics.dageCollected = 2;
+					}
+				}
+				weapon.upgrade(itemLevel);
+				armor.upgrade(itemLevel);
+
+				// 20% base chance to be enchanted, stored separately so status isn't revealed early
+				//we generate first so that the outcome doesn't affect the number of RNG rolls
+				enchant = Weapon.Enchantment.random();
+				glyph = Armor.Glyph.random();
+
+				float enchantRoll = Random.Float();
+				if (enchantRoll > 0.2f * ParchmentScrap.enchantChanceMultiplier()){
+					enchant = null;
+					glyph = null;
 				}
 
 			}
@@ -412,8 +403,8 @@ public class Ghost extends NPC {
 				processed = false;
 				depth = Dungeon.depth;
 
-				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				switch (Random.chances(new float[]{0, 0, 10, 6, 3, 1,8})){
+				//48%:tier2, 29%:tier3, 14%:tier4, 4%:tier5 2%:tier6
+				switch (Random.chances(new float[]{0, 0, 10, 6, 3, 1, 0.5f})){
 					default:
 					case 2: armor = new LeatherArmor(); break;
 					case 3: armor = new MailArmor();    break;
@@ -423,15 +414,48 @@ public class Ghost extends NPC {
 				}
 				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
 				int wepTier = Random.chances(new float[]{0, 0, 10, 6, 3, 1});
-				Generator.Category c = Generator.wepTiers[wepTier - 1];
-				weapon = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
+				weapon = (Weapon) Generator.random(Generator.wepTiers[wepTier - 1]);
 
-				ghostQuest();
+				//clear weapon's starting properties
+				weapon.level(0);
+				weapon.enchant(null);
+				weapon.cursed = false;
 
-				//10% to be enchanted. We store it separately so enchant status isn't revealed early
-				if (Random.Int(10) == 0){
-					enchant = Weapon.Enchantment.random();
-					glyph = Armor.Glyph.random();
+				//50%:+0, 30%:+1, 15%:+2, 5%:+3
+				float itemLevelRoll = Random.Float();
+				int itemLevel;
+				if (itemLevelRoll < 0.26f) {
+					itemLevel = 0;  // 物品等级为0
+				} else if (itemLevelRoll < 0.51f) {
+					itemLevel = 1;  // 物品等级为1
+				} else if (itemLevelRoll < 0.66f) {
+					itemLevel = 2;  // 物品等级为2
+				} else if (itemLevelRoll < 0.76f) {
+					itemLevel = 3;  // 物品等级为3
+					// 如果没有解锁特定徽章，则更新统计数据
+					if (!Badges.isUnlocked(Badges.Badge.GHOSTDAGE)) {
+						Statistics.dageCollected = 1;
+					}
+				} else {
+					// 物品等级为4
+					itemLevel = 4;
+					// 如果没有解锁另一个特定徽章，则更新统计数据
+					if (!Badges.isUnlocked(Badges.Badge.DAGETO)) {
+						Statistics.dageCollected = 2;
+					}
+				}
+				weapon.upgrade(itemLevel);
+				armor.upgrade(itemLevel);
+
+				// 20% base chance to be enchanted, stored separately so status isn't revealed early
+				//we generate first so that the outcome doesn't affect the number of RNG rolls
+				enchant = Weapon.Enchantment.random();
+				glyph = Armor.Glyph.random();
+
+				float enchantRoll = Random.Float();
+				if (enchantRoll > 0.2f * ParchmentScrap.enchantChanceMultiplier()){
+					enchant = null;
+					glyph = null;
 				}
 
 			}

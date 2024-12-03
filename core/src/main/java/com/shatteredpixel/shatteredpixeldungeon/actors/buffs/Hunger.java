@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -201,13 +203,26 @@ public class Hunger extends Buff implements Hero.Doom {
 	}
 
 	public int hungerDamage() {
-		int hunger = (int) Math.max(0, STARVING - hunger());
-		return (int) (hunger/50);
+		int hunger;
+		Hunger hungerBuff = hero.buff(Hunger.class);
+		if(hungerBuff != null){
+			hunger = (int) Math.max(0, STARVING - hunger());
+		} else {
+			hunger = 100;
+		}
+
+		return hunger/50;
 	}
 
 	public int hungerNoWEDamage(){
-		int hunger = (int) Math.max(0, STARVING - hunger());
-		return (int) (hunger/75);
+		int hunger;
+		Hunger hungerBuff = hero.buff(Hunger.class);
+		if(hungerBuff != null){
+			hunger = (int) Math.max(0, STARVING - hunger());
+		} else {
+			hunger = 75;
+		}
+		return hunger/75;
 	}
 
 	@Override
