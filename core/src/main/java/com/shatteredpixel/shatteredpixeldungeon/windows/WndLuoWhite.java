@@ -22,6 +22,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.SaiPlu
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.LuoWhiteSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
@@ -40,7 +42,6 @@ public class WndLuoWhite extends Window {
     private static final int BTN_GAP	= 6;
     private static final int GAP		= 6;
 
-
     public WndLuoWhite() {
         LuoWhite.shop3 = new MoonDao();
         LuoWhite.shop2 = new DiedCrossBow();
@@ -48,6 +49,24 @@ public class WndLuoWhite extends Window {
 
         LuoWhite.shop4 = new RiceSword();
         LuoWhite.shop5 = new RedBloodMoon();
+
+
+        StyledButton btnSite = new StyledButton(Chrome.Type.TOAST_TR, Messages.get(this,"talk_red")){
+            @Override
+            protected void onClick() {
+                super.onClick();
+                Game.runOnRenderThread(new Callback() {
+                    @Override
+                    public void call() {
+                        //TODO 礼包码逻辑
+                    }
+                });
+            }
+        };
+        btnSite.icon(new ItemSprite(ItemSpriteSheet.ICEGOLD));
+        btnSite.textColor(Window.TITLE_COLOR);
+        btnSite.setRect(56,-2, 65, 20 );
+        add(btnSite);
 
         IconTitle titlebar = new IconTitle();
         titlebar.setRect(0, 0, WIDTH, 0);
