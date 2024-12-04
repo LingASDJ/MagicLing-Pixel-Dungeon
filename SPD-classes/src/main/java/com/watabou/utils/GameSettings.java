@@ -181,6 +181,12 @@ public class GameSettings {
 		get().flush();
 	}
 
+	/*
+	 * @Comments 删除xml设置文件中指定关键字 key 里的指定主键 value 所对应的数组;允许批量删除，在value中以";"作为主键之间的分隔符
+	 * @Parameters key,value
+	 * @NativeName: delete
+	 * @NativeFunction: void delete(String,String)
+	 */
 	public static void delete( String key, String value ) {
 		String[] itemArray = value.split( ";" );
 		String str = get().getString( key, "" );
@@ -200,6 +206,12 @@ public class GameSettings {
 		get().flush();
 	}
 
+	/*
+	 * @Comments 修改xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组，value为修改后的数组
+	 * @Parameters key,target,value
+	 * @NativeName: modifyArray
+	 * @NativeFunction: void modifyArray(String,String,String)
+	 */
 	public static void modifyArray( String key, String target, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
@@ -223,6 +235,12 @@ public class GameSettings {
 		}
 	}
 
+	/*
+	 * @Comments 修改xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组中的第 index 个元素，value为修改后的元素
+	 * @Parameters key,target,index,value
+	 * @NativeName: modifyArrayElement
+	 * @NativeFunction: void modifyArrayElement(String,String,int,String)
+	 */
 	public static void modifyArrayElement( String key, String target, int index, String value ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
@@ -268,6 +286,12 @@ public class GameSettings {
 		}
 	}
 
+	/*
+	 * @Comments 获取xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组中的第 index 个元素
+	 * @Parameters key,target,index
+	 * @NativeName: getArrayElement
+	 * @NativeFunction: String getArrayElement(String,String,int)
+	 */
 	public static String getArrayElement( String key, String target, int index ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
@@ -303,6 +327,12 @@ public class GameSettings {
 		return null;
 	}
 
+	/*
+	 * @Comments 获取xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组
+	 * @Parameters key,target
+	 * @NativeName: getArray
+	 * @NativeFunction: String getArray(String,String)
+	 */
 	public static String getArray( String key, String target ) {
 		String str = get().getString( key, "" );
 		StringBuilder stringArray = new StringBuilder( str );
@@ -315,10 +345,24 @@ public class GameSettings {
 		return null;
 	}
 
+	/*
+	 * @Comments 查询xml设置文件中指定关键字 key 里的指定主键 target 所对应的数组是否存在
+	 * @Parameters key,target
+	 * @NativeName: query
+	 * @NativeFunction: boolean query(String,String)
+	 */
 	public static boolean query( String key, String target ) {
 		return Integer.valueOf( exist(key,target)[1] ) > 0;
 	}
 
+	/*
+	 * @Comments 查询字符串 str 中是否包含指定主键 target 所对应的数组，并返回一个字符串数组
+	 * 返回值内容:
+	 * 指定主键 target 所对应的数组的起始位置，终止位置，数组本身
+	 * @Parameters str,target
+	 * @NativeName: exist
+	 * @NativeFunction: String[] exist(String,String)
+	 */
 	public static String[] exist( String str, String target ) {
 		StringBuilder stringArray = new StringBuilder( str );
 		int start = -1;
