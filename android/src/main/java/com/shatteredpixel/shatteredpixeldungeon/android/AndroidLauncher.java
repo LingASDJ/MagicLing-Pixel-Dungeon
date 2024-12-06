@@ -48,124 +48,131 @@ import com.shatteredpixel.shatteredpixeldungeon.update.Updates;
 import com.watabou.noosa.Game;
 import com.watabou.utils.FileUtils;
 
+import cat.ereza.customactivityoncrash.config.CaocConfig;
+
 public class AndroidLauncher extends AndroidApplication {
-	
-	public static AndroidApplication instance;
-	
-	private static AndroidPlatformSupport support;
-	
-	@SuppressLint("SetTextI18n")
-	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		FirebaseApp.initializeApp(this);
-		try {
-			GdxNativesLoader.load();
-			FreeType.initFreeType();
-		} catch (Exception e){
-			AndroidMissingNativesHandler.error = e;
-			Intent intent = new Intent(this, AndroidMissingNativesHandler.class);
-			startActivity(intent);
-			finish();
-			return;
-		}
 
-		//there are some things we only need to set up on first launch
-		if (instance == null) {
+    public static AndroidApplication instance;
 
-			instance = this;
+    private static AndroidPlatformSupport support;
 
-			try {
-				Game.version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-			} catch (PackageManager.NameNotFoundException e) {
-				Game.version = "???";
-			}
-			try {
-				Game.versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-			} catch (PackageManager.NameNotFoundException e) {
-				Game.versionCode = 0;
-			}
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        CaocConfig.Builder.create()
+                .backgroundMode(CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM) //default: CaocConfig.BACKGROUND_MODE_SHOW_CUSTOM
+                .minTimeBetweenCrashesMs(2000) //default: 3000
+                .errorActivity(ErrorActivity.class) //default: null (default error activity)
+                .apply();
+        FirebaseApp.initializeApp(this);
+        try {
+            GdxNativesLoader.load();
+            FreeType.initFreeType();
+        } catch (Exception e) {
+            AndroidMissingNativesHandler.error = e;
+            Intent intent = new Intent(this, AndroidMissingNativesHandler.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        //there are some things we only need to set up on first launch
+        if (instance == null) {
+
+            instance = this;
+
+            try {
+                Game.version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                Game.version = "???";
+            }
+            try {
+                Game.versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            } catch (PackageManager.NameNotFoundException e) {
+                Game.versionCode = 0;
+            }
 
 
-			if (NewsImpl.supportsNews()) {
-				Updates.service = UpdateImpl.getUpdateService();
-				News.service = NewsImpl.getNewsService();
-			}
+            if (NewsImpl.supportsNews()) {
+                Updates.service = UpdateImpl.getUpdateService();
+                News.service = NewsImpl.getNewsService();
+            }
 
-			FileUtils.setDefaultFileProperties(Files.FileType.Local, "");
+            FileUtils.setDefaultFileProperties(Files.FileType.Local, "");
 
-			// grab preferences directly using our instance first
-			// so that we don't need to rely on Gdx.app, which isn't initialized yet.
-			// Note that we use a different prefs name on android for legacy purposes,
-			// this is the default prefs filename given to an android app (.xml is automatically added to it)
-			SPDSettings.set(instance.getPreferences("ShatteredPixelDungeon"));
+            // grab preferences directly using our instance first
+            // so that we don't need to rely on Gdx.app, which isn't initialized yet.
+            // Note that we use a different prefs name on android for legacy purposes,
+            // this is the default prefs filename given to an android app (.xml is automatically added to it)
+            SPDSettings.set(instance.getPreferences("ShatteredPixelDungeon"));
 
-		} else {
-			instance = this;
-		}
-		
-		//set desired orientation (if it exists) before initializing the app.
-		if (SPDSettings.landscape() != null) {
-			instance.setRequestedOrientation( SPDSettings.landscape() ?
-					ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
-					ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT );
-		}
-		
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.depth = 0;
-		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-			//use rgb565 on ICS devices for better performance
-			config.r = 5;
-			config.g = 6;
-			config.b = 5;
-		}
+        } else {
+            instance = this;
+        }
 
-		config.useCompass = false;
-		config.useAccelerometer = false;
-		
-		if (support == null) support = new AndroidPlatformSupport();
-		else                 support.reloadGenerators();
-		
-		support.updateSystemUI();
+        //set desired orientation (if it exists) before initializing the app.
+        if (SPDSettings.landscape() != null) {
+            instance.setRequestedOrientation(SPDSettings.landscape() ?
+                    ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
+                    ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        }
 
-		Button.longClick = ViewConfiguration.getLongPressTimeout()/1000f;
-		
-		initialize(new ShatteredPixelDungeon(support), config);
-//		throw new RuntimeException("Testing crash");
-	}
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.depth = 0;
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            //use rgb565 on ICS devices for better performance
+            config.r = 5;
+            config.g = 6;
+            config.b = 5;
+        }
 
-	@Override
-	public AndroidAudio createAudio(Context context, AndroidApplicationConfiguration config) {
-		return new AsynchronousAndroidAudio(context, config);
-	}
+        config.useCompass = false;
+        config.useAccelerometer = false;
 
-	@Override
-	protected void onResume() {
-		//prevents weird rare cases where the app is running twice
-		if (instance != this){
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				finishAndRemoveTask();
-			} else {
-				finish();
-			}
-		}
-		super.onResume();
-	}
+        if (support == null) support = new AndroidPlatformSupport();
+        else support.reloadGenerators();
 
-	@Override
-	public void onBackPressed() {
-		//do nothing, game should catch all back presses
-	}
+        support.updateSystemUI();
 
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		support.updateSystemUI();
-	}
-	
-	@Override
-	public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
-		super.onMultiWindowModeChanged(isInMultiWindowMode);
-		support.updateSystemUI();
-	}
+        Button.longClick = ViewConfiguration.getLongPressTimeout() / 1000f;
+
+        initialize(new ShatteredPixelDungeon(support), config);
+        throw new RuntimeException("Testing crash");
+    }
+
+    @Override
+    public AndroidAudio createAudio(Context context, AndroidApplicationConfiguration config) {
+        return new AsynchronousAndroidAudio(context, config);
+    }
+
+    @Override
+    protected void onResume() {
+        //prevents weird rare cases where the app is running twice
+        if (instance != this) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                finishAndRemoveTask();
+            } else {
+                finish();
+            }
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing, game should catch all back presses
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        support.updateSystemUI();
+    }
+
+    @Override
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode);
+        support.updateSystemUI();
+    }
 }
