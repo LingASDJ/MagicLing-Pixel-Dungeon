@@ -94,7 +94,9 @@ dependencies {
 
     //修复小米手表与低安卓系统的WebView冲突兼容问题
     //noinspection GradleDependency
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.blankj:utilcodex:1.30.6'
 
     //崩溃报告
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
