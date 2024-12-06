@@ -138,7 +138,6 @@ public class AndroidLauncher extends AndroidApplication {
         Button.longClick = ViewConfiguration.getLongPressTimeout() / 1000f;
 
         initialize(new ShatteredPixelDungeon(support), config);
-        throw new RuntimeException("Testing crash");
     }
 
     @Override
