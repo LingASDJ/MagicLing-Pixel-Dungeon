@@ -1116,4 +1116,22 @@ public class SPDSettings extends GameSettings {
 	public static int fulLScreenMonitor(){
 		return getInt( KEY_FULLSCREEN_MONITOR, 0 );
 	}
+
+	public static final String KEY_GIFT_DATA = "gift_data";
+
+	public static void saveGift( String[] target ){
+		put( KEY_GIFT_DATA, target );
+	}
+
+	public static boolean queryGiftExist( String target ){
+		return query( getString( KEY_GIFT_DATA, ""), target );
+	}
+
+	public static String queryGiftPart( String target, int index ){
+		return getArrayElement( KEY_GIFT_DATA, target, index );
+	}
+
+	public static void modifyGiftPart( String target, int index ,String value){
+		modifyArrayElement( KEY_GIFT_DATA, target, index, value ) ;
+	}
 }
