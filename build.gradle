@@ -25,7 +25,7 @@ allprojects {
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
-        appAndroidCompileSDK = 33
+        appAndroidCompileSDK = 34
         appAndroidMinSDK = 19
         appAndroidTargetSDK = 33
 
