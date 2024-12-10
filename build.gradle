@@ -17,6 +17,7 @@ buildscript {
 
 allprojects {
 
+    //安卓端分支 使用模拟器进行测试
     ext {
         appName = 'Magic Ling Pixel Dungeon'
         appPackageName = 'com.ansdomagiclingpixeldungeon.ling'
