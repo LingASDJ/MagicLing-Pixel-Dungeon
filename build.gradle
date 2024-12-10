@@ -17,6 +17,7 @@ buildscript {
 
 allprojects {
 
+    //电脑端 使用 gradlew desktop:debug release
     ext {
         appName = 'Magic Ling Pixel Dungeon'
         appPackageName = 'com.ansdomagiclingpixeldungeon.ling'
