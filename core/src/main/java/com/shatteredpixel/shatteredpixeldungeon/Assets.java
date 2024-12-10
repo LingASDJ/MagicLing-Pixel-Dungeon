@@ -34,38 +34,38 @@ public class Assets {
 
 	public static final String NIGHT	= "music/DwarfGeneral.ogg";
 
-	public static final String YOGALXY	= "music/rgjt/galaxy.mp3";
-	public static final String YOGGOD	= "music/rgjt/god.mp3";
-	public static final String STARLXY	= "music/rgjt/star.mp3";
+	public static final String YOGALXY	= "music/rgjt/galaxy.ogg";
+	public static final String YOGGOD	= "music/rgjt/god.ogg";
+	public static final String STARLXY	= "music/rgjt/star.ogg";
 
-	public static final String SKBJY	= "music/Boss-Saka.ogg";
+	public static final String SKBJY		= "music/Boss-Saka.ogg";
 
-	public static final String TOWN = "music/town.ogg";
-	public static final String BGM_BOSSA = "music/Boss1.ogg";
-	public static final String BGM_BOSSA3 = "music/tmp/dra.ogg";
-	public static final String BGM_YOU = "music/tmp/you.ogg";
-	public static final String BGM_BOSSB = "music/Boss2.ogg";
-	public static final String BGM_BOSSB2 = "music/Tengu.ogg";
-	public static final String BGM_BOSSC = "music/Boss3.ogg";
-	public static final String BGM_BOSSD = "music/Boss4.ogg";
-	public static final String BGM_BOSSD2 = "music/DwarfGeneral.ogg";
-	public static final String BGM_BOSSE3 = "music/Yogdead.ogg";
+	public static final String TOWN 		= "music/town.ogg";
+	public static final String BGM_BOSSA 	= "music/Boss1.ogg";
+	public static final String BGM_BOSSA3 	= "music/tmp/dra.ogg";
+	public static final String BGM_YOU 		= "music/tmp/you.ogg";
+	public static final String BGM_BOSSB 	= "music/Boss2.ogg";
+	public static final String BGM_BOSSB2 	= "music/Tengu.ogg";
+	public static final String BGM_BOSSC 	= "music/Boss3.ogg";
+	public static final String BGM_BOSSD 	= "music/Boss4.ogg";
+	public static final String BGM_BOSSD2 	= "music/DwarfGeneral.ogg";
+	public static final String BGM_BOSSE3 	= "music/Yogdead.ogg";
 
-	public static final String BGM_SHOP = "music/Shop.ogg";
-	public static final String BGM_BOSSE4 = "music/YogTime.ogg";
-	public static final String BGM_FRBOSS = "music/SnowLing.ogg";
-	public static final String HOLLOW_CITY = "music/tmp/hollowcity.ogg";
+	public static final String BGM_SHOP 	= "music/Shop.ogg";
+	public static final String BGM_BOSSE4 	= "music/YogTime.ogg";
+	public static final String BGM_FRBOSS 	= "music/SnowLing.ogg";
+	public static final String HOLLOW_CITY 	= "music/hollow/Mischief_Managed.ogg";
 
-	public static final String FL_CITY = "music/forestflower.ogg";
-	public static final String BOSSDOG = "music/tmp/dogboss.ogg";
+	public static final String FL_CITY 		= "music/forestflower.ogg";
+	public static final String BOSSDOG 		= "music/tmp/dogboss.ogg";
+
 	public static class Effects {
 		public static final String EFFECTS      = "effects/effects.png";
 		public static final String FIREBALL     = "effects/fireball.png";
 		public static final String SPECKS       = "effects/specks.png";
 		public static final String SPELL_ICONS  = "effects/spell_icons.png";
-
 		public static final String SHAKCO       = "effects/shockwave.png";
-		public static final String TEXT_ICONS = "effects/text_icons.png";
+		public static final String TEXT_ICONS 	= "effects/text_icons.png";
 	}
 
 	public static class Environment {
@@ -323,7 +323,7 @@ public class Assets {
 
 		public static final String SAND = "music/Sand.ogg";
 
-		public static final String PRACH = "music/peach.mp3";
+		public static final String PRACH = "music/peach.ogg";
 
         public static final String HALLS_TENSE = "music/halls_tense.ogg";
 

@@ -219,6 +219,9 @@ public class LevelRules {
                         }
                     case 26:
                         return new LastLevel();
+                    case 27: case 28: case 29: case 30:
+                        return new HollowLevel();
+
                     default:
                         Statistics.deepestFloor--;
                         return new DeadEndLevel();
