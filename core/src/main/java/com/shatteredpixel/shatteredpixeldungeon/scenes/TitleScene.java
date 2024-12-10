@@ -13,7 +13,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.Gregorian;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.NetIcons;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BadgeBanner;
@@ -178,7 +177,7 @@ public class TitleScene extends PixelScene {
 			playBGM(Assets.Music.CHRAMSS, true);
 		} else {
 			Music.INSTANCE.playTracks(
-					new String[]{Assets.Music.PRACH, Assets.BOSSDOG},
+					new String[]{Assets.Music.THEME, Assets.HOLLOW_CITY},
 					new float[]{1, 1},
 					true);
 		}
@@ -217,7 +216,7 @@ public class TitleScene extends PixelScene {
 				} else {
 					asset =  Assets.Interfaces.STATUS_DARK;
 				}
-				float preTime = 0.9f;
+				float preTime = 0.6f;
 				if (preCurTime < preTime) {
 					preCurTime += Game.elapsed;
 					return;
@@ -244,7 +243,7 @@ public class TitleScene extends PixelScene {
 				this.angle = 90 + curTime/ time * 225;
 				am = curTime*curTime*curTime/(time * time * time);
 
-				float preTime = 0.9f;
+				float preTime = 0.6f;
 				if (preCurTime < preTime) {
 					preCurTime += Game.elapsed;
 					return;
@@ -267,7 +266,7 @@ public class TitleScene extends PixelScene {
 				am = Math.max(0f, (float)Math.sin(time1 += Game.elapsed));
 				if (time1 >= 1.5f * Math.PI) time1 = 0;
 				rm = Math.max(0f, (float)Math.sin(time2 += Game.elapsed));
-				if (time2 >= 1.0f * Math.E) time2 = 5;
+				if (time2 >= 1.0f * Math.E) time2 = 3;
 				ra = Math.max(0f, (float)Math.sin(time3 += Game.elapsed));
 				if (time3 >= 1.0f * Math.PI) time3 = 1;
 			}
