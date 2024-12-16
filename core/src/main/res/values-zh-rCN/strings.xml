@@ -2,5 +2,6 @@
 <resources>
     <string name="restart">重启</string>
     <string name="no_configuration_found">没有找到配置信息，请手动重启程序吧。</string>
-    <string name="error_info">游戏运行时出现未经捕获的异常：\n\n%1$s</string>
+    <string name="copy_error_report">复制错误报告</string>
+    <string name="copy_complete">复制完成</string>
 </resources>
