@@ -1,6 +1,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.android;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,12 +17,12 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Locale;
-
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 
 public class ErrorActivity extends AppCompatActivity {
+
+    private String errorMsg;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,12 +35,14 @@ public class ErrorActivity extends AppCompatActivity {
             BarUtils.setNavBarColor(this, 0x00000000);
         }
         setContentView(R.layout.activity_error);
+        errorMsg = CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, getIntent());
         final MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
         setSupportActionBar(toolbar);
         final TextView textView = findViewById(R.id.error_info_text_view);
-        textView.setText(String.format(Locale.getDefault(), getString(R.string.error_info), CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, getIntent())));
-        final Button button = findViewById(R.id.error_button);
-        button.setOnClickListener(v -> {
+        textView.setText(errorMsg);
+
+        final Button restartButton = findViewById(R.id.restart_button);
+        restartButton.setOnClickListener(v -> {
             CaocConfig config = CustomActivityOnCrash.getConfigFromIntent(
                     getIntent()
             );
@@ -47,6 +51,14 @@ public class ErrorActivity extends AppCompatActivity {
                 return;
             }
             CustomActivityOnCrash.restartApplication(ErrorActivity.this, config);
+        });
+        final Button copyButton = findViewById(R.id.copy_button);
+        copyButton.setOnClickListener(v -> {
+            final ClipboardManager systemService =
+                    (ClipboardManager) this.getSystemService(CLIPBOARD_SERVICE);
+            final ClipData mClipData = ClipData.newPlainText("Label", errorMsg);
+            systemService.setPrimaryClip(mClipData);
+            Snackbar.make(v, R.string.copy_complete, Snackbar.LENGTH_LONG).show();
         });
     }
 }
