@@ -317,11 +317,14 @@ public class GameSettings {
 			}
 
 			endIndex = tempStr.indexOf(",", startIndex + 1 );
-			if(endIndex == -1)
+			if( endIndex == -1 )
 				endIndex = tempStr.length();
 			startIndex = index == 0 ? 0 : startIndex + 1;
 
-			return tempStr.substring(startIndex, endIndex).toString();
+			if( tempStr.indexOf(",") == -1 )
+				startIndex = 0;
+
+			return tempStr.substring( startIndex, endIndex ).replace(";","");
 		}
 
 		return null;
@@ -378,7 +381,7 @@ public class GameSettings {
 
 				targetString = stringArray.substring(start, end);
 
-				if ( target.equals( targetString.split(",")[0] ) ) {
+				if ( target.equals( targetString.split(",")[0].replace(";","") ) ) {
 					check = true;
 					if( targetString.contains(";") && !targetString.contains(",") ){
 						end -= 1;

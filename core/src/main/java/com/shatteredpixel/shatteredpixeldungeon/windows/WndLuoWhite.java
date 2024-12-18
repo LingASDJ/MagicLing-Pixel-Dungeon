@@ -11,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ReloadShop;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.LuoWhite;
+import com.shatteredpixel.shatteredpixeldungeon.custom.Gift;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
@@ -25,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.LuoWhiteSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
@@ -59,6 +61,50 @@ public class WndLuoWhite extends Window {
                     @Override
                     public void call() {
                         //TODO 礼包码逻辑
+                        GameScene.show( new WndTextInput( Messages.get( WndLuoWhite.class, "key_title" ),
+                                Messages.get( WndLuoWhite.class, "key_desc" ),
+                                "",
+                                99,
+                                false,
+                                Messages.get( WndLuoWhite.class, "key_confirm" ),
+                                Messages.get( WndLuoWhite.class, "key_cancel" ) ){
+                            @Override
+                            public void onSelect(boolean positive, String text) {
+                                if ( positive ){
+                                    int result = Gift.ActivateGift( text );
+                                    switch ( result ){
+                                        case 1:
+                                            //发放礼物的函数待完成
+                                            ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage( Icons.INFO.get(), Messages.get( WndLuoWhite.class,"success" ), Messages.get( WndLuoWhite.class, "key_activation" ) ) {
+                                                public void onBackPressed() {
+                                                    super.onBackPressed();
+                                                }
+                                            } );
+                                            break;
+                                        case 2:
+                                            ShatteredPixelDungeon.scene().addToFront( new WndError( Messages.get( WndLuoWhite.class, "key_expired" ) ) {
+                                                public void onBackPressed() {
+                                                    super.onBackPressed();
+                                                }
+                                            } );
+                                            break;
+                                        case 3:
+                                            ShatteredPixelDungeon.scene().addToFront( new WndError( Messages.get( WndLuoWhite.class, "key_used" ) ) {
+                                                public void onBackPressed() {
+                                                    super.onBackPressed();
+                                                }
+                                            } );
+                                            break;
+                                        default:
+                                            ShatteredPixelDungeon.scene().addToFront( new WndError( Messages.get( WndLuoWhite.class, "key_not_found" ) ) {
+                                                public void onBackPressed() {
+                                                    super.onBackPressed();
+                                                }
+                                            } );
+                                    }
+                                }
+                            }
+                        });
                     }
                 });
             }
