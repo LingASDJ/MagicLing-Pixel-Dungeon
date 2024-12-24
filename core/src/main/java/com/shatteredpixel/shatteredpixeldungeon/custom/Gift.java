@@ -143,6 +143,7 @@ public class Gift implements Bundlable {
 
     //存储Buff
     private static void GiveBuff(String buffKey, int buffValue){
+        GLog.i( Messages.get( Gift.class, "buff", Messages.get( Gift.class, buffKey ) ) );
         giftBuffArray.put( buffKey, buffValue);
     }
 
