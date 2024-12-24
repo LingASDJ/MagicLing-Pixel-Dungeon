@@ -74,7 +74,6 @@ public class WndLuoWhite extends Window {
                                     int result = Gift.ActivateGift( text );
                                     switch ( result ){
                                         case 1:
-                                            //发放礼物的函数待完成
                                             ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage( Icons.INFO.get(), Messages.get( WndLuoWhite.class,"success" ), Messages.get( WndLuoWhite.class, "key_activation" ) ) {
                                                 public void onBackPressed() {
                                                     super.onBackPressed();
