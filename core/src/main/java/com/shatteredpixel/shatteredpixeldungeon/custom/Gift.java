@@ -1,35 +1,101 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundlable;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Reflection;
 
 import net.iharder.Base64;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Gift {
+public class Gift implements Bundlable {
 
     public static final String KEY_ARRAY	= "TUxQRFpFUk8sSEVMTE9aRVJPRUlHSFQ=";
-    public static final String[] Gift_ARRAY	= {
+    private static final String[] Gift_DATA	= {
             "TUxQRFpFUk8sMTczNTU3NTE0MixmYWxzZTs==",//正常兑换码
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
             "VEVTVCwxNzM1NTc1MTQyLHRydWU7"//已使用兑换码
     };
 
+    private static final HashMap<String, LinkedHashMap<String, Integer>> GIFT_ITEM ;
+    static {
+        GIFT_ITEM = new HashMap<>(Map.of(
+                "TUxQRFpFUk8=",//正常兑换码
+                new LinkedHashMap<>(Map.of(//允许一次性给予多种物品
+                        "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves", 1,//给予物品样例
+                        "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 100,//给予古币样例
+                        "GiftBuff.God",1//给予buff样例测试，请以GiftBuff开头
+                )),
+                "test2",
+                new LinkedHashMap<>()//如若不想给予任何东西请不要初始化，该项为测试项
+        ));
+    }
+
+    private static final LinkedHashMap<String,Integer> giftBuffArray = new LinkedHashMap<>();
+    private static final String giftBuffArrayKey = "gift_buff_array_key";
+    private static final String giftBuffArrayValue = "gift_buff_array_value";
+
     private static int GIFT_Code = 0;
     private static int GIFT_Expiration_Date = 1;
     private static int Gift_Used = 2;
 
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        String[] giftArrayKey = new String[giftBuffArray.size()];
+        int[] giftArrayValue = new int[giftBuffArray.size()];
+
+        int i = 0;
+        for ( Map.Entry<String, Integer> entry : giftBuffArray.entrySet() ) {
+            giftArrayKey[i] = entry.getKey();
+            giftArrayValue[i] = entry.getValue();
+            i++;
+        }
+
+        bundle.put( giftBuffArrayKey, giftArrayKey );
+        bundle.put( giftBuffArrayValue, giftArrayValue );
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        ArrayList<String> giftBuffArrayKeys = new ArrayList<>();
+        ArrayList<Integer> giftBuffArrayValues = new ArrayList<>();
+
+        for ( String key : bundle.getStringArray( giftBuffArrayKey ) ){
+            giftBuffArrayKeys.add( key );
+        }
+        for ( int value : bundle.getIntArray( giftBuffArrayValue ) ){
+            giftBuffArrayValues.add( value );
+        }
+        for ( int i = 0; i < giftBuffArrayKeys.size(); i++ ){
+            giftBuffArray.put( giftBuffArrayKeys.get( i ), giftBuffArrayValues.get( i ) );
+        }
+    }
+
     //将兑换码导入本地数据中
     public static void GiftTime() {
         try {
-            int length = Gift_ARRAY.length;
+            int length = Gift_DATA.length;
             String decodedString = "";
             byte[] decoded;
             List<String> saveData = new ArrayList<>();
 
             for(int i = 0; i < length; i++) {
-                decoded = Base64.decode( Gift_ARRAY[i] );
+                decoded = Base64.decode( Gift_DATA[i] );
                 decodedString = new String( decoded) ;
 
                 if( SPDSettings.queryGiftExist( decodedString.split(",")[0] ) )
@@ -47,9 +113,8 @@ public class Gift {
     }
 
     //玩家使用兑换码
-    public static int ActivateGift( String key ) {
-        String keyExist = SPDSettings.queryGiftPart( key, GIFT_Code );
-        if( keyExist == null || keyExist.isEmpty() || !key.contains(keyExist) )
+    public static int ActivateGift(String key) {
+        if( !SPDSettings.queryGiftExist( key ) )
             return 0;
 
         long currentTime = System.currentTimeMillis() / 1000;
@@ -61,8 +126,72 @@ public class Gift {
         if( keyUsed )
             return 3;
 
+        String keyCheck = Base64.encodeBytes( key.getBytes() );
+        if( GIFT_ITEM.containsKey( keyCheck ) ){
+            LinkedHashMap<String, Integer> items = GIFT_ITEM.get( keyCheck );
+            for ( Map.Entry<String, Integer> entry : items.entrySet() ) {
+                if( entry.getKey().contains("GiftBuff") )
+                        GiveBuff( entry.getKey(), entry.getValue() );
+                else
+                    GiveItem( entry.getKey(), entry.getValue() );
+            }
+        }
+
         SPDSettings.modifyGiftPart( key, Gift_Used, String.valueOf(true) );
         return 1;
+    }
+
+    //存储Buff
+    private static void GiveBuff(String buffKey, int buffValue){
+        GLog.i( Messages.get( Gift.class, "buff", Messages.get( Gift.class, buffKey ) ) );
+        giftBuffArray.put( buffKey, buffValue);
+    }
+
+    //给予物品
+    private static void GiveItem(String itemName,int quantity){
+        boolean collect = false;
+        Item item = null;
+        try {
+            item = (Item) Reflection.newInstance(Class.forName(itemName));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        if(Challenges.isItemBlocked(item)) return;
+        if (item != null) {
+            //若为咕币
+            if(item instanceof IceCyanBlueSquareCoin) {
+                GLog.i( Messages.get( Gift.class, "you_now_have", item.name(), quantity ));
+                new IceCyanBlueSquareCoin(quantity).doPickUp(hero);
+                return;
+            }
+
+            if(item.stackable)
+                collect = item.quantity(quantity).collect();
+            else
+                collect = item.collect();
+            item.identify();
+
+            if(collect){
+                GLog.i( Messages.get( Gift.class, "you_now_have", item.name(), quantity ));
+                Sample.INSTANCE.play( Assets.Sounds.ITEM );
+                GameScene.pickUp( item, hero.pos );
+            }else{
+                item.doDrop(hero);
+            }
+        }
+    }
+
+    //Buff是否存在
+    public static boolean IsGiftBuffExist( String key ){
+        return giftBuffArray.containsKey( key );
+    }
+
+    //Buff状态，-1为不存在或其他
+    public static int GetGiftBuffStatus( String key ){
+        if( !IsGiftBuffExist( key ) )
+            return -1;
+
+        return giftBuffArray.get( key );
     }
 
     public static String base64() {

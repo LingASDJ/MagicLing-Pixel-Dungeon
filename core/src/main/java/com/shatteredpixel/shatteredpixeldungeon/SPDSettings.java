@@ -1119,18 +1119,28 @@ public class SPDSettings extends GameSettings {
 
 	public static final String KEY_GIFT_DATA = "gift_data";
 
+	//保存礼物数据
 	public static void saveGift( String[] target ){
 		put( KEY_GIFT_DATA, target );
 	}
 
+	//查询礼物是否存在
 	public static boolean queryGiftExist( String target ){
-		return query( getString( KEY_GIFT_DATA, ""), target );
+		String[] keyArrays = getAllStringArray( KEY_GIFT_DATA );
+		for( String keyArray : keyArrays ){
+			if( keyArray.split(",")[0].equals( target ) )
+				return true;
+		}
+
+		return false;
 	}
 
+	//查询礼物数组元素
 	public static String queryGiftPart( String target, int index ){
 		return getArrayElement( KEY_GIFT_DATA, target, index );
 	}
 
+	//修改礼物数组元素
 	public static void modifyGiftPart( String target, int index ,String value){
 		modifyArrayElement( KEY_GIFT_DATA, target, index, value ) ;
 	}
