@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.Turtle;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.PiraLand;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.RiceRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.ApprenticeWitch;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Butcher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Crumb;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Frankenstein;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Ghost_Halloween;
@@ -250,19 +249,20 @@ public class MobSpawner extends Actor {
 							Eye.class,
 							Scorpio.class, Succubus.class,Fire_Scorpio.class,Ice_Scorpio.class,ShieldHuntsman.class));
 
-				case 26:
-					return new ArrayList<>(Arrays.asList(
-							Frankenstein.class, Crumb.class));
-
+					//Hollow Mobs
 				case 27:
 					return new ArrayList<>(Arrays.asList(
-							Frankenstein.class, Crumb.class, Butcher.class,Butcher.class,Crumb.class));
+							Frankenstein.class, Frankenstein.class,
+							Crumb.class, Crumb.class, Eye.class));
 
 				case 28:
 					return new ArrayList<>(Arrays.asList(
-							ApprenticeWitch.class, Crumb.class, ApprenticeWitch.class,Butcher.class,Crumb.class));
+							Frankenstein.class, Frankenstein.class,
+							Crumb.class, Crumb.class, Eye.class));
 
-				case 29: case 30:
+				case 29:
+
+				case 30:
 					return new ArrayList<>(Arrays.asList(
 							ApprenticeWitch.class, Crumb.class, PumkingBomber.class, ApprenticeWitch.class));
 

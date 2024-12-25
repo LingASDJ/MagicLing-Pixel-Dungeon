@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.TestBooks;
 import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.DLCItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.RushMobScrollOfRandom;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.lightblack.OilLantern;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
@@ -54,6 +55,7 @@ import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class GameRules {
@@ -267,7 +269,7 @@ public class GameRules {
 
                 if(!(item instanceof Bag || item instanceof DLCItem|| item instanceof TestItem ||
                         item instanceof Trinket || item instanceof TestBooks|| item instanceof SpiritBow
-                || item instanceof Potion || item instanceof Scroll || item instanceof Waterskin ||
+                || item instanceof Potion || item instanceof Scroll || item instanceof Waterskin ||item instanceof Food ||
                         item instanceof Ankh || item instanceof MagesStaff  || item.unique) && result !=null){
                     item.detach(Dungeon.hero.belongings.backpack);
                 }
@@ -282,4 +284,21 @@ public class GameRules {
             GLog.p(Messages.get(RushMobScrollOfRandom.class, "recycled"));
         }
     }
+
+//    public static String BannersRules() {
+//        final Calendar calendar = Calendar.getInstance();
+//        String banners;
+//        if(calendar.get(Calendar.MONTH) > 9){
+//            banners = Assets.Interfaces.BANNERS_WINNERS;
+//        } else if(calendar.get(Calendar.MONTH) > 6) {
+//            banners = Assets.Interfaces.BANNERS_SUMER;
+//        } else if(calendar.get(Calendar.MONTH) > 3) {
+//            banners = Assets.Interfaces.BANNERS_YEARS;
+//        } else {
+//            banners = Assets.Interfaces.BANNERS;
+//        }
+//        return banners;
+//    }
+
+
 }

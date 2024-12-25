@@ -23,12 +23,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourg
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Halo;
@@ -46,7 +44,6 @@ public class OpenLastLevel extends Level {
 
         viewDistance = Math.min(5, viewDistance);
     }
-
 
     private static final int WIDTH = 13;
     private static final int HEIGHT = 23;
@@ -93,7 +90,7 @@ public class OpenLastLevel extends Level {
 
     @Override
     public boolean activateTransition(Hero hero, LevelTransition transition) {
-        if (transition.type == LevelTransition.Type.BRANCH_ENTRANCE) {
+        if (transition.type == LevelTransition.Type.BRANCH_EXIT && depth == 26) {
             Game.runOnRenderThread(new Callback() {
                 @Override
                 public void call() {
@@ -101,9 +98,9 @@ public class OpenLastLevel extends Level {
                     if (timeFreeze != null) timeFreeze.disarmPresses();
                     Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
                     if (timeBubble != null) timeBubble.disarmPresses();
-                    InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+                    InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
                     InterlevelScene.curTransition = new LevelTransition();
-                    InterlevelScene.curTransition.destDepth = depth;
+                    InterlevelScene.curTransition.destDepth = depth + 1;
                     InterlevelScene.curTransition.destType = LevelTransition.Type.REGULAR_EXIT;
                     InterlevelScene.curTransition.destBranch = 0;
                     InterlevelScene.curTransition.type = LevelTransition.Type.REGULAR_EXIT;
@@ -112,35 +109,6 @@ public class OpenLastLevel extends Level {
                 }
             });
             return false;
-        } else if (transition.type == LevelTransition.Type.REGULAR_EXIT) {
-            return false;
-        } else if (transition.type == LevelTransition.Type.REGULAR_ENTRANCE || transition.type == LevelTransition.Type.BRANCH_EXIT) {
-
-            if((hero.belongings.getItem(Amulet.class) != null) ||(hero.belongings.getItem(JAmulet.class) != null) ){
-                TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-                if (timeFreeze != null) timeFreeze.disarmPresses();
-                Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-                if (timeBubble != null) timeBubble.disarmPresses();
-                InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-                InterlevelScene.curTransition = new LevelTransition();
-                InterlevelScene.curTransition.destDepth = depth + 1;
-                InterlevelScene.curTransition.destType = LevelTransition.Type.REGULAR_ENTRANCE;
-                InterlevelScene.curTransition.destBranch = 0;
-                InterlevelScene.curTransition.type = LevelTransition.Type.REGULAR_ENTRANCE;
-                InterlevelScene.curTransition.centerCell  = -1;
-                Game.switchScene( InterlevelScene.class );
-            } else {
-                Game.runOnRenderThread(new Callback() {
-                    @Override
-                    public void call() {
-                        GameScene.show( new WndMessage( Messages.get(hero, "leave3") ) );
-                    }
-                });
-                return false;
-            }
-
-
-            return false;
         } else {
             return super.activateTransition(hero, transition);
         }
@@ -148,24 +116,21 @@ public class OpenLastLevel extends Level {
 
     @Override
     protected boolean build() {
+
         setSize(WIDTH, HEIGHT);
         map = code_map.clone();
 
-        int enter = 58;
+        int enter = 32;
         LevelTransition entrance = new LevelTransition(this, enter, LevelTransition.Type.REGULAR_EXIT);
         transitions.add(entrance);
 
-        int exit = 32;
+        int exit = 279;
         LevelTransition exitCell = new LevelTransition(this, exit, LevelTransition.Type.REGULAR_ENTRANCE);
         transitions.add(exitCell);
 
         int exit2 = 19;
         LevelTransition exitCell2 = new LevelTransition(this, exit2, LevelTransition.Type.BRANCH_EXIT);
         transitions.add(exitCell2);
-
-        int enter2 = 279;
-        LevelTransition entrance2 = new LevelTransition(this, enter2, LevelTransition.Type.BRANCH_ENTRANCE);
-        transitions.add(entrance2);
 
         CustomTilemap vis = new townBehind();
         vis.pos(0, 0);

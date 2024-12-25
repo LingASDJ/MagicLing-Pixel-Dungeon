@@ -3475,10 +3475,11 @@ public class Hero extends Char {
 
 	//灯火前行逻辑
 	public void damageLantern(int value) {
-		lanterfire -= Dungeon.isChallenged(DARKNESS)? value*2 : value;
+
 		if (lanterfire < 0) {
 			lanterfire = 0;
 		}
+		lanterfire -= value;
 		hero.sprite.showStatus(0x808080, String.valueOf(value));
 	}
 

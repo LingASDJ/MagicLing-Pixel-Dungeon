@@ -347,7 +347,6 @@ public class GameScene extends PixelScene {
 		StyledButton restart = new StyledButton(Chrome.Type.GREY_BUTTON_TR, Messages.get(StartScene.class, "new"), 9){
 			@Override
 			protected void onClick() {
-				//InterlevelScene.noStory = true;
 				GameScene.show(new WndRestart());
 			}
 
@@ -1528,6 +1527,11 @@ public class GameScene extends PixelScene {
 								WndStory.showChapter( WndStory.ID_CHAPTONEEND );
 							} else if(Dungeon.isChallenged(CS)&& Dungeon.branch == 0){
 								WndStory.showChapter(WndStory.ID_ZTBS);
+							}
+							break;
+						case 26:
+							if(Statistics.Hollow_Holiday){
+								WndStory.showChapter(WndStory.ID_HOLLOW);
 							}
 							break;
 					}

@@ -437,6 +437,7 @@ public class Assets {
 		public static final String SMLF = "splashes/smallleaf_portraits.png";
 		public static final String SMLS = "splashes/card_smallleaf_portraits.png";
 
+		public static final String XMS_GDZ= "splashes/Xmas_gdz_portraits.png";
 		public static final String GDZ= "splashes/gdz_portraits.png";
 
 		public static final String PIANO = "splashes/piano_portraits.png";
@@ -499,6 +500,7 @@ public class Assets {
 		public static final String YUYE	= "sprites/npc/yuye.png";
 		public static final String MINT	= "sprites/npc/mint.png";
 		public static final String ZAKO	= "sprites/npc/zako.png";
+		public static final String XMS_GUDAZI	= "sprites/npc/Xms_gdz.png";
 		public static final String GUDAZI	= "sprites/npc/gdz.png";
 		public static final String DEEP	= "sprites/npc/deepsea.png";
 		public static final String QUESTION	= "sprites/npc/question.png";

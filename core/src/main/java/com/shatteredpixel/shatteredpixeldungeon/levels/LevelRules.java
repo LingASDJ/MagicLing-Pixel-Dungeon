@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.items.books.questbookslist.HollowCityBook;
 import com.shatteredpixel.shatteredpixeldungeon.levels.minilevels.DragonCaveLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.minilevels.DragonFestivalMiniLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.minilevels.HotelLevel;
@@ -218,7 +219,12 @@ public class LevelRules {
                             return new HallsBossLevel();
                         }
                     case 26:
-                        return new LastLevel();
+                        if(Statistics.Hollow_Holiday){
+                            return new OpenLastLevel();
+                        } else {
+                            return new LastLevel();
+                        }
+
                     case 27: case 28: case 29: case 30:
                         return new HollowLevel();
 

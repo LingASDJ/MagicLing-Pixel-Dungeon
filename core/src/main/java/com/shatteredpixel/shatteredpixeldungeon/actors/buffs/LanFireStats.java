@@ -1,5 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DARKNESS;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -40,7 +41,8 @@ public class LanFireStats extends Buff implements Hero.Doom {
                 return true;
             }
             if (hero.lanterfire > 0 ) {
-                hero.damageLantern(1+Challenges.activeChallenges()/3);
+                hero.damageLantern(1+Challenges.activeChallenges()/3 +
+                        (Dungeon.isChallenged(DARKNESS) ? 2+Challenges.activeChallenges() : 0));
                 spend((int) (35f-(float) (Dungeon.depth/5+Challenges.activeChallenges())));
             } else {
                 spend(STEP);

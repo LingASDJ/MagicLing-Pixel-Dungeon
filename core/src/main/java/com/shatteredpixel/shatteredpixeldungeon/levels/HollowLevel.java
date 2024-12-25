@@ -3,9 +3,13 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot.TyphonPlot;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot.hollow.HollowCityPlot;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.HollowPainter;
@@ -26,8 +30,10 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TeleportationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndDialog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Halo;
@@ -44,6 +50,11 @@ public class HollowLevel extends RegularLevel {
     }
 
     @Override
+    public void playLevelMusic(){
+        BGMPlayer.playBGM(Assets.HOLLOW_CITY, true);
+    }
+
+    @Override
     public boolean activateTransition(Hero hero, LevelTransition transition) {
         if (transition.type == LevelTransition.Type.REGULAR_ENTRANCE && depth == 26) {
             Game.runOnRenderThread(new Callback() {
@@ -56,9 +67,9 @@ public class HollowLevel extends RegularLevel {
                     InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
                     InterlevelScene.curTransition = new LevelTransition();
                     InterlevelScene.curTransition.destDepth = depth - 1;
-                    InterlevelScene.curTransition.destType = LevelTransition.Type.REGULAR_EXIT;
+                    InterlevelScene.curTransition.destType = LevelTransition.Type.REGULAR_ENTRANCE;
                     InterlevelScene.curTransition.destBranch = 4;
-                    InterlevelScene.curTransition.type = LevelTransition.Type.REGULAR_EXIT;
+                    InterlevelScene.curTransition.type = LevelTransition.Type.REGULAR_ENTRANCE;
                     InterlevelScene.curTransition.centerCell  = -1;
                     Game.switchScene( InterlevelScene.class );
                 }
@@ -172,12 +183,6 @@ public class HollowLevel extends RegularLevel {
             this.pos = pos;
 
             PointF p = DungeonTilemap.tileCenterToWorld( pos );
-//            for (int i=0; i){
-//
-//            }
-//            pos( p.x - 4, p.y + 2, 2, 0 );
-//
-//            pour( FlameParticle.FACTORY, 0.15f );
 
             add( new Halo( 12, 0xFFa500, 0.3f ).point( p.x, p.y + 1 ) );
         }

@@ -41,20 +41,20 @@ public class OilPotion extends Item {
         }
     }
 
-    @Override
-    public boolean doPickUp(Hero hero, int pos) {
-        if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion) {
-            OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
-            if(lantern != null) {
-                Refill(lantern);
-                GLog.i(Messages.get(OilLantern.class, "lanterreload"));
-            } else {
-                GLog.i(Messages.get(OilLantern.class, "must"));
-            }
-
-        }
-        return true;
-    }
+//    @Override
+//    public boolean doPickUp(Hero hero, int pos) {
+//        if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion) {
+//            OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
+//            if(lantern != null) {
+//                Refill(lantern);
+//                GLog.i(Messages.get(OilLantern.class, "lanterreload"));
+//            } else {
+//                GLog.i(Messages.get(OilLantern.class, "must"));
+//            }
+//
+//        }
+//        return true;
+//    }
 
 
     public void Refill(OilLantern lantern) {
