@@ -212,6 +212,9 @@ public class Statistics {
 
 	public static int killYogMobsAnargy;
 
+	//Holiday Boolean
+	public static boolean Hollow_Holiday = false;
+
 	private static final String ICECLAN ="iceCyanBlueSquareCoin";
 
 	private static final String GAMETIME = "gameTime";
@@ -496,9 +499,18 @@ public class Statistics {
 		seedCustom = false;
 		GetFoodLing = 0;
 		CrivusbossTeleporter = 0;
+
+		//节日布尔-临时版本
+		Hollow_Holiday = false;
 	}
 
     public static void storeInBundle(Bundle bundle) {
+
+		/**/
+
+		bundle.put("HOLLOW_DAY",Hollow_Holiday);
+
+		/**/
 
 		bundle.put(ICECLAN, RandModeCount);
 
@@ -671,6 +683,11 @@ public class Statistics {
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
+
+		/**/
+		Hollow_Holiday = bundle.getBoolean("HOLLOW_DAY");
+		/**/
+
 
 		GameKillFireDargon = bundle.getBoolean("DRAM");
 

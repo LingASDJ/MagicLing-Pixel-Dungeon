@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.holiday;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -10,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndDialog;
 import com.watabou.noosa.Image;
@@ -96,7 +98,11 @@ public class GudaziPlot extends Plot {
     private void process_to_1() {
         diagulewindow.hideAll();
         Dungeon.hero.interrupt();
-        diagulewindow.setMainAvatar(new Image(Assets.Splashes.GDZ));
+        if(holiday == RegularLevel.Holiday.XMAS){
+            diagulewindow.setMainAvatar(new Image(Assets.Splashes.XMS_GDZ));
+        } else {
+            diagulewindow.setMainAvatar(new Image(Assets.Splashes.GDZ));
+        }
         diagulewindow.setLeftName(Messages.get(Gudazi.class, "name"));
         diagulewindow.changeText(Messages.get(Gudazi.class, "message1"));
     }
@@ -313,7 +319,11 @@ public class GudaziPlot extends Plot {
         private void process_to_1() {
             diagulewindow.hideAll();
             Dungeon.hero.interrupt();
-            diagulewindow.setMainAvatar(new Image(Assets.Splashes.GDZ));
+            if(holiday == RegularLevel.Holiday.XMAS){
+                diagulewindow.setMainAvatar(new Image(Assets.Splashes.XMS_GDZ));
+            } else {
+                diagulewindow.setMainAvatar(new Image(Assets.Splashes.GDZ));
+            }
             diagulewindow.setLeftName(Messages.get(Gudazi.class, "name"));
             diagulewindow.changeText(Messages.get(Gudazi.class, "message11",hero.name()));
         }

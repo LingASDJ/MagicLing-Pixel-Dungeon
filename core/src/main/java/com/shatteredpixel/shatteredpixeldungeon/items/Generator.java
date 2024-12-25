@@ -208,6 +208,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WhiteBlastSwo
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WitheWoodSword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.DiedCrossBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.GoldLongGun;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.KingAxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.MoonDao;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.RiceSword;
@@ -571,8 +572,13 @@ public class Generator {
 
 					RedBloodMoon.class,
 					MoonDao.class,
+					GoldLongGun.class
 			};
-			WEP_T4.probs = new float[]{6, 5, 5, 4, 4, 4, 2, 3, 6, SPDSettings.isItemUnlock(RedBloodMoon.class.getSimpleName()) ? 1.2f : 0, SPDSettings.isItemUnlock(MoonDao.class.getSimpleName()) ? 1.5f : 0};
+			WEP_T4.probs = new float[]{6, 5, 5, 4, 4, 4, 2, 3, 7,
+					SPDSettings.isItemUnlock(RedBloodMoon.class.getSimpleName()) ? 1.2f : 0,
+					SPDSettings.isItemUnlock(MoonDao.class.getSimpleName()) ? 1.5f : 0,
+					SPDSettings.isItemUnlock(GoldLongGun.class.getSimpleName()) ? 1.3f : 0,
+			};
 
 			WEP_T5.classes = new Class<?>[]{
 					LockSword.class,

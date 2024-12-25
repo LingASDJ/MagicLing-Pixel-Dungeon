@@ -22,12 +22,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Gift implements Bundlable {
 
     public static final String KEY_ARRAY	= "TUxQRFpFUk8sSEVMTE9aRVJPRUlHSFQ=";
     private static final String[] Gift_DATA	= {
             "TUxQRFpFUk8sMTczNTU3NTE0MixmYWxzZTs==",//正常兑换码
+
+            //圣诞2024
+            "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
             "VEVTVCwxNzM1NTc1MTQyLHRydWU7"//已使用兑换码
     };
@@ -37,12 +41,15 @@ public class Gift implements Bundlable {
         GIFT_ITEM = new HashMap<>(Map.of(
                 "TUxQRFpFUk8=",//正常兑换码
                 new LinkedHashMap<>(Map.of(//允许一次性给予多种物品
-                        "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves", 1,//给予物品样例
-                        "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 100,//给予古币样例
-                        "GiftBuff.God",1//给予buff样例测试，请以GiftBuff开头
+                        "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 500
                 )),
-                "test2",
-                new LinkedHashMap<>()//如若不想给予任何东西请不要初始化，该项为测试项
+                "TUxQRF9DaHJpc3RtYXMtMjAyNA==",
+                new LinkedHashMap<>(Map.of(//允许一次性给予多种物品
+                        "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 600,//给予物品样例
+                        "com.shatteredpixel.shatteredpixeldungeon.items.food.Switch", 3,//给予古币样例
+                        "com.shatteredpixel.shatteredpixeldungeon.items.food.Cake",2,//给予buff样例测试，请以GiftBuff开头
+                        "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.GoldLongGun",1
+                ))
         ));
     }
 
@@ -114,6 +121,11 @@ public class Gift implements Bundlable {
 
     //玩家使用兑换码
     public static int ActivateGift(String key) {
+
+        if(Objects.equals(key, "")){
+            return 4;
+        }
+
         if( !SPDSettings.queryGiftExist( key ) )
             return 0;
 

@@ -49,38 +49,32 @@ public class VenomGas extends Blob {
                     cell = i + j* Dungeon.level.width();
                     if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
                         if (!ch.isImmune(this.getClass()))
-                            //Buff.affect(ch, Venom.class).set(2f, strength, source);
                         {
                             Char finalCh = ch;
-                            Game.runOnRenderThread(new Callback() {
-                                @Override
-                                public void call() {
-                                    finalCh.damage(damage,this);
-                                    if(finalCh.isAlive()){
-                                        boolean matched = false;
-                                        int index = -1;
-                                        for(int in=0; in<enemies.size();in++ ){
-                                            if(enemies.get(in) == finalCh){
-                                                matched = true;
-                                                damageTotal.set(in,damageTotal.get(in)+damage);
-                                                index = in;
-                                            };
-                                        }
-                                        if(!matched){
-                                            enemies.add(finalCh);
-                                            damageTotal.add(damage);
-                                        }
-                                        if(index != -1){
-                                            if(damageTotal.get(index)> (8 * standardDamage)){
-                                                Buff.affect(finalCh, Blindness.class,1f);
-                                                if(damageTotal.get(index)> (20 * standardDamage)){
-                                                    Buff.affect(finalCh, Paralysis.class, 1f);
-                                                }
-                                            }
+                            finalCh.damage(damage,this);
+                            if(finalCh.isAlive()){
+                                boolean matched = false;
+                                int index = -1;
+                                for(int in=0; in<enemies.size();in++ ){
+                                    if(enemies.get(in) == finalCh){
+                                        matched = true;
+                                        damageTotal.set(in,damageTotal.get(in)+damage);
+                                        index = in;
+                                    };
+                                }
+                                if(!matched){
+                                    enemies.add(finalCh);
+                                    damageTotal.add(damage);
+                                }
+                                if(index != -1){
+                                    if(damageTotal.get(index)> (8 * standardDamage)){
+                                        Buff.affect(finalCh, Blindness.class,1f);
+                                        if(damageTotal.get(index)> (20 * standardDamage)){
+                                            Buff.affect(finalCh, Paralysis.class, 1f);
                                         }
                                     }
                                 }
-                            });
+                            }
                         }
                     }
                 }

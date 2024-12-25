@@ -68,7 +68,7 @@ public class Torch extends Item {
 
 	@Override
 	public boolean doPickUp(Hero hero, int pos) {
-		if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion) {
+		if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion && Dungeon.hero.belongings.backpack.items.size() < Dungeon.hero.belongings.backpack.capacity()) {
 			OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
 			if(lantern!=null){
 				Refill(lantern);
@@ -76,8 +76,10 @@ public class Torch extends Item {
 			} else {
 				GLog.p(Messages.get(Torch.class,"youmustload"));
 			}
-        }
-        return true;
+			return true;
+        } else {
+			return false;
+		}
     }
 	
 	@Override
