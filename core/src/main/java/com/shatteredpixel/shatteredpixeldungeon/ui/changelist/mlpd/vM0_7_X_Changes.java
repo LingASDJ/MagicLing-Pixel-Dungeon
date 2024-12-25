@@ -54,6 +54,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V07993_Changes(changeInfos);
         add_V07990_Changes(changeInfos);
         add_V078_90_Changes(changeInfos);
         add_V0770_Changes(changeInfos);
@@ -84,6 +85,54 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V07993_Changes( ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.7.9.9-SP3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.AUDIO), ("音乐优化"),
+                ("音乐进行了一些压缩，保证音乐质量情况下减负安装包大小")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
+                ("1.部分素材优化迭代\n" +
+                        "2.部分文案优化\n" +
+                        "3.部分素材细节优化更新")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.WARNING), ("错误报告V2登场"),
+                ("错误报告v2界面全新来袭，感谢薄荷的界面制作")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.GOLDLANGGUN), ("新传奇武器：黄金长枪"),
+                ("堤喀眷顾之人才能找到的武器，给予使用者无与伦比的祝福")));
+
+        changes.addButton(new ChangeButton(new LuoWhiteSprite(), ("兑换码系统V1.0"),
+                ("兑换码系统来袭，替代更新补偿")));
+
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.LANTERNB), ("寂灭灯火V1.2"),
+                (
+                        "1.没入黑暗灯火扣减从全局双倍调为原灯火扣减 + 2*挑战数量/5，且仅在自动扣减中\n\n" +
+                                "2.优化魔女的低语：束缚，现在会在效果结束后给予装备的净化，作为代价，装备会降一级")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.7.9.9-SP3版本:\n\n" +
+                        "1.修复部分文本缺失\n" +
+                        "2.修复毒杖，火把的崩溃和无限回合异常"));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SAI,
+                new ItemSprite.Glowing( Window.GDX_COLOR )), "附魔：审判",
+                "暂时下架这个附魔"));
+
     }
 
     public static void add_V07990_Changes( ArrayList<ChangeInfo> changeInfos ) {

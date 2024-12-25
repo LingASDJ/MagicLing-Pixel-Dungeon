@@ -1,8 +1,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.galaxy;
 
-import java.awt.print.Book;
+import com.shatteredpixel.shatteredpixeldungeon.items.books.Books;
 
-public class PaoPaoBook extends Book {
+public class PaoPaoBook extends Books {
 
 
 

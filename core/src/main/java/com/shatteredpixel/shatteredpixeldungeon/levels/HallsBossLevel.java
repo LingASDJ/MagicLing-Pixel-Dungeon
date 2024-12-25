@@ -246,16 +246,16 @@ public class HallsBossLevel extends Level {
 			seal();
 		}
 
-		if(Statistics.amuletObtained && Badges.isUnlocked(Badges.Badge.CHAMPION_1X) && !SothothEye
-				|| Dungeon.isDLC(Conducts.Conduct.DEV) && !SothothEye) {
-
-			TrueYog npc = new TrueYog();
-			npc.pos = exit() + width*3;
-			mobs.add(npc);
-			GameScene.add( npc );
-
-			SothothEye = true;
-		}
+//		if(Statistics.amuletObtained && Badges.isUnlocked(Badges.Badge.CHAMPION_1X) && !SothothEye
+//				|| Dungeon.isDLC(Conducts.Conduct.DEV) && !SothothEye) {
+//
+//			TrueYog npc = new TrueYog();
+//			npc.pos = exit() + width*3;
+//			mobs.add(npc);
+//			GameScene.add( npc );
+//
+//			SothothEye = true;
+//		}
 
 
 		super.occupyCell( ch );
