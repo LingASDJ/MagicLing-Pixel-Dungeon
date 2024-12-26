@@ -26,7 +26,7 @@ import com.badlogic.gdx.Preferences;
 import com.watabou.noosa.Game;
 
 public class GameSettings {
-	
+
 	public static final String DEFAULT_PREFS_FILE = "settings.xml";
 	private static final String BUNDLABLE="b";
 
@@ -39,27 +39,27 @@ public class GameSettings {
 		}
 	}
 	private static Preferences prefs;
-	
+
 	private static Preferences get() {
 		if (prefs == null) {
 			prefs = Gdx.app.getPreferences( DEFAULT_PREFS_FILE );
 		}
 		return prefs;
 	}
-	
+
 	//allows setting up of preferences directly during game initialization
 	public static void set( Preferences prefs ){
 		GameSettings.prefs = prefs;
 	}
-	
+
 	public static boolean contains( String key ){
 		return get().contains( key );
 	}
-	
+
 	public static int getInt( String key, int defValue ) {
 		return getInt(key, defValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
-	
+
 	public static int getInt( String key, int defValue, int min, int max ) {
 		try {
 			int i = get().getInteger( key, defValue );
@@ -97,7 +97,7 @@ public class GameSettings {
 			return defValue;
 		}
 	}
-	
+
 	public static boolean getBoolean( String key, boolean defValue ) {
 		try {
 			return get().getBoolean(key, defValue);
@@ -106,11 +106,11 @@ public class GameSettings {
 			return defValue;
 		}
 	}
-	
+
 	public static String getString( String key, String defValue ) {
 		return getString(key, defValue, Integer.MAX_VALUE);
 	}
-	
+
 	public static String getString( String key, String defValue, int maxLength ) {
 		try {
 			String s = get().getString( key, defValue );
@@ -140,7 +140,7 @@ public class GameSettings {
 			return new String[0];
 		}
 	}
-	
+
 	public static void put( String key, int value ) {
 		get().putInteger(key, value);
 		get().flush();
@@ -150,12 +150,12 @@ public class GameSettings {
 		get().putLong(key, value);
 		get().flush();
 	}
-	
+
 	public static void put( String key, boolean value ) {
 		get().putBoolean(key, value);
 		get().flush();
 	}
-	
+
 	public static void put( String key, String value ) {
 		get().putString(key, value);
 		get().flush();
@@ -317,11 +317,14 @@ public class GameSettings {
 			}
 
 			endIndex = tempStr.indexOf(",", startIndex + 1 );
-			if(endIndex == -1)
+			if( endIndex == -1 )
 				endIndex = tempStr.length();
 			startIndex = index == 0 ? 0 : startIndex + 1;
 
-			return tempStr.substring(startIndex, endIndex).toString();
+			if( tempStr.indexOf(",") == -1 )
+				startIndex = 0;
+
+			return tempStr.substring( startIndex, endIndex ).replace(";","");
 		}
 
 		return null;
@@ -378,7 +381,7 @@ public class GameSettings {
 
 				targetString = stringArray.substring(start, end);
 
-				if ( target.equals( targetString.split(",")[0] ) ) {
+				if ( target.equals( targetString.split(",")[0].replace(";","") ) ) {
 					check = true;
 					if( targetString.contains(";") && !targetString.contains(",") ){
 						end -= 1;
