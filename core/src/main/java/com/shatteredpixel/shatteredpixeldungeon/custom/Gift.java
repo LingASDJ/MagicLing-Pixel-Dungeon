@@ -18,6 +18,7 @@ import com.watabou.utils.Reflection;
 import net.iharder.Base64;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class Gift implements Bundlable {
     public static final String KEY_ARRAY	= "TUxQRFpFUk8sSEVMTE9aRVJPRUlHSFQ=";
     private static final String[] Gift_DATA	= {
             "TUxQRFpFUk8sMTczNTU3NTE0MixmYWxzZTs==",//正常兑换码
-            "TUxQRF9TT1JSWSwxNzM1NjYwNzk5LGZhbHNl",
+
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
@@ -38,24 +39,21 @@ public class Gift implements Bundlable {
 
     private static final HashMap<String, LinkedHashMap<String, Integer>> GIFT_ITEM ;
     static {
-        GIFT_ITEM = new HashMap<>(Map.of(
-                "TUxQRFpFUk8=",//正常兑换码
-                new LinkedHashMap<>(Map.of(//允许一次性给予多种物品
-                        "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 500
-                )),
-                "TUxQRF9DaHJpc3RtYXMtMjAyNA==",
-                new LinkedHashMap<>(Map.of(//允许一次性给予多种物品
-                        "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 600,//给予物品样例
-                        "com.shatteredpixel.shatteredpixeldungeon.items.food.Switch", 3,//给予古币样例
-                        "com.shatteredpixel.shatteredpixeldungeon.items.food.Cake",2,//给予buff样例测试，请以GiftBuff开头
-                        "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.GoldLongGun",1
-                )),
-                "TUxQRF9TT1JSWQ==",
-                new LinkedHashMap<>(Map.of(//允许一次性给予多种物品
-                        "com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade", 2,//给予物品样例
-                        "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 2
-                        ))
-        ));
+        HashMap<String, LinkedHashMap<String, Integer>> tempMap = new HashMap<>();
+
+        LinkedHashMap<String, Integer> code1 = new LinkedHashMap<>();
+        code1.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 500 );
+
+        LinkedHashMap<String, Integer> code2 = new LinkedHashMap<>();
+        code2.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 600 );
+        code2.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.Switch", 3 ) ;
+        code2.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.Cake", 2 );
+        code2.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.GoldLongGun", 1 );
+
+        tempMap.put( "TUxQRFpFUk8=", code1 );
+        tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
+
+        GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );
     }
 
     private static final LinkedHashMap<String,Integer> giftBuffArray = new LinkedHashMap<>();
