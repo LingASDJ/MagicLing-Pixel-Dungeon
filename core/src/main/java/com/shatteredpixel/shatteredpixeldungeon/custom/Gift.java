@@ -30,7 +30,7 @@ public class Gift implements Bundlable {
     public static final String KEY_ARRAY	= "TUxQRFpFUk8sSEVMTE9aRVJPRUlHSFQ=";
     private static final String[] Gift_DATA	= {
             "TUxQRFpFUk8sMTczNTU3NTE0MixmYWxzZTs==",//正常兑换码
-
+            "TUxQRF9TT1JSWSwxNzM1NjYwNzk5LGZhbHNl",
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
