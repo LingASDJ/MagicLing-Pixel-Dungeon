@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.DragonWall;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -175,7 +174,7 @@ public class FireDragon extends Boss implements Callback {
         if(HP<=0 && !noAlive){
             noAlive = true;
             HP = HT/2;
-            Buff.prolong(this, RoseShiled.class, 8f);
+            Buff.prolong(this, Invisibility.class, 12f);
         }
 
         if (state == WANDERING){
@@ -323,10 +322,10 @@ public class FireDragon extends Boss implements Callback {
             ScrollOfTeleportation.appear(this,334);
         }
 
-        if(Random.Int(3,10)>=7 && HP>HT/2){
+        if(Random.Int(3,10)>=7 && HP<HT/2){
             int oppositeAdjacent = enemy.pos + (enemy.pos - pos);
             Ballistica trajectory = new Ballistica(enemy.pos, oppositeAdjacent, Ballistica.MAGIC_BOLT);
-            WandOfBlastWave.throwChar(enemy, trajectory, 2, false, false, this);
+            WandOfBlastWave.throwChar(enemy, trajectory, Random.Int(2,7), false, false, this);
         }
 
         if (buff(BleedingEffect.class) != null){

@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfHealth;
@@ -22,6 +23,7 @@ import com.watabou.glwrap.Blending;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Tilemap;
+import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
@@ -86,6 +88,12 @@ public class LaveCavesBossLevel extends Level{
         set( HOME, Terrain.EMPTY );
         GameScene.updateMap( HOME );
         Dungeon.observe();
+        Game.runOnRenderThread(new Callback() {
+            @Override
+            public void call() {
+                Music.INSTANCE.play(Assets.Music.SEWERS_BOSS, true);
+            }
+        });
     }
 
     @Override
@@ -94,6 +102,17 @@ public class LaveCavesBossLevel extends Level{
         set( HOME, Terrain.ENTRANCE );
         GameScene.updateMap( HOME );
         Dungeon.observe();
+        Game.runOnRenderThread(new Callback() {
+            @Override
+            public void call() {
+                Music.INSTANCE.fadeOut(5f, new Callback() {
+                    @Override
+                    public void call() {
+                        Music.INSTANCE.end();
+                    }
+                });
+            }
+        });
     }
 
     public boolean activateTransition(Hero hero, LevelTransition transition) {

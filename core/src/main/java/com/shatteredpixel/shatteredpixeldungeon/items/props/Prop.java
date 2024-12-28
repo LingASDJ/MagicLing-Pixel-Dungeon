@@ -1,6 +1,5 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.props;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.watabou.utils.Random;

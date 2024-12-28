@@ -55,7 +55,6 @@ import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class GameRules {

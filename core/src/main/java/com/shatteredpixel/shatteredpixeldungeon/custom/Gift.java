@@ -30,7 +30,7 @@ public class Gift implements Bundlable {
     public static final String KEY_ARRAY	= "TUxQRFpFUk8sSEVMTE9aRVJPRUlHSFQ=";
     private static final String[] Gift_DATA	= {
             "TUxQRFpFUk8sMTczNTU3NTE0MixmYWxzZTs==",//正常兑换码
-            "TUxQRF9TT1JSWSwxNzM1NjYwNzk5LGZhbHNl",
+            "U1A0LVJFQURZLDE3MzU2NjA3OTksZmFsc2U=",
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
@@ -50,8 +50,13 @@ public class Gift implements Bundlable {
         code2.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.Cake", 2 );
         code2.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.GoldLongGun", 1 );
 
+        LinkedHashMap<String, Integer> code3 = new LinkedHashMap<>();
+        code3.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 400 );
+        code3.put( "com.shatteredpixel.shatteredpixeldungeon.items.Gold", 400 ) ;
+
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
+        tempMap.put( "U1A0LVJFQURZ",code3);
 
         GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );
     }

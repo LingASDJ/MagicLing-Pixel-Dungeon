@@ -24,7 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
@@ -66,7 +66,7 @@ public class ScrollOfRoseShiled extends Scroll {
     @Override
     public void doRead() {
         detach(curUser.belongings.backpack);
-        Buff.prolong(hero, RoseShiled.class, 8f);
+        Buff.prolong(hero,  Invisibility.class, 8f);
         setKnown();
         new Flare( 5, 32 ).color( 0xFF00FF, true ).show( curUser.sprite, 2f );
 

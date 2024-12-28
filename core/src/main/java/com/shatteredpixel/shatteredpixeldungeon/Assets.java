@@ -23,7 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 public class Assets {
 
-	public static final String BGM_1A = "music/tmp/drg.ogg";
+	public static final String BGM_1A = "music/forestflower.ogg";
 	public static final String BGM_1 = "music/Level1.ogg";
 	public static final String BGM_2 = "music/Level2.ogg";
 	public static final String BGM_3 = "music/Level3.ogg";
@@ -42,7 +42,7 @@ public class Assets {
 
 	public static final String TOWN 		= "music/town.ogg";
 	public static final String BGM_BOSSA 	= "music/Boss1.ogg";
-	public static final String BGM_BOSSA3 	= "music/tmp/dra.ogg";
+	public static final String BGM_BOSSA3 	= "music/Boss1.ogg";
 	public static final String BGM_YOU 		= "music/tmp/you.ogg";
 	public static final String BGM_BOSSB 	= "music/Boss2.ogg";
 	public static final String BGM_BOSSB2 	= "music/Tengu.ogg";

@@ -10,9 +10,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
 
