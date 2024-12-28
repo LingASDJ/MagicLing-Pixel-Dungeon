@@ -66,21 +66,24 @@ public class Torch extends Item {
 		detach(Dungeon.hero.belongings.backpack);
 	}
 
-	@Override
-	public boolean doPickUp(Hero hero, int pos) {
-		if (super.doPickUp(hero, pos) && Statistics.AutoOilPotion && Dungeon.hero.belongings.backpack.items.size() < Dungeon.hero.belongings.backpack.capacity()) {
-			OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
-			if(lantern!=null){
-				Refill(lantern);
-				GLog.p(Messages.get(Torch.class,"lanterfireactive",Math.min(Math.max(55 - (10 * Statistics.deepestFloor / 5) - Challenges.activeChallenges() / 4, 10), 100)));
-			} else {
-				GLog.p(Messages.get(Torch.class,"youmustload"));
-			}
-			return true;
-        } else {
-			return false;
-		}
-    }
+//	@Override
+//	public boolean doPickUp(Hero hero, int pos) {
+//		if (super.doPickUp(hero, pos)  && Dungeon.hero.belongings.backpack.items.size() < Dungeon.hero.belongings.backpack.capacity()) {
+//			if(Statistics.AutoOilPotion){
+//				OilLantern lantern = Dungeon.hero.belongings.getItem(OilLantern.class);
+//				if(lantern!=null){
+//					Refill(lantern);
+//					GLog.p(Messages.get(Torch.class,"lanterfireactive",Math.min(Math.max(55 - (10 * Statistics.deepestFloor / 5) - Challenges.activeChallenges() / 4, 10), 100)));
+//				} else {
+//					GLog.p(Messages.get(Torch.class,"youmustload"));
+//				}
+//				return true;
+//			}
+//
+//        } else {
+//			return false;
+//		}
+//    }
 	
 	@Override
 	public void execute( Hero hero, String action ) {

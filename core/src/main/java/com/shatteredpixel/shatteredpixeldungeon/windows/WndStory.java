@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessMixShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessMobDied;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessNoMoney;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot.hollow.HollowCityPlot;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BannerSprites;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -50,6 +51,7 @@ import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.PointerArea;
+import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
@@ -79,6 +81,7 @@ public class WndStory extends Window {
 
 	public static final int ID_COLDCHESTBOSS		= 29;
 
+	public static final int ID_HOLLOW		= 40;
 
 	//DLC BOSSRUSH
 	public static final int ID_GAME = 12;
@@ -124,6 +127,9 @@ public class WndStory extends Window {
 		CHAPTERS.put( ID_CHAPTONEEND, "new" );
 		CHAPTERS.put( ID_ICEBOSS, "icedead" );
 		CHAPTERS.put( ID_COLDCHESTBOSS, "coldchest" );
+
+		CHAPTERS.put( ID_HOLLOW, "hollow" );
+
 		CHAPTERS.put( ID_GAME, "bossrushstart" );
 		CHAPTERS.put( ID_NOMOBS, "nomobs" );
 		CHAPTERS.put( ID_CALA, "calaboss" );
@@ -252,6 +258,15 @@ public class WndStory extends Window {
 					mapnameSlain.texture( "interfaces/mapname/halls.png" );
 					mapnameSlain.show( Window.GDX_COLOR, 0.6f, 3f );
 					scene.showLogo( mapnameSlain );
+					break;
+				case 26:
+					HollowCityPlot Plot = new HollowCityPlot();
+					Game.runOnRenderThread(new Callback() {
+						@Override
+						public void call() {
+							GameScene.show(new WndDialog(Plot,false));
+						}
+					});
 					break;
 			}
 		}

@@ -503,13 +503,19 @@ public class Rival extends Boss implements Callback {
     public String description() {
         String desc = super.description();
 
-        desc += Messages.get(this, "weapon", weapon.toString() );
-        desc += Messages.get(this, "armor", armor.toString() );
-        desc += Messages.get(this, "ring", misc1.toString() );
-        desc += Messages.get(this, "ring", misc2.toString() );
-        desc += Messages.get(this, "wand", wand.toString() );
-        desc += Messages.get(this, "missile", missile.toString() );
-        desc += Messages.get(this, "ankhs");
+        if(Dungeon.hero != null){
+            desc += Messages.get(this, "weapon", weapon.toString() );
+            desc += Messages.get(this, "armor", armor.toString() );
+            desc += Messages.get(this, "ring", misc1.toString() );
+            desc += Messages.get(this, "ring", misc2.toString() );
+            desc += Messages.get(this, "wand", wand.toString() );
+            desc += Messages.get(this, "missile", missile.toString() );
+            desc += Messages.get(this, "ankhs");
+        } else {
+            desc += "";
+        }
+
+
 
         return desc;
     }

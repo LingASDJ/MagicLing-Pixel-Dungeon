@@ -511,8 +511,8 @@ public class ItemSpriteSheet {
         assignItemRect(ARTIFACT_ARMBAND,    16, 13);
         assignItemRect(ARTIFACT_CAPE,       16, 14);
         assignItemRect(ARTIFACT_TALISMAN,   15, 13);
-        assignItemRect(ARTIFACT_HOURGLASS,  13, 16);
-        assignItemRect(ARTIFACT_TOOLKIT,    15, 13);
+        assignItemRect(ARTIFACT_HOURGLASS,  16, 16);
+        assignItemRect(ARTIFACT_TOOLKIT,    16, 16);
         assignItemRect(ARTIFACT_SPELLBOOK,  13, 16);
         assignItemRect(ARTIFACT_BEACON,     16, 16);
         assignItemRect(ARTIFACT_CHAINS,     16, 16);
