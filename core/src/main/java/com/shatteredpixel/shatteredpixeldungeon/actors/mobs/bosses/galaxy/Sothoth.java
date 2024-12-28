@@ -17,9 +17,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
@@ -241,7 +241,7 @@ public class Sothoth extends Boss {
         yell( Messages.get(this, "defeated") );
         Statistics.TrueYogNoDied = true;
 
-        Buff.prolong(((SothothEyeDied) obj), RoseShiled.class, 10f);
+        Buff.prolong(((SothothEyeDied) obj),  Invisibility.class, 10f);
 
         Set<Integer> selectedPositions = new HashSet<>();
         int maxPositions = Math.min(RandomPos.length, 4);

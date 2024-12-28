@@ -5,7 +5,6 @@ import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.holid
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
-import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 
 public class GudaziSprite extends MobSprite {

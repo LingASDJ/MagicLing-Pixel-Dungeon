@@ -1388,7 +1388,7 @@ public class DwarfMaster extends Boss {
             summonSubject(3, Skeleton.class);
             summonSubject(3, Necromancer.class);
             //summonSubject(3, RedNecromancer.class);
-            Buff.affect(this, RoseShiled.class, 20f);
+            Buff.affect(this,  Invisibility.class, 20f);
             Buff.affect(this, Haste.class, 5f);
             Buff.affect(this, ArcaneArmor.class).set(Dungeon.hero.lvl + 10, 10);
             Buff.affect(this, Healing.class).setHeal(40, 0f, 6);

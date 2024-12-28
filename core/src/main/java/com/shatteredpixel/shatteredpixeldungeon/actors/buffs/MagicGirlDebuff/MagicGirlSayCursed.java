@@ -1,9 +1,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
@@ -32,13 +32,13 @@ public class MagicGirlSayCursed extends MagicGirlDebuff {
     public void detach() {
         if(Dungeon.hero.belongings.weapon() != null){
             Dungeon.hero.belongings.weapon().cursed = false;
-            Dungeon.hero.belongings.weapon().level--;
         }
 
         if(Dungeon.hero.belongings.armor() != null) {
             Dungeon.hero.belongings.armor().cursed = false;
-            Dungeon.hero.belongings.armor().level--;
         }
+
+        Buff.affect(target, Degrade.class, 10f);
 
         super.detach();
     }
