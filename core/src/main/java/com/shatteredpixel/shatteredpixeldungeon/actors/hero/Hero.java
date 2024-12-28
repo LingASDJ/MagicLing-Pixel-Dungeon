@@ -860,13 +860,13 @@ public class Hero extends Char {
 		}
 
 		if (!RingOfForce.fightingUnarmed(this)) {
-			dmg += wep.damageRoll( this );
+			dmg = wep.damageRoll( this );
 
 			if (!(wep instanceof MissileWeapon)) dmg += RingOfForce.armedDamageBonus(this);
 		} else {
-			dmg += RingOfForce.damageRoll(this);
+			dmg = RingOfForce.damageRoll(this);
 			if (RingOfForce.unarmedGetsWeaponAugment(this)){
-				dmg += ((Weapon)belongings.attackingWeapon()).augment.damageFactor(dmg);
+				dmg = ((Weapon)belongings.attackingWeapon()).augment.damageFactor(dmg);
 			}
 		}
 
