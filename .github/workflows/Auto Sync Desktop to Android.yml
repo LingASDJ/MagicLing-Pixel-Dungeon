@@ -1,0 +1,35 @@
+name: Auto Sync Desktop to Android
+
+on:
+  push:
+    branches:
+      - 2025-Desktop
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git user info
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Checkout target branch (2025-Android)
+        run: |
+          git fetch origin
+          git checkout 2025-Android
+          git pull origin 2025-Android
+
+      - name: Merge folder from 2025-Desktop to 2025-Android
+        run: |
+          git checkout 2025-Desktop -- core/src/main
+          git add core/src/main
+          git commit -m "Sync core/src/main from 2025-Desktop branch"
+
+      - name: Push changes to 2025-Android branch
+        run: |
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git 2025-Android
