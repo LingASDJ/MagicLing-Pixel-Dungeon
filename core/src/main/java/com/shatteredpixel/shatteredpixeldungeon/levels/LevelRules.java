@@ -40,7 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.nosync.SkyGooBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.spical.GalaxyKeyBossLevel;
 import com.watabou.utils.Random;
 
-//Level Rules
+//Level Rules Test Android
 public class LevelRules {
 
     public static Level createStandardLevel() {
