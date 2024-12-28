@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -91,7 +92,7 @@ public class DeepShadowLevel extends Level {
         if(rival == null && !Statistics.doNotLookLing){
             GLog.n(Messages.get(Rival.class,"mustone",hero.name()+"?"));
             Buff.prolong( hero, Paralysis.class, Paralysis.DURATION*50 );
-            Buff.affect(hero, RoseShiled.class, 200000f);
+            Buff.affect(hero,  Invisibility.class, 200000f);
             GameScene.scene.add(new Delayer(3f){
                 @Override
                 protected void onComplete() {

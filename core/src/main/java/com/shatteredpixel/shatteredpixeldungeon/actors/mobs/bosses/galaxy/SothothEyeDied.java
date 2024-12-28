@@ -19,6 +19,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
@@ -577,7 +578,7 @@ public class SothothEyeDied extends Boss {
                 for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
                     if (mob instanceof SothothEyeDied) {
                         Buff.append(mob, DiedGalaxy.class).bombPos = 1182;
-                        Buff.prolong(mob, RoseShiled.class, 1000f);
+                        Buff.prolong(mob,  Invisibility.class, 1000f);
                     }
                 }
 
