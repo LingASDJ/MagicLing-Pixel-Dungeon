@@ -225,7 +225,7 @@ public class LevelRules {
                         }
 
                     case 27: case 28: case 29: case 30:
-                        return new HollowLevel();
+                        return Statistics.Hollow_Holiday ? new HollowLevel() : new DeadEndLevel();
 
                     default:
                         Statistics.deepestFloor--;

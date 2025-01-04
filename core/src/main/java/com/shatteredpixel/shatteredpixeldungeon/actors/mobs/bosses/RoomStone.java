@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
@@ -139,7 +140,7 @@ public class RoomStone extends Mob {
         for (Mob boss : Dungeon.level.mobs.toArray(new Mob[0])) {
             if (boss instanceof DictFish) {
                 Buff.affect(boss, Adrenaline.class, 35f);
-                Buff.affect(boss,  Invisibility.class, 10f);
+                Buff.affect(boss, Invulnerability.class, 10f);
             }
         }
         super.die( cause );

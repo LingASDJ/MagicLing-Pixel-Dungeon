@@ -24,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ColdMagicRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.Cerberus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.FireDragon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -46,6 +47,41 @@ public abstract class DiedClearElemet extends Mob {
         } else {
             return description;
         }
+    }
+
+    private class Wandering extends Mob.Wandering {
+
+        @Override
+        public boolean act( boolean enemyInFOV, boolean justAlerted ) {
+            if ( enemyInFOV ) {
+
+                enemySeen = true;
+
+                notice();
+                alerted = true;
+                state = HUNTING;
+
+                target = hero.pos;
+            } else {
+
+                enemySeen = false;
+
+                int oldPos = pos;
+
+                target = hero.pos;
+
+                //always move towards the hero when wandering
+                if (getCloser( target )) {
+                    spend( 1 / speed() );
+                    return moveSprite( oldPos, pos );
+                } else {
+                    spend( TICK );
+                }
+            }
+
+            return true;
+        }
+
     }
 
     private void Alt_Zap() {
@@ -103,6 +139,10 @@ public abstract class DiedClearElemet extends Mob {
         immunities.add(ToxicGas.class);
         flying =true;
         baseSpeed = Dungeon.branch == 0 ? 1.5f : 1f;
+
+        if(Dungeon.branch == 0){
+            WANDERING = new Wandering();
+        }
     }
 
     @Override

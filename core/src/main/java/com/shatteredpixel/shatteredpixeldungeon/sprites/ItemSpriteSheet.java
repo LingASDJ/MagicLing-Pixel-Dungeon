@@ -83,6 +83,8 @@ public class ItemSpriteSheet {
     public static final int GOLD            = UNCOLLECTIBLE+0;
     public static final int ENERGY          = UNCOLLECTIBLE+1;
 
+    public static final int EMPTY           = UNCOLLECTIBLE+2;
+
     public static final int DEWDROP         = UNCOLLECTIBLE+3;
     public static final int PETAL           = UNCOLLECTIBLE+4;
     public static final int SANDBAG         = UNCOLLECTIBLE+5;
@@ -665,7 +667,7 @@ public class ItemSpriteSheet {
     static{
         for (int i = SEEDS; i < SEEDS+16; i++)
             assignItemRect(i, 10, 10);
-        assignItemRect(GREEN_LING, 13, 15);
+        assignItemRect(GREEN_LING, 12, 15);
     }
 
     private static final int BREWS          =                               xy(1, 25);  //8 slots

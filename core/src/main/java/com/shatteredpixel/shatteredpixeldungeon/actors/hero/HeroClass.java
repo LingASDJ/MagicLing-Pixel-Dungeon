@@ -165,14 +165,7 @@ public enum HeroClass {
 	public void initHero( Hero hero ) {
 		if (!Dungeon.isDLC(Conducts.Conduct.SEED)) {
 
-			//古堡内容Debug测试
 			Statistics.Hollow_Holiday = true;
-
-			if (Challenges.activeChallenges() >= 10) {
-				hero.lanterfire = 100 - Challenges.activeChallenges() * 4;
-			} else if (Dungeon.isChallenged(Challenges.DHXD)) {
-				hero.lanterfire = 60;
-			}
 
 			if (RegularLevel.birthday == RegularLevel.DevBirthday.DEV_BIRTHDAY) {
 				new CrystalLing().quantity(1).identify().collect();

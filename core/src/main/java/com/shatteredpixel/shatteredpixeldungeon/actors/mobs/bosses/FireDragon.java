@@ -24,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.DragonWall;
@@ -174,7 +175,7 @@ public class FireDragon extends Boss implements Callback {
         if(HP<=0 && !noAlive){
             noAlive = true;
             HP = HT/2;
-            Buff.prolong(this, Invisibility.class, 12f);
+            Buff.prolong(this,  Invulnerability.class, 12f);
         }
 
         if (state == WANDERING){

@@ -23,6 +23,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HaloFireImBlue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
@@ -1388,7 +1389,7 @@ public class DwarfMaster extends Boss {
             summonSubject(3, Skeleton.class);
             summonSubject(3, Necromancer.class);
             //summonSubject(3, RedNecromancer.class);
-            Buff.affect(this,  Invisibility.class, 20f);
+            Buff.affect(this, Invulnerability.class, 20f);
             Buff.affect(this, Haste.class, 5f);
             Buff.affect(this, ArcaneArmor.class).set(Dungeon.hero.lvl + 10, 10);
             Buff.affect(this, Healing.class).setHeal(40, 0f, 6);
