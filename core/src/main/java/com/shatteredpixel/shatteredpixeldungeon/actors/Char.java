@@ -679,6 +679,12 @@ public abstract class Char extends Actor {
 		} else if ( buff(BlessMobDied.class) != null ) {
 			damage *= 1.5f;
 		}
+
+		ScaryBuff scaryBuff = Dungeon.hero.buff(ScaryBuff.class);
+		if(scaryBuff.Scary>50){
+			damage *= 0.65f;
+		}
+
 		return damage;
 	}
 

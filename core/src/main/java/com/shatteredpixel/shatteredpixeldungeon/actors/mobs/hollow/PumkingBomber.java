@@ -26,16 +26,16 @@ public class PumkingBomber extends Mob {
     {
         spriteClass = PumkingBomberSprite.class;
 
-        HP = HT = 120;
+        HP = HT = 140;
         defenseSkill = 22;
         viewDistance = Light.DISTANCE;
 
         loot = Pasty.class;
-        lootChance = 0.01f;
+        lootChance = 0.15f;
 
         EXP = 19;
 
-        maxLvl = 40;
+        maxLvl = 35;
 
         HUNTING = new Hunting();
 
@@ -57,7 +57,7 @@ public class PumkingBomber extends Mob {
 
     @Override
     public int attackSkill( Char target ) {
-        return 30;
+        return 50;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class PumkingBomber extends Mob {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 4);
+        return super.drRoll() + Random.NormalIntRange(2, 4);
     }
 
     private static final String LAST_ENEMY_POS = "last_enemy_pos";

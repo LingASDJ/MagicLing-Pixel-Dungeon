@@ -1,5 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -8,6 +9,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Vampire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.REN;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -55,8 +58,10 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TeleportationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Halo;
@@ -100,6 +105,14 @@ public class HollowLevel extends RegularLevel {
                 }
             });
             return false;
+        } else if(transition.type == LevelTransition.Type.REGULAR_EXIT && depth == 30) {
+            Game.runOnRenderThread(new Callback() {
+                @Override
+                public void call() {
+                    GameScene.show( new WndMessage( Messages.get(hero, "hollow_1") ) );
+                }
+            });
+            return false;
         } else {
             return super.activateTransition(hero, transition);
         }
@@ -137,10 +150,14 @@ public class HollowLevel extends RegularLevel {
         addItemToSpawn(convert());
         addItemToSpawn(convert());
 
+        addItemToSpawn(convert());
+        addItemToSpawn(convert());
+        addItemToSpawn(convert());
+
         super.createItems();
     }
 
-    private Item convert(){
+    public static Item convert(){
         Item w = new Food();
         switch (Random.Int(0,17)){
             default:
@@ -148,7 +165,7 @@ public class HollowLevel extends RegularLevel {
                 w = Generator.random(Generator.wepTiers[Random.NormalIntRange(2,5)]);
                 break;
             case 1:
-                w = Generator.random(Generator.misTiers[1]).quantity(2).identify(false);
+                w = Generator.random(Generator.misTiers[Random.NormalIntRange(1,5)]).quantity(2).identify(false);
                 break;
             case 2:
                 w = new LeatherArmor().identify(false);
@@ -159,7 +176,7 @@ public class HollowLevel extends RegularLevel {
                 w = ws;
                 break;
             case 4:
-                w = new Alchemize().quantity(Random.IntRange(2, 3));
+                w = Generator.randomUsingDefaults( Generator.Category.WAND );
                 break;
             case 5:
                 w = new PotionOfHealing().quantity(1);
@@ -203,32 +220,20 @@ public class HollowLevel extends RegularLevel {
                 w = Generator.randomUsingDefaults( Generator.Category.STONE );
                 break;
             case 15:
-                switch (Random.Int(6)){
+                switch (Random.Int(4)){
                     default:
                     case 0: w = new ScrollOfSirensSong(); break;
                     case 1: w = new ScrollOfChallenge(); break;
                     case 2: w = new ScrollOfMetamorphosis(); break;
                     case 3: w = new ScrollOfAntiMagic();    break;
-                    case 4: w = new ScrollOfPsionicBlast();   break;
-                    case 5:
-                        PaswordBadges.loadGlobal();
-                        List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered( true );
-                        if(passwordbadges.contains(PaswordBadges.Badge.RESET_DAY)) {
-                            w = new SakaFishSketon();
-                        } else {
-                            w = Generator.randomUsingDefaults( Generator.Category.FOOD );
-                        }
-                        break;
                 }
                 break;
             case 16:
-                switch (Random.Int(6)){
+                switch (Random.Int(3)){
                     default:
-                    case 1: w = new WaterSoul();   break;
-                    case 2: w = new BlizzardBrew(); break;
-                    case 3: w = new CausticBrew();    break;
-                    case 4: w = new InfernalBrew();   break;
-                    case 5: w = new ShockingBrew();   break;
+                    case 0: w = new WaterSoul();   break;
+                    case 1: w = new BlizzardBrew(); break;
+                    case 2: w = new CausticBrew();    break;
                 }
                 break;
         }
@@ -238,8 +243,8 @@ public class HollowLevel extends RegularLevel {
     @Override
     protected Painter painter() {
         return new HollowPainter()
-                .setWater(feeling == Level.Feeling.WATER ? 0.90f : 0.30f, 2)
-                .setGrass(feeling == Level.Feeling.GRASS ? 0.80f : 0.20f, 0)
+                .setWater(feeling == Level.Feeling.WATER ? 0.55f : 0.50f, 2)
+                .setGrass(feeling == Level.Feeling.GRASS ? 0.70f : 0.40f, 0)
                 .setTraps(nTraps(), trapClasses(), trapChances());
     }
 
@@ -251,6 +256,22 @@ public class HollowLevel extends RegularLevel {
     @Override
     public String waterTex() {
         return Assets.Environment.WATER_HOLLOW;
+    }
+
+    protected void createMobs() {
+        if(depth>28){
+            Vampire n = new Vampire();
+            n.pos = randomRespawnCell(n);
+            mobs.add(n);
+
+            if(Random.Float()<0.25f){
+                Vampire n1 = new Vampire();
+                n1.pos = randomRespawnCell(n1);
+                mobs.add(n1);
+            }
+        }
+
+        super.createMobs();
     }
 
     @Override

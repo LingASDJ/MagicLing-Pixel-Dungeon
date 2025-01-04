@@ -13,16 +13,16 @@ public class ButcherSprite extends MobSprite {
         TextureFilm frames = new TextureFilm( texture, 20, 17 );
 
         idle = new Animation( 11, true );
-        idle.frames( frames, 0,1,2,3,4 );
+        idle.frames( frames, 0,1,2,3,4,5 );
 
         run = new Animation( 12, true );
-        run.frames( frames, 5,6,7,8,9,10 );
+        run.frames( frames,  6,7,8,9,10,11 );
 
         attack = new Animation( 11, false );
-        attack.frames( frames, 11,12,13,14,15,16,17 );
+        attack.frames( frames, 12,13,14,15,16,17,18 );
 
         die = new Animation( 11, false );
-        die.frames( frames, 18,19,20,21,22,23 );
+        die.frames( frames, 19,20,21,22,23,24 );
 
         play( idle );
     }

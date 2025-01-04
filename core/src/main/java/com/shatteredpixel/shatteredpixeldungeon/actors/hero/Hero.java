@@ -85,6 +85,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DeadSoul;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Drowsy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ElementalBuff.BaseBuff.ScaryBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ElementalBuff.DamageBuff.ScaryDamageBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostImbueEX;
@@ -390,6 +391,14 @@ public class Hero extends Char {
 
 		if(Dungeon.hero.buff(ScaryDamageBuff.class) != null) {
 			strBonus -= 2;
+		}
+
+		ScaryBuff scaryBuff = Dungeon.hero.buff(ScaryBuff.class);
+		if(scaryBuff.Scary>80){
+			strBonus -= 3;
+		}
+		if(scaryBuff.Scary>50){
+			hero.attackSkill /= 3;
 		}
 
 		return STR + strBonus;

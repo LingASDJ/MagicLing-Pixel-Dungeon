@@ -1534,6 +1534,11 @@ public class GameScene extends PixelScene {
 								WndStory.showChapter(WndStory.ID_HOLLOW);
 							}
 							break;
+						case 27:
+							if(Statistics.Hollow_Holiday){
+								WndStory.showChapter(WndStory.ID_HOLLOW_POLT);
+							}
+							break;
 					}
 				}
 
