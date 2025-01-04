@@ -622,6 +622,14 @@ public abstract class Char extends Actor {
 
 		float acuRoll = Random.Float( acuStat );
 		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
+
+		ScaryBuff scaryBuff = attacker.buff(ScaryBuff.class);
+		if(scaryBuff != null){
+			if(scaryBuff.Scary>50){
+				acuRoll *= 0.7f;
+			}
+		}
+
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){

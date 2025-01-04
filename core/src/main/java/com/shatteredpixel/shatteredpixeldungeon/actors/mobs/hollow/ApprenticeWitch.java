@@ -119,19 +119,13 @@ public class ApprenticeWitch extends Mob {
                     }
                     break;
                 case 1:
-                    if (leapVictim != null){
-                        ScrollOfTeleportation.appear(enemy, target);
-                        yell(Messages.get(this,"bye"));
-                    }
-                    break;
-                case 2:
                     int T_dmg = dmg*2;
                     if (leapVictim != null){
                         enemy.damage(T_dmg,this);
                         yell(Messages.get(this,"die"));
                     }
                     break;
-                case 3:
+                case 2:
                     yell(Messages.get(this,"oh_no"));
                     damage(dmg,this);
                     break;

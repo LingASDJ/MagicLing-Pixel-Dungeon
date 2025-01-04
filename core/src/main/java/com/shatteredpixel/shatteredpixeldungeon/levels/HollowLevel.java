@@ -162,10 +162,10 @@ public class HollowLevel extends RegularLevel {
         switch (Random.Int(0,17)){
             default:
             case 0:
-                w = Generator.random(Generator.wepTiers[Random.NormalIntRange(2,5)]);
+                w = Generator.randomUsingDefaults( Generator.Category.WEP_T3 );
                 break;
             case 1:
-                w = Generator.random(Generator.misTiers[Random.NormalIntRange(1,5)]).quantity(2).identify(false);
+                w = Generator.randomUsingDefaults( Generator.Category.MIS_T3 );
                 break;
             case 2:
                 w = new LeatherArmor().identify(false);

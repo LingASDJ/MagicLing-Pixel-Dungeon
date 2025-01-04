@@ -51,7 +51,6 @@ public class ScaryDamageBuff extends ElementalBaseBuff {
 
             if (--level <= 0) {
                 detach();
-                Buff.affect(target, ScaryImmunitiesBuff.class, ScaryImmunitiesBuff.DURATION);
             }
 
             damageInc = Random.Int(1,5) + WithDamage/5F;
@@ -70,6 +69,11 @@ public class ScaryDamageBuff extends ElementalBaseBuff {
         }
 
         return true;
+    }
+
+    public void detach() {
+        super.detach();
+        Buff.affect(target, ScaryImmunitiesBuff.class, ScaryImmunitiesBuff.DURATION);
     }
 
     @Override

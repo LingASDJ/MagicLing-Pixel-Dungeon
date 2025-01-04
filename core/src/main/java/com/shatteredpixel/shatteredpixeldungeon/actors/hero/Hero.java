@@ -79,6 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessQinyue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessRedWhite;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessUnlock;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.ClearLanterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
@@ -102,11 +103,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LighS;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlDebuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayCursed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayKill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayMoneyMore;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayNoSTR;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSaySlowy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayTimeLast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
@@ -187,6 +190,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.props.StarSachet;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.CrystalLing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.MagicBook;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.LanFireGo;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.LingJing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MIME;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
@@ -390,16 +394,13 @@ public class Hero extends Char {
 		}
 
 		if(Dungeon.hero.buff(ScaryDamageBuff.class) != null) {
-			strBonus -= 2;
+			strBonus -= 4;
 		}
 
 		ScaryBuff scaryBuff = Dungeon.hero.buff(ScaryBuff.class);
 		if(scaryBuff != null){
 			if(scaryBuff.Scary>80){
 				strBonus -= 3;
-			}
-			if(scaryBuff.Scary>50){
-				hero.attackSkill /= 3;
 			}
 		}
 
@@ -1067,7 +1068,20 @@ public class Hero extends Char {
 	public boolean act() {
 
 
-
+		LanFireGo lanFireGo = hero.belongings.getItem(LanFireGo.class);
+		if (lanFireGo != null) {
+			lanFireGo.detachAll(hero.belongings.backpack);
+			if(Dungeon.isChallenged(DHXD)){
+				hero.lanterfire = 60;
+				Buff.detach( this, MagicGirlSayCursed.class );
+				Buff.detach( this, MagicGirlSayKill.class );
+				Buff.detach( this, MagicGirlSayMoneyMore.class );
+				Buff.detach( this, MagicGirlSaySlowy.class );
+				Buff.detach( this, MagicGirlSayNoSTR.class );
+				Buff.detach( this, MagicGirlSayTimeLast.class );
+				Buff.detach( this, Nyctophobia.NoRoadMobs.class);
+			}
+		}
 
 		if(Statistics.zeroItemLevel == 8 && Dungeon.depth == 0){
 			PaswordBadges.WHATSUP();
@@ -3496,7 +3510,7 @@ public class Hero extends Char {
 
 	public void healLantern(int value) {
 		//寂灭灯火1.0
-		lanterfire = min(lanterfire + value, Dungeon.isChallenged(DHXD) ? 64 : 100);
+		lanterfire = min(lanterfire + value, Dungeon.isChallenged(DHXD) ? 72 : 100);
 		hero.sprite.showStatus(0x00ff00, String.valueOf(value));
 	}
 
