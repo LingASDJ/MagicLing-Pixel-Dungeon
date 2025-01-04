@@ -39,17 +39,22 @@ public class ScaryDamageBuff extends ElementalBaseBuff {
 
     public static final float DURATION	= 50f;
     private float damageInc = 0;
+
+
+    private int WithDamage;
+
     @Override
     public boolean act() {
         if (target.isAlive()) {
 
+            WithDamage++;
 
             if (--level <= 0) {
                 detach();
                 Buff.affect(target, ScaryImmunitiesBuff.class, ScaryImmunitiesBuff.DURATION);
             }
 
-            damageInc = Random.Int(1,5);
+            damageInc = Random.Int(1,5) + WithDamage/5F;
             target.damage((int)damageInc, this);
             damageInc -= (int)damageInc;
             beckonEnemies();
@@ -69,7 +74,7 @@ public class ScaryDamageBuff extends ElementalBaseBuff {
 
     @Override
     public int icon() {
-        return BuffIndicator.SCARY;
+        return BuffIndicator.SCARY_RED;
     }
 
     public static final String DAMAGE = "damage_inc";
@@ -85,11 +90,5 @@ public class ScaryDamageBuff extends ElementalBaseBuff {
         super.restoreFromBundle(bundle);
         damageInc = bundle.getFloat(DAMAGE);
     }
-
-    @Override
-    public void tintIcon(Image icon) {
-        icon.hardlight(1f, 0f, 0f);
-    }
-
 }
 

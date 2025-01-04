@@ -41,9 +41,8 @@ public class LanFireStats extends Buff implements Hero.Doom {
                 return true;
             }
             if (hero.lanterfire > 0 ) {
-                hero.damageLantern(1+Challenges.activeChallenges()/3 +
-                        (Dungeon.isChallenged(DARKNESS) ? 2+Challenges.activeChallenges() : 0));
-                spend((int) (35f-(float) (Dungeon.depth/5+Challenges.activeChallenges())));
+                hero.damageLantern(1+Challenges.activeChallenges()/3 + (Dungeon.isChallenged(DARKNESS) ? 2 : 0));
+                spend((int) (55f-(float) (Dungeon.depth/5+Challenges.activeChallenges())));
             } else {
                 spend(STEP);
             }
@@ -54,8 +53,8 @@ public class LanFireStats extends Buff implements Hero.Doom {
     @Override
     public String desc() {
         String result;
-        int damage = 1+Challenges.activeChallenges()/3;
-        int lanter = (int) (35f-(float) (Dungeon.depth/5+Challenges.activeChallenges()));
+        int damage = 1+Challenges.activeChallenges()/3 + (Dungeon.isChallenged(DARKNESS) ? 2 : 0);
+        int lanter = (int) (55f-(float) (Dungeon.depth/5+Challenges.activeChallenges()));
         if (hero.lanterfire >= 90 && hero.lanterfire <= 100) {
             result =  Messages.get(Nyctophobia.class, "desc");
         } else if (hero.lanterfire >= 80 && hero.lanterfire <= 89) {

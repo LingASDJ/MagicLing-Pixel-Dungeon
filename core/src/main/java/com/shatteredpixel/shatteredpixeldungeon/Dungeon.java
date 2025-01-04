@@ -390,6 +390,10 @@ public class Dungeon {
 		return depth == 6 || depth == 11 || depth == 16|| depth == 21;
 	}
 
+	public static boolean RDLCLevel() {
+		return depth == 27 || depth == 28 || depth == 29 || depth == 30;
+	}
+
 	public static boolean iceLevel() {
 		return depth > 5 && depth < 16;
 	}
@@ -564,14 +568,15 @@ public class Dungeon {
 	}
 
 	public static boolean souNeeded() {
+
+		if (Dungeon.RDLCLevel()) return false;
+		if (depth==0) return false;
+		if (Dungeon.branch !=0 ) return false;
+
 		int souLeftThisSet;
-		//3 SOU each floor set, 1.5 (rounded) on forbidden runes challenge
-		if (isChallenged(Challenges.NO_SCROLLS)){
-			souLeftThisSet = Math.round(1.5f - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5f) * 1.5f));
-		} else {
-			souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
-		}
-		if (souLeftThisSet <= 0 || Dungeon.branch != 0) return false;
+		//3 SOU each floor set
+		souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
+		if (souLeftThisSet <= 0) return false;
 
 		int floorThisSet = (depth % 5);
 		//chance is floors left / scrolls left

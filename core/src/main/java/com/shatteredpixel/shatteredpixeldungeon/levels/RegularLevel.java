@@ -325,14 +325,19 @@ public abstract class RegularLevel extends Level {
 			}
 		}
 
-		if (Dungeon.depth >= 26 && Random.Int(10) <= 4) {
-			initRooms.add(new BigEyeRoom());
-			initRooms.add(new CoinRoom());
-		} else if(Dungeon.depth<26 && Random.Int(10) == 1) {
+
+//		if (Dungeon.depth >= 26 && Random.Int(10) <= 4) {
+//			initRooms.add(new BigEyeRoom());
+//			initRooms.add(new CoinRoom());
+//		} else
+
+		if(Dungeon.depth<26 && Random.Int(10) == 1) {
 			initRooms.add(new EyeRoom());
 		}
 
-		if(Dungeon.exgoldLevel()&&Dungeon.isChallenged(CS)) initRooms.add(new GoldRoom());
+		if(Dungeon.exgoldLevel()&&Dungeon.isChallenged(CS)) {
+			initRooms.add(new GoldRoom());
+		}
 
 		if( Dungeon.depth<26 && Random.Int(30) == 1 && (Dungeon.isChallenged(DHXD) || Statistics.lanterfireactive )){
 			initRooms.add(new OilWellRoom());
@@ -638,7 +643,12 @@ public abstract class RegularLevel extends Level {
 
 		//谜城资源量减半
 		if(Dungeon.isChallenged(CS)){
-			nItems = nItems/2;
+			nItems /= 2;
+		}
+
+		//DLC EX()SP
+		if(depth>25){
+			nItems /= 100;
 		}
 
 		for (int i=0; i < nItems; i++) {

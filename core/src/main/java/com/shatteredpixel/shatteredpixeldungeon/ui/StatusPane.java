@@ -482,11 +482,11 @@ public class StatusPane extends Component {
 
 		int maxHunger = (int) Hunger.STARVING;
 		float maxPureSole = hero.lanterfire;
-		int mtPureSole = Dungeon.isChallenged(DHXD) ? 60 : 100;
+		int mtPureSole = Dungeon.isChallenged(DHXD) ? 64 : 100;
 
 		//冰血聪明 x
 		int maxLFSHp = hero.lanterfire;
-		int mjsLFSHp = Dungeon.isChallenged(DHXD) ? 60 : 100;
+		int mjsLFSHp = Dungeon.isChallenged(DHXD) ? 64 : 100;
 
 		int health = hero.HP;
 		int shield = hero.shielding();
@@ -524,7 +524,7 @@ public class StatusPane extends Component {
 			float b =  0.93f+0.57f*Math.max(0f, (float)Math.sin( time));
 
 			float lanter = hero.lanterfire;
-			lanterText.text(lanter+"/"+ (Dungeon.isChallenged(DHXD) ? 60 : 100));
+			lanterText.text(lanter+"/"+ (Dungeon.isChallenged(DHXD) ? 64 : 100));
 			lanterText.scale.set(PixelScene.align(0.5f));
 			lanterText.x = 3;
 			lanterText.y = 25;

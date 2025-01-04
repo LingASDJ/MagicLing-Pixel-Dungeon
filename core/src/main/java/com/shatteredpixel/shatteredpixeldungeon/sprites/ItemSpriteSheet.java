@@ -1043,6 +1043,15 @@ public class ItemSpriteSheet {
     public static final int  BZMDR_BOOKS			= SCROLL_GOLD+5;
     public static final int  BOSSRUSH_MINI			= SCROLL_GOLD+6;
 
+
+    private static final int HOLLOW_INDEX   	 = xy(1, 44);
+
+    public static final int HOLY_WATER =			 HOLLOW_INDEX + 12;
+
+    static {
+        assignItemRect(HOLY_WATER, 11, 15);
+    }
+
     static {
         assignItemRect(SCROLL_GOLD, 15, 14);
         assignItemRect(BOSSRUSH_GOLD, 16, 12);
