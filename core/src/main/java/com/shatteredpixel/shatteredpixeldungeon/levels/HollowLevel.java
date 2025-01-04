@@ -5,9 +5,37 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHolyWater;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.WaterSoul;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.SakaFishSketon;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.HollowPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -36,6 +64,8 @@ import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import java.util.List;
 
 public class HollowLevel extends RegularLevel {
 
@@ -77,16 +107,132 @@ public class HollowLevel extends RegularLevel {
 
     @Override
     protected int standardRooms(boolean forceMax) {
-        if (forceMax) return 9;
+        if (forceMax) return 6;
         //8 to 9, average 8.33
         return 8+ Random.chances(new float[]{2, 1});
     }
 
     @Override
     protected int specialRooms(boolean forceMax) {
-        if (forceMax) return 3;
+        if (forceMax) return 4;
         //2 to 3, average 2.5
         return 2 + Random.chances(new float[]{1, 1});
+    }
+
+    @Override
+    protected void createItems() {
+        PotionOfHolyWater potionOfHolyWater = new PotionOfHolyWater();
+        potionOfHolyWater.quantity(Random.NormalIntRange(1,3));
+        addItemToSpawn(potionOfHolyWater);
+
+        switch (depth){
+            case 28: case 30:
+                ScrollOfUpgrade scrollOfUpgrade = new ScrollOfUpgrade();
+                scrollOfUpgrade.quantity(1);
+                addItemToSpawn(scrollOfUpgrade);
+            break;
+        }
+
+        addItemToSpawn(convert());
+        addItemToSpawn(convert());
+        addItemToSpawn(convert());
+
+        super.createItems();
+    }
+
+    private Item convert(){
+        Item w = new Food();
+        switch (Random.Int(0,17)){
+            default:
+            case 0:
+                w = Generator.random(Generator.wepTiers[Random.NormalIntRange(2,5)]);
+                break;
+            case 1:
+                w = Generator.random(Generator.misTiers[1]).quantity(2).identify(false);
+                break;
+            case 2:
+                w = new LeatherArmor().identify(false);
+                break;
+            case 3:
+                Item ws;
+                ws = TippedDart.randomTipped(2);
+                w = ws;
+                break;
+            case 4:
+                w = new Alchemize().quantity(Random.IntRange(2, 3));
+                break;
+            case 5:
+                w = new PotionOfHealing().quantity(1);
+                break;
+            case 6:
+                w = Generator.randomUsingDefaults( Generator.Category.POTION );
+                break;
+            case 7:
+                w = new StoneOfAugmentation();
+                break;
+            case 8:
+                switch (Random.Int(4)){
+                    case 0:
+                        w = ( new Bomb() );
+                        break;
+                    case 1:
+                    case 2:
+                        w = ( new Bomb.DoubleBomb() );
+                        break;
+                    case 3:
+                        w = ( new Honeypot() );
+                        break;
+                }
+                break;
+            case 9:
+                w = Generator.randomUsingDefaults( Generator.Category.SCROLL );
+                break;
+            case 10:
+                w = ( new ScrollOfIdentify() );
+                break;
+            case 11:
+                w = ( new ScrollOfRemoveCurse() );
+                break;
+            case 12:
+                w = ( new ScrollOfMagicMapping() );
+                break;
+            case 13:
+                w = new Stylus();
+                break;
+            case 14:
+                w = Generator.randomUsingDefaults( Generator.Category.STONE );
+                break;
+            case 15:
+                switch (Random.Int(6)){
+                    default:
+                    case 0: w = new ScrollOfSirensSong(); break;
+                    case 1: w = new ScrollOfChallenge(); break;
+                    case 2: w = new ScrollOfMetamorphosis(); break;
+                    case 3: w = new ScrollOfAntiMagic();    break;
+                    case 4: w = new ScrollOfPsionicBlast();   break;
+                    case 5:
+                        PaswordBadges.loadGlobal();
+                        List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered( true );
+                        if(passwordbadges.contains(PaswordBadges.Badge.RESET_DAY)) {
+                            w = new SakaFishSketon();
+                        } else {
+                            w = Generator.randomUsingDefaults( Generator.Category.FOOD );
+                        }
+                        break;
+                }
+                break;
+            case 16:
+                switch (Random.Int(6)){
+                    default:
+                    case 1: w = new WaterSoul();   break;
+                    case 2: w = new BlizzardBrew(); break;
+                    case 3: w = new CausticBrew();    break;
+                    case 4: w = new InfernalBrew();   break;
+                    case 5: w = new ShockingBrew();   break;
+                }
+                break;
+        }
+        return w;
     }
 
     @Override

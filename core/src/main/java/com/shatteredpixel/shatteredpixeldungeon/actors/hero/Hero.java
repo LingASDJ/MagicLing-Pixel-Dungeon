@@ -3484,7 +3484,7 @@ public class Hero extends Char {
 
 	public void healLantern(int value) {
 		//寂灭灯火1.0
-		lanterfire = min(lanterfire + value, Dungeon.isChallenged(DHXD) ? 60 : 100);
+		lanterfire = min(lanterfire + value, Dungeon.isChallenged(DHXD) ? 64 : 100);
 		hero.sprite.showStatus(0x00ff00, String.valueOf(value));
 	}
 

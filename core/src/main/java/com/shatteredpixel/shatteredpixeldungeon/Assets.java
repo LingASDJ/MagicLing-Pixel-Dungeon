@@ -54,7 +54,8 @@ public class Assets {
 	public static final String BGM_SHOP 	= "music/Shop.ogg";
 	public static final String BGM_BOSSE4 	= "music/YogTime.ogg";
 	public static final String BGM_FRBOSS 	= "music/SnowLing.ogg";
-	public static final String HOLLOW_CITY 	= "music/hollow/Mischief_Managed.ogg";
+	public static final String HOLLOW_CITY 	= "music/hollow/Mischief_Managed-Easy.ogg";
+	public static final String HOLLOW_CITY_HARD 	= "music/hollow/Mischief_Managed.ogg";
 
 	public static final String FL_CITY 		= "music/forestflower.ogg";
 	public static final String BOSSDOG 		= "music/tmp/dogboss.ogg";
@@ -217,18 +218,28 @@ public class Assets {
 
 		public static final String LANTERLING_N  = "interfaces/LanterLing_N.png";
 
-		public static final String BANNERS  = "interfaces/banners.png";
+		public static final String BANNERS     = "interfaces/Banners/banners.png";
+		public static final String BANNERS_SD  = "interfaces/Banners/banners_sd.png";
+
+		public static final String BANNERS_SR  = "interfaces/Banners/banners_spr.png";
+		public static final String BANNERS_SM  = "interfaces/Banners/banners_sum.png";
+		public static final String BANNERS_AT  = "interfaces/Banners/banners_at.png";
+		public static final String BANNERS_WT  = "interfaces/Banners/banners_wt.png";
+
+		public static final String BANNERS_CJ  = "interfaces/Banners/banners_cj.png";
 
 		public static final String MENUTITLE  = "interfaces/menutitle.png";
-		public static final String TWOYEARS  = "interfaces/2years.png";
 
-		public static final String Three_YEARS  = "interfaces/3years.png";
+
+
+		public static final String TWO_YEARS  	= "interfaces/Years/2years.png";
+		public static final String Three_YEARS  = "interfaces/Years/3years.png";
+		public static final String Four_YEARS  =  "interfaces/Years/4years.png";
 
 		//网络贴图
 		public static final String NETICONS = "interfaces/net_icons.png";
 
-		//圣诞节
-		public static final String BANNERSSD  = "interfaces/banners_sd.png";
+
 
 		public static final String BADGES   = "interfaces/badges.png";
 		public static final String PROBADGES   = "interfaces/passwordbadges.png";

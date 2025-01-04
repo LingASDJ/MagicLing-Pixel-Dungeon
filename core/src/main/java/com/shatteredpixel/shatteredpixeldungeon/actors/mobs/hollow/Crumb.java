@@ -26,8 +26,8 @@ public class Crumb extends Mob {
     {
         spriteClass = CrumbSprite.class;
 
-        //baseSpeed = 1.5f;
-        HP = HT = 50;
+        baseSpeed = 1.5f;
+        HP = HT = 80;
 
         defenseSkill = 14;
 

@@ -249,11 +249,14 @@ public class MobSpawner extends Actor {
 							Eye.class,
 							Scorpio.class, Succubus.class,Fire_Scorpio.class,Ice_Scorpio.class,ShieldHuntsman.class));
 
-					//Hollow Mobs
+				//Hollow Mobs
 				case 27:
 					return new ArrayList<>(Arrays.asList(
 							Frankenstein.class, Frankenstein.class,
-							Crumb.class, Crumb.class, Eye.class));
+							Crumb.class, Crumb.class,
+							Frankenstein.class,
+							Crumb.class, Crumb.class,
+							Eye.class));
 
 				case 28:
 					return new ArrayList<>(Arrays.asList(
