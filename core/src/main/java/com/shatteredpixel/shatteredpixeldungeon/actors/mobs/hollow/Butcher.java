@@ -103,12 +103,12 @@ public class Butcher extends Mob {
                         Buff.affect(hero, Bleeding.class).set(3);
                     } else if(Random.Float() >= 6.6f) {
                         Buff.affect(hero, Bleeding.class).set(5);
-                        ((ScaryBuff) buff).damgeScary( 15);
+                        ((ScaryBuff) buff).damgeScary( 6);
                     } else if(Random.Float() >= 0.666f) {
                         Buff.affect(hero, Bleeding.class).set(9);
-                        ((ScaryBuff) buff).damgeScary( 25);
+                        ((ScaryBuff) buff).damgeScary( 9);
                     } else {
-                        ((ScaryBuff) buff).damgeScary( 5);
+                        ((ScaryBuff) buff).damgeScary( Random.Int(2,5));
                     }
                 } else {
                     Buff.affect( enemy, ScaryBuff.class ).set( (100), 1 );
@@ -120,7 +120,7 @@ public class Butcher extends Mob {
 
     @Override
     public int attackSkill( Char target ) {
-        return 20;
+        return 60;
     }
 
     private static final String BLINK_CD = "blink_cd";

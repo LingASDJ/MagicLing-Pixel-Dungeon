@@ -40,7 +40,7 @@ public class PumkingBomber extends Mob {
         HUNTING = new Hunting();
 
         baseSpeed = 0.75f;
-
+        properties.add( Property.HOLLOW );
         properties.add(Char.Property.DEMONIC);
         properties.add(Char.Property.UNDEAD);
     }

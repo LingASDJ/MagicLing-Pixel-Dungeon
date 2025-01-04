@@ -25,12 +25,13 @@ import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.Holid
 import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.holiday;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.GameRules;
 import com.watabou.noosa.Image;
 
 public class BannerSprites {
 
     public static Image get(Type type) {
-        Image icon = new Image(holiday == XMAS ? Assets.Interfaces.BANNERSSD : Assets.Interfaces.BANNERS);
+        Image icon = new Image(GameRules.BannersRules());
         switch (type) {
             case PIXEL_DUNGEON:
                 icon.frame(icon.texture.uvRect(0, 0, 132, 90));

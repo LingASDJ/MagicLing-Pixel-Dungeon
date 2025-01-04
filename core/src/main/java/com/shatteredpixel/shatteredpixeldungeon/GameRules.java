@@ -10,12 +10,17 @@ import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTra
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTrinket;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWand;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWeapon;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.Holiday.CJ;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.Holiday.DWJ;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.Holiday.XMAS;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.holiday;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionHero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessBossRushLow;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.WaloKe;
 import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestItem;
+import com.shatteredpixel.shatteredpixeldungeon.custom.utils.Gregorian;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
@@ -55,6 +60,7 @@ import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class GameRules {
@@ -284,20 +290,24 @@ public class GameRules {
         }
     }
 
-//    public static String BannersRules() {
-//        final Calendar calendar = Calendar.getInstance();
-//        String banners;
-//        if(calendar.get(Calendar.MONTH) > 9){
-//            banners = Assets.Interfaces.BANNERS_WINNERS;
-//        } else if(calendar.get(Calendar.MONTH) > 6) {
-//            banners = Assets.Interfaces.BANNERS_SUMER;
-//        } else if(calendar.get(Calendar.MONTH) > 3) {
-//            banners = Assets.Interfaces.BANNERS_YEARS;
-//        } else {
-//            banners = Assets.Interfaces.BANNERS;
-//        }
-//        return banners;
-//    }
+    public static String BannersRules() {
+        final Calendar calendar = Calendar.getInstance();
+        String banners;
+        if(holiday == CJ) {
+            banners = Assets.Interfaces.BANNERS_CJ;
+        } else if(holiday == XMAS) {
+            banners = Assets.Interfaces.BANNERS_SD;
+        } else if(calendar.get(Calendar.MONTH) > 9){
+            banners = Assets.Interfaces.BANNERS_AT;
+        } else if(calendar.get(Calendar.MONTH) > 6) {
+            banners = Assets.Interfaces.BANNERS_SM;
+        } else if(calendar.get(Calendar.MONTH) > 3) {
+            banners = Assets.Interfaces.BANNERS_SR;
+        } else {
+            banners = Assets.Interfaces.BANNERS;
+        }
+        return banners;
+    }
 
 
 }

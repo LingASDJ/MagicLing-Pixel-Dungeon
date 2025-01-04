@@ -20,14 +20,14 @@ public class Frankenstein extends Mob {
     private static int FIRST_DEATH_REVIVE_CHANCE = 50; // 50% chance for first death
     private static int SECOND_DEATH_REVIVE_CHANCE = 25; // 25% chance for second death
     private int deathCount = 0; // Counter for how many times the creature has died
-    public boolean MustDied;
+    public boolean MustDied = false;
 
     public int RestCooldown;
 
     {
         spriteClass = FrankensteinSprite.class;
         baseSpeed = 1.2f;
-        HP = HT = 90;
+        HP = HT = 120;
         EXP = 15;
         defenseSkill = 14;
         maxLvl = 34;
@@ -66,6 +66,10 @@ public class Frankenstein extends Mob {
             return true; // If still alive according to the parent class
         }
 
+        if(MustDied || deathCount >=2){
+            return true;
+        }
+
         // Check resurrection chances
         if (deathCount == 0 && RestCooldown == 0) {
             if (Random.Int(100) <= FIRST_DEATH_REVIVE_CHANCE) {
@@ -89,7 +93,6 @@ public class Frankenstein extends Mob {
             }
         }
 
-        MustDied = true;
         return false;
     }
 
@@ -111,7 +114,7 @@ public class Frankenstein extends Mob {
         if(enemy!=null && enemy == hero) {
             for (Buff buff : hero.buffs()) {
                 if (buff instanceof ScaryBuff) {
-                    ((ScaryBuff) buff).damgeScary(10);
+                    ((ScaryBuff) buff).damgeScary(Random.Int(3,6));
                 } else {
                     Buff.affect(enemy, ScaryBuff.class).set((100), 5);
                 }
