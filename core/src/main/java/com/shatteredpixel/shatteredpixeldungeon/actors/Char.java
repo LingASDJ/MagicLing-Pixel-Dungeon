@@ -681,10 +681,11 @@ public abstract class Char extends Actor {
 		}
 
 		ScaryBuff scaryBuff = Dungeon.hero.buff(ScaryBuff.class);
-		if(scaryBuff.Scary>50){
-			damage *= 0.65f;
+		if(scaryBuff != null){
+			if(scaryBuff.Scary>50){
+				damage *= 0.65f;
+			}
 		}
-
 		return damage;
 	}
 

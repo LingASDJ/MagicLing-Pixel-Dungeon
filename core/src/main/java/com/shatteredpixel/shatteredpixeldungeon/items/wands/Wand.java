@@ -167,10 +167,13 @@ public abstract class Wand extends Item {
 
 
 		ScaryBuff scaryBuff = Dungeon.hero.buff(ScaryBuff.class);
-		if(scaryBuff.Scary>70){
-			GLog.w(Messages.get(this, "no_holo"));
-			return false;
+		if(scaryBuff != null){
+			if(scaryBuff.Scary>70){
+				GLog.w(Messages.get(this, "no_holo"));
+				return false;
+			}
 		}
+
 
 		if (owner.buff(WildMagic.WildMagicTracker.class) == null && owner.buff(MagicImmune.class) != null){
 			GLog.w( Messages.get(this, "no_magic") );
