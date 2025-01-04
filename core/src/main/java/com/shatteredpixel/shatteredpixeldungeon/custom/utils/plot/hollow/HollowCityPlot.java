@@ -70,7 +70,6 @@ public class HollowCityPlot extends Plot {
     public void skip() {
         diagulewindow.cancel();
         WndDialog.settedPlot = null;
-        HollowLogo();
     }
 
     private void process_to_1()
@@ -100,7 +99,6 @@ public class HollowCityPlot extends Plot {
 
     private void process_to_4()
     {
-        HollowLogo();
         diagulewindow.changeText(Messages.get(HollowCityPlot.class,"message4"));
     }
 }

@@ -176,21 +176,12 @@ public class OpenLastLevel extends Level {
 
     @Override
     protected void createItems() {
-        if(Dungeon.isDLC(Conducts.Conduct.DEV)){
-            drop( new JAmulet(), AMULET_POS );
-        } else {
-            drop( new Amulet(), 19 );
-        }
+//        if(Dungeon.isDLC(Conducts.Conduct.DEV)){
+//            drop( new JAmulet(), AMULET_POS );
+//        } else {
+//            drop( new Amulet(), 19 );
+//        }
 
-    }
-
-    @Override
-    public void playLevelMusic() {
-        if (Statistics.amuletObtained) {
-            Music.INSTANCE.end();
-        } else {
-            Music.INSTANCE.play(Assets.Music.THEME_FINALE, true);
-        }
     }
 
     @Override

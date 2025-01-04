@@ -37,10 +37,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.Turtle;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.PiraLand;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.RiceRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.ApprenticeWitch;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Butcher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Crumb;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Frankenstein;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Ghost_Halloween;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.PumkingBomber;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Pumking_Ghost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Vampire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.rlpt.DrTerror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.rlpt.GunHuntsman;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
@@ -260,14 +263,25 @@ public class MobSpawner extends Actor {
 
 				case 28:
 					return new ArrayList<>(Arrays.asList(
-							Frankenstein.class, Frankenstein.class,
-							Crumb.class, Crumb.class, Eye.class));
-
+							Crumb.class, Crumb.class,
+							Ghost_Halloween.class,Ghost_Halloween.class,
+							Pumking_Ghost.class
+							));
 				case 29:
+					return new ArrayList<>(Arrays.asList(
+							ApprenticeWitch.class,
+							Butcher.class,Butcher.class,
+							PumkingBomber.class, Pumking_Ghost.class
+					));
 
 				case 30:
 					return new ArrayList<>(Arrays.asList(
-							ApprenticeWitch.class, Crumb.class, PumkingBomber.class, ApprenticeWitch.class));
+							ApprenticeWitch.class,
+							ApprenticeWitch.class,
+							Butcher.class,Butcher.class,
+							Pumking_Ghost.class
+							, PumkingBomber.class
+					));
 
 				default:
 					return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,

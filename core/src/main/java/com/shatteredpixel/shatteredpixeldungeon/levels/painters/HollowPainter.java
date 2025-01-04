@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.painters;
 
+import static com.shatteredpixel.shatteredpixeldungeon.levels.HollowLevel.convert;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -43,18 +45,6 @@ public class HollowPainter extends RegularPainter {
             }
         }
 
-        for (int i=0; i < l - w; i++) {
-
-            if (map[i] == Terrain.EMPTY && Random.Int( 10 ) == 0) {
-                map[i] = Terrain.EMPTY_DECO;
-
-            } else if (map[i] == Terrain.WALL
-                    && !DungeonTileSheet.wallStitcheable(map[i + w])
-                    && Random.Int( 27 - Dungeon.depth ) == 0) {
-                map[i] = Terrain.WALL_DECO;
-            }
-        }
-
         for (int i=0; i < w; i++) {
             if (map[i] == Terrain.WALL &&
                     (map[i + w] == Terrain.EMPTY || map[i + w] == Terrain.EMPTY_SP) &&
@@ -78,7 +68,7 @@ public class HollowPainter extends RegularPainter {
                     continue; // 跳过生成拟态怪物的步骤
                 }
 
-                level.mobs.add(HollowMimic.spawnAt(i, Generator.random(Generator.Category.ARMOR), HollowMimic.class));
+                level.mobs.add(HollowMimic.spawnAt(i, convert(), HollowMimic.class));
                 map[i] = Terrain.EMPTY;
                 mimicCount++; // 增加拟态怪物数量的计数器
             }

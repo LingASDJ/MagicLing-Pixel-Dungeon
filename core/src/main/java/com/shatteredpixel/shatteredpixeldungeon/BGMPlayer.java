@@ -113,6 +113,8 @@ public class BGMPlayer {
                     playBGM(Assets.BGM_4, true);
                 } else if (d > 20 && d <= 25) {
                     playBGM(Assets.BGM_5, true);
+                } else if (d == 26 && Statistics.Hollow_Holiday) {
+                    playBGM(Assets.HOLLOW_CITY, true);
                 } else if (d >= 29 && d < 31) {
                     playBGM(Assets.HOLLOW_CITY_HARD, true);
                 } else if (d > 26 && d < 29) {
