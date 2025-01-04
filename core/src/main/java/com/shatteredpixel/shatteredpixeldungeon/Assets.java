@@ -561,11 +561,13 @@ public class Assets {
 
 		public static final String GHOST_HE = "sprites/hollow/ghost_halloween.png";
 
+		public static final String GHOST_HP = "sprites/hollow/pumpkin_ghost.png";
+
 		public static final String CRUMB = "sprites/hollow/crumb.png";
 
 		public static final String BOMB = "sprites/hollow/gingerbread.png";
 
-		public static final String MIMICRY = "sprites/hollow/mimicry.png";
+		public static final String VAMPIRE = "sprites/hollow/vampire.png";
 
 		public static final String KEEPERKINGBOT	= "sprites/npc/autoshop.png";
 

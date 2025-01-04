@@ -83,6 +83,8 @@ public class WndStory extends Window {
 
 	public static final int ID_HOLLOW		= 40;
 
+	public static final int ID_HOLLOW_POLT		= 41;
+
 	//DLC BOSSRUSH
 	public static final int ID_GAME = 12;
 	public static final int ID_NOMOBS = 14;
@@ -129,6 +131,8 @@ public class WndStory extends Window {
 		CHAPTERS.put( ID_COLDCHESTBOSS, "coldchest" );
 
 		CHAPTERS.put( ID_HOLLOW, "hollow" );
+
+		CHAPTERS.put( ID_HOLLOW_POLT, "hollowpolt" );
 
 		CHAPTERS.put( ID_GAME, "bossrushstart" );
 		CHAPTERS.put( ID_NOMOBS, "nomobs" );
@@ -267,6 +271,11 @@ public class WndStory extends Window {
 							GameScene.show(new WndDialog(Plot,false));
 						}
 					});
+					break;
+				case 27:
+					mapnameSlain.texture( "interfaces/mapname/hollow.png" );
+					mapnameSlain.show( Window.GDX_COLOR, 0.6f, 3f );
+					scene.showLogo( mapnameSlain );
 					break;
 			}
 		}
