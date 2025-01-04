@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicGirlDebuff.MagicGirlSayTimeLast;
@@ -790,7 +791,7 @@ public class FireMagicDied extends Boss implements Callback, Hero.Doom {
             sprite.showStatus(0xff0000, Messages.get(this, "dead"));
             Buff.affect(this, ChampionEnemy.Halo.class);
             Buff.affect(this, Adrenaline.class, 50f);
-            Buff.affect(this,  Invisibility.class, 20f);
+            Buff.affect(this,  Invulnerability.class, 20f);
         } else if (phase == 3 && preHP > 10 && HP <= 20){
             yell( Messages.get(this, "losing") );
             die(Dungeon.hero);

@@ -3,12 +3,14 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist.mlpd;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.lb.RivalSprite;
+import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.NetIcons;
 import com.shatteredpixel.shatteredpixeldungeon.effects.PasswordBadgeBanner;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ApprenticeWitchSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ButcherSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrivusStarFruitsSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM720Sprite;
@@ -32,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.MoonLowSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.NyzSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PianoLeSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PiraLandSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.PumkingGhostSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QinWolfSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QliphothSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RedNecromancerSprite;
@@ -39,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.SakaFishBossSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkKingSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkeeperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SmallLeafSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.VampireSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WhiteGirlSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.YetYogSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ZakoSprite;
@@ -54,6 +58,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0800M1_Changes(changeInfos);
         add_V07993_Changes(changeInfos);
         add_V07990_Changes(changeInfos);
         add_V078_90_Changes(changeInfos);
@@ -85,6 +90,61 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0800M1_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.0.0-M1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "middle"), false, null);
+        changes.hardlight(Window.Pink_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new VampireSprite(), ("万圣古堡①测-中测"),
+                ("万圣节古堡①测，中测群正在测试，敬请期待古堡正式版本！")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.HOLY_WATER), ("新物品：圣水瓶"),
+                ("可以重创部分敌人，可以让部分敌人失效，每层生成1-3个圣水瓶")));
+
+        changes.addButton(new ChangeButton(new GhostHalloweenSprite(), ("新怪物：鬼魂"),
+                ("游荡在万圣大殿的鬼魂，虽然无法对敌人造成伤害，但可以造成精神摧残。")));
+
+        changes.addButton(new ChangeButton(new PumkingGhostSprite(), ("新怪物：南瓜头鬼魂"),
+                ("游荡在万圣大殿的鬼魂，虽然无法对敌人造成伤害，但可以造成精神摧残。")));
+
+        changes.addButton(new ChangeButton(new ApprenticeWitchSprite(), ("新怪物：见习魔女"),
+                ("她曾是某魔法学院的学生，因为太过顽皮，没能通过魔法考试，所以无法成为一名合格的法师。")));
+
+        changes.addButton(new ChangeButton(new ButcherSprite(), ("新怪物：电锯狂人"),
+                ("电锯狂人曾经也是一个冒险者，可现在由于各种原因，他已失去了神智。它徘徊这古堡周围，寻找一切可以被撕碎的东西。")));
+
+        changes.addButton(new ChangeButton(new FrankensteinSprite(), ("新怪物：残梦魔偶"),
+                ("游荡在万圣大殿的未完成人偶，据说制作它们的主人因为它们失败的外型和缓慢的速度最终抛弃了它们。它们已经陷入了癫狂之中，会寻找一切活着的生命，并撕碎他们的灵魂。")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new LuoWhiteSprite(), ("兑换码系统V2.0"),
+                ("兑换码系统现在可在游戏界面中进入！")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.LANTERNB), ("寂灭灯火V1.5"),
+                ("1.没入黑暗灯火扣减从原灯火扣减 + 2*挑战数量/5，改为固定+2，且仅在自动扣减中\n\n" +
+                                "2.灯火最大值提升至72")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.7.9.9-SP4版本:\n\n" +
+                        "1.修复部分文本缺失\n" +
+                        "2.修复哨位法杖异常\n" +
+                        "3.优化纯晶元素4层AI\n" +
+                        "4.火龙，莲娜，矮人武将阶段调整追加无敌"));
+
     }
 
     public static void add_V07993_Changes( ArrayList<ChangeInfo> changeInfos ) {
