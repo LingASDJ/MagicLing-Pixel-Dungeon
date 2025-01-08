@@ -293,21 +293,27 @@ public class GameRules {
     public static String BannersRules() {
         final Calendar calendar = Calendar.getInstance();
         String banners;
-        if(holiday == CJ) {
-            banners = Assets.Interfaces.BANNERS_CJ;
-        } else if(holiday == XMAS) {
-            banners = Assets.Interfaces.BANNERS_SD;
-        } else if(calendar.get(Calendar.MONTH) > 9){
-            banners = Assets.Interfaces.BANNERS_AT;
-        } else if(calendar.get(Calendar.MONTH) > 6) {
-            banners = Assets.Interfaces.BANNERS_SM;
-        } else if(calendar.get(Calendar.MONTH) > 3) {
-            banners = Assets.Interfaces.BANNERS_SR;
-        } else {
-            banners = Assets.Interfaces.BANNERS;
-        }
+
+        // 判断是否为节假日
+
+            // 获取当前月份
+            int month = calendar.get(Calendar.MONTH); // 注意，月份是从0开始的，0表示1月，11表示12月
+
+            // 根据月份选择季节对应的横幅
+            if (month == 2 || month == 3 || month == 4) { // 春季：3, 4, 5月
+                banners = Assets.Interfaces.BANNERS_SR;
+            } else if (month == 5 || month == 6 || month == 7) { // 夏季：6, 7, 8月
+                banners = Assets.Interfaces.BANNERS_SM;
+            } else if (month == 8 || month == 9 || month == 10) { // 秋季：9, 10, 11月
+                banners = Assets.Interfaces.BANNERS_AT;
+            } else { // 冬季：12, 1, 2月
+                banners = Assets.Interfaces.BANNERS_WT;
+            }
+
+
         return banners;
     }
+
 
 
 }
