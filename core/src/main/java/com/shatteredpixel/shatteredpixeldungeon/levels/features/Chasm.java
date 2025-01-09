@@ -21,7 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.features;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.branch;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
@@ -142,6 +144,10 @@ public class Chasm implements Hero.Doom {
 			if (Statistics.crivusfruitslevel2) {
 				hero.damage(3, CrivusStarFruits.class);
 			}
+		} else if(branch!=0){
+			ScrollOfTeleportation.appear(hero, level.entrance());
+			Dungeon.hero.interrupt();
+			Dungeon.observe();
 		} else if(Dungeon.depth > 28) {
 			GLog.n(Messages.get(Imp.class,"must_go"));
 		} else if(Statistics.DwarfMasterKing && Dungeon.depth == 19 && !Statistics.dwarfKill) {

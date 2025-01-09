@@ -116,7 +116,7 @@ public class PaswordBadges {
         SAKA_DIED(5),
         RESET_DAY(6),
         BRCLER(7),
-        ALLCHSX(8),
+        ALLCHSX(8,false,true),
 
         GODD_MAKE(12),
 
@@ -145,15 +145,18 @@ public class PaswordBadges {
 
         public boolean meta;
 
+        public boolean challenges;
+
         public int image;
 
         Badge( int image ) {
-            this( image, false );
+            this( image, false,false );
         }
 
-        Badge( int image, boolean meta ) {
+        Badge( int image, boolean meta,boolean challenges ) {
             this.image = image;
             this.meta = meta;
+            this.challenges = challenges;
         }
 
         public String title(){
@@ -161,7 +164,12 @@ public class PaswordBadges {
         }
 
         public String desc(){
-            return Messages.get(this, name()+".desc");
+            if(challenges) {
+                return Messages.get(this, name() + ".desc", SPDSettings.RecordChallengs());
+            } else {
+                return Messages.get(this, name()+".desc");
+            }
+
         }
 
         Badge() {
@@ -170,7 +178,7 @@ public class PaswordBadges {
     }
 
     public static HashSet<Badge> global;
-    private static HashSet<Badge> local = new HashSet<>();
+    public static HashSet<Badge> local = new HashSet<>();
 
 
 

@@ -68,6 +68,28 @@ public class BGMPlayer {
                 if(d == 25){
                     playBGM(Assets.Music.THEME_FINALE, true);
                 }
+                if(d == 10){
+                    Music.INSTANCE.playTracks(
+                            new String[]{Assets.Music.DIAMAND_KING_INTRO,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                            },
+                            new float[]{1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                            },
+                            false);
+                }
                 if (d == 11 || d == 12 || d == 13 || d == 14) {
                     if(level.locked){
                         playBGM(Assets.Music.CAVES_BOSS_FINALE, true);
@@ -187,7 +209,6 @@ public class BGMPlayer {
                     playBGM(Assets.BGM_BOSSB2, true);
                     break;
                 case 16: case 17:
-                    playBGM(Assets.BGM_BOSSC, true);
                     try {
                         CavesBossLevel level = (CavesBossLevel) Dungeon.level;
                         for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])){
@@ -259,7 +280,26 @@ public class BGMPlayer {
                 playBGM(Assets.BGM_BOSSA, true);
             } else if (Dungeon.bossLevel() && t == 10) {
                 if(((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) && !Statistics.mustTengu){
-                    playBGM(Assets.BGM_BOSSB, true);
+                    Music.INSTANCE.playTracks(
+                            new String[]{Assets.Music.DIAMAND_KING_INTRO,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                            },
+                            new float[]{1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                            },
+                            false);
                 } else {
                     playBGM(Assets.BGM_BOSSB2, true);
                 }

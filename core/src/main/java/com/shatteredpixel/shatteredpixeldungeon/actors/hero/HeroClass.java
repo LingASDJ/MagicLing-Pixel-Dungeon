@@ -166,7 +166,7 @@ public enum HeroClass {
 	public void initHero( Hero hero ) {
 		if (!Dungeon.isDLC(Conducts.Conduct.SEED)) {
 
-			//Statistics.Hollow_Holiday = true;
+			Statistics.Hollow_Holiday = true;
 
 			if (RegularLevel.birthday == RegularLevel.DevBirthday.DEV_BIRTHDAY) {
 				new CrystalLing().quantity(1).identify().collect();

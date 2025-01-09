@@ -154,6 +154,8 @@ public class Statistics {
 	//拟态之王
 	public static boolean TPDoorDieds = false;
 
+	public static int KillMazeMimic;
+
 	//前路优化
 	public static boolean noGoReadHungry = false;
 
@@ -173,6 +175,9 @@ public class Statistics {
 	public static boolean Alone;
 
 	//首次对决
+
+	public static boolean RandomMimicItem;
+
 	public static boolean mimicking = false;
 
 	public static boolean mustTengu = false;
@@ -300,6 +305,10 @@ public class Statistics {
 	private static final String AnmyMobs		= "anmymobs";
 
 	private static final String MMC		= "mmcsx";
+
+	private static final String MMCITEM		= "mmcsx_item";
+
+	private static final String MIMIC_MAZEKILL		= "mimic_mazekill";
 
 	private static final String DDK		= "dada";
 
@@ -452,6 +461,9 @@ public class Statistics {
         qualifiedForNoKilling = false;
         qualifiedForBossChallengeBadge = false;
         mimicking = false;
+
+		RandomMimicItem = Random.NormalIntRange(0,100)>=45;
+		KillMazeMimic = 0;
 
 		//生成商店限制
 		Alone = false;
@@ -621,6 +633,12 @@ public class Statistics {
 
 		bundle.put(MMC,mimicking);
 
+		bundle.put(MMC,mimicking);
+
+		bundle.put(MMCITEM,RandomMimicItem);
+
+		bundle.put(MIMIC_MAZEKILL,KillMazeMimic);
+
 		bundle.put( AnmyMobs, TryUsedAnmy );
 
 		bundle.put( TIPSGO, tipsgodungeon );
@@ -688,6 +706,9 @@ public class Statistics {
 		Hollow_Holiday = bundle.getBoolean("HOLLOW_DAY");
 		/**/
 
+		RandomMimicItem = bundle.getBoolean(MMCITEM);
+
+		KillMazeMimic = bundle.getInt(MIMIC_MAZEKILL);
 
 		GameKillFireDargon = bundle.getBoolean("DRAM");
 

@@ -116,7 +116,7 @@ public class FireDragon extends Boss implements Callback {
 
     @Override
     public boolean isInvulnerable(Class effect) {
-        return !Dungeon.level.locked;
+        return !Dungeon.level.locked || super.isInvulnerable(effect);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class FireDragon extends Boss implements Callback {
     public int damageRoll() {
         int damage = super.damageRoll();
         if (buff(DamageUpEffect.class) != null){
-            damage = (int) (damage*1.4f);
+            damage = (int) (damage * 1.4f);
         }
         return damage;
     }
