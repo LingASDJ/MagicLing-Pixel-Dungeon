@@ -407,7 +407,7 @@ public abstract class Level implements Bundlable {
 		
 		map = new int[length];
 
-		Arrays.fill( map, feeling == Level.Feeling.CHASM ? Terrain.CHASM : Terrain.WALL );
+		Arrays.fill( map, feeling == Level.Feeling.CHASM ? Statistics.bossRushMode ?  Terrain.WALL : Terrain.CHASM : Terrain.WALL );
 		
 		visited     = new boolean[length];
 		mapped      = new boolean[length];
@@ -1214,8 +1214,13 @@ public abstract class Level implements Bundlable {
 			heap.pos = cell;
 			heap.drop(item);
 			if (map[cell] == Terrain.CHASM || (Dungeon.level != null && pit[cell])) {
-				Dungeon.dropToChasm( item );
-				GameScene.discard( heap );
+				if(Dungeon.branch != 0){
+					item.doPickUp(hero, hero.pos);
+					heap.destroy();
+				} else {
+					Dungeon.dropToChasm( item );
+					GameScene.discard( heap );
+				}
 			} else {
 				heaps.put( cell, heap );
 				GameScene.add( heap );
@@ -1262,8 +1267,13 @@ public abstract class Level implements Bundlable {
 			heap.pos = cell;
 			heap.drop(item);
 			if (map[cell] == Terrain.CHASM || (Dungeon.level != null && pit[cell])) {
-				Dungeon.dropToChasm( item );
-				GameScene.discard( heap );
+				if(Dungeon.branch != 0){
+					item.doPickUp(hero, hero.pos);
+					heap.destroy();
+				} else {
+					Dungeon.dropToChasm( item );
+					GameScene.discard( heap );
+				}
 			} else {
 				heaps.put( cell, heap );
 				GameScene.add( heap );

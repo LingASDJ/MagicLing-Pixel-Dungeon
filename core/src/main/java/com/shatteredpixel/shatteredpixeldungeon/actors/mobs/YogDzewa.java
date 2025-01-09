@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Boss;
@@ -560,7 +561,9 @@ public class YogDzewa extends Boss {
 			Statistics.qualifiedForBossChallengeBadge = false;
 		}
 		Statistics.bossScores[4] += 5000 + 1250*Statistics.spawnersAlive;
-
+		if(Challenges.activeChallenges() > SPDSettings.RecordChallengs()){
+			SPDSettings.RecordChallengs(Challenges.activeChallenges());
+		}
 		Dungeon.level.unseal();
 		super.die( cause );
 

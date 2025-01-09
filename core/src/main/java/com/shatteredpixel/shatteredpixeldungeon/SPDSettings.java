@@ -1144,4 +1144,18 @@ public class SPDSettings extends GameSettings {
 	public static void modifyGiftPart( String target, int index ,String value){
 		modifyArrayElement( KEY_GIFT_DATA, target, index, value ) ;
 	}
+
+
+	//Challanges
+
+	public static final String KEY_RECORD	= "record";
+
+	public static void RecordChallengs(int value) {
+		put(KEY_RECORD, value);
+	}
+
+	public static int RecordChallengs() {
+		return getInt(KEY_RECORD, 0);
+	}
+
 }

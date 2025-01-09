@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -28,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -56,6 +59,8 @@ public class Mimic extends Mob {
 
 	{
 		spriteClass = MimicSprite.class;
+
+		flying = Dungeon.branch == 4;
 
 		properties.add(Property.DEMONIC);
 
@@ -200,6 +205,13 @@ public class Mimic extends Mob {
 			alignment = Alignment.ENEMY;
 			stopHiding();
 		}
+
+		LockedFloor lock = hero.buff(LockedFloor.class);
+		if (lock != null){
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
+			else                                                    lock.addTime(dmg*1.5f);
+		}
+
 		super.damage(dmg, src);
 	}
 
@@ -274,12 +286,17 @@ public class Mimic extends Mob {
 
 		if (items != null) {
 			for (Item item : items) {
-				Dungeon.level.drop( item, pos ).sprite.drop();
+    				Dungeon.level.drop( item, pos ).sprite.drop();
 			}
 			items = null;
 		}
 		//宝藏迷宫
 		Statistics.goldchestmazeCollected++;
+
+		if(Dungeon.depth == 10 && Dungeon.branch == 4){
+			Statistics.KillMazeMimic++;
+		}
+
 		super.rollToDropLoot();
 	}
 

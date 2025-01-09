@@ -82,6 +82,14 @@ public class ItemSlot extends Button {
 		public int image() { return ItemSpriteSheet.TOMB; }
 		public String name() { return Messages.get(Heap.class, "tomb"); }
 	};
+	public static final Item WHITETOMB = new Item() {
+		public int image() { return ItemSpriteSheet.GRAVE; }
+		public String name() { return Messages.get(Heap.class, "wtomb"); }
+	};
+	public static final Item BLACK = new Item() {
+		public int image() { return ItemSpriteSheet.EBONY_CHEST; }
+		public String name() { return Messages.get(Heap.class, "black_chest"); }
+	};
 	public static final Item SKELETON = new Item() {
 		public int image() { return ItemSpriteSheet.BONES; }
 		public String name() { return Messages.get(Heap.class, "skeleton"); }

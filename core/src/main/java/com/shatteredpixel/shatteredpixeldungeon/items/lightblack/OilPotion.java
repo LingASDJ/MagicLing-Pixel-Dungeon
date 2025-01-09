@@ -61,6 +61,6 @@ public class OilPotion extends Item {
 
     @Override
     public int value() {
-        return Dungeon.isChallenged(DHXD) ? quantity * 80 : quantity * 20;
+        return Dungeon.isChallenged(DHXD) ? quantity * 40 : quantity * 20;
     }
 }

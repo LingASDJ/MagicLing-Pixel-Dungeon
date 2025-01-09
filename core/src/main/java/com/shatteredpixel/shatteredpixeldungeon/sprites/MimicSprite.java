@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.watabou.noosa.TextureFilm;
@@ -121,7 +122,7 @@ public class MimicSprite extends MobSprite {
 		@Override
 		public void hideMimic(Char ch) {
 			super.hideMimic(ch);
-			alpha(0.2f);
+			alpha(Dungeon.branch == 4 ? 0.4f : 0.2f);
 		}
 
 		@Override
