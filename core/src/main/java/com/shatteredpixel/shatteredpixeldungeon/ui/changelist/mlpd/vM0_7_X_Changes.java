@@ -3,7 +3,6 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist.mlpd;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.lb.RivalSprite;
-import com.shatteredpixel.shatteredpixeldungeon.custom.messages.M;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.NetIcons;
 import com.shatteredpixel.shatteredpixeldungeon.effects.PasswordBadgeBanner;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -58,6 +57,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0801_Changes(changeInfos);
         add_V0800M1_Changes(changeInfos);
         add_V07993_Changes(changeInfos);
         add_V07990_Changes(changeInfos);
@@ -90,6 +90,48 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0801_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.0.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        Image issxsaxs =new DimandKingSprite();
+        issxsaxs.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(issxsaxs, ("拟态之王2.0"),
+                ("现在拟态之王因为实装音乐所以重新优化了一些阶段，" +
+                        "尤其是第二阶段，同时绝命有所调整，请自行游戏内查看")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.AUDIO), ("新原创音乐：拟态之王-宝藏迷宫"),
+                ("由作曲家'Tatsro'制作的原创Boss战BGM")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.LANTERNB), ("寂灭灯火V1.6"),
+                ("1.灯油降价，从原来的四倍变成两倍！" +
+                        "2.灯火自然扣减变慢4回合")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.DISPLAY), ("UI改动"),
+                ("1.加密徽章现在可以看见自己的获得量/总量" +
+                        "2.13挑徽章可以看见自己的最高记录挑战数量,但需要在新版本进行一次通过才能记录。")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.0.0:\n\n" +
+                        "1.修复子层丢东西导致的小异常\n" +
+                        "2.修复BossRush裂缝层地形异常问题\n" +
+                        "3.修复BossRush模式部分楼层的异常问题\n" +
+                        "4.修复玩家到达白墓碑和黑宝箱上方时会显示其中的物品的小异常\n" +
+                        "5.修复部分音乐冲突导致的部分机型的严重卡顿\n" +
+                        "6.修复火龙buff不生效以及无敌失效异常"));
+
     }
 
     public static void add_V0800M1_Changes(ArrayList<ChangeInfo> changeInfos ) {

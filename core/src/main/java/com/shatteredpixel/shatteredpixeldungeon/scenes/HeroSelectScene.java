@@ -441,10 +441,16 @@ public class HeroSelectScene extends PixelScene {
 
 			@Override
 			protected void onClick() {
-				HeroClass cl = heroClass();
-				GamesInProgress.selectedClass = cl;
-				a.heroClass(cl);
-				ShatteredPixelDungeon.scene().addToFront(new WndMessage(Messages.get(cl, cl.name() + "_story")));
+//				HeroClass cl = heroClass();
+//				GamesInProgress.selectedClass = cl;
+//				a.heroClass(cl);
+				ShatteredPixelDungeon.scene().addToFront(new WndMessage(Messages.get(this,"closed")));
+			}
+
+			@Override
+			public Image icon() {
+				icon.alpha( 0.4f );
+				return icon;
 			}
 		};
 		Telnetsc.setSize( BUTTON_HEIGHT, BUTTON_HEIGHT );

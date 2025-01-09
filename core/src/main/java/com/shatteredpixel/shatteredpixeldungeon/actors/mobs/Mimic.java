@@ -21,12 +21,17 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -49,21 +54,23 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class Mimic extends Mob {
-	
+
 	private int level;
-	
+
 	{
 		spriteClass = MimicSprite.class;
+
+		flying = Dungeon.branch == 4;
 
 		properties.add(Property.DEMONIC);
 
 		EXP = 0;
-		
+
 		//mimics are neutral when hidden
 		alignment = Alignment.NEUTRAL;
 		state = PASSIVE;
 	}
-	
+
 	public ArrayList<Item> items;
 
 	private boolean stealthy = false;
@@ -79,7 +86,7 @@ public class Mimic extends Mob {
 		bundle.put( LEVEL, level );
 		bundle.put( STEALTHY, stealthy );
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
@@ -110,7 +117,9 @@ public class Mimic extends Mob {
 
 	@Override
 	public String name() {
-		if (alignment == Alignment.NEUTRAL){
+		if (alignment == Alignment.NEUTRAL && properties.contains(Property.HOLLOW)){
+			return Messages.get(HollowMimic.class, "minames");
+		} else if(alignment == Alignment.NEUTRAL) {
 			return Messages.get(Heap.class, "chest");
 		} else {
 			return super.name();
@@ -119,12 +128,12 @@ public class Mimic extends Mob {
 
 	@Override
 	public String description() {
-		if (alignment == Alignment.NEUTRAL){
-			if (MimicTooth.stealthyMimics()){
-				return Messages.get(Heap.class, "chest_desc");
-			} else {
-				return Messages.get(Heap.class, "chest_desc") + "\n\n" + Messages.get(this, "hidden_hint");
-			}
+		if (alignment == Alignment.NEUTRAL && properties.contains(Property.HOLLOW)) {
+			return Messages.get(HollowMimic.class, "midescs");
+		} else if (MimicTooth.stealthyMimics()) {
+			return Messages.get(Heap.class, "chest_desc");
+		} else if (alignment == Alignment.NEUTRAL){
+			return Messages.get(Heap.class, "chest_desc") + "\n\n" + Messages.get(this, "hidden_hint");
 		} else {
 			return super.description();
 		}
@@ -196,6 +205,13 @@ public class Mimic extends Mob {
 			alignment = Alignment.ENEMY;
 			stopHiding();
 		}
+
+		LockedFloor lock = hero.buff(LockedFloor.class);
+		if (lock != null){
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
+			else                                                    lock.addTime(dmg*1.5f);
+		}
+
 		super.damage(dmg, src);
 	}
 
@@ -257,23 +273,30 @@ public class Mimic extends Mob {
 		this.level = level;
 		adjustStats(level);
 	}
-	
+
 	public void adjustStats( int level ) {
 		HP = HT = (1 + level) * 6;
 		defenseSkill = 2 + level/2;
-		
+
 		enemySeen = true;
 	}
-	
+
 	@Override
 	public void rollToDropLoot(){
-		
+
 		if (items != null) {
 			for (Item item : items) {
-				Dungeon.level.drop( item, pos ).sprite.drop();
+    				Dungeon.level.drop( item, pos ).sprite.drop();
 			}
 			items = null;
 		}
+		//宝藏迷宫
+		Statistics.goldchestmazeCollected++;
+
+		if(Dungeon.depth == 10 && Dungeon.branch == 4){
+			Statistics.KillMazeMimic++;
+		}
+
 		super.rollToDropLoot();
 	}
 

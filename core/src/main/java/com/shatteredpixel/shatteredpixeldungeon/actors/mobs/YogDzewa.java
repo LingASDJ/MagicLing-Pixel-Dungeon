@@ -21,12 +21,20 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.AQUAPHOBIA;
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.EXSG;
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.RLPT;
+import static com.shatteredpixel.shatteredpixeldungeon.Challenges.SBSG;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Boss;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
@@ -63,7 +71,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class YogDzewa extends Mob {
+public class YogDzewa extends Boss {
 
 	{
 		spriteClass = YogSprite.class;
@@ -523,6 +531,26 @@ public class YogDzewa extends Mob {
 		}
 		Bestiary.skipCountingEncounters = false;
 
+		if(Dungeon.isChallenged(RLPT)){
+			Badges.GOODRLPT();
+		}
+
+		if(!Dungeon.whiteDaymode){
+			PaswordBadges.NIGHT_CAT();
+		}
+
+		if(Dungeon.isChallenged(AQUAPHOBIA)){
+			Badges.CLEARWATER();
+		}
+
+		if(Dungeon.isChallenged(SBSG)){
+			PaswordBadges.BIGX();
+		}
+
+		if(Dungeon.isChallenged(EXSG)){
+			PaswordBadges.EXSG();
+		}
+
 		updateVisibility(Dungeon.level);
 
 		GameScene.bossSlain();
@@ -533,7 +561,9 @@ public class YogDzewa extends Mob {
 			Statistics.qualifiedForBossChallengeBadge = false;
 		}
 		Statistics.bossScores[4] += 5000 + 1250*Statistics.spawnersAlive;
-
+		if(Challenges.activeChallenges() > SPDSettings.RecordChallengs()){
+			SPDSettings.RecordChallengs(Challenges.activeChallenges());
+		}
 		Dungeon.level.unseal();
 		super.die( cause );
 
@@ -542,26 +572,26 @@ public class YogDzewa extends Mob {
 
 	@Override
 	public void notice() {
-		if (!BossHealthBar.isAssigned()) {
-			BossHealthBar.assignBoss(this);
-			yell(Messages.get(this, "notice"));
-			for (Char ch : Actor.chars()){
-				if (ch instanceof DriedRose.GhostHero){
-					((DriedRose.GhostHero) ch).sayBoss();
+			if (!BossHealthBar.isAssigned()) {
+				BossHealthBar.assignBoss(this);
+				yell(Messages.get(this, "notice"));
+				for (Char ch : Actor.chars()) {
+					if (ch instanceof DriedRose.GhostHero) {
+						((DriedRose.GhostHero) ch).sayBoss();
+					}
+				}
+				Game.runOnRenderThread(new Callback() {
+					@Override
+					public void call() {
+						Music.INSTANCE.play(Assets.Music.HALLS_TENSE, true);
+					}
+				});
+				if (phase == 0) {
+					phase = 1;
+					summonCooldown = Random.NormalFloat(MIN_SUMMON_CD, MAX_SUMMON_CD);
+					abilityCooldown = Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
 				}
 			}
-			Game.runOnRenderThread(new Callback() {
-				@Override
-				public void call() {
-					Music.INSTANCE.play(Assets.Music.HALLS_BOSS, true);
-				}
-			});
-			if (phase == 0) {
-				phase = 1;
-				summonCooldown = Random.NormalFloat(MIN_SUMMON_CD, MAX_SUMMON_CD);
-				abilityCooldown = Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
-			}
-		}
 	}
 
 	@Override

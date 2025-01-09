@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Boss;
@@ -579,7 +580,6 @@ public class YogReal extends Boss {
             Statistics.qualifiedForBossChallengeBadge = false;
         }
         if(Statistics.RandMode){
-            PaswordBadges.KILLALLBOSS();
             PaswordBadges.BOSSRUSH();
             Statistics.questScores[4] += 30000;
             Dungeon.win( Nxhy.class );
@@ -600,7 +600,6 @@ public class YogReal extends Boss {
                     new float[]{1, 1},
                     false);
         } else if(Statistics.bossRushMode){
-            PaswordBadges.KILLALLBOSS();
             PaswordBadges.BOSSRUSH();
             Statistics.questScores[4] += 30000;
             Dungeon.win( BossRushBloodGold.class );
@@ -620,6 +619,12 @@ public class YogReal extends Boss {
                     new String[]{Assets.Music.THEME_2, Assets.Music.THEME_1},
                     new float[]{1, 1},
                     false);
+        }
+
+        PaswordBadges.KILLALLBOSS();
+
+        if(Challenges.activeChallenges() > SPDSettings.RecordChallengs()){
+            SPDSettings.RecordChallengs(Challenges.activeChallenges());
         }
 
         Statistics.bossScores[4] += 10000 + 2250*Statistics.spawnersAlive;
