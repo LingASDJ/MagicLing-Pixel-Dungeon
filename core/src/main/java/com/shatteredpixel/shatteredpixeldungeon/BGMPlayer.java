@@ -275,8 +275,8 @@ public class BGMPlayer {
             if(s == 3 && t == 16 ||s == 3 && t == 17 || s == 3 && t == 18) {
                 playBGM(Assets.SKBJY, true);
             } else if(t == 5 && s == 3){
-                playBGM(Assets.BGM_BOSSA3, true);
-            } else if (Dungeon.bossLevel() && t == 5 || t == 4 && s == 2) {
+                playBGM(Assets.Music.DRAGON_LING, true);
+            } else if (Dungeon.bossLevel() && t == 5 && s == 0 || t == 4 && s == 2) {
                 playBGM(Assets.BGM_BOSSA, true);
             } else if (Dungeon.bossLevel() && t == 10) {
                 if(((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) && !Statistics.mustTengu){

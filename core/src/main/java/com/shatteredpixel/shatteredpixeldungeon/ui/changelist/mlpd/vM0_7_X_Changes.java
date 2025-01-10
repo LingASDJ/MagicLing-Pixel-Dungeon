@@ -102,6 +102,11 @@ public class vM0_7_X_Changes {
         changes.hardlight(Window.GREEN_COLOR);
         changeInfos.add(changes);
 
+        Image dragonSprite = new FireDragonSprite();
+        dragonSprite.scale.set(PixelScene.align(0.72f));
+        changes.addButton(new ChangeButton(dragonSprite, ("熔岩火龙-绝命模式"),
+                ("新增熔岩火龙绝命模式，以及修复一些buff不生效的异常")));
+
         Image issxsaxs =new DimandKingSprite();
         issxsaxs.scale.set(PixelScene.align(0.8f));
         changes.addButton(new ChangeButton(issxsaxs, ("拟态之王2.0"),
@@ -110,6 +115,9 @@ public class vM0_7_X_Changes {
 
         changes.addButton(new ChangeButton(Icons.get(Icons.AUDIO), ("新原创音乐：拟态之王-宝藏迷宫"),
                 ("由作曲家'Tatsro'制作的原创Boss战BGM")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.AUDIO), ("新三方音乐：Titanic（泰坦之魂）"),
+                ("泰坦之魂游戏原声，应用于熔岩火龙Boss战")));
 
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
         changes.hardlight(CharSprite.WARNING);
@@ -130,7 +138,11 @@ public class vM0_7_X_Changes {
                         "3.修复BossRush模式部分楼层的异常问题\n" +
                         "4.修复玩家到达白墓碑和黑宝箱上方时会显示其中的物品的小异常\n" +
                         "5.修复部分音乐冲突导致的部分机型的严重卡顿\n" +
-                        "6.修复火龙buff不生效以及无敌失效异常"));
+                        "6.修复火龙buff不生效以及无敌失效异常\n" +
+                        "7.修复法伊娜拦路的问题\n" +
+                        "8.修复玫瑰卷轴失效的问题\n" +
+                        "9.修复子层的跳楼异常\n" +
+                        "10.修复部分特效异常"));
 
     }
 

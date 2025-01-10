@@ -16,6 +16,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.HalomethaneFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
@@ -26,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.DragonWall;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -78,6 +80,8 @@ public class FireDragon extends Boss implements Callback {
     private boolean captured = false;
     public int summonedElementals = 0;
     private int targetingPos = -1;
+
+    private int attackCount = 0;
 
     private boolean noAlive = false;
 
@@ -174,8 +178,8 @@ public class FireDragon extends Boss implements Callback {
 
         if(HP<=0 && !noAlive){
             noAlive = true;
-            HP = HT/2;
-            Buff.prolong(this,  Invulnerability.class, 12f);
+            HP = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 80 : HT/2;
+            Buff.prolong(this,  RoseShiled.class, Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 20f : 12f);
         }
 
         if (state == WANDERING){
@@ -278,6 +282,28 @@ public class FireDragon extends Boss implements Callback {
                             }
                         }));
             }
+
+
+
+
+        }
+
+        if(attackCount>=4){
+            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+                if (mob instanceof DiedClearElemet) {
+                    sprite.parent.add(new Chains(sprite.center(),
+                            mob.sprite.destinationCenter(),
+                            Effects.Type.RED_CHAIN,
+                            () -> {
+                                Actor.add(new Pushing(mob, mob.pos, pos, () -> {
+                                    pullEnemy(mob, pos);
+                                }));
+                                next();
+                                eatCooldown = 0;
+                            }));
+                }
+            }
+            attackCount = 0;
         }
 
         if (state != SLEEPING){
@@ -330,7 +356,7 @@ public class FireDragon extends Boss implements Callback {
         }
 
         if (buff(BleedingEffect.class) != null){
-            Buff.affect( enemy, HalomethaneBurning.class ).reignite(enemy,damage/3f );
+            Buff.affect(enemy, Bleeding.class).set(Random.Int(2,5));
         }
         return damage;
     }
@@ -365,6 +391,16 @@ public class FireDragon extends Boss implements Callback {
             }
 
         }
+    }
+
+    @Override
+    public boolean attack(Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
+        boolean result = super.attack( enemy, dmgMulti, dmgBonus, accMulti );
+        if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+            attackCount++;
+        }
+
+        return result;
     }
 
     protected void zap() {
@@ -410,8 +446,10 @@ public class FireDragon extends Boss implements Callback {
         bundle.put(TARGETING_POS, targetingPos);
         bundle.put("count",fireAttackCooldown);
         bundle.put("se",summonedElementals);
+        bundle.put("sex",attackCount);
         bundle.put("eat",eatCooldown);
         bundle.put("attack",captured);
+        bundle.put("nolive",noAlive);
         bundle.put(LAST_ENEMY_POS, lastEnemyPos);
         bundle.put(LEAP_POS, leapPos);
         bundle.put(LEAP_CD, leapCooldown);
@@ -424,11 +462,13 @@ public class FireDragon extends Boss implements Callback {
         fireAttackCooldown = bundle.getInt("count");
         summonedElementals = bundle.getInt("se");
         eatCooldown = bundle.getInt("eat");
+        attackCount = bundle.getInt("sex");
         captured = bundle.getBoolean("attack");
         if (state != SLEEPING) BossHealthBar.assignBoss(this);
         lastEnemyPos = bundle.getInt(LAST_ENEMY_POS);
         leapPos = bundle.getInt(LEAP_POS);
         leapCooldown = bundle.getFloat(LEAP_CD);
+        noAlive = bundle.getBoolean("nolive");
     }
 
 
