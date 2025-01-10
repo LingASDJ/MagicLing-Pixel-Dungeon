@@ -126,12 +126,12 @@ public class WandOfVenom extends DamageWand {
 
     @Override
     public int min(int lvl) {
-        return 2+4*lvl;
+        return 2*lvl;
     }
 
     @Override
     public int max(int lvl) {
-        return 3+5*lvl;
+        return 3+2*lvl;
     }
 
     @Override
