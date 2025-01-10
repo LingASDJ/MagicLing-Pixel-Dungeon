@@ -123,6 +123,9 @@ public class vM0_7_X_Changes {
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.HIGHTWAND_1), ("法杖调整：毒液侵染法杖"),
+                ("回退代码到稳定版本，但伤害数值下降至原有70%")));
+
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.LANTERNB), ("寂灭灯火V1.6"),
                 ("1.灯油降价，从原来的四倍变成两倍！" +
                         "2.灯火自然扣减变慢4回合")));
