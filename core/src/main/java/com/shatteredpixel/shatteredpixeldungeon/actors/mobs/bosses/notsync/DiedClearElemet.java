@@ -252,7 +252,7 @@ public abstract class DiedClearElemet extends Mob {
 
             if (effect > 2) {
 
-                if (effect >= 4 && enemy.buff(Burning.class) == null) {
+                if (effect >= 4 && enemy.buff(Bleeding.class) == null) {
                     Buff.affect( enemy, Bleeding.class ).set( effect );
                 }
             }

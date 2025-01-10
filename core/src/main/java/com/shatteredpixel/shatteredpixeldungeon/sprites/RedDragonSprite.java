@@ -25,6 +25,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.FireGhostDead;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.HalomethaneFlameParticle;
 import com.watabou.noosa.MovieClip;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
@@ -81,5 +83,17 @@ public class RedDragonSprite extends MobSprite {
     public void link(Char var1) {
         super.link(var1);
         this.add(State.ROSESHIELDED);
+    }
+
+    @Override
+    public void die() {
+        super.die();
+
+        remove(State.ROSESHIELDED);
+        emitter().start( HalomethaneFlameParticle.FACTORY, 0.03f, 60 );
+
+        if (visible) {
+            Sample.INSTANCE.play( Assets.Sounds.BURNING );
+        }
     }
 }
