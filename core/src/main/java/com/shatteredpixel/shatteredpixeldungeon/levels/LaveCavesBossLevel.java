@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfHealth;
@@ -24,6 +25,7 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Tilemap;
 import com.watabou.noosa.audio.Music;
+import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
@@ -81,6 +83,42 @@ public class LaveCavesBossLevel extends Level{
 
     };
 
+    private static final int[] Hard_codedMap = {
+            W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
+            W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,Y,W,W,W,W,W,W,W,
+            W,W,W,W,W,W,W,W,V,V,R,R,R,R,R,R,R,R,R,R,R,R,R,W,W,W,W,W,W,W,W,W,
+            W,W,W,W,W,W,R,R,V,V,R,R,R,R,R,R,R,R,R,R,Y,R,R,R,R,W,W,W,W,W,W,W,
+            W,W,W,W,R,R,R,R,V,V,R,R,R,R,Y,Y,R,R,Y,R,R,R,R,R,Y,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,R,R,V,V,R,R,R,Y,G,Y,Y,Y,Y,R,R,R,R,Y,R,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,R,R,V,V,R,R,Y,Y,Y,Y,Y,Y,Y,Y,R,R,R,R,R,W,W,W,W,W,W,W,
+            W,W,R,R,R,R,R,R,V,V,R,R,Y,Y,Y,Y,Y,R,V,Y,Y,R,R,R,Y,R,W,W,W,W,W,W,
+            W,W,R,R,R,R,R,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,R,V,R,Y,Y,Y,Y,Y,Y,R,R,W,W,W,W,
+            W,W,R,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,R,V,R,Y,Y,Y,Y,Y,R,R,R,W,W,W,W,
+            W,R,Y,Y,Y,Y,R,R,Y,Y,Y,Y,Y,Y,L,Y,Y,Y,V,R,Y,Y,Y,Y,Y,R,R,R,W,W,W,W,
+            W,R,Y,R,R,R,R,R,R,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,R,R,R,W,W,
+            W,Y,Y,R,R,R,R,R,R,R,Y,Y,Y,Y,Y,V,Y,Y,Y,Y,Y,R,R,Y,V,V,Y,Y,R,R,W,W,
+            W,Y,Y,R,R,R,R,R,R,R,Y,Y,Y,Y,V,V,Y,Y,Y,Y,R,R,R,V,V,V,Y,Y,R,R,W,W,
+            W,Y,R,R,R,R,Y,Y,R,R,V,V,Y,Y,Y,Y,Y,Y,Y,Y,R,R,R,V,V,V,R,Y,Y,R,W,W,
+            W,Y,R,R,R,R,R,Y,R,R,V,V,Y,Y,Y,Y,Y,Y,R,R,Y,Y,Y,V,V,V,R,Y,Y,R,W,W,
+            W,Y,R,R,R,R,R,Y,Y,R,V,V,Y,Y,Y,Y,Y,R,R,R,R,Y,R,V,V,V,R,Y,Y,R,W,W,
+            W,Y,R,R,R,R,R,R,Y,Y,V,V,Y,Y,Y,Y,R,R,R,R,R,R,R,V,V,V,Y,Y,Y,R,W,W,
+            W,Y,Y,R,R,R,R,R,R,R,R,Y,Y,Y,Y,Y,R,R,R,R,R,R,R,V,V,V,Y,Y,Y,Y,W,W,
+            W,R,Y,R,R,R,R,Y,R,R,R,R,R,Y,Y,Y,R,R,Y,R,R,R,R,V,V,Y,Y,Y,R,W,W,W,
+            W,R,Y,Y,R,R,Y,Y,Y,R,R,R,R,Y,Y,Y,Y,Y,Y,R,R,R,R,V,Y,Y,Y,R,R,W,W,W,
+            W,R,R,Y,Y,Y,Y,Y,Y,R,R,V,R,Y,Y,R,R,R,R,Y,R,R,R,Y,Y,Y,R,R,R,W,W,W,
+            W,R,R,Y,Y,Y,Y,Y,Y,Y,Y,V,V,Y,Y,R,R,R,R,R,R,Y,Y,Y,R,R,R,W,W,W,W,W,
+            W,R,R,Y,Y,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,R,R,R,R,R,Y,Y,R,R,R,R,W,W,W,W,W,
+            W,W,R,R,Y,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,Y,R,R,R,R,Y,Y,Y,Y,Y,Y,W,W,W,W,W,
+            W,W,W,R,R,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,Y,Y,Y,Y,Y,Y,Y,W,W,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,Y,Y,R,R,R,R,R,X,Y,Y,Y,Y,W,W,W,D,D,W,W,W,W,W,W,W,W,W,
+            W,W,W,W,R,R,Y,Y,R,R,R,R,R,R,Y,Y,Y,Y,W,W,W,Y,Y,Y,G,G,Y,R,R,G,W,W,
+            W,W,W,W,W,R,R,Y,R,R,R,R,R,R,Y,Y,Y,W,W,W,W,W,Y,G,Y,G,Y,Y,Y,Y,W,W,
+            W,W,W,W,W,W,R,R,Y,R,R,R,R,R,Y,Y,Y,W,W,W,W,W,Y,Y,V,V,V,Y,M,Y,W,W,
+            W,W,W,W,W,W,W,W,W,R,Y,R,R,R,Y,Y,Y,W,W,W,W,W,Y,Y,Y,Y,Y,Y,Y,Y,W,W,
+            W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
+
+    };
+
     private static final int HOME = 845;
     @Override
     public void seal() {
@@ -91,7 +129,7 @@ public class LaveCavesBossLevel extends Level{
         Game.runOnRenderThread(new Callback() {
             @Override
             public void call() {
-                Music.INSTANCE.play(Assets.Music.SEWERS_BOSS, true);
+                Music.INSTANCE.play(Assets.Music.DRAGON_LING, true);
             }
         });
     }
@@ -156,7 +194,7 @@ public class LaveCavesBossLevel extends Level{
 
         setSize(32, 32);
 
-        map = codedMap.clone();
+        map = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? Hard_codedMap : codedMap.clone();
 
         CustomTilemap vis = new townBehind();
         vis.pos(0, 0);
@@ -205,7 +243,7 @@ public class LaveCavesBossLevel extends Level{
     public static class townBehind extends CustomTilemap {
 
         {
-            texture = Assets.Environment.LAVACAVE_OP;
+            texture = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ?  Assets.Environment.LAVACAVE_OP_HRAD : Assets.Environment.LAVACAVE_OP;
 
             tileW = 32;
             tileH = 32;
@@ -292,7 +330,7 @@ public class LaveCavesBossLevel extends Level{
                 return;
             }
 
-            if (visible = (pos < Dungeon.level.heroFOV.length && Dungeon.level.heroFOV[pos])) {
+            if (visible == (pos < Dungeon.level.heroFOV.length && Dungeon.level.heroFOV[pos])) {
 
                 super.update();
 
@@ -313,6 +351,65 @@ public class LaveCavesBossLevel extends Level{
             Blending.setLightMode();
             super.draw();
             Blending.setNormalMode();
+        }
+    }
+
+    public static final class SmokeParticle extends PixelParticle {
+
+        public SmokeParticle() {
+            super();
+
+            color( 0x000000 );
+            speed.set( Random.Float( -2, 4 ), -Random.Float( 3, 6 ) );
+        }
+
+        public void reset( float x, float y ) {
+            revive();
+
+            this.x = x;
+            this.y = y;
+
+            left = lifespan = 2f;
+        }
+
+        @Override
+        public void update() {
+            super.update();
+            float p = left / lifespan;
+            am = p > 0.8f ? 1 - p : p * 0.25f;
+            size( 6 - p * 3 );
+        }
+    }
+
+    public static class Smoke extends Emitter {
+
+        private int pos;
+
+        public static final Emitter.Factory factory = new Factory() {
+
+            @Override
+            public void emit( Emitter emitter, int index, float x, float y ) {
+                CityLevel.SmokeParticle p = (CityLevel.SmokeParticle)emitter.recycle( CityLevel.SmokeParticle.class );
+                p.reset( x, y );
+            }
+        };
+
+        public Smoke( int pos ) {
+            super();
+
+            this.pos = pos;
+
+            PointF p = DungeonTilemap.tileCenterToWorld( pos );
+            pos( p.x - 6, p.y - 4, 12, 12 );
+
+            pour( factory, 0.2f );
+        }
+
+        @Override
+        public void update() {
+            if (visible == (pos < Dungeon.level.heroFOV.length && Dungeon.level.heroFOV[pos])) {
+                super.update();
+            }
         }
     }
 

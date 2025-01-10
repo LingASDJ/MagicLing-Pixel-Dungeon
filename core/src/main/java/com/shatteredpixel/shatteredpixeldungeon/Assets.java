@@ -82,6 +82,7 @@ public class Assets {
 
 		public static final String TILES_GARDEN = "environment/tiles_garden.png";
 		public static final String LAVACAVE_OP  = "environment/custom_tiles/lavecave_behind.png";
+		public static final String LAVACAVE_OP_HRAD  = "environment/custom_tiles/lavecave_behind_hard.png";
 		public static final String LAVACAVE_PO  = "environment/custom_tiles/lavecave_above.png";
 
 		public static final String HOLLOW_OP  = "environment/custom_tiles/cerberus_behind.png";
@@ -343,6 +344,7 @@ public class Assets {
 
 		public static final String DIAMAND_KING_INTRO = "music/boss/DiamndKing_Boss_Intro.ogg";
 		public static final String DIAMAND_KING_LOOP  = "music/boss/DiamndKing_Boss_Loop.ogg";
+		public static final String DRAGON_LING  = "music/boss/Dragon.ogg";
     }
 
 	public static class Sounds {

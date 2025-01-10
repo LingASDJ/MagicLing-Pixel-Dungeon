@@ -42,7 +42,7 @@ public class LanFireStats extends Buff implements Hero.Doom {
             }
             if (hero.lanterfire > 0 ) {
                 hero.damageLantern(1+Challenges.activeChallenges()/3 + (Dungeon.isChallenged(DARKNESS) ? 2 : 0));
-                spend((int) (55f-(float) (Dungeon.depth/5+Challenges.activeChallenges())));
+                spend((int) (59f-(float) (Dungeon.depth/5+Challenges.activeChallenges())));
             } else {
                 spend(STEP);
             }

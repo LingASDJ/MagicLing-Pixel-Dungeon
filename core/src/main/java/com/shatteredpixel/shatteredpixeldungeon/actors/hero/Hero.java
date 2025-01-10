@@ -119,6 +119,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
@@ -2322,15 +2323,8 @@ public class Hero extends Char {
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
 					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay))){
 				if (!Chasm.jumpConfirmed){
-
-					if(Dungeon.branch != 0 && !bossRushMode || Dungeon.depth == 5 ){
-						if(buff(Levitation.class) != null){
-							GLog.n(Messages.get(Hero.class, "error_no"));
-						}
-					} else {
-						Chasm.heroJump(this);
-						interrupt();
-					}
+					Chasm.heroJump(this);
+					interrupt();
 				} else {
 					flying = false;
 					remove(buff(Levitation.class)); //directly remove to prevent cell pressing
@@ -3276,7 +3270,7 @@ public class Hero extends Char {
 
 	@Override
 	public boolean isInvulnerable(Class effect) {
-		return super.isInvulnerable(effect) || buff(Invulnerability.class) != null || buff(Invulnerability.GodDied.class) != null;
+		return super.isInvulnerable(effect) || buff(Invulnerability.class) != null || buff(Invulnerability.GodDied.class) != null || buff(RoseShiled.class) != null || this.buff(RoseShiled.class) != null;
 	}
 
 	public boolean search( boolean intentional ) {
