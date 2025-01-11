@@ -94,7 +94,7 @@ public class vM0_7_X_Changes {
 
     public static void add_V0801_Changes(ArrayList<ChangeInfo> changeInfos ) {
 
-        ChangeInfo changes = new ChangeInfo("v0.8.0.1", true, "");
+        ChangeInfo changes = new ChangeInfo("v0.8.0.1-2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
@@ -106,6 +106,9 @@ public class vM0_7_X_Changes {
         dragonSprite.scale.set(PixelScene.align(0.72f));
         changes.addButton(new ChangeButton(dragonSprite, ("熔岩火龙-绝命模式"),
                 ("新增熔岩火龙绝命模式，以及修复一些buff不生效的异常")));
+
+        changes.addButton(new ChangeButton(new RedNecromancerSprite(), ("BossRush2.1"),
+                ("第一大层Boss顺序发生了变化，现在是普果->史莱姆王->异果，并且现在最大层不再是100。")));
 
         Image issxsaxs =new DimandKingSprite();
         issxsaxs.scale.set(PixelScene.align(0.8f));
@@ -131,8 +134,15 @@ public class vM0_7_X_Changes {
                         "2.灯火自然扣减变慢4回合")));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.DISPLAY), ("UI改动"),
-                ("1.加密徽章现在可以看见自己的获得量/总量" +
-                        "2.13挑徽章可以看见自己的最高记录挑战数量,但需要在新版本进行一次通过才能记录。")));
+                ("1.加密徽章现在可以看见自己的获得量/总量\n" +
+                        "2.13挑徽章可以看见自己的最高记录挑战数量,但需要在新版本进行一次通过才能记录。\n" +
+                        "3.现在特殊模式可显示对应图标和东西")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.0.1:\n\n" +
+                        "1.修复子层物品掉落的闪退异常\n" +
+                        "2.宝藏迷宫可适配在BossRush\n" +
+                        "3.其他小型Bug修正,太多了这里不做过多描述"));
 
         changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
                 "0.8.0.0:\n\n" +

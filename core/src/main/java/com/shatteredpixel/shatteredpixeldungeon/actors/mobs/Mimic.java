@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -31,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.FoundChest;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.HollowMimic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -40,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -284,16 +287,36 @@ public class Mimic extends Mob {
 	@Override
 	public void rollToDropLoot(){
 
-		if (items != null) {
+		FoundChest foundChest = Dungeon.hero.buff(FoundChest.class);
+		if(foundChest != null){
+			if(foundChest.NoLoot != 10){
+				if (items != null) {
+					for (Item item : items) {
+						if (Dungeon.branch == 0){
+							Dungeon.level.drop(item, pos).sprite.drop();
+						} else if (Dungeon.level.map[pos] == Terrain.CHASM){
+							Dungeon.level.drop(item, Dungeon.level.entrance()).sprite.drop();
+						}
+					}
+					items = null;
+				}
+			}
+		} else {
 			for (Item item : items) {
-    				Dungeon.level.drop( item, pos ).sprite.drop();
+				if (Dungeon.level.map[pos] == Terrain.CHASM && Dungeon.branch != 0){
+					Dungeon.level.drop(item, Dungeon.level.entrance()).sprite.drop();
+				} else {
+					Dungeon.level.drop(item, pos).sprite.drop();
+				}
+
 			}
 			items = null;
 		}
+
 		//宝藏迷宫
 		Statistics.goldchestmazeCollected++;
 
-		if(Dungeon.depth == 10 && Dungeon.branch == 4){
+		if((Dungeon.depth == 10 || Dungeon.depth == 11) && Dungeon.branch == 4){
 			Statistics.KillMazeMimic++;
 		}
 

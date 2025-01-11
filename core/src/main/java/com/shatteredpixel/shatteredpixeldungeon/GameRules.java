@@ -96,7 +96,6 @@ public class GameRules {
                             Game.switchScene(InterlevelScene.class);
                             Buff.affect(hero, BlessBossRushLow.class, ChampionHero.DURATION*123456f);
                             Statistics.difficultyDLCEXLevel = 1;
-                            Statistics.deepestFloor = 100;
                             Statistics.bossRushMode = true;
                             Dungeon.gold = 0;
                             Dungeon.rushgold = 16;
@@ -114,7 +113,6 @@ public class GameRules {
                             InterlevelScene.curTransition.centerCell = -1;
                             Game.switchScene(InterlevelScene.class);
                             Statistics.difficultyDLCEXLevel = 2;
-                            Statistics.deepestFloor = 100;
                             Statistics.bossRushMode = true;
                             Dungeon.gold = 0;
                             Dungeon.rushgold = 16;
@@ -132,7 +130,6 @@ public class GameRules {
                             InterlevelScene.curTransition.centerCell = -1;
                             Game.switchScene(InterlevelScene.class);
                             Statistics.difficultyDLCEXLevel = 3;
-                            Statistics.deepestFloor = 100;
                             Statistics.bossRushMode = true;
                             Dungeon.gold = 0;
                             Dungeon.rushgold = 16;
@@ -153,7 +150,6 @@ public class GameRules {
                                 InterlevelScene.curTransition.centerCell = -1;
                                 Game.switchScene(InterlevelScene.class);
                                 Statistics.difficultyDLCEXLevel = 4;
-                                Statistics.deepestFloor = 100;
                                 Statistics.bossRushMode = true;
                                 Dungeon.gold = 0;
                                 Dungeon.rushgold = 16;

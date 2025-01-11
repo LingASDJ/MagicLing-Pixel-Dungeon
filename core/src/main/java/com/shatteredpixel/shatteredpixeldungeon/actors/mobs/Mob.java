@@ -25,6 +25,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.bossLevel;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.lanterfireactive;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -1099,7 +1100,13 @@ public abstract class Mob extends Char {
 			if (Random.Float() < lootChance()) {
 				Item loot = createLoot();
 				if (loot != null) {
-					Dungeon.level.drop(loot, pos).sprite.drop();
+					if (Dungeon.branch == 0){
+						Dungeon.level.drop(loot, pos).sprite.drop();
+					} else if(Dungeon.level.map[pos] == Terrain.CHASM) {
+						Dungeon.level.drop(loot, level.entrance()).sprite.drop();
+					} else {
+						Dungeon.level.drop(loot, pos).sprite.drop();
+					}
 				}
 			}
 		}

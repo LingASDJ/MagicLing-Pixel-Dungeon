@@ -101,14 +101,12 @@ public class SlimeKing extends Boss {
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put(partcold, PartCold);
-        bundle.put(chainsused, chainsUsed);
     }
 
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         PartCold = bundle.getBoolean(partcold);
-        chainsUsed = bundle.getBoolean(chainsused);
     }
 
     {
@@ -119,9 +117,8 @@ public class SlimeKing extends Boss {
         defenseSkill = 12;
         spriteClass = SlimeKingSprite.class;
         lootChance = 1;
-        HUNTING = new Hunting();
         properties.add(Property.BOSS);
-        baseSpeed = 0.4f;
+        baseSpeed = 0.6f;
     }
 
     @Override
@@ -133,7 +130,6 @@ public class SlimeKing extends Boss {
             var4.pos = super.pos;
             var4.activate();
             PartCold = true;
-            chainsUsed = true;
             GLog.n(Messages.get(SlimeKing.class,"fuck"));
         } else if (HP < 70) {
             baseSpeed = 1f;
@@ -227,71 +223,6 @@ public class SlimeKing extends Boss {
         }
     }
 
-    private boolean chainsUsed = false;
-    private boolean chain(int target){
-        if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE))
-            return false;
-
-        Ballistica chain = new Ballistica(pos, target, Ballistica.PROJECTILE);
-
-        if (chain.collisionPos != enemy.pos
-                || chain.path.size() < 2
-                || Dungeon.level.pit[chain.path.get(1)])
-            return false;
-        else {
-            int newPos;
-            newPos = -1;
-            for (int i : chain.subPath(1, chain.dist)){
-                if (!Dungeon.level.solid[i] && Actor.findChar(i) == null){
-                    newPos = i;
-                    break;
-                }
-            }
-
-            if (newPos == 0){
-                return false;
-            } else {
-                final int newPosFinal = newPos;
-                this.target = newPos;
-
-                if (sprite.visible) {
-                    yell(Messages.get(this, "scorpion"));
-                    new Item().throwSound();
-                    Sample.INSTANCE.play(Assets.Sounds.CHAINS);
-                   sprite.parent.add(new Chains(sprite.center(),
-							enemy.sprite.destinationCenter(),
-							Effects.Type.CHAIN,
-							new Callback() {
-						public void call() {
-							Actor.add(new Pushing(enemy, enemy.pos, newPosFinal, new Callback() {
-								public void call() {
-									pullEnemy(enemy, newPosFinal);
-								}
-							}));
-							next();
-						}
-					}));
-                } else {
-                    pullEnemy(enemy, newPos);
-                }
-            }
-        }
-        chainsUsed = true;
-        return true;
-    }
-
-    private void pullEnemy( Char enemy, int pullPos ){
-        enemy.pos = pullPos;
-        enemy.sprite.place(pullPos);
-        Dungeon.level.occupyCell(enemy);
-        Cripple.prolong(enemy, Cripple.class, 4f);
-        if (enemy == Dungeon.hero) {
-            Dungeon.hero.interrupt();
-            Dungeon.observe();
-            GameScene.updateFog();
-        }
-    }
-
 
     public void move( int step ) {
         Dungeon.level.seal();
@@ -303,7 +234,6 @@ public class SlimeKing extends Boss {
         super.notice();
         BossHealthBar.assignBoss(this);
         yell( Messages.get(this, "notice") );
-        chainsUsed = false;
     }
 
 
@@ -344,24 +274,5 @@ public class SlimeKing extends Boss {
         }
     }
 
-    private class Hunting extends Mob.Hunting{
-        @Override
-        public boolean act( boolean enemyInFOV, boolean justAlerted ) {
-            enemySeen = enemyInFOV;
 
-            if (!chainsUsed
-                    && enemyInFOV
-                    && !isCharmedBy( enemy )
-                    && !canAttack( enemy )
-                    && Dungeon.level.distance( pos, enemy.pos ) < 5
-
-
-                    && chain(enemy.pos)){
-                return !(sprite.visible || enemy.sprite.visible);
-            } else {
-                return super.act( enemyInFOV, justAlerted );
-            }
-
-        }
-    }
 }
