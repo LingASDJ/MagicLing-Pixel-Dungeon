@@ -137,6 +137,9 @@ public enum Rankings {
         rec.customSeed = Dungeon.customSeedText;
         rec.daily = Dungeon.daily;
 
+        rec.SRandMode = Statistics.RandMode;
+        rec.SRushMode = Statistics.bossRushMode;
+
         Badges.validateHighScore(rec.score);
 
         INSTANCE.saveGameData(rec);
@@ -503,6 +506,9 @@ public enum Rankings {
 
         //Note this is for summary purposes, visible score should be re-calculated from game data
         public int score;
+
+        public boolean SRushMode;
+        public boolean SRandMode;
 
         public String customSeed;
         public boolean daily;

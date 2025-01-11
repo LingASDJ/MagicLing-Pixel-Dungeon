@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogReal;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nxhy;
@@ -270,9 +271,16 @@ public class RankingsScene extends PixelScene {
 				level.hardlight( TEXT_LOSE[odd] );
 
 				if (rec.depth != 0){
+					if(rec.SRushMode){
+						steps.copy(new ItemSprite(ItemSpriteSheet.BOSSRUSH_GOLD));
+					} else if(rec.SRandMode){
+						steps.copy(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD));
+					} else {
+						steps.copy(Icons.STAIRS.get());
+					}
 					depth.text( Integer.toString(rec.depth) );
 					depth.measure();
-					steps.copy(Icons.STAIRS.get());
+
 
 					add(steps);
 					add(depth);

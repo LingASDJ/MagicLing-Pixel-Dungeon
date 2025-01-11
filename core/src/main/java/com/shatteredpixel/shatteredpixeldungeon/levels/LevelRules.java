@@ -49,12 +49,12 @@ public class LevelRules {
                 switch (depth) {
                     case 1: return new AncityLevel();
 
-                    case 2: return new ForestBossLevel();
+                    case 2: return new ForestPoisonBossLevel();
 
                     case 4:
-                        return new ForestHardBossLevel();
+                        return new SLMKingLevel();
 
-                    case 6: return new SLMKingLevel();
+                    case 6: return new ForestHardBossLevel();
 
                     case 7:
                         if(Statistics.difficultyDLCEXLevel >=2){
@@ -295,7 +295,7 @@ public class LevelRules {
                     case 17:
                     case 18:
                         return new GardenLevel();
-                    case 10:
+                    case 10: case 11:
                         return new MiniChestMazeLevel();
                     default:
                         return new DeadEndLevel();

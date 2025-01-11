@@ -6,6 +6,9 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessGoodSTR;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.FoundChest;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NTNPC;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -65,6 +68,7 @@ public class TPDoor extends NTNPC {
                                 InterlevelScene.curTransition.type = LevelTransition.Type.BRANCH_ENTRANCE;
                                 InterlevelScene.curTransition.centerCell = -1;
                                 Game.switchScene(InterlevelScene.class);
+                                Buff.detach(hero, FoundChest.class);
                             } else {
                                 TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
                                 if (timeFreeze != null) timeFreeze.disarmPresses();
@@ -78,6 +82,7 @@ public class TPDoor extends NTNPC {
                                 InterlevelScene.curTransition.type = LevelTransition.Type.REGULAR_EXIT;
                                 InterlevelScene.curTransition.centerCell = -1;
                                 Game.switchScene(InterlevelScene.class);
+                                Buff.affect(hero, FoundChest.class).set(100, 1);
                             }
 
                         }

@@ -29,6 +29,7 @@ public class DimandMimic extends Mimic {
     {
         spriteClass = MimicSprite.Dimand.class;
         properties.add( Property.ICY );
+        properties.add( Property.MINIBOSS );
     }
 
     public DimandMimic() {
@@ -71,13 +72,13 @@ public class DimandMimic extends Mimic {
     }
 
     @Override
-    public int attackProc(Char var1, int var2) {
-        var2 = super.attackProc(var1, var2 / 2);
+    public int attackProc(Char enemy, int damage ) {
+        damage = super.attackProc(enemy, damage / 2);
         if (Random.Int(2) == 0) {
-            Buff.affect(var1, Bleeding.class).set((float)(var2));
+            Buff.affect(enemy, Bleeding.class).set((float)(damage));
         }
 
-        return var2;
+        return damage;
     }
 
     @Override
@@ -173,6 +174,21 @@ public class DimandMimic extends Mimic {
             Dungeon.observe();
             GameScene.updateFog();
         }
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 3,18 );
+    }
+
+    @Override
+    public int drRoll() {
+        return 3;
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 6 + Dungeon.hero.lvl;
     }
 
     @Override

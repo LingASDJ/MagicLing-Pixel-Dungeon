@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.FoundChest;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DimandMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.EbonyMimic;
@@ -115,6 +116,10 @@ public class MiniChestMazeLevel extends RegularLevel {
                     Buff.affect(mob, Dread.class);
                     Buff.affect(mob, Invulnerability.class, 100f);
                 }
+            }
+            FoundChest foundChest = Dungeon.hero.buff(FoundChest.class);
+            if(foundChest != null){
+                foundChest.NoLoot = 10;
             }
             Statistics.TPDoorDieds = true;
             GLog.n(Messages.get(TPDoor.class,"display"));
