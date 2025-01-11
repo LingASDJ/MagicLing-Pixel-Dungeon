@@ -25,6 +25,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Challenges.AQUAPHOBIA;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.DHXD;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 import static com.shatteredpixel.shatteredpixeldungeon.SPDSettings.HelpSettings;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.bossRushMode;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.gameNight;
@@ -484,7 +485,12 @@ public class Hero extends Char {
 			}
 
 			Item item = Random.element( items );
-			Dungeon.level.drop( item, cell ).sprite.drop( pos );
+			if (Dungeon.branch == 0){
+				Dungeon.level.drop( item, cell ).sprite.drop( pos );
+			} else {
+				Dungeon.level.drop( item, cell ).sprite.drop( level.entrance() );
+			}
+
 			items.remove( item );
 		}
 

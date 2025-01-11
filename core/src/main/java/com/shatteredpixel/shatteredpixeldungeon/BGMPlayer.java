@@ -200,10 +200,29 @@ public class BGMPlayer {
                     playBGM(Assets.BGM_BOSSA, true);
                     break;
                 case 11:
-                    playBGM(Assets.BGM_BOSSB, true);
+                    Music.INSTANCE.playTracks(
+                            new String[]{Assets.Music.DIAMAND_KING_INTRO,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                    Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                            },
+                            new float[]{1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                                    ,1 ,1 ,1 ,1 ,1
+                            },
+                            false);
                     break;
                 case 14:
-                    playBGM(Assets.BGM_YOU, true);
+                    playBGM(Assets.Music.DRAGON_LING, true);
                     break;
                 case 9:
                     playBGM(Assets.BGM_BOSSB2, true);

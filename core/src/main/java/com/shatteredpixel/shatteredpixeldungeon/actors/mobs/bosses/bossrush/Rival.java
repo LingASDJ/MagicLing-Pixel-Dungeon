@@ -509,7 +509,7 @@ public class Rival extends Boss implements Callback {
             desc += Messages.get(this, "ring", misc1.toString() );
             desc += Messages.get(this, "ring", misc2.toString() );
             desc += Messages.get(this, "wand", wand.toString() );
-            desc += Messages.get(this, "missile", missile.toString() );
+            desc += Messages.get(this, "missile", missile.name() );
             desc += Messages.get(this, "ankhs");
         } else {
             desc += "";

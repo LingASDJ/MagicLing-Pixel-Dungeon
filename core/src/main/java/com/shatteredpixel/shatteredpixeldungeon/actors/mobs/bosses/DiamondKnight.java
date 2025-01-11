@@ -498,6 +498,13 @@ public class DiamondKnight extends Boss implements Hero.Doom {
         } else {
             enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
         }
+
+
+        if (enemy == Dungeon.hero && !enemy.isAlive()) {
+            Dungeon.fail( getClass() );
+            GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
+        }
+
     }
 
     public void onZapComplete() {
