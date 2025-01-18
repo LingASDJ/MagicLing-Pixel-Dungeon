@@ -709,6 +709,19 @@ public abstract class Char extends Actor {
 
 	public float speed() {
 		float speed = baseSpeed;
+
+
+
+		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+			if(buff instanceof ChampionEnemy.Small){
+				speed = baseSpeed * 1.3f;
+			} else if(buff instanceof ChampionEnemy.Bomber){
+				speed = 0.5f;
+			} else if(buff instanceof ChampionEnemy.Middle){
+				speed = baseSpeed * 1.5f;
+			}
+		}
+
 		if ( buff( Cripple.class ) != null ) speed /= 2f;
 		if ( buff( Stamina.class ) != null) speed *= 1.5f;
 		if ( buff( Adrenaline.class ) != null) speed *= 2f;

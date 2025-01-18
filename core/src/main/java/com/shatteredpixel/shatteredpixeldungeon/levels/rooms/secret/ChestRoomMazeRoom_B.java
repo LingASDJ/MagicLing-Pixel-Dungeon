@@ -83,7 +83,7 @@ public class ChestRoomMazeRoom_B extends SecretRoom {
 
         PathFinder.setMapSize(level.width(), level.height());
 
-        entrance().set(Door.Type.HIDDEN);
+        entrance().set(Door.Type.REGULAR);
     }
 }
 

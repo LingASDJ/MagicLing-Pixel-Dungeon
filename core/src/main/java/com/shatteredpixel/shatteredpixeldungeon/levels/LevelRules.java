@@ -49,10 +49,10 @@ public class LevelRules {
                 switch (depth) {
                     case 1: return new AncityLevel();
 
-                    case 2: return new ForestPoisonBossLevel();
+                    case 3: return new SewerBossLevel();
 
                     case 4:
-                        return new SLMKingLevel();
+                        return new ForestPoisonBossLevel();
 
                     case 6: return new ForestHardBossLevel();
 
@@ -95,7 +95,7 @@ public class LevelRules {
                     case 31: return new YogGodHardBossLevel();
 
                     //补给层 T1
-                    case 3:  case 5: case 8:  case 10:
+                    case 2:  case 5: case 8:  case 10:
                         //补给层 T2
                     case 12: case 15:  case 19: case 20:
                         //补给层 T3

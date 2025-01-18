@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.custom.testmode;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.branch;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.CrivusbossTeleporter;
+import static com.shatteredpixel.shatteredpixeldungeon.Statistics.KillMazeMimic;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.TPDoorDieds;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.crivusfruitslevel2;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.crivusfruitslevel3;
@@ -19,6 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.DragonWall;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.FoundChest;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
@@ -277,8 +279,12 @@ public class LevelTeleporter extends TestItem {
                 Statistics.TrueYogNoDied   = false;
             }
 
-
+            FoundChest foundChest = Dungeon.hero.buff(FoundChest.class);
+            if(foundChest != null){
+                foundChest.NoLoot = 0;
+            }
             CrivusbossTeleporter = 0;
+            KillMazeMimic = 0;
             //拟态王二阶段死亡的时候给予重新评估
             if(TPDoorDieds){
                 TPDoorDieds = false;

@@ -73,13 +73,6 @@ public class AncientMysteryCityLevel extends RegularLevel {
             initRooms.add(s);
         }
 
-        SpecialRoom x;
-        rooms = Random.NormalIntRange(1, 2);
-        for (int i = 0; i < rooms; i++){
-            x = new TrapsRoom();
-            initRooms.add(x);
-        }
-
         int rooms2 = 2;
         for (int i = 1; i < rooms2; i++){
             s = new StudyRoom();

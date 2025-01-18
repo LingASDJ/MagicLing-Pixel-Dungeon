@@ -289,14 +289,19 @@ public class Mimic extends Mob {
 
 		FoundChest foundChest = Dungeon.hero.buff(FoundChest.class);
 		if(foundChest != null){
-			if(foundChest.NoLoot != 10){
+			if(foundChest.NoLoot == 10){
 				if (items != null) {
 					for (Item item : items) {
-						if (Dungeon.branch == 0){
-							Dungeon.level.drop(item, pos).sprite.drop();
-						} else if (Dungeon.level.map[pos] == Terrain.CHASM){
-							Dungeon.level.drop(item, Dungeon.level.entrance()).sprite.drop();
-						}
+						Dungeon.dropToChasm( item );
+					}
+					items = null;
+				}
+			} else {
+				for (Item item : items) {
+					if (Dungeon.level.map[pos] == Terrain.CHASM && Dungeon.branch != 0){
+						Dungeon.level.drop(item, Dungeon.level.entrance()).sprite.drop();
+					} else {
+						Dungeon.level.drop(item, pos).sprite.drop();
 					}
 					items = null;
 				}
@@ -308,9 +313,8 @@ public class Mimic extends Mob {
 				} else {
 					Dungeon.level.drop(item, pos).sprite.drop();
 				}
-
+				items = null;
 			}
-			items = null;
 		}
 
 		//宝藏迷宫
