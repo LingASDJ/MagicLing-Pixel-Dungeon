@@ -9,7 +9,7 @@ import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
 public class FoundChest extends Buff {
-
+    public int distance = 2;
     {
         type = buffType.POSITIVE;
     }
@@ -51,16 +51,13 @@ public class FoundChest extends Buff {
 
     @Override
     public int icon() {
-        return BuffIndicator.TIME;
+        return BuffIndicator.DK;
     }
-    @Override
-    public void tintIcon(Image icon) {
-        icon.hardlight(Window.CYELLOW);
-    }
+
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", Statistics.KillMazeMimic);
+        return Messages.get(this, "desc", Math.min(Statistics.KillMazeMimic,5));
     }
 
     private static final String LEVEL	    = "level";
