@@ -184,15 +184,12 @@ abstract public class Boss extends Mob {
 
     private void RollCS(){
         Class<?extends ChampionEnemy> buffCls;
-        switch (Random.Int(9)){
+        switch (Random.Int(6)){
             case 0: default:    buffCls = ChampionEnemy.Blazing.class;      break;
             case 1:             buffCls = ChampionEnemy.Projecting.class;   break;
-            case 2:             buffCls = ChampionEnemy.AntiMagic.class;    break;
-            case 3:             buffCls = ChampionEnemy.Giant.class;        break;
-            case 4:             buffCls = ChampionEnemy.Blessed.class;      break;
-            case 5:             buffCls = ChampionEnemy.Growing.class;      break;
-            case 6:             buffCls = ChampionEnemy.Halo.class;      	break;
-            case 7:             buffCls = ChampionEnemy.DelayMob.class;     break;
+            case 2:             buffCls = ChampionEnemy.Blessed.class;      break;
+            case 3:             buffCls = ChampionEnemy.Growing.class;      break;
+            case 4:             buffCls = ChampionEnemy.Halo.class;      	break;
         }
         Buff.affect(this, buffCls);
         this.state = this.WANDERING;
@@ -200,12 +197,11 @@ abstract public class Boss extends Mob {
 
     private void RollEX(){
         Class<?extends ChampionEnemy> buffCls2;
-        switch (Random.Int(5)){
-            case 0: default:    buffCls2 = ChampionEnemy.Middle.class;      break;
-            case 1:             buffCls2 = ChampionEnemy.Bomber.class;      break;
-            case 2:             buffCls2 = ChampionEnemy.Sider.class;       break;
-            case 3:             buffCls2 = ChampionEnemy.LongSider.class;   break;
-            case 4:             buffCls2 = ChampionEnemy.Big.class;         break;
+        switch (Random.Int(4)){
+            case 0:     default:          buffCls2 = ChampionEnemy.Bomber.class;      break;
+            case 1:                       buffCls2 = ChampionEnemy.Sider.class;       break;
+            case 2:                       buffCls2 = ChampionEnemy.LongSider.class;   break;
+            case 3:                       buffCls2 = ChampionEnemy.Big.class;         break;
         }
         Buff.affect(this, buffCls2);
         this.state = this.WANDERING;

@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.seed;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -125,8 +126,8 @@ public abstract class ChampionEnemy extends Buff {
 		return 1f;
 	}
 
-	public float speedFactor(){
-		return target.baseSpeed;
+	public float speedFactor(float speed){
+		return seed;
 	}
 
 	{
@@ -363,6 +364,11 @@ public abstract class ChampionEnemy extends Buff {
 		}
 
 		@Override
+		public float speedFactor(float s) {
+			return  0.3f;
+		}
+
+		@Override
 		public float meleeDamageFactor() {
 			return 0.65f;
 		}
@@ -412,7 +418,7 @@ public abstract class ChampionEnemy extends Buff {
 		}
 
 		@Override
-		public float speedFactor() {
+		public float speedFactor(float s) {
 			return 0.5f;
 		}
 
@@ -439,8 +445,9 @@ public abstract class ChampionEnemy extends Buff {
 			} else target.sprite.remove(CharSprite.State.MUTATION_4);
 		}
 		@Override
-		public float speedFactor() {
-			return super.speedFactor()*1.25f;
+		public float speedFactor(float s) {
+			s = (int) target.baseSpeed;
+			return 0.5f;
 		}
 
 		@Override
