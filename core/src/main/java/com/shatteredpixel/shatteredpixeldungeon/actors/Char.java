@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionHero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessMobDied;
@@ -100,6 +101,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrivusFruits;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.DwarfGeneral;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.hollow.DeadDogCerberus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -623,6 +625,11 @@ public abstract class Char extends Actor {
 		float acuRoll = Random.Float( acuStat );
 		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
 
+		//狗子追加50%的精准，有这个效果时
+		if (attacker.buff(DeadDogCerberus.CerberusBless.class) != null){
+			acuRoll *= 1.5f;
+		}
+
 		ScaryBuff scaryBuff = attacker.buff(ScaryBuff.class);
 		if(scaryBuff != null){
 			if(scaryBuff.Scary>50){
@@ -644,6 +651,11 @@ public abstract class Char extends Actor {
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){
 			defRoll *= buff.evasionAndAccuracyFactor();
 		}
+
+		for (ChampionHero buff : defender.buffs(ChampionHero.class)){
+			defRoll *= buff.evasionAndAccuracyFactor();
+		}
+
 		defRoll *= AscensionChallenge.statModifier(defender);
 
 		return (acuRoll * accMulti) >= defRoll;
@@ -680,6 +692,12 @@ public abstract class Char extends Actor {
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
 			buff.onAttackProc( enemy );
 		}
+
+		for (ChampionHero buff : buffs(ChampionHero.class)){
+			damage *= (int) buff.meleeDamageFactor();
+			buff.onAttackProc( enemy );
+		}
+
 		//削弱10%伤害
 		if ( buff(MagicGirlSayKill.class) != null ){
 			damage *= 0.90f;
@@ -710,7 +728,8 @@ public abstract class Char extends Actor {
 	public float speed() {
 		float speed = baseSpeed;
 
-
+		//创世神
+		if ( buff( Invulnerability.GodDied.class ) != null ) speed *= 2f;
 
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
 			if(buff instanceof ChampionEnemy.Small){
@@ -807,6 +826,10 @@ public abstract class Char extends Actor {
 
 		if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null){
 			dmg *= 1.25f;
+		}
+
+		for (ChampionHero buff : buffs(ChampionHero.class)){
+			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){

@@ -617,7 +617,7 @@ public class Generator {
 					FireFishSword.class,
 					SliverLockSword.class,
 			};
-			WEP_T6.probs = new float[]{1, 0, 0, 0, Statistics.RandMode ? 1 : 0, 0};
+			WEP_T6.probs = new float[]{1, 0, 0, 0, 1, 0};
 
 			//see Generator.randomArmor
 			ARMOR.classes = new Class<?>[]{

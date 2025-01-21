@@ -544,6 +544,7 @@ public class Assets {
 		public static final String BOAT = "sprites/hollow/boat.png";
 		public static final String SWTICH = "sprites/hollow/Silence_Witch.png";
 		public static final String CSBR = "sprites/hollow/Cerberus.png";
+		public static final String NCSBR = "sprites/hollow/New_Cerberus.png";
 
 		public static final String DGS = "sprites/boss/dwarf_general.png";
 
