@@ -1,7 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -47,6 +46,9 @@ public class LaveCavesBossLevel extends Level{
     private static final short D = Terrain.SECRET_DOOR;
     private static final short M = Terrain.WELL;
     private static final short L= Terrain.PEDESTAL;
+
+    private static final short B= Terrain.BARRICADE;
+
     private static final int[] codedMap = {
             W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
             W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,Y,W,W,W,W,W,W,W,
@@ -110,7 +112,7 @@ public class LaveCavesBossLevel extends Level{
             W,R,R,Y,Y,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,R,R,R,R,R,Y,Y,R,R,R,R,W,W,W,W,W,
             W,W,R,R,Y,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,Y,R,R,R,R,Y,Y,Y,Y,Y,Y,W,W,W,W,W,
             W,W,W,R,R,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,Y,Y,Y,Y,Y,Y,Y,W,W,W,W,W,W,W,W,W,
-            W,W,W,R,R,R,Y,Y,R,R,R,R,R,X,Y,Y,Y,Y,W,W,W,D,D,W,W,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,Y,Y,R,R,R,R,R,X,Y,Y,Y,Y,W,W,W,B,B,W,W,W,W,W,W,W,W,W,
             W,W,W,W,R,R,Y,Y,R,R,R,R,R,R,Y,Y,Y,Y,W,W,W,Y,Y,Y,G,G,Y,R,R,G,W,W,
             W,W,W,W,W,R,R,Y,R,R,R,R,R,R,Y,Y,Y,W,W,W,W,W,Y,G,Y,G,Y,Y,Y,Y,W,W,
             W,W,W,W,W,W,R,R,Y,R,R,R,R,R,Y,Y,Y,W,W,W,W,W,Y,Y,V,V,V,Y,M,Y,W,W,

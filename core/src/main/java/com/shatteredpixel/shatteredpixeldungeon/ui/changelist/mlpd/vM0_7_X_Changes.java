@@ -57,6 +57,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0805_Changes(changeInfos);
         add_V0801_Changes(changeInfos);
         add_V0800M1_Changes(changeInfos);
         add_V07993_Changes(changeInfos);
@@ -90,6 +91,49 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0805_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.0.5", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        Image dragonSprite = new FireDragonSprite();
+        dragonSprite.scale.set(PixelScene.align(0.72f));
+        changes.addButton(new ChangeButton(dragonSprite, ("熔岩火龙-绝命模式"),
+                ("调整熔岩火龙地图地形，使之更加刺激")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V1.5"),
+                ("1.背包中的武器不再参与嬗变\n" +
+                        "2.修复了一些潜在问题，优化了底层模块")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD_XiaonianYei"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位小年夜快乐！")));
+
+        changes.addButton(new ChangeButton(new RedNecromancerSprite(), ("BossRush2.2"),
+                ("第一大层Boss顺序发生了变化，现在是粘咕->普果->异果->天痕（困难模式），并且现在最大层不再是100。")));
+
+        Image issxsaxs =new DimandKingSprite();
+        issxsaxs.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(issxsaxs, ("拟态之王2.0"),
+                ("现在拟态之王因为实装音乐所以重新优化了一些阶段，并且迷宫不再是隐藏门" +
+                        "尤其是第二阶段，同时绝命有所调整，请自行游戏内查看")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.0.5:\n\n" +
+                        "1.修复部分武器肌肉合剂不生效的异常\n" +
+                        "2.修复苦痛刻痕使用祝福的十字架死亡的异常，以及可反复退出的问题\n" +
+                        "3.修复英雄精英效果不生效的问题\n" +
+                        "4.其他小型崩溃Bug修正,这里不做过多描述"));
     }
 
     public static void add_V0801_Changes(ArrayList<ChangeInfo> changeInfos ) {
