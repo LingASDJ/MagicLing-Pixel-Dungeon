@@ -35,6 +35,9 @@ public class Gift implements Bundlable {
             //灯火
             "QmFkTGFudGVyRmlyZS1Hbyw0MDcwOTUxNzc1LGZhbHNl",
 
+            //小年夜
+            "TUxQRF9YaWFvbmlhblllaSwxNzM4MTU5MjAwLGZhbHNl",
+
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
@@ -62,10 +65,18 @@ public class Gift implements Bundlable {
         code4.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 300 );
         code4.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.LanFireGo", 1 );
 
+        LinkedHashMap<String, Integer> code5 = new LinkedHashMap<>();
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",2025);
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 2);
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfNukeCole", 1);
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonKingBreath", 1);
+
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
         tempMap.put( "U1A0LVJFQURZ",code3);
-        tempMap.put( "QmFkTGFudGVyRmlyZS1Hbw==",code4);
+        tempMap.put( "QmFkTGFudGVyRmlyZS1Hbw==", code4);
+        tempMap.put( "TUxQRF9YaWFvbmlhblllaQ==",code5);
+
 
         GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );
     }

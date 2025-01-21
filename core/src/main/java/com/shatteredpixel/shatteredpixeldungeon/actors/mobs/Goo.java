@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -305,7 +306,9 @@ public class Goo extends Mob {
 			Dungeon.level.drop( Generator.random( Generator.Category.STONE), pos + ofs ).sprite.drop( pos );
 		}
 
-
+		if(Statistics.bossRushMode){
+			Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
+		}
 
 
 		Badges.GOO();

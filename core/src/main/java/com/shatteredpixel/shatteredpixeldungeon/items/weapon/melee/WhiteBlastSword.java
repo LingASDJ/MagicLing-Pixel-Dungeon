@@ -54,7 +54,11 @@ public class WhiteBlastSword extends MeleeWeapon implements ActionIndicator.Acti
 
     @Override
     public int STRReq(int lvl) {
-        return (7 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
+        int req = (7 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
+        if (masteryPotionBonus){
+            req -= 2;
+        }
+        return req;
     }
 
     @Override

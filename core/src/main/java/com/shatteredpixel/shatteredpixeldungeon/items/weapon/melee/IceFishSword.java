@@ -175,7 +175,11 @@ public class IceFishSword extends MeleeWeapon {
 
     @Override
     public int STRReq(int lvl) {
-        return Dungeon.depth/10+16;
+        int req = Dungeon.depth/10+16;
+        if (masteryPotionBonus){
+            req -= 2;
+        }
+        return req;
     }
 
     @Override
