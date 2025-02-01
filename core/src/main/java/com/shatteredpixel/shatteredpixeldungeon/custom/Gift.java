@@ -128,10 +128,16 @@ public class Gift implements Bundlable {
             String decodedString = "";
             byte[] decoded;
             List<String> saveData = new ArrayList<>();
+            long currentTime = System.currentTimeMillis() / 1000;
+            long expirationDate = 0;
 
             for(int i = 0; i < length; i++) {
                 decoded = Base64.decode( Gift_DATA[i] );
                 decodedString = new String( decoded) ;
+
+                expirationDate = Long.parseLong( decodedString.split(",")[1] );
+                if( currentTime > expirationDate )
+                    continue;
 
                 if( SPDSettings.queryGiftExist( decodedString.split(",")[0] ) )
                     continue;
@@ -143,6 +149,8 @@ public class Gift implements Bundlable {
                 String[] result = new String[saveData.size()];
                 SPDSettings.saveGift( saveData.toArray( result ) );
             }
+
+            SPDSettings.deleteOutdatedGift();
         } catch (Exception ignored) {
         }
     }
