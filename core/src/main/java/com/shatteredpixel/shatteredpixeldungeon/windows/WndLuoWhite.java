@@ -96,6 +96,13 @@ public class WndLuoWhite extends Window {
                                     if ( positive){
                                         int result = Gift.ActivateGift( text );
                                         switch ( result ){
+                                            case 0:
+                                                ShatteredPixelDungeon.scene().addToFront( new WndError( Messages.get( WndLuoWhite.class, "no_internet" ) ) {
+                                                    public void onBackPressed() {
+                                                        super.onBackPressed();
+                                                    }
+                                                } );
+                                                break;
                                             case 1:
                                                 ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage( Icons.INFO.get(), Messages.get( WndLuoWhite.class,"success" ), Messages.get( WndLuoWhite.class, "key_activation" ) ) {
                                                     public void onBackPressed() {
