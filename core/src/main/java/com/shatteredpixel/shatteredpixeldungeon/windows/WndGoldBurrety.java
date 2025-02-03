@@ -269,21 +269,23 @@ public class WndGoldBurrety extends Window {
                     hero.belongings.weapon = changeWeapon((Weapon) hero.belongings.weapon);
                     Dungeon.hero.belongings.weapon.detachAll(Dungeon.hero.belongings.backpack);
                     hero.belongings.weapon.identify();
+                    //武器
+                    if(Statistics.upgradeGold<=18){
+                        hero.belongings.weapon.upgrade();
+                        hero.belongings.weapon.noUpgrade = true;
+                    }
                 } else {
                     result = changeWeapon( (Weapon)item );
-                    if(!Statistics.WeaponUpgrade){
-                       result.upgrade();
-                    }
+                    result.noUpgrade = true;
                 }
 
                 result.collect();
-
                 //武器
-                if(!Statistics.WeaponUpgrade){
-                    hero.belongings.weapon.upgrade();
+                if(Statistics.upgradeGold<=18){
+                    result.upgrade();
                 }
 
-                Statistics.WeaponUpgrade = true;
+                Statistics.upgradeGold--;
                 item.detach(Dungeon.hero.belongings.backpack);
             } else if (item instanceof TippedDart) {
                 result = changeTippedDart((TippedDart) item);
@@ -297,6 +299,7 @@ public class WndGoldBurrety extends Window {
                 if(Statistics.magestaffUpgrade == 0){
                     Statistics.magestaffUpgrade++;
                     item.upgrade();
+                    item.noUpgrade = true;
                 }
 
                 Dungeon.quickslot.setSlot(0, result);
@@ -313,9 +316,10 @@ public class WndGoldBurrety extends Window {
             } else if (item instanceof Wand) {
                 result = changeWand((Wand) item);
 
-                if(!Statistics.WandUpgrade){
+                if(Statistics.upgradeGold<=18){
                     result.upgrade();
-                    Statistics.WandUpgrade = true;
+                    result.noUpgrade = true;
+                    Statistics.upgradeGold--;
                 }
 
                 result.collect();
@@ -349,16 +353,24 @@ public class WndGoldBurrety extends Window {
                     hero.belongings.artifact.detachAll(Dungeon.hero.belongings.backpack);
                     hero.belongings.artifact.identify();
 
-                    if(!Statistics.ArUpgrade){
-                        Statistics.ArUpgrade = true;
+                    if(Statistics.upgradeGold<=18){
+                        Statistics.upgradeGold--;
                         hero.belongings.artifact.upgrade();
+                        hero.belongings.artifact.noUpgrade = true;
                     }
 
                 } else if (item == hero.belongings.ring()) {
+                    hero.belongings.ring.buff.detach();
                     hero.belongings.ring = changeRing(hero.belongings.ring);
-                    hero.belongings.ring.detachAll(Dungeon.hero.belongings.backpack);
+                    hero.belongings.ring.detach(Dungeon.hero.belongings.backpack);
+                    if(Statistics.upgradeGold<=18){
+                        hero.belongings.ring.upgrade();
+                        Statistics.upgradeGold--;
+                        hero.belongings.ring.noUpgrade = true;
+                    }
                 } else {
                     result = changeRing((Ring) item);
+                    result.noUpgrade = true;
                 }
             }
 
@@ -383,12 +395,6 @@ public class WndGoldBurrety extends Window {
         } else if (level < 0) {
             n.degrade( -level );
         }
-
-        if(!Statistics.RingUpgrade){
-            n.upgrade();
-            Statistics.RingUpgrade = true;
-        }
-
 
         n.levelKnown = r.levelKnown;
         n.cursedKnown = r.cursedKnown;
@@ -431,9 +437,9 @@ public class WndGoldBurrety extends Window {
             Item result = changeTrinket((Trinket) item);
 
 
-            if(!Statistics.TrinkUpgrde){
+            if(Statistics.upgradeGold<=18){
                 result.upgrade();
-                Statistics.TrinkUpgrde = true;
+                Statistics.upgradeGold--;
             }
 
             result.collect();
@@ -460,9 +466,9 @@ public class WndGoldBurrety extends Window {
                 }
             }
 
-            if(!Statistics.ArUpgrade){
+            if(Statistics.upgradeGold<=18){
                 n.upgrade();
-                Statistics.ArUpgrade = true;
+                Statistics.upgradeGold--;
             }
 
             n.cursedKnown = a.cursedKnown;
@@ -559,6 +565,9 @@ public class WndGoldBurrety extends Window {
 
         @Override
         public boolean itemSelectable(Item item) {
+            if(item.noUpgrade){
+                return false;
+            }
             if(item instanceof MeleeWeapon) {
                 Generator.Category c = Generator.wepTiers[((MeleeWeapon) item).tier - 1];
                 int canChangeWeapon = 0;
@@ -630,6 +639,8 @@ public class WndGoldBurrety extends Window {
             return false;
         }
     };
+
+
 
     // 清理所有槽位中的相同物品
     private void clearItemFromSlots(Item item) {

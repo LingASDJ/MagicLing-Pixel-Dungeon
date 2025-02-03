@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.QuestGold;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.WaloKe;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
@@ -168,9 +169,9 @@ public class GameRules {
 
             // 获取当前月份
             int month = calendar.get(Calendar.MONTH); // 注意，月份是从0开始的，0表示1月，11表示12月
-
-            // 根据月份选择季节对应的横幅
-            if (month == 2 || month == 3 || month == 4) { // 春季：3, 4, 5月
+        if(RegularLevel.holiday == RegularLevel.Holiday.CJ) {
+            banners = Assets.Interfaces.BANNERS_CJ;
+        } else if (month == 2 || month == 3 || month == 4) { // 春季：3, 4, 5月
                 banners = Assets.Interfaces.BANNERS_SR;
             } else if (month == 5 || month == 6 || month == 7) { // 夏季：6, 7, 8月
                 banners = Assets.Interfaces.BANNERS_SM;

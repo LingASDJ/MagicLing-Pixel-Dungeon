@@ -293,8 +293,10 @@ public class Goo extends Mob {
 
 		//Dungeon.level.drop( Generator.random( Generator.Category.WAND), pos) .sprite.drop();
 
-		Dungeon.level.drop( new CrystalKey( Dungeon.depth ), hero.pos ).sprite.drop();
-		Dungeon.level.drop( new CrystalKey( Dungeon.depth ), pos ).sprite.drop();
+		if(Dungeon.branch == 2) {
+			Dungeon.level.drop(new CrystalKey(Dungeon.depth), hero.pos).sprite.drop();
+			Dungeon.level.drop(new CrystalKey(Dungeon.depth), pos).sprite.drop();
+		}
 
 		//60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
 		int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
