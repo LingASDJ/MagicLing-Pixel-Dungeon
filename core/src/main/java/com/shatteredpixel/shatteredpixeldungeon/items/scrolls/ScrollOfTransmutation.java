@@ -57,6 +57,18 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Reflection;
 
 public class ScrollOfTransmutation extends InventoryScroll {
+
+	public static class EX extends ScrollOfTransmutation{
+		{
+			identify();
+		}
+		@Override
+		protected void onItemSelected(Item item) {
+			super.onItemSelected(item);
+			Item result = changeItem(item);
+			result.cursed = true;
+		}
+	}
 	
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_TRANSMUTE;

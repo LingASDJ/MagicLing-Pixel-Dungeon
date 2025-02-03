@@ -2,57 +2,25 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeArtifact;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeSeed;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeStaff;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeStone;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTippedDart;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTrinket;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWand;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWeapon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionHero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessBossRushLow;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.QuestGold;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.WaloKe;
-import com.shatteredpixel.shatteredpixeldungeon.custom.testmode.TestItem;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.TestBooks;
-import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.DLCItem;
-import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.RushMobScrollOfRandom;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.lightblack.OilLantern;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkKingSprite;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndError;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -184,6 +152,7 @@ public class GameRules {
                             InterlevelScene.curTransition.centerCell = -1;
                             Game.switchScene(InterlevelScene.class);
                             Statistics.RandMode = true;
+                            Buff.affect(hero, QuestGold.class).set((100), 1);
                         }
                     }
                 });
@@ -191,115 +160,6 @@ public class GameRules {
 
         });
     }
-
-    /**
-     * 百变模式的嬗变方法
-     */
-    public static void RandMode_ItemMode() {
-        Statistics.RandModeCount++;
-        if (Statistics.RandMode) {
-            ArrayList<Item> items = Dungeon.hero.belongings.getAllItems(Item.class);
-            Item result = items.get(0);
-
-            // 处理武器
-            handleWeapon();
-
-            // 遍历物品并进行转换
-            for (Item item : items) {
-                result = processItem(item, result);
-                if (result != null && !shouldSkipItem(item)) {
-                    item.detachAll(Dungeon.hero.belongings.backpack);
-                }
-                dropItemIfNecessary(result);
-            }
-
-            // 显示转换效果
-            Transmuting.show(Dungeon.hero, new RushMobScrollOfRandom(), new RushMobScrollOfRandom());
-            Dungeon.hero.sprite.emitter().start(Speck.factory(Speck.CHANGE), 0.2f, 10);
-            GLog.p(Messages.get(RushMobScrollOfRandom.class, "recycled"));
-        }
-    }
-
-    private static void handleWeapon() {
-        if (Dungeon.hero.belongings.weapon instanceof Weapon) {
-            hero.belongings.weapon = changeWeapon((Weapon) hero.belongings.weapon);
-            Dungeon.hero.belongings.weapon.detachAll(Dungeon.hero.belongings.backpack);
-            hero.belongings.weapon.identify();
-            hero.belongings.weapon.upgrade();
-        }
-    }
-
-    private static Item processItem(Item item, Item currentResult) {
-        Item result = currentResult;
-
-        if (item instanceof MagesStaff) {
-            result = changeStaff((MagesStaff) item);
-            item.upgrade();
-            Dungeon.quickslot.setSlot(0, result);
-        } else if (item instanceof TippedDart) {
-            result = changeTippedDart((TippedDart) item);
-            item.upgrade();
-        } else if (item instanceof Wand) {
-            item.upgrade();
-            result = changeWand((Wand) item);
-        } else if (item instanceof Plant.Seed) {
-            result = changeSeed((Plant.Seed) item);
-        } else if (item instanceof Trinket) {
-            result = processTrinket(item);
-        } else if (item instanceof Runestone) {
-            result = changeStone((Runestone) item);
-        } else if (item instanceof Artifact) {
-            result = processArtifact(item);
-        }
-
-
-
-        return result;
-    }
-
-    private static Item processTrinket(Item item) {
-        if (item.level() < 6) {
-            item.detach(Dungeon.hero.belongings.backpack);
-            Item result = changeTrinket((Trinket) item);
-            result.upgrade();
-            return result;
-        }
-        return item;
-    }
-
-    private static Item processArtifact(Item item) {
-        Artifact artifact = changeArtifact((Artifact) item);
-        if (artifact == null) {
-            if (item instanceof OilLantern) {
-                Item result = item;
-                result.level(0);
-                return result;
-            } else {
-                // 如果没有合适的Artifact，生成一个随机+0戒指
-                Item result = Generator.randomUsingDefaults(Generator.Category.RING);
-                result.levelKnown = item.levelKnown;
-                result.cursed = item.cursed;
-                result.cursedKnown = item.cursedKnown;
-                result.level(0);
-                return result;
-            }
-        }
-        return artifact;
-    }
-
-    private static boolean shouldSkipItem(Item item) {
-        return item instanceof Bag || item instanceof DLCItem || item instanceof TestItem ||
-                item instanceof TestBooks || item instanceof SpiritBow || item instanceof Potion ||
-                item instanceof Scroll || item instanceof Waterskin || item instanceof Food ||
-                item instanceof Ankh || item instanceof MagesStaff || item.unique;
-    }
-
-    private static void dropItemIfNecessary(Item result) {
-        if (result != null && !result.collect()) {
-            Dungeon.level.drop(result, Dungeon.hero.pos).sprite.drop();
-        }
-    }
-
 
     public static String BannersRules() {
         final Calendar calendar = Calendar.getInstance();
@@ -309,9 +169,9 @@ public class GameRules {
 
             // 获取当前月份
             int month = calendar.get(Calendar.MONTH); // 注意，月份是从0开始的，0表示1月，11表示12月
-
-            // 根据月份选择季节对应的横幅
-            if (month == 2 || month == 3 || month == 4) { // 春季：3, 4, 5月
+        if(RegularLevel.holiday == RegularLevel.Holiday.CJ) {
+            banners = Assets.Interfaces.BANNERS_CJ;
+        } else if (month == 2 || month == 3 || month == 4) { // 春季：3, 4, 5月
                 banners = Assets.Interfaces.BANNERS_SR;
             } else if (month == 5 || month == 6 || month == 7) { // 夏季：6, 7, 8月
                 banners = Assets.Interfaces.BANNERS_SM;

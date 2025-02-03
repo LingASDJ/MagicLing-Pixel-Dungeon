@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
@@ -43,12 +45,12 @@ public class PotionBandolier extends Bag {
 	}
 
 	public int capacity(){
-		return 35; // default container size
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 17: 35;
 	}
 
 	@Override
 	public int value() {
-		return 40;
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 60 : 40;
 	}
 
 }

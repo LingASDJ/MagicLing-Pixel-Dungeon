@@ -54,7 +54,7 @@ public class Ring extends KindofMisc {
 	}
 
 
-	protected Buff buff;
+	public Buff buff;
 
 	private static final LinkedHashMap<String, Integer> gems = new LinkedHashMap<String, Integer>() {
 		{

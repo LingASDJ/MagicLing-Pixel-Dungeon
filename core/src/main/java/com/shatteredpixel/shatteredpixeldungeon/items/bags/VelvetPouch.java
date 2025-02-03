@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CrivusFruitsFlake;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
@@ -46,12 +48,12 @@ public class VelvetPouch extends Bag {
 	}
 
 	public int capacity(){
-		return 40; // default container size
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 20 : 40;
 	}
 	
 	@Override
 	public int value() {
-		return 30;
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 45 : 30;
 	}
 
 }

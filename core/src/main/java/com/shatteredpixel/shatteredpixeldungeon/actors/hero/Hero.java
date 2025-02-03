@@ -124,6 +124,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WaterSoulX;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.NightorDay;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.QuestGold;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
@@ -620,6 +621,10 @@ public class Hero extends Char {
 		}
 		Buff.affect( this, Regeneration.class );
 		Buff.affect( this, Hunger.class );
+
+		if(Statistics.RandMode){
+			Buff.affect(this, QuestGold.class).set((100), 1);
+		}
 
 		if(HelpSettings()) {
 			Buff.affect(this, GameTracker.class);

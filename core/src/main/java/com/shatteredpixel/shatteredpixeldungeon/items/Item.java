@@ -135,6 +135,7 @@ public class Item implements Bundlable {
 	 * 动态组
 	 */
 	public boolean animation;
+	public boolean noUpgrade = false;
 
 	public boolean animationToidle = false;
 	public String animationTotalFrame;
@@ -667,6 +668,8 @@ public class Item implements Bundlable {
 		bundle.put( KEPT_LOST, keptThoughLostInvent );
 
 		bundle.put(ANLIX,animation);
+
+		bundle.put("NOUP",noUpgrade);
 	}
 	
 	@Override
@@ -696,6 +699,8 @@ public class Item implements Bundlable {
 		keptThoughLostInvent = bundle.getBoolean( KEPT_LOST );
 
 		animation = bundle.getBoolean(ANLIX);
+
+		noUpgrade = bundle.getBoolean("NOUP");
 	}
 
 	public int targetingPos( Hero user, int dst ){

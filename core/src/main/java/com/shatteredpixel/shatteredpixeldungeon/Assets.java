@@ -455,6 +455,7 @@ public class Assets {
 
 		public static final String XMS_GDZ= "splashes/Xmas_gdz_portraits.png";
 		public static final String GDZ= "splashes/gdz_portraits.png";
+		public static final String YSGDZ= "splashes/gdz_yeas.png";
 
 		public static final String PIANO = "splashes/piano_portraits.png";
 
@@ -478,7 +479,7 @@ public class Assets {
 
 		public static final String HK = "splashes/hk.png";
 
-		public static final String YTZY = "splashes/yet_yog_portraits.png";
+		public static final String YTZY = "splashes/YetYogR.png";
 
 		public static final String TRZY = "splashes/true_yog_portraits.png";
 
@@ -493,6 +494,8 @@ public class Assets {
 		public static final String MOON = "splashes/moon_portraits.png";
 
 		public static final String COON = "splashes/⑨.png";
+
+		public static final String PINKFOX = "splashes/pinkfox.png";
 
 		public static final String LMOON = "splashes/lowmoon_portraits.png";
 
@@ -514,14 +517,28 @@ public class Assets {
 
 	public static class Sprites {
 
+		//Gold
+		public static final String GIANT_WORM      = "sprites/gold/giant_worm.png";
+		public static final String HEROGNOLLOLD    = "sprites/gold/tribesman_old.png";
+		public static final String MAYFLY          = "sprites/gold/mayfly.png";
+		public static final String PRISONER        = "sprites/gold/prisoner.png";
+		public static final String DRAKE           = "sprites/gold/drake.png";
+		public static final String ARTILLERIST     = "sprites/gold/artillerist.png";
+		public static final String ROYAL_GUARD     = "sprites/gold/royal_guard.png";
+		public static final String GORGON          = "sprites/gold/gorgon.png";
+
 		//NPCS
 		public static final String KEEPERKING	= "sprites/npc/ShopKing.png";
-		public static final String YETYOG	= "sprites/npc/yet_yog.png";
+		public static final String YETYOG	= "sprites/npc/yetyogyears.png";
 
 		public static final String YUYE	= "sprites/npc/yuye.png";
 		public static final String MINT	= "sprites/npc/mint.png";
+
+		public static final String PINKFOX	= "sprites/npc/pinkfox.png";
+
 		public static final String ZAKO	= "sprites/npc/zako.png";
 		public static final String XMS_GUDAZI	= "sprites/npc/Xms_gdz.png";
+		public static final String XS_GUDAZI	= "sprites/npc/gdz1.png";
 		public static final String GUDAZI	= "sprites/npc/gdz.png";
 		public static final String DEEP	= "sprites/npc/deepsea.png";
 		public static final String QUESTION	= "sprites/npc/question.png";
@@ -655,6 +672,7 @@ public class Assets {
 		public static final String DKGirl		= "Npcs/DKGirl.png";
 
 		public static final String LanFire		= "sprites/npc/lanfire.png";
+		public static final String LanFire_CJ		= "sprites/npc/lanfire_cj.png";
 
 		public static final String CJBL		= "sprites/npc/blue_cj.png";
 
@@ -665,6 +683,8 @@ public class Assets {
 		public static final String WHITE		= "sprites/npc/whiteling.png";
 
 		public static final String FAYINA		= "sprites/npc/guard_npc.png";
+
+		public static final String XR		= "sprites/npc/Xiayuan.png";
 
 		public static final String TOMB		= "sprites/npc/tomb.png";
 
@@ -678,10 +698,13 @@ public class Assets {
 
 
 		public static final String WOLF		= "sprites/npc/wolf.png";
+
+		public static final String LEZI		= "sprites/npc/le_zi.png";
+
 		public static final String SKSH		= "sprites/npc/skin_shop.png";
 
 		public static final String KONG		= "sprites/npc/ChineseGongFu.png";
-		public static final String MOLX		= "sprites/npc/moonwhite-n.png";
+		public static final String MOLX		= "sprites/npc/lowmoon.png";
 
 		public static final String ATRI		= "sprites/npc/ATRI.png";
 		public static final String BBAT	= "sprites/bloodbat.png";

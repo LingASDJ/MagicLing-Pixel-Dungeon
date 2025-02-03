@@ -25,6 +25,7 @@ public class LuoWhite extends NTNPC {
     {
         spriteClass = LuoWhiteSprite.class;
     }
+
     private boolean first=true;
     private boolean secnod=true;
     private boolean rd=true;

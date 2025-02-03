@@ -11,7 +11,10 @@ public class GudaziSprite extends MobSprite {
     private Animation what_up;
     public GudaziSprite() {
         super();
-        if(holiday == RegularLevel.Holiday.XMAS){
+
+        if(holiday == RegularLevel.Holiday.CJ) {
+            texture( Assets.Sprites.XS_GUDAZI );
+        } else if(holiday == RegularLevel.Holiday.XMAS){
             texture( Assets.Sprites.XMS_GUDAZI );
         } else {
             texture( Assets.Sprites.GUDAZI );
