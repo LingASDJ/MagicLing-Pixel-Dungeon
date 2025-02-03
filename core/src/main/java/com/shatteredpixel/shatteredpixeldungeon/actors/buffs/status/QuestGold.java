@@ -45,45 +45,62 @@ public class QuestGold extends Buff {
         String result;
         result = super.desc();
 
-        result  += "\n\n" + Messages.get(this, "gold",Statistics.goldRefogreCount);
+        result  += "\n" + Messages.get(this, "gold",Statistics.goldRefogreCount);
 
         if (!Ghost.Quest.completed()){
-            result  += "\n\n" + Messages.get(this, "ghost");
+            result  += "\n" + Messages.get(this, "ghost");
         }  else {
-            result  += "\n\n" + Messages.get(this, "ghost_yes");
+            result  += "\n" + Messages.get(this, "ghost_yes");
         }
 
         if (!RedDragon.Quest.completed()){
-            result  += "\n\n" + Messages.get(this, "dragon");
+            result  += "\n" + Messages.get(this, "dragon");
         }  else {
-            result  += "\n\n" + Messages.get(this, "dragon_yes");
+            result  += "\n" + Messages.get(this, "dragon_yes");
         }
 
         if (!Wandmaker.Quest.completed()){
-            result  += "\n\n" + Messages.get(this, "wand");
+            result  += "\n" + Messages.get(this, "wand");
         }  else {
-            result  += "\n\n" + Messages.get(this, "wand_yes");
+            result  += "\n" + Messages.get(this, "wand_yes");
         }
 
         if (!Blacksmith.Quest.completed()){
-            result  += "\n\n" + Messages.get(this, "bm");
+            result  += "\n" + Messages.get(this, "bm");
         }  else {
-            result  += "\n\n" + Messages.get(this, "bm_yes");
+            result  += "\n" + Messages.get(this, "bm_yes");
         }
 
         if (!Imp.Quest.completed){
-            result  += "\n\n" + Messages.get(this, "im");
+            result  += "\n" + Messages.get(this, "im");
         }  else {
-            result  += "\n\n" + Messages.get(this, "im_yes");
+            result  += "\n" + Messages.get(this, "im_yes");
         }
 
         if ( Statistics.dimandchestmazeCollected>=3){
-            result  += "\n\n" + Messages.get(this, "dk_yes");
+            result  += "\n" + Messages.get(this, "dk_yes");
         }  else {
-            result  += "\n\n" + Messages.get(this, "dk");
+            result  += "\n" + Messages.get(this, "dk");
         }
 
 
+
+
+        result  += "\n" + Messages.get(this, "boss");
+
+        switch (Statistics.RandomQuest){
+            case 1:
+                result  += "\n" + Messages.get(this, "random_1");
+                break;
+            case 2:
+                result  += "\n" + Messages.get(this, "random_2");
+                break;
+            default:
+                result  += "\n" + Messages.get(this, "random_3");
+                break;
+        }
+
+        result  += "\n" + Messages.get(this, "ws",Statistics.upgradeGold);
 
         return result;
     }

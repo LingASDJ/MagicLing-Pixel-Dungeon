@@ -42,11 +42,10 @@ public class Statistics {
 
 	public static int magestaffUpgrade;
 
-	public static boolean ArUpgrade 	= false;
-	public static boolean RingUpgrade 	= false;
-	public static boolean TrinkUpgrde 	= false;
-	public static boolean WeaponUpgrade = false;
-	public static boolean WandUpgrade 	= false;
+	public static int RandomQuest;
+	public static int GoldMobDead;
+
+	public static int upgradeGold;
 
 	public static boolean snow = false;
 
@@ -413,11 +412,10 @@ public class Statistics {
 
 		magestaffUpgrade = 0;
 
-		ArUpgrade 	= false;
-		RingUpgrade 	= false;
-		TrinkUpgrde 	= false;
-		WeaponUpgrade = false;
-		WandUpgrade 	= false;
+		upgradeGold = 18;
+		RandomQuest = Random.NormalIntRange(1,3);
+		GoldMobDead = 0;
+
 
 		goldRefogreCount = 0;
 
@@ -573,12 +571,10 @@ public class Statistics {
 
 		bundle.put("PinkFoxCT",PinkFoxCount);
 
+		bundle.put("RDXD",RandomQuest);
+		bundle.put("GDXD",GoldMobDead);
 
-		bundle.put("ArUpgrad",ArUpgrade);
-		bundle.put("RingUpgrade",RingUpgrade);
-		bundle.put("TrinkUpgrde",TrinkUpgrde);
-		bundle.put("WeaponUpgrade",WeaponUpgrade);
-		bundle.put("WandUpgrade",WandUpgrade);
+		bundle.put("ArUpgrade",upgradeGold);
 
 		bundle.put("BDSH", magestaffUpgrade);
 
@@ -751,11 +747,10 @@ public class Statistics {
 
 		magestaffUpgrade = bundle.getInt("BDSH");
 
-		ArUpgrade = bundle.getBoolean("ArUpgrade");
-		RingUpgrade = bundle.getBoolean("RingUpgrade");
-		TrinkUpgrde = bundle.getBoolean("TrinkUpgrde");
-		WandUpgrade =bundle.getBoolean("WeaponUpgrade");
-		WandUpgrade = bundle.getBoolean("WandUpgrade");
+		RandomQuest = bundle.getInt("RDXD");
+		GoldMobDead = bundle.getInt("GDXD");
+
+		upgradeGold = bundle.getInt("XXXXXXX");
 
 		KillMazeMimic = bundle.getInt(MIMIC_MAZEKILL);
 

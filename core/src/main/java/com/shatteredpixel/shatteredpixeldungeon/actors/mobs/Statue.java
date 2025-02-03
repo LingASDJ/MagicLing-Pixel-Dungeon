@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -151,6 +152,11 @@ public class Statue extends Mob {
 		weapon.identify(false);
 		Dungeon.level.drop( weapon, pos ).sprite.drop();
 		super.die( cause );
+
+
+		if(Statistics.RandomQuest == 1){
+			Statistics.goldRefogreCount++;
+		}
 	}
 
 	@Override

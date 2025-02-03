@@ -68,6 +68,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.BookBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.HerbBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.KingBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.LingBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
@@ -204,11 +205,14 @@ public enum HeroClass {
 		if(!Dungeon.isChallenged(Challenges.MINIBAG)){
 			new HerbBag().quantity(1).identify().collect();
 			new KingBag().quantity(1).identify().collect();
-			new VelvetPouch().collect();
-			Dungeon.LimitedDrops.VELVET_POUCH.drop();
 		}
 
+		if(Dungeon.isChallenged(Challenges.MINIBAG)){
+			new LingBag().quantity(1).identify().collect();
+		}
 
+		new VelvetPouch().collect();
+		Dungeon.LimitedDrops.VELVET_POUCH.drop();
 
 		Waterskin waterskin = new Waterskin();
 		waterskin.collect();

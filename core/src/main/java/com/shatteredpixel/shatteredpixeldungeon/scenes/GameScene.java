@@ -1987,14 +1987,43 @@ public class GameScene extends PixelScene {
 
 			Sample.INSTANCE.play( Assets.Sounds.BOSS );
 
+			//金蝶重置
 			if(Statistics.RandMode){
 				Statistics.goldRefogreCount++;
-				Statistics.ArUpgrade 	= false;
-				Statistics.RingUpgrade 	= false;
-				Statistics.TrinkUpgrde 	= false;
-				Statistics.WeaponUpgrade = false;
-				Statistics.WandUpgrade 	= false;
 				Statistics.magestaffUpgrade = 0;
+				Statistics.upgradeGold = 18;
+
+				ArrayList<Item> food = Dungeon.hero.belongings.getAllItems(Item.class);
+				for (Item w : food.toArray(new Item[0])){
+					if(w.noUpgrade){
+						w.noUpgrade = false;
+					}
+				}
+
+				if(Statistics.RandomQuest == 3){
+					switch (Dungeon.depth){
+						case 5:
+							if(Statistics.enemiesSlain <= 20){
+								Statistics.goldRefogreCount++;
+							}
+							break;
+						case 10:
+							if(Statistics.enemiesSlain <= 35){
+								Statistics.goldRefogreCount++;
+							}
+							break;
+						case 15:
+							if(Statistics.enemiesSlain <= 50){
+								Statistics.goldRefogreCount++;
+							}
+							break;
+						case 20:
+							if(Statistics.enemiesSlain <= 70){
+								Statistics.goldRefogreCount++;
+							}
+							break;
+					}
+				}
 			}
 		}
 	}
