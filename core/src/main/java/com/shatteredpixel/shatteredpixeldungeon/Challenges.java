@@ -45,7 +45,9 @@ public class Challenges {
 
 	public static final int CS   = 32768;
 
-	public static final int MAX_VALUE = 65536;
+	public static final int MINIBAG   = 65536;
+
+	public static final int MAX_VALUE = 131072;
 	public static final String[] NAME_IDS = {
 			"no_food",
 			"no_armor",
@@ -63,11 +65,12 @@ public class Challenges {
 			"dhxd",
 			"morelevel",
 			"cs",
+			"mini_bag"
 	};
 
 	public static final int[] MASKS = {
 			NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS
-			, AQUAPHOBIA, CHAMPION_ENEMIES,RLPT,SBSG,EXSG,STRONGER_BOSSES,DHXD,MOREROOM,CS,
+			, AQUAPHOBIA, CHAMPION_ENEMIES,RLPT,SBSG,EXSG,STRONGER_BOSSES,DHXD,MOREROOM,CS,MINIBAG
 	};
 	public String name;
 

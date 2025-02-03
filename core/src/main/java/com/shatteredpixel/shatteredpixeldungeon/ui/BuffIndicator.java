@@ -162,6 +162,9 @@ public class BuffIndicator extends Component {
 
 	public static final int DK        = 116;
 
+	public static final int QUEST       = 117;
+
+
     public static final int SIZE_SMALL = 7;
     public static final int SIZE_LARGE = 16;
 

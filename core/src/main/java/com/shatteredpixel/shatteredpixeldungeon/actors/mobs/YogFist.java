@@ -86,13 +86,21 @@ public abstract class YogFist extends Mob {
 		HP = HT = 300;
 		defenseSkill = 20;
 
+
+
 		viewDistance = Light.DISTANCE;
 
 		//for doomed resistance
 		EXP = 25;
 		maxLvl = -2;
 
-		state = HUNTING;
+		if(Dungeon.depth == 0){
+			state = PASSIVE;
+		} else {
+			state = HUNTING;
+		}
+
+
 
 		properties.add(Property.BOSS);
 		properties.add(Property.DEMONIC);

@@ -10,7 +10,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GodNPC;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot.YetYogPlot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDivination;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.YetYogSprite;
@@ -86,12 +86,12 @@ public class YetYog extends GodNPC {
                 }
             });
             first = false;
-        } else if ( passwordbadges.contains(PaswordBadges.Badge.KILL_YOGSTS) && secnod ){
+        } else if (passwordbadges.contains(PaswordBadges.Badge.KILL_YOGSTS) && secnod ){
             yell(Messages.get(this,"scroll"));
             if(Statistics.zeroItemLevel >=4 && Dungeon.depth == 0) {
                 Dungeon.level.drop(new Gold(100), hero.pos);
             } else {
-                Item item = new ScrollOfDivination();
+                Item item = new ScrollOfChallenge();
                 item.identify();
                 Dungeon.level.drop( item , hero.pos );
             }

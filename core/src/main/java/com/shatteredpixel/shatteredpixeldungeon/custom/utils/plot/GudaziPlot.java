@@ -44,7 +44,7 @@ public class GudaziPlot extends Plot {
             switch (process) {
                 default:
                 case 1:
-                    process_to_1();//Mostly process to 1 is made directly when creating,it might not be used,just in case
+                    process_to_1();
                     break;
                 case 2:
                     process_to_2();
@@ -98,7 +98,10 @@ public class GudaziPlot extends Plot {
     private void process_to_1() {
         diagulewindow.hideAll();
         Dungeon.hero.interrupt();
-        if(holiday == RegularLevel.Holiday.XMAS){
+
+        if(holiday == RegularLevel.Holiday.CJ){
+            diagulewindow.setMainAvatar(new Image(Assets.Splashes.YSGDZ));
+        } else if(holiday == RegularLevel.Holiday.XMAS){
             diagulewindow.setMainAvatar(new Image(Assets.Splashes.XMS_GDZ));
         } else {
             diagulewindow.setMainAvatar(new Image(Assets.Splashes.GDZ));
@@ -114,11 +117,9 @@ public class GudaziPlot extends Plot {
 
     private void process_to_3()
     {
-        if(Statistics.zeroItemLevel >=4 && Dungeon.depth == 0 && Statistics.gdzDialogLevel==0) {
-            Dungeon.level.drop(new Gold(1), hero.pos);
-        } else {
-            Dungeon.level.drop( new ChargrilledMeat(), hero.pos );
-        }
+        Dungeon.level.drop( new ChargrilledMeat(), hero.pos );
+        Dungeon.level.drop(new Gold(500), hero.pos);
+        Statistics.gdzHelpDungeon++;
         Statistics.zeroItemLevel++;
         Statistics.gdzDialogLevel++;
         diagulewindow.changeText(Messages.get(Gudazi.class,"message3"));

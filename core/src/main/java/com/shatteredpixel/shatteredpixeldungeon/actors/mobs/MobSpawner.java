@@ -36,6 +36,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.ThreeLeafBug;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.Turtle;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.PiraLand;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.RiceRat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Drake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GiantWorm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Gorgon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Mayfly;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Prisoner;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.RoyalGuard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.TribemanOld;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.ApprenticeWitch;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Butcher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Crumb;
@@ -43,7 +50,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Frankenstein;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Ghost_Halloween;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.PumkingBomber;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Pumking_Ghost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.hollow.Vampire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.rlpt.DrTerror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.rlpt.GunHuntsman;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
@@ -131,165 +137,333 @@ public class MobSpawner extends Actor {
 
 			}
 		} else {
-			switch (i) {
-				//正常刷怪
-				case 1:
-					//3x rat, 1x snake
-					return new ArrayList<>(Arrays.asList(
-							Rat.class, Rat.class));
-				case 2:
-					return new ArrayList<>(Arrays.asList(FlowerSlime.class,
-							FlowerSlime.class, FlowerSlime.class, Gnoll.class, Gnoll.class,
-							Gnoll.class, Gnoll.class));
-				case 3:
-					return new ArrayList<>(Arrays.asList(FlowerSlime.class,
-							FlowerSlime.class, Katydid.class,
-							Katydid.class, FlowerSlime.class, FlowerSlime.class,
-							ClearElemental.class,Crab.class,Swarm.class));
-				case 4:
-					return new ArrayList<>(Arrays.asList(Katydid.class,
-							ClearElemental.class, Slime_Red.class,
-							Slime_Orange.class, Swarm.class,Crab.class));
-				case 5:
-					return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,Slime.class,Slime.class,Swarm.class,Crab.class));
-				case 6:
-					return new ArrayList<>(Arrays.asList(Skeleton.class,
-							Skeleton.class,BrownBat.class,BrownBat.class,Thief.class,Thief.class));
 
-				case 7:
-					return new ArrayList<>(Arrays.asList(Skeleton.class,
-							Thief.class,DM100.class,Necromancer.class,Guard.class,DM100.class));
-				case 8:
-					return new ArrayList<>(Arrays.asList(Skeleton.class,
-							Skeleton.class,
-							Thief.class, Guard.class,Necromancer.class, DM100.class));
-				case 9:
-					return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
-							Thief.class,Thief.class,BrownBat.class,BrownBat.class, DM100.class,
-							BrownBat.class,Thief.class,Thief.class));
+			if(Statistics.RandMode){
+				switch (i) {
+					//正常刷怪
+					case 1:
+						//3x rat, 1x snake
+						return new ArrayList<>(Arrays.asList(
+								Rat.class, Mayfly.class));
+					case 2:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class,
+								Rat.class, OGPDZSLS.class, OGPDLLS.class,
+								Gnoll.class, Gnoll.class));
+					case 3:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class,
+								FlowerSlime.class,
+								Slime_Qs.class, Katydid.class, GiantWorm.class, Mayfly.class,
+								ClearElemental.class,Crab.class,Swarm.class));
+					case 4:
+						return new ArrayList<>(Arrays.asList(Katydid.class,
+								Slime_Sn.class, Slime_Red.class,
+								Slime_Orange.class,  GiantWorm.class, Mayfly.class,Crab.class));
+					case 5:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,Slime.class,Slime.class,Swarm.class,Crab.class));
+					case 6:
+						return new ArrayList<>(Arrays.asList(Skeleton.class,
+								Skeleton.class,BrownBat.class,BrownBat.class,Thief.class,Thief.class));
 
-				case 10:
-					return new ArrayList<>(Arrays.asList(Bat.class,
-							Brute.class, Brute.class,
-							Necromancer.class,Necromancer.class));
-				case 11:
-					return new ArrayList<>(Arrays.asList(Bat.class, DM100.class,DM100.class,ColdMagicRat.class,
-							ColdMagicRat.class));
-				case 12:
-					//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
-					return new ArrayList<>(Arrays.asList(
-							Bat.class,
-							ColdMagicRat.class,FireGhost.class,ColdMagicRat.class));
-				case 13:
-					//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
-					return new ArrayList<>(Arrays.asList(
-							Bat.class,
-							Brute.class,Spinner.class,
-							DM100.class,RedSwarm.class));
+					case 7:
+						return new ArrayList<>(Arrays.asList(Skeleton.class,
+								Thief.class, Prisoner.class,Necromancer.class,Guard.class,DM100.class));
+					case 8:
+						return new ArrayList<>(Arrays.asList(Skeleton.class,
+								Skeleton.class,
+								Thief.class, Guard.class,Necromancer.class, Prisoner.class));
+					case 9:
+						return new ArrayList<>(Arrays.asList(
+								Skeleton.class, Prisoner.class, Skeleton.class,
+								Thief.class,Thief.class,BrownBat.class,
+								Guard.class, DM100.class));
 
-				case 14:
-					return new ArrayList<>(Arrays.asList(
-							Bat.class,
-							Spinner.class,
-							ColdMagicRat.class,RedSwarm.class,Shaman.random()));
-				case 15:
-					//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
-					return new ArrayList<>(Arrays.asList(
-							Bat.class,
-							Spinner.class,
+					case 10:
+						return new ArrayList<>(Arrays.asList(Bat.class,
+								Brute.class, Brute.class,
+								Necromancer.class,Necromancer.class));
+					case 11:
+						return new ArrayList<>(Arrays.asList(Bat.class, Drake.class,DM200.class,ColdMagicRat.class,
+								ColdMagicRat.class));
+					case 12:
+						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,DM200.class,
+								ColdMagicRat.class, Drake.class ,ColdMagicRat.class));
+					case 13:
+						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,DM200.class,
+								Brute.class,Spinner.class, TribemanOld.class,
+								Drake.class,RedSwarm.class));
 
-							Brute.class,FireGhost.class,ColdMagicRat.class,RedSwarm.class));
+					case 14:
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,Drake.class,
+								Spinner.class,TribemanOld.class,
+								ColdMagicRat.class,RedSwarm.class,Shaman.random()));
+					case 15:
+						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,
+								Spinner.class,
 
-				// City
-				case 16:
-					//5x elemental, 5x warlock, 1x monk, 2x silvercrab
-					return new ArrayList<>(Arrays.asList(
-							Monk.class,
-							Shaman.random()));
-				case 17:
-					//2x elemental, 2x warlock, 2x monk, 1x silvercrab
-					return new ArrayList<>(Arrays.asList(
-							Elemental.random(),
-							Monk.class,FireGhost.class));
-				case 18:
-					//1x elemental, 1x warlock, 2x monk, 3x golem
-					return new ArrayList<>(Arrays.asList(
-							Elemental.random(),
-							Random.NormalFloat(1,6)>=3 ? BruteBot.class : Warlock.class,
-							Monk.class,
-							Golem.class,FireGhost.class));
-				case 19:
-					//1x elemental, 1x warlock, 2x monk, 3x golem
-					return new ArrayList<>(Arrays.asList(
-							Monk.class,
-							Golem.class, Warlock.class,ShieldHuntsman.class,
-							Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class));
-				case 20:
-					//1x elemental, 1x warlock, 2x monk, 3x golem
-					return new ArrayList<>(Arrays.asList(
-							Elemental.random(),
-							Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class,
-							Monk.class,
-							Golem.class, Golem.class,Ice_Scorpio.class));
+								Brute.class,FireGhost.class,ColdMagicRat.class,RedSwarm.class));
 
-				case 21:
-					//3x succubus, 3x evil eye
-					return new ArrayList<>(Arrays.asList(
-							Eye.class,ShieldHuntsman.class));
-				case 22:
-					//3x succubus, 3x evil eye
-					return new ArrayList<>(Arrays.asList(
-									Eye.class,ShieldHuntsman.class));
-				case 23:
-					//1x: succubus, 2x evil eye, 3x scorpio
-					return new ArrayList<>(Arrays.asList(
-									Eye.class,ShieldHuntsman.class,Ice_Scorpio.class));
-				//前半段决战
-				case 24:
-					//1x succubus, 2x evil eye, 3x scorpio
-					return new ArrayList<>(Arrays.asList(
-							Succubus.class,
-							Eye.class,
-							Scorpio.class, Succubus.class,Fire_Scorpio.class,Ice_Scorpio.class,ShieldHuntsman.class));
+					// City
+					case 16:
+						//5x elemental, 5x warlock, 1x monk, 2x silvercrab
+						return new ArrayList<>(Arrays.asList(
+								Monk.class,
+								Shaman.random()));
+					case 17:
+						//2x elemental, 2x warlock, 2x monk, 1x silvercrab
+						return new ArrayList<>(Arrays.asList(
+								Elemental.random(),
+								Monk.class,FireGhost.class));
+					case 18:
+						//1x elemental, 1x warlock, 2x monk, 3x golem
+						return new ArrayList<>(Arrays.asList(
+								Elemental.random(),
+								Random.NormalFloat(1,6)>=3 ? BruteBot.class : Warlock.class,
+								Monk.class, RoyalGuard.class,
+								Golem.class,FireGhost.class));
+					case 19:
+						//1x elemental, 1x warlock, 2x monk, 3x golem
+						return new ArrayList<>(Arrays.asList(
+								Monk.class,RoyalGuard.class,RoyalGuard.class,
+								Golem.class, Warlock.class,ShieldHuntsman.class,
+								Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class));
+					case 20:
+						//1x elemental, 1x warlock, 2x monk, 3x golem
+						return new ArrayList<>(Arrays.asList(
+								Elemental.random(),
+								Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class,
+								Monk.class,
+								Golem.class, Golem.class,Ice_Scorpio.class, Fire_Scorpio.class));
 
-				//Hollow Mobs
-				case 27:
-					return new ArrayList<>(Arrays.asList(
-							Frankenstein.class, Frankenstein.class,
-							Crumb.class, Crumb.class,
-							Frankenstein.class,
-							Crumb.class, Crumb.class,
-							Eye.class));
+					case 21:
+						//3x succubus, 3x evil eye
+						return new ArrayList<>(Arrays.asList(
+								Eye.class,ShieldHuntsman.class, Fire_Scorpio.class));
+					case 22:
+						//3x succubus, 3x evil eye
+						return new ArrayList<>(Arrays.asList(
+								Eye.class,ShieldHuntsman.class, Gorgon.class));
+					case 23:
+						//1x: succubus, 2x evil eye, 3x scorpio
+						return new ArrayList<>(Arrays.asList(
+								Eye.class,ShieldHuntsman.class,Ice_Scorpio.class
+								, Fire_Scorpio.class,
+								Gorgon.class));
+					//前半段决战
+					case 24:
+						//1x succubus, 2x evil eye, 3x scorpio
+						return new ArrayList<>(Arrays.asList(
+								Succubus.class,
+								Eye.class,
+								Scorpio.class, Succubus.class,Fire_Scorpio.class,Ice_Scorpio.class,ShieldHuntsman.class));
 
-				case 28:
-					return new ArrayList<>(Arrays.asList(
-							Crumb.class, Crumb.class,
-							Ghost_Halloween.class,Ghost_Halloween.class,
-							Pumking_Ghost.class
-							));
-				case 29:
-					return new ArrayList<>(Arrays.asList(
-							ApprenticeWitch.class,
-							Butcher.class,Butcher.class,
-							PumkingBomber.class, Pumking_Ghost.class
-					));
+					//Hollow Mobs
+					case 27:
+						return new ArrayList<>(Arrays.asList(
+								Frankenstein.class, Frankenstein.class,
+								Crumb.class, Crumb.class,
+								Frankenstein.class,
+								Crumb.class, Crumb.class,
+								Eye.class));
 
-				case 30:
-					return new ArrayList<>(Arrays.asList(
-							ApprenticeWitch.class,
-							ApprenticeWitch.class,
-							Butcher.class,Butcher.class,
-							Pumking_Ghost.class
-							, PumkingBomber.class
-					));
+					case 28:
+						return new ArrayList<>(Arrays.asList(
+								Crumb.class, Crumb.class,
+								Ghost_Halloween.class,Ghost_Halloween.class,
+								Pumking_Ghost.class
+						));
+					case 29:
+						return new ArrayList<>(Arrays.asList(
+								ApprenticeWitch.class,
+								Butcher.class,Butcher.class,
+								PumkingBomber.class, Pumking_Ghost.class
+						));
 
-				default:
-					return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,
-							FlowerSlime.class,
-							FlowerSlime.class, FlowerSlime.class, FlowerSlime.class,
-							FlowerSlime.class, FlowerSlime.class, FlowerSlime.class,
-							FlowerSlime.class));
+					case 30:
+						return new ArrayList<>(Arrays.asList(
+								ApprenticeWitch.class,
+								ApprenticeWitch.class,
+								Butcher.class,Butcher.class,
+								Pumking_Ghost.class
+								, PumkingBomber.class
+						));
+
+					default:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,
+								FlowerSlime.class,
+								FlowerSlime.class, FlowerSlime.class, FlowerSlime.class,
+								FlowerSlime.class, FlowerSlime.class, FlowerSlime.class,
+								FlowerSlime.class));
+				}
+			} else {
+				switch (i) {
+					//正常刷怪
+					case 1:
+						//3x rat, 1x snake
+						return new ArrayList<>(Arrays.asList(
+								Rat.class, Rat.class));
+					case 2:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class,
+								FlowerSlime.class, FlowerSlime.class, Gnoll.class, Gnoll.class,
+								Gnoll.class, Gnoll.class));
+					case 3:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class,
+								FlowerSlime.class, Katydid.class,
+								Katydid.class, FlowerSlime.class, FlowerSlime.class,
+								ClearElemental.class,Crab.class,Swarm.class));
+					case 4:
+						return new ArrayList<>(Arrays.asList(Katydid.class,
+								ClearElemental.class, Slime_Red.class,
+								Slime_Orange.class, Swarm.class,Crab.class));
+					case 5:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,Slime.class,Slime.class,Swarm.class,Crab.class));
+					case 6:
+						return new ArrayList<>(Arrays.asList(Skeleton.class,
+								Skeleton.class,BrownBat.class,BrownBat.class,Thief.class,Thief.class));
+
+					case 7:
+						return new ArrayList<>(Arrays.asList(Skeleton.class,
+								Thief.class,DM100.class,Necromancer.class,Guard.class,DM100.class));
+					case 8:
+						return new ArrayList<>(Arrays.asList(Skeleton.class,
+								Skeleton.class,
+								Thief.class, Guard.class,Necromancer.class, DM100.class));
+					case 9:
+						return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
+								Thief.class,Thief.class,BrownBat.class,BrownBat.class, DM100.class,
+								BrownBat.class,Thief.class,Thief.class));
+
+					case 10:
+						return new ArrayList<>(Arrays.asList(Bat.class,
+								Brute.class, Brute.class,
+								Necromancer.class,Necromancer.class));
+					case 11:
+						return new ArrayList<>(Arrays.asList(Bat.class, DM200.class,DM200.class,ColdMagicRat.class,
+								ColdMagicRat.class));
+					case 12:
+						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,
+								ColdMagicRat.class,FireGhost.class,ColdMagicRat.class));
+					case 13:
+						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,
+								Brute.class,Spinner.class,
+								DM200.class,RedSwarm.class));
+
+					case 14:
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,
+								Spinner.class,
+								ColdMagicRat.class,RedSwarm.class,Shaman.random()));
+					case 15:
+						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+						return new ArrayList<>(Arrays.asList(
+								Bat.class,
+								Spinner.class,
+
+								Brute.class,FireGhost.class,ColdMagicRat.class,RedSwarm.class));
+
+					// City
+					case 16:
+						//5x elemental, 5x warlock, 1x monk, 2x silvercrab
+						return new ArrayList<>(Arrays.asList(
+								Monk.class,
+								Shaman.random()));
+					case 17:
+						//2x elemental, 2x warlock, 2x monk, 1x silvercrab
+						return new ArrayList<>(Arrays.asList(
+								Elemental.random(),
+								Monk.class,FireGhost.class));
+					case 18:
+						//1x elemental, 1x warlock, 2x monk, 3x golem
+						return new ArrayList<>(Arrays.asList(
+								Elemental.random(),
+								Random.NormalFloat(1,6)>=3 ? BruteBot.class : Warlock.class,
+								Monk.class,
+								Golem.class,FireGhost.class));
+					case 19:
+						//1x elemental, 1x warlock, 2x monk, 3x golem
+						return new ArrayList<>(Arrays.asList(
+								Monk.class,
+								Golem.class, Warlock.class,ShieldHuntsman.class,
+								Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class));
+					case 20:
+						//1x elemental, 1x warlock, 2x monk, 3x golem
+						return new ArrayList<>(Arrays.asList(
+								Elemental.random(),
+								Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class,
+								Monk.class,
+								Golem.class, Golem.class,Ice_Scorpio.class));
+
+					case 21:
+						//3x succubus, 3x evil eye
+						return new ArrayList<>(Arrays.asList(
+								Eye.class,ShieldHuntsman.class));
+					case 22:
+						//3x succubus, 3x evil eye
+						return new ArrayList<>(Arrays.asList(
+								Eye.class,ShieldHuntsman.class));
+					case 23:
+						//1x: succubus, 2x evil eye, 3x scorpio
+						return new ArrayList<>(Arrays.asList(
+								Eye.class,ShieldHuntsman.class,Ice_Scorpio.class));
+					//前半段决战
+					case 24:
+						//1x succubus, 2x evil eye, 3x scorpio
+						return new ArrayList<>(Arrays.asList(
+								Succubus.class,
+								Eye.class,
+								Scorpio.class, Succubus.class,Fire_Scorpio.class,Ice_Scorpio.class,ShieldHuntsman.class));
+
+					//Hollow Mobs
+					case 27:
+						return new ArrayList<>(Arrays.asList(
+								Frankenstein.class, Frankenstein.class,
+								Crumb.class, Crumb.class,
+								Frankenstein.class,
+								Crumb.class, Crumb.class,
+								Eye.class));
+
+					case 28:
+						return new ArrayList<>(Arrays.asList(
+								Crumb.class, Crumb.class,
+								Ghost_Halloween.class,Ghost_Halloween.class,
+								Pumking_Ghost.class
+						));
+					case 29:
+						return new ArrayList<>(Arrays.asList(
+								ApprenticeWitch.class,
+								Butcher.class,Butcher.class,
+								PumkingBomber.class, Pumking_Ghost.class
+						));
+
+					case 30:
+						return new ArrayList<>(Arrays.asList(
+								ApprenticeWitch.class,
+								ApprenticeWitch.class,
+								Butcher.class,Butcher.class,
+								Pumking_Ghost.class
+								, PumkingBomber.class
+						));
+
+					default:
+						return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,
+								FlowerSlime.class,
+								FlowerSlime.class, FlowerSlime.class, FlowerSlime.class,
+								FlowerSlime.class, FlowerSlime.class, FlowerSlime.class,
+								FlowerSlime.class));
+				}
 			}
+
+
 		}
 		return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class));
 	}
