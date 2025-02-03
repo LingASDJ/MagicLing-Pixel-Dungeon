@@ -232,8 +232,6 @@ public enum HeroClass {
 			new BlessingNecklace().quantity(1).identify().collect();
 			Dungeon.LimitedDrops.BLESSING_NECKLACE.dropped();
 
-			new RushMobScrollOfRandom().collect();
-
 			new SpawnMisc().quantity(1).identify().collect();
 			new LevelTeleporter().quantity(1).identify().collect();
 			new SakaFishSketon().quantity(1).identify().collect();
