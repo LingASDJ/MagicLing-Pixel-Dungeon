@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.GameRules;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
@@ -1464,7 +1463,6 @@ public class GameScene extends PixelScene {
 							break;
 						case 1:
 							WndStory.showChapter( WndStory.ID_SEWERS );
-							if(Statistics.RandModeCount == 0) GameRules.RandMode_ItemMode();
 							break;
 						case 5:
 							switch(Dungeon.branch) {
@@ -1485,7 +1483,6 @@ public class GameScene extends PixelScene {
 							break;
 						case 6:
 							WndStory.showChapter( WndStory.ID_PRISON );
-							if(Statistics.RandModeCount == 1) GameRules.RandMode_ItemMode();
 							break;
 						case 10:
 							if((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) {
@@ -1495,12 +1492,10 @@ public class GameScene extends PixelScene {
 							}
 							break;
 						case 11:
-							if(Statistics.RandModeCount == 2) GameRules.RandMode_ItemMode();
 							WndStory.showChapter( WndStory.ID_CAVES );
 							break;
 						case 16:
 							WndStory.showChapter( WndStory.ID_CITY );
-							if(Statistics.RandModeCount == 3) GameRules.RandMode_ItemMode();
 							break;
 						case 17:case 18:
 							switch(Dungeon.branch){
@@ -1520,7 +1515,6 @@ public class GameScene extends PixelScene {
 							break;
 						case 21:
 							WndStory.showChapter( WndStory.ID_HALLS );
-							if(Statistics.RandModeCount == 4) GameRules.RandMode_ItemMode();
 							break;
 						case 25:
 							if(Dungeon.branch == 5){
@@ -1992,6 +1986,16 @@ public class GameScene extends PixelScene {
 			}
 
 			Sample.INSTANCE.play( Assets.Sounds.BOSS );
+
+			if(Statistics.RandMode){
+				Statistics.goldRefogreCount++;
+				Statistics.ArUpgrade 	= false;
+				Statistics.RingUpgrade 	= false;
+				Statistics.TrinkUpgrde 	= false;
+				Statistics.WeaponUpgrade = false;
+				Statistics.WandUpgrade 	= false;
+				Statistics.magestaffUpgrade = 0;
+			}
 		}
 	}
 

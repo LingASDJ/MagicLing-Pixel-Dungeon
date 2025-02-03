@@ -35,6 +35,19 @@ public class Statistics {
 	//神器限制
 	public static boolean ARLing = false;
 	public static boolean CatFirst = false;
+
+	public static boolean PinkFox = false;
+
+	public static int PinkFoxCount;
+
+	public static int magestaffUpgrade;
+
+	public static boolean ArUpgrade 	= false;
+	public static boolean RingUpgrade 	= false;
+	public static boolean TrinkUpgrde 	= false;
+	public static boolean WeaponUpgrade = false;
+	public static boolean WandUpgrade 	= false;
+
 	public static boolean snow = false;
 
 	public static int gdzHelpDungeon;
@@ -126,6 +139,7 @@ public class Statistics {
 	public static float duration;
 	
 	public static boolean qualifiedForNoKilling = false;
+
 	public static boolean completedWithNoKilling = false;
 	
 	public static boolean amuletObtained = false;
@@ -195,7 +209,7 @@ public class Statistics {
 	public static int gameDay;
 	public static boolean gameNight;
 
-	public static int dwarfchange;
+	public static int goldRefogreCount;
 
 	//随机嬗变
 	public static int RandModeCount;
@@ -387,13 +401,25 @@ public class Statistics {
 
 		CatFirst = false;
 
+		PinkFox = false;
+
 		SmallLeafGet = false;
 		noClearKill = false;
 		Statistics.AutoOilPotion = false;
 
         HealingIsDied = 0;
 
-		dwarfchange = Random.Int(1,101);
+		PinkFoxCount = 0;
+
+		magestaffUpgrade = 0;
+
+		ArUpgrade 	= false;
+		RingUpgrade 	= false;
+		TrinkUpgrde 	= false;
+		WeaponUpgrade = false;
+		WandUpgrade 	= false;
+
+		goldRefogreCount = 0;
 
 		NoTime = false;
 		dm720Fight = false;
@@ -545,6 +571,17 @@ public class Statistics {
 
 		bundle.put(HKLEVEL,hcDialogLevel);
 
+		bundle.put("PinkFoxCT",PinkFoxCount);
+
+
+		bundle.put("ArUpgrad",ArUpgrade);
+		bundle.put("RingUpgrade",RingUpgrade);
+		bundle.put("TrinkUpgrde",TrinkUpgrde);
+		bundle.put("WeaponUpgrade",WeaponUpgrade);
+		bundle.put("WandUpgrade",WandUpgrade);
+
+		bundle.put("BDSH", magestaffUpgrade);
+
 		bundle.put(WKLEVEL,wcDialogLevel);
 
 		bundle.put(GZLEVEL,gdzDialogLevel);
@@ -562,6 +599,8 @@ public class Statistics {
 		bundle.put("ARLing",ARLing);
 
 		bundle.put("CAT",CatFirst);
+
+		bundle.put("FOXSD",PinkFox);
 
 		bundle.put("GDZ",gdzHelpDungeon);
 
@@ -681,7 +720,7 @@ public class Statistics {
 
 		bundle.put(MSTG,mustTengu);
 
-		bundle.put("DWCHSAG",dwarfchange);
+		bundle.put("DWCHSAG", goldRefogreCount);
 
 		//SPD
 		bundle.put("real_time_passed", second_elapsed);
@@ -708,6 +747,16 @@ public class Statistics {
 
 		RandomMimicItem = bundle.getBoolean(MMCITEM);
 
+		PinkFoxCount = bundle.getInt("PinkFoxCT");
+
+		magestaffUpgrade = bundle.getInt("BDSH");
+
+		ArUpgrade = bundle.getBoolean("ArUpgrade");
+		RingUpgrade = bundle.getBoolean("RingUpgrade");
+		TrinkUpgrde = bundle.getBoolean("TrinkUpgrde");
+		WandUpgrade =bundle.getBoolean("WeaponUpgrade");
+		WandUpgrade = bundle.getBoolean("WandUpgrade");
+
 		KillMazeMimic = bundle.getInt(MIMIC_MAZEKILL);
 
 		GameKillFireDargon = bundle.getBoolean("DRAM");
@@ -725,11 +774,13 @@ public class Statistics {
 
 		snow = bundle.getBoolean("SNOW");
 
+		PinkFox = bundle.getBoolean("FOXSD");
+
 		CrivusbossTeleporter = bundle.getInt(BDK);
 
 		GetFoodLing = bundle.getInt( SIDERLING);
 
-		dwarfchange = bundle.getInt("DWCHSAG");
+		goldRefogreCount = bundle.getInt("DWCHSAG");
 
 		gameDay = bundle.getInt("gameday");
 

@@ -151,7 +151,10 @@ public class NxhyShopRoom extends SpecialRoom {
         itemsToSpawn2.add(w);
         itemsToSpawn2.add(TippedDart.randomTipped(2));
         //itemsToSpawn2.add(new MerchantsBeacon());
-        itemsToSpawn2.add(ChooseBag(Dungeon.hero.belongings));
+        Bag bag = ChooseBag(Dungeon.hero.belongings);
+        if (bag != null) {
+            itemsToSpawn2.add(bag);
+        }
         itemsToSpawn2.add(new ScrollOfTransmutation());
         //itemsToSpawn2.add(new DriedRose());
         itemsToSpawn2.add(Generator.randomUsingDefaults(Generator.Category.POTION));

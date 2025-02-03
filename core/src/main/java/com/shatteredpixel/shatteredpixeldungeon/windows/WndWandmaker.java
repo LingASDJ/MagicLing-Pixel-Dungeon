@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
@@ -133,6 +134,10 @@ public class WndWandmaker extends Window {
 		wandmaker.sprite.die();
 		
 		Wandmaker.Quest.complete();
+
+		if(Statistics.RandMode){
+			Statistics.goldRefogreCount++;
+		}
 	}
 
 	private class RewardWindow extends WndInfoItem {

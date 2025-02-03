@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -47,7 +49,7 @@ public class MagicalHolster extends Bag {
 	}
 
 	public int capacity(){
-		return 34; // default container size
+		return  Dungeon.isChallenged(Challenges.MINIBAG) ? 17 : 34; // default container size
 	}
 	
 	@Override
@@ -82,7 +84,7 @@ public class MagicalHolster extends Bag {
 	
 	@Override
 	public int value() {
-		return 60;
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 90 : 60;
 	}
 
 }
