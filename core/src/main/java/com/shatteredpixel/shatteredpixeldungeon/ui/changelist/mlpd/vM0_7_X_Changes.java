@@ -16,6 +16,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.DM720Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DeepSeaSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DimandKingSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DragonGirlBlueSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.DreamSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DwarfGeneralSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireCrystalSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireDragonSprite;
@@ -115,6 +116,15 @@ public class vM0_7_X_Changes {
 
         changes.addButton(new ChangeButton(Icons.get(Icons.BADGES),("新徽章加入"),
                 ("一个隐藏徽章")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.CHALLANEESICON_17), ("挑战改进:孤城迷境"),
+                ("挑战优化:\n" +
+                        "1.0层翻新，奈亚子进入常规入口会有温馨提示\n" +
+                        "2.孤城Bzmdr\n" +
+                        "3.孤城可游玩特殊模式")));
+
+        changes.addButton(new ChangeButton(new DreamSprite(), ("新NPC:晓梦加入"),
+                ("风里雨里，0层等你")));
 
         changes.addButton(new ChangeButton(new RedNecromancerSprite(), ("BossRush2.4"),
                 ("Boss现在不会获得成长精英效果。")));
