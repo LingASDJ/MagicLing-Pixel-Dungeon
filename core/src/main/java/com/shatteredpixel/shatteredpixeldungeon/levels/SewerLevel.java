@@ -179,7 +179,7 @@ public class SewerLevel extends RegularLevel {
 			mobs.add(npc20);
 		}
 
-		if(Dungeon.depth == 1){
+		if(Dungeon.depth == 1 && Statistics.RandMode){
 			PinkFox npc18 = new PinkFox();
 			npc18.pos = entrance()-1;
 			mobs.add(npc18);

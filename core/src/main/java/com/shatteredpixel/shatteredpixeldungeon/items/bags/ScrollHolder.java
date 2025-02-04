@@ -48,7 +48,7 @@ public class ScrollHolder extends Bag {
 	}
 
 	public int capacity(){
-		return  Dungeon.isChallenged(Challenges.MINIBAG) ? 18 : 36; // default container size
+		return  Dungeon.isChallenged(Challenges.MINIBAG) ? 21 : 36; // default container size
 	}
 	
 	@Override

@@ -2,28 +2,21 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NTNPC;
-import com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot.BzmdrLandPlot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BzmdrSprite;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndDialog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
-import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public class BzmdrLand extends NTNPC {
+public class BzmdrDungeon extends NTNPC {
     private int died;
 
     protected ArrayList<String> X_chat;
@@ -59,16 +52,9 @@ public class BzmdrLand extends NTNPC {
 
         chat = new ArrayList<String>() {
             {
-                add((Messages.get(BzmdrLand.class, "a_message1")));
-                add((Messages.get(BzmdrLand.class, "a_message2")));
-                add((Messages.get(BzmdrLand.class, "a_message3")));
-            }
-        };
-
-        X_chat = new ArrayList<String>() {
-            {
-                add((Messages.get(BzmdrLand.class, "c_message1")));
-                add((Messages.get(BzmdrLand.class, "c_message2")));
+                add((Messages.get(BzmdrLand.class, "x_message1")));
+                add((Messages.get(BzmdrLand.class, "x_message2")));
+                add((Messages.get(BzmdrLand.class, "x_message3")));
             }
         };
     }
@@ -103,36 +89,28 @@ public class BzmdrLand extends NTNPC {
     public boolean interact(Char c) {
 
         sprite.turnTo(pos, hero.pos);
-        BzmdrLandPlot plot = new BzmdrLandPlot();
-
-        if(Dungeon.isChallenged(Challenges.CS)){
-            if(Statistics.amuletObtained && secnod){
-                WndQuest.chating(this,X_chat);
-                secnod = false;
-            } else if(first) {
-                WndQuest.chating(this,chat);
-                Item item = ( Generator.randomUsingDefaults( Generator.Category.STONE ));
-                Dungeon.level.drop( item , hero.pos );
-                Item item2 = ( Generator.randomUsingDefaults( Generator.Category.STONE ));
-                Dungeon.level.drop( item2 , hero.pos );
-                first = false;
-            } else {
-                yell("……");
+        if(first) {
+            WndQuest.chating(this, chat);
+            switch (Random.NormalIntRange(1,3)){
+                case 1:
+                    Item item = (Generator.randomUsingDefaults(Generator.Category.SCROLL));
+                    Dungeon.level.drop(item, hero.pos);
+                    break;
+                case 2:
+                    Item item2 = (Generator.randomUsingDefaults(Generator.Category.POTION));
+                    Dungeon.level.drop(item2, hero.pos);
+                    break;
+                case 3:
+                    Item item3 = (Generator.randomUsingDefaults(Generator.Category.MIS_T4));
+                    Dungeon.level.drop(item3, hero.pos);
+                    break;
             }
+            first = false;
         } else {
-            if (first) {
-                Game.runOnRenderThread(new Callback() {
-                    @Override
-                    public void call() {
-                        GameScene.show(new WndDialog(plot,false));
-                    }
-                });
-                first=false;
-            } else {
-                yell("……");
-            }
+            yell("……");
         }
         return true;
     }
 
 }
+

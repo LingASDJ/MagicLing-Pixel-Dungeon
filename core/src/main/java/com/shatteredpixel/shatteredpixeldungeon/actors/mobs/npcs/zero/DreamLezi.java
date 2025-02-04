@@ -5,7 +5,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NTNPC;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.extra.ScrollOfTeleTation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DreamSprite;
 import com.watabou.utils.Bundle;
 
@@ -51,7 +51,7 @@ public class DreamLezi extends NTNPC {
             first = false;
         } else if(secnod){
            secnod = false;yell("嬗变一下吧！但是这个会必定诅咒哦！");
-            Dungeon.level.drop(new ScrollOfTransmutation.EX(), hero.pos);
+            Dungeon.level.drop(new ScrollOfTeleTation().identify(), hero.pos);
         } else {
             yell("新年快乐，我的动物园好看吗？");
         }

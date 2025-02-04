@@ -45,7 +45,7 @@ public class PotionBandolier extends Bag {
 	}
 
 	public int capacity(){
-		return Dungeon.isChallenged(Challenges.MINIBAG) ? 17: 35;
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 21 : 35;
 	}
 
 	@Override

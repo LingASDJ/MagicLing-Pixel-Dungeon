@@ -506,6 +506,24 @@ public class MeleeWeapon extends Weapon {
 				partialCharge = 0;
 			}
 
+			if (Dungeon.hero.subClass == HeroSubClass.CHAMPION
+					&& secondCharges < secondChargeCap()) {
+				if (Regeneration.regenOn()) {
+					// 80 to 60 turns per charge without talent
+					// up to 53.333 to 40 turns per charge at max talent level
+					secondPartialCharge += secondChargeMultiplier() / (40f-(secondChargeCap()-secondCharges));
+				}
+
+				if (secondPartialCharge >= 1) {
+					secondCharges++;
+					secondPartialCharge--;
+					updateQuickslot();
+				}
+
+			} else {
+				secondPartialCharge = 0;
+			}
+
 			if (ActionIndicator.action != this && Dungeon.hero.subClass == HeroSubClass.CHAMPION) {
 				ActionIndicator.setAction(this);
 			}

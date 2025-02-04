@@ -38,6 +38,10 @@ public class Gift implements Bundlable {
             //小年夜
             "TUxQRF9YaWFvbmlhblllaSwxNzM4MTU5MjAwLGZhbHNl",
 
+            //春节兑换码
+            "TUxQRC1TbmFrZVllYXJzT2xkLDE3MzkzNzI0MDAsZmFsc2U=",
+            "TUxQRC00WWVhcnNPbGQsMTczOTM3MjQwMCxmYWxzZQ==",
+
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
@@ -71,11 +75,28 @@ public class Gift implements Bundlable {
         code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfNukeCole", 1);
         code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonKingBreath", 1);
 
+        //MLPD-4YearsOld
+        LinkedHashMap<String, Integer> code6 = new LinkedHashMap<>();
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",700);
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.RedBlock", 3);
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Seekingspear", 1);
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation", 1);
+
+        //MLPD-4YearsOld
+        LinkedHashMap<String, Integer> code7 = new LinkedHashMap<>();
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",400);
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 1);
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.DiedCrossBow", 1);
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
+
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
         tempMap.put( "U1A0LVJFQURZ",code3);
         tempMap.put( "QmFkTGFudGVyRmlyZS1Hbw==", code4);
         tempMap.put( "TUxQRF9YaWFvbmlhblllaQ==",code5);
+
+        tempMap.put("TUxQRC00WWVhcnNPbGQ=",code6);
+        tempMap.put("TUxQRC1TbmFrZVllYXJzT2xk",code7);
 
 
         GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );
