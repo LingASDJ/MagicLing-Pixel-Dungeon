@@ -49,7 +49,7 @@ public class MagicalHolster extends Bag {
 	}
 
 	public int capacity(){
-		return  Dungeon.isChallenged(Challenges.MINIBAG) ? 17 : 34; // default container size
+		return  Dungeon.isChallenged(Challenges.MINIBAG) ? 20 : 34; // default container size
 	}
 	
 	@Override

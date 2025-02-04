@@ -71,6 +71,7 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
 
         properties.add(Property.IMMOVABLE);
         properties.add(Property.BOSS);
+        alignment = Alignment.NEUTRAL;
     }
 
     @Override
@@ -237,6 +238,9 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
     protected boolean act() {
 
         if (HP > 60 && Statistics.crivusfruitslevel3){
+
+            alignment = Alignment.ENEMY;
+
             if(enemy!=null && enemy == hero){
                 yell(Messages.get(this,"goodbye"));
                 enemy.damage(enemy.HT/3,this);
@@ -252,9 +256,6 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
         state = PASSIVE;
         if (alignment == Alignment.NEUTRAL) {
             return true;
-        }
-        if( hero.buff(LockedFloor.class) != null){
-            notice();
         }
 
         GameScene.add(Blob.seed(pos, Statistics.crivusfruitslevel2 ? 0 : 20,  ConfusionGas.class));
@@ -288,6 +289,12 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
         focusCooldown = bundle.getInt( FOCUS_COOLDOWN );
         if (state != SLEEPING) BossHealthBar.assignBoss(this);
         if ((HP*2 <= HT)) BossHealthBar.bleed(true);
+
+        if (Statistics.crivusfruitslevel3){
+            alignment = Alignment.ENEMY;
+        } else {
+            alignment = Alignment.NEUTRAL;
+        }
 
     }
     @Override
@@ -374,18 +381,14 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
     }
 
     public void notice() {
-        super.notice();
-        if (!BossHealthBar.isAssigned()) {
-            BossHealthBar.assignBoss(this);
-            GLog.n(Messages.get(this, "notice"));
-            GameScene.flash(0x8000cc00);
-            Camera.main.shake(1f,3f);
-            this.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
-            GameScene.bossReady();
-            for (Char ch : Actor.chars()){
-                if (ch instanceof DriedRose.GhostHero){
-                    ((DriedRose.GhostHero) ch).sayBoss();
-                }
+        BossHealthBar.assignBoss(this);
+        GLog.n(Messages.get(this, "notice"));
+        GameScene.flash(0x8000cc00);
+        Camera.main.shake(1f,3f);
+        GameScene.bossReady();
+        for (Char ch : Actor.chars()){
+            if (ch instanceof DriedRose.GhostHero){
+                ((DriedRose.GhostHero) ch).sayBoss();
             }
         }
     }

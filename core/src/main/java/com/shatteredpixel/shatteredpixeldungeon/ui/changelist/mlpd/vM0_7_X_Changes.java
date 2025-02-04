@@ -57,6 +57,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0808_Changes(changeInfos);
         add_V0805_Changes(changeInfos);
         add_V0801_Changes(changeInfos);
         add_V0800M1_Changes(changeInfos);
@@ -91,6 +92,48 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0808_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.0.8", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V2.0"),
+                ("完全重做，详见金蝶游戏内部说明")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD-SnakeYearsOld"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位新年快乐！")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD-4YearsOld"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位新年快乐！")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.BADGES),("新徽章加入"),
+                ("一个隐藏徽章")));
+
+        changes.addButton(new ChangeButton(new RedNecromancerSprite(), ("BossRush2.4"),
+                ("Boss现在不会获得成长精英效果。")));
+
+        Image issxsaxs =new QliphothSprite();
+        issxsaxs.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(issxsaxs, ("果子系列Boss优化"),
+                ("现在果子在不能攻击前不再被自动瞄准，且异果藤曼开局追加10回合失明")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.0.8:\n\n" +
+                        "1.修复决斗家转职副完全不充能的问题\n" +
+                        "2.修复金蝶测试版的各种问题\n" +
+                        "3.0层魔像现在不会传送\n" +
+                        "4.其他小型崩溃Bug修正,这里不做过多描述"));
     }
 
     public static void add_V0805_Changes(ArrayList<ChangeInfo> changeInfos ) {

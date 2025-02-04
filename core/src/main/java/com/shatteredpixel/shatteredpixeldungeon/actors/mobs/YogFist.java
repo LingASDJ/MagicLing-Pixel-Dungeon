@@ -24,6 +24,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -79,6 +81,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public abstract class YogFist extends Mob {
 
@@ -94,7 +97,7 @@ public abstract class YogFist extends Mob {
 		EXP = 25;
 		maxLvl = -2;
 
-		if(Dungeon.depth == 0){
+		if(Dungeon.depth == 0 && !Statistics.amuletObtained){
 			state = PASSIVE;
 		} else {
 			state = HUNTING;
@@ -190,6 +193,14 @@ public abstract class YogFist extends Mob {
 		for ( Char c : Actor.chars() ){
 			if (c instanceof YogDzewa){
 				((YogDzewa) c).processFistDeath();
+			}
+		}
+
+		PaswordBadges.loadGlobal();
+		List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered(true);
+		if(Dungeon.depth == 0 && Statistics.amuletObtained ){
+			if (!passwordbadges.contains(PaswordBadges.Badge.ONE_POUCH)) {
+				PaswordBadges.ONE_POUCH();
 			}
 		}
 	}

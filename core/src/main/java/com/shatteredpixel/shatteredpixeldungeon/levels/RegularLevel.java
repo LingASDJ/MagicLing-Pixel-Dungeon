@@ -389,7 +389,9 @@ public abstract class RegularLevel extends Level {
 		}
 
 		if(Statistics.RandMode){
-			initRooms.add(new GoldBurretyRoom());
+			if(depth>1){
+				initRooms.add(new GoldBurretyRoom());
+			}
 		}
 
 		//Rush Shop

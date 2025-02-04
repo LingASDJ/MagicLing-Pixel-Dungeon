@@ -184,12 +184,11 @@ abstract public class Boss extends Mob {
 
     private void RollCS(){
         Class<?extends ChampionEnemy> buffCls;
-        switch (Random.Int(6)){
+        switch (Random.Int(4)){
             case 0: default:    buffCls = ChampionEnemy.Blazing.class;      break;
             case 1:             buffCls = ChampionEnemy.Projecting.class;   break;
             case 2:             buffCls = ChampionEnemy.Blessed.class;      break;
-            case 3:             buffCls = ChampionEnemy.Growing.class;      break;
-            case 4:             buffCls = ChampionEnemy.Halo.class;      	break;
+            case 3:             buffCls = ChampionEnemy.Halo.class;      	break;
         }
         Buff.affect(this, buffCls);
         this.state = this.WANDERING;

@@ -49,7 +49,7 @@ public class KingBag extends Bag {
     }
 
     public int capacity(){
-        return Dungeon.isChallenged(Challenges.MINIBAG) ? 11 : 21;
+        return Dungeon.isChallenged(Challenges.MINIBAG) ? 12 : 21;
     }
     @Override
     public int value() {

@@ -30,7 +30,7 @@ public class BookBag extends Bag {
     }
 
     public int capacity(){
-        return Dungeon.isChallenged(Challenges.MINIBAG) ? 5 : 10;
+        return Dungeon.isChallenged(Challenges.MINIBAG) ? 6 : 10;
     }
 
     @Override

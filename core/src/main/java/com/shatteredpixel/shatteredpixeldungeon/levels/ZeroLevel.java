@@ -22,10 +22,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Challenges.CS;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.GameRules;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -37,18 +39,29 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nyz;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.REN;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Slyl;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.obSir;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.BzmdrLand;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.WaloKe;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.YetYog;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.BossRushBloodGold;
+import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.DLCItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.RushMobScrollOfRandom;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.RandomChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.SakaFishSketon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.SurfaceScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndHardNotification;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
@@ -127,6 +140,8 @@ public class ZeroLevel extends Level {
         return true;
     }
 
+
+
     protected void createItems() {
 
         //places the first guidebook page on floor 1
@@ -187,9 +202,14 @@ public class ZeroLevel extends Level {
             npc3.pos = (this.width * 18 + 20);
             mobs.add(npc3);
         }
-//        PinkLing god1= new PinkLing();
-//        god1.pos = (this.width * 28 + 30);
-//        mobs.add(god1);
+
+        WaloKe god1= new WaloKe();
+        god1.pos = 289;
+        mobs.add(god1);
+
+        BzmdrLand god2= new BzmdrLand();
+        god2.pos = 340;
+        mobs.add(god2);
 
         if (Badges.isUnlocked(Badges.Badge.NYZ_SHOP)){
 
@@ -225,7 +245,21 @@ public class ZeroLevel extends Level {
 
     @Override
     public boolean activateTransition(Hero hero, LevelTransition transition) {
-        if (transition.type == LevelTransition.Type.SURFACE){
+        if (transition.type == LevelTransition.Type.BRANCH_ENTRANCE) {
+            TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+            if (timeFreeze != null) timeFreeze.disarmPresses();
+            Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+            if (timeBubble != null) timeBubble.disarmPresses();
+            InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+            InterlevelScene.curTransition = new LevelTransition();
+            InterlevelScene.curTransition.destDepth = depth;
+            InterlevelScene.curTransition.destType = LevelTransition.Type.BRANCH_EXIT;
+            InterlevelScene.curTransition.destBranch = 1;
+            InterlevelScene.curTransition.type = LevelTransition.Type.BRANCH_EXIT;
+            InterlevelScene.curTransition.centerCell = -1;
+            Game.switchScene(InterlevelScene.class);
+            return false;
+        } else if (transition.type == LevelTransition.Type.SURFACE){
 
             if (hero.belongings.getItem( Amulet.class ) == null) {
                 Game.runOnRenderThread(new Callback() {
@@ -246,6 +280,37 @@ public class ZeroLevel extends Level {
                 }
                 return true;
             }
+        } else if (transition.type == LevelTransition.Type.REGULAR_EXIT) {
+
+            if (hero.belongings.getItem( DLCItem.class ) == null) {
+
+                Game.runOnRenderThread(new Callback() {
+                    @Override
+                    public void call() {
+                        GameScene.show( new WndHardNotification(new ItemSprite(ItemSpriteSheet.DLCBOOKS),
+                                Messages.get(hero, "dlc_name"),
+                                Messages.get(hero, "leave_more_dead"),
+                                "OK",
+                                0));
+                    }
+                });
+                return false;
+            } else if(hero.belongings.getItem( BossRushBloodGold.class ) != null && Statistics.deepestFloor == 0) {
+                GameRules.BossRush();
+                return false;
+            } else if(hero.belongings.getItem( RushMobScrollOfRandom.class ) != null && Statistics.deepestFloor == 0) {
+                GameRules.RandMode();
+                return false;
+            } else {
+                Game.runOnRenderThread(new Callback() {
+                    @Override
+                    public void call() {
+                        GameScene.show(new WndMessage(Messages.get(hero, "leave_more_dead")));
+                    }
+                });
+                return false;
+            }
+
         } else {
             return super.activateTransition(hero, transition);
         }
