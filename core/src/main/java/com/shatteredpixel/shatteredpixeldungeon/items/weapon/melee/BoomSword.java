@@ -81,7 +81,6 @@ public class BoomSword extends MeleeWeapon {
                 missile = new FrostBomb();
                 break;
             default:
-            case 8:
                 missile = new ShrapnelBomb();
                 break;
         }

@@ -67,6 +67,8 @@ public class PinkFoxPlot extends Plot {
 
     @Override
     public void skip() {
+        diagulewindow.cancel();
+        WndDialog.settedPlot = null;
     }
 
     private void process_to_1() {
@@ -139,6 +141,8 @@ public class PinkFoxPlot extends Plot {
 
         @Override
         public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
         }
 
 

@@ -1991,7 +1991,6 @@ public class GameScene extends PixelScene {
 			if(Statistics.RandMode){
 				Statistics.goldRefogreCount++;
 				Statistics.magestaffUpgrade = 0;
-				Statistics.upgradeGold = 18;
 
 				ArrayList<Item> food = Dungeon.hero.belongings.getAllItems(Item.class);
 				for (Item w : food.toArray(new Item[0])){
@@ -1999,6 +1998,8 @@ public class GameScene extends PixelScene {
 						w.noUpgrade = false;
 					}
 				}
+
+				Statistics.upgradeGold = Random.NormalIntRange(8,24);
 
 				if(Statistics.RandomQuest == 3){
 					switch (Dungeon.depth){

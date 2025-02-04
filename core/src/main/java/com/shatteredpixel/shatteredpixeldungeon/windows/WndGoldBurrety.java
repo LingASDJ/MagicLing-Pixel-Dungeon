@@ -17,8 +17,17 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.WraithAmulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.RushMobScrollOfRandom;
 import com.shatteredpixel.shatteredpixeldungeon.items.lightblack.OilLantern;
@@ -50,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -334,32 +344,19 @@ public class WndGoldBurrety extends Window {
                 result.collect();
                 item.detach(Dungeon.hero.belongings.backpack);
             } else if (item instanceof Artifact) {
-                if(item == hero.belongings.misc()) {
+               if(item == hero.belongings.artifact()){
                     hero.belongings.artifact = (Artifact) processArtifact(hero.belongings.artifact);
                     hero.belongings.artifact.detachAll(Dungeon.hero.belongings.backpack);
-                } else if(item == hero.belongings.artifact()){
-                    hero.belongings.artifact = (Artifact) processArtifact(hero.belongings.artifact);
-                    hero.belongings.artifact.detachAll(Dungeon.hero.belongings.backpack);
+                   if(Statistics.upgradeGold<=18){
+                       hero.belongings.artifact.upgrade();
+                       Statistics.upgradeGold--;
+                       hero.belongings.artifact.noUpgrade = true;
+                   }
                 } else {
                     result = processArtifact(item);
                 }
             } else if (item instanceof Ring) {
-                Artifact n;
-                do {
-                    n = Generator.randomArtifact();
-                } while (n != null && Challenges.isItemBlocked(n));
-                if (item == hero.belongings.misc() && n != null) {
-                    hero.belongings.artifact = (Artifact) processArtifact(hero.belongings.artifact);
-                    hero.belongings.artifact.detachAll(Dungeon.hero.belongings.backpack);
-                    hero.belongings.artifact.identify();
-
-                    if(Statistics.upgradeGold<=18){
-                        Statistics.upgradeGold--;
-                        hero.belongings.artifact.upgrade();
-                        hero.belongings.artifact.noUpgrade = true;
-                    }
-
-                } else if (item == hero.belongings.ring()) {
+               if (item == hero.belongings.ring()) {
                     hero.belongings.ring.buff.detach();
                     hero.belongings.ring = changeRing(hero.belongings.ring);
                     hero.belongings.ring.detach(Dungeon.hero.belongings.backpack);
@@ -451,12 +448,7 @@ public class WndGoldBurrety extends Window {
 
     private Artifact changeArtifact( Artifact a ) {
         Artifact n;
-        do {
-            n = Generator.randomArtifact();
-        } while ( n != null && (Challenges.isItemBlocked(n) || n.getClass() == a.getClass()));
-
-        if (n != null){
-
+        n = Normal();
             if (a instanceof DriedRose){
                 if (((DriedRose) a).ghostWeapon() != null){
                     Dungeon.level.drop(((DriedRose) a).ghostWeapon(), Dungeon.hero.pos);
@@ -468,6 +460,7 @@ public class WndGoldBurrety extends Window {
 
             if(Statistics.upgradeGold<=18){
                 n.upgrade();
+                n.noUpgrade = true;
                 Statistics.upgradeGold--;
             }
 
@@ -478,33 +471,32 @@ public class WndGoldBurrety extends Window {
             n.collect();
             a.detach(Dungeon.hero.belongings.backpack);
             return n;
-        }
 
-        return null;
+
+
+    }
+
+    private Artifact Normal() {
+        Artifact artifact;
+        /** 你要恶心我，我直接手写生成 TNND*/
+        switch (Random.NormalIntRange(0,9)){
+            case 0: artifact = new UnstableSpellbook(); break;
+            case 2: artifact = new HornOfPlenty(); break;
+            case 3: artifact = new SandalsOfNature(); break;
+            case 4: artifact = new TalismanOfForesight(); break;
+            case 5: artifact = new TimekeepersHourglass(); break;
+            case 6: artifact = new AlchemistsToolkit(); break;
+            case 7: artifact = new DriedRose(); break;
+            case 8: artifact = new  EtherealChains(); break;
+            case 9: artifact = new WraithAmulet(); break;
+            default:
+                artifact = new ChaliceOfBlood(); break;
+        }
+        return artifact;
     }
 
     private Item processArtifact(Item item) {
-        Artifact artifact = changeArtifact((Artifact) item);
-        if (artifact == null) {
-            if (item instanceof OilLantern) {
-                Item result = item;
-                result.level(0);
-                return result;
-            } else {
-                // 如果没有合适的Artifact，生成一个随机+0戒指
-                Item result = Generator.randomUsingDefaults(Generator.Category.RING);
-                result.collect();
-                result.levelKnown = item.levelKnown;
-                result.cursed = item.cursed;
-                result.identify();
-
-                result.cursedKnown = item.cursedKnown;
-                result.level(item.level()/2);
-                item.detach(Dungeon.hero.belongings.backpack);
-                return result;
-            }
-        }
-        return artifact;
+        return changeArtifact((Artifact) item);
     }
 
     protected WndBag.ItemSelector GolditemSelector = new WndBag.ItemSelector() {
@@ -565,7 +557,7 @@ public class WndGoldBurrety extends Window {
 
         @Override
         public boolean itemSelectable(Item item) {
-            if(item.noUpgrade){
+            if(item.noUpgrade || item == hero.belongings.misc()){
                 return false;
             }
             if(item instanceof MeleeWeapon) {

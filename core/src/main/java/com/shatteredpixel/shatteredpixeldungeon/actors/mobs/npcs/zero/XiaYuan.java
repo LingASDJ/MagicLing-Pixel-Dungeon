@@ -79,6 +79,7 @@ public class XiaYuan extends NTNPC {
         sprite.turnTo(pos, hero.pos);
         if (first) {
             WndQuest.chating(this, chat);
+            zeroItemLevel++;
             if (Statistics.zeroItemLevel >= 4 && Dungeon.depth == 0) {
                 Dungeon.level.drop(new Gold(1), hero.pos);
             } else {
@@ -89,7 +90,6 @@ public class XiaYuan extends NTNPC {
             WndQuest.chating(this, C_chat);
         } else {
             WndQuest.chating(this, B_chat);
-            zeroItemLevel++;
             secnod = false;
         }
         return true;

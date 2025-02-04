@@ -48,7 +48,7 @@ public class VelvetPouch extends Bag {
 	}
 
 	public int capacity(){
-		return Dungeon.isChallenged(Challenges.MINIBAG) ? 20 : 40;
+		return Dungeon.isChallenged(Challenges.MINIBAG) ? 24 : 40;
 	}
 	
 	@Override

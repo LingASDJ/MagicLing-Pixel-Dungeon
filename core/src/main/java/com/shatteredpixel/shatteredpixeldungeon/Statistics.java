@@ -230,8 +230,12 @@ public class Statistics {
 
 	public static int killYogMobsAnargy;
 
+
+	public static int gudaZiRandomSkin;
+
 	//Holiday Boolean
 	public static boolean Hollow_Holiday = false;
+
 
 	private static final String ICECLAN ="iceCyanBlueSquareCoin";
 
@@ -415,8 +419,6 @@ public class Statistics {
 		upgradeGold = 18;
 		RandomQuest = Random.NormalIntRange(1,3);
 		GoldMobDead = 0;
-
-
 		goldRefogreCount = 0;
 
 		NoTime = false;
@@ -456,6 +458,8 @@ public class Statistics {
 		RandModeCount = 0;
 
 		killYogMobsAnargy = 0;
+
+		gudaZiRandomSkin = Random.NormalIntRange(1,2);
 
         findMoon = false;
 		deadGo = false;
@@ -555,6 +559,8 @@ public class Statistics {
 
 		bundle.put("KILL_YOG",killYogMobsAnargy);
 
+		bundle.put("GDZRSKIN",gudaZiRandomSkin);
+
 		bundle.put(DWSX, dwarfKill);
 
 		bundle.put(STS, TrueYogNoDied);
@@ -574,7 +580,7 @@ public class Statistics {
 		bundle.put("RDXD",RandomQuest);
 		bundle.put("GDXD",GoldMobDead);
 
-		bundle.put("ArUpgrade",upgradeGold);
+		bundle.put("XXXXXXX",upgradeGold);
 
 		bundle.put("BDSH", magestaffUpgrade);
 
@@ -764,6 +770,8 @@ public class Statistics {
 		NightDreamLoop = bundle.getBoolean(NIGHTDR);
 
 		killYogMobsAnargy = bundle.getInt("KILL_YOG");
+
+		gudaZiRandomSkin = bundle.getInt("GDZRSKIN");
 
 		hcDialogLevel = bundle.getInt(HKLEVEL);
 

@@ -19,6 +19,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ClearElemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -214,6 +215,7 @@ public class ForestHardBossLevel extends Level {
         for (int i : ForestBossLasherPos) {
             CrivusStarFruitsLasher csp = new CrivusStarFruitsLasher();
             csp.pos = i;
+            Buff.affect(csp, Blindness.class, 10f);
             GameScene.add(csp);
         }
 
@@ -233,6 +235,7 @@ public class ForestHardBossLevel extends Level {
         CrivusStarFruits boss = new CrivusStarFruits();
         boss.state = boss.WANDERING;
         boss.pos = 577;
+        boss.notice();
         GameScene.add(boss);
     }
 

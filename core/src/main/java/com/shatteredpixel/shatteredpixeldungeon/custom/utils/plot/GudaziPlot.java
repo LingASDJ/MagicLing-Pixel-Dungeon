@@ -100,7 +100,12 @@ public class GudaziPlot extends Plot {
         Dungeon.hero.interrupt();
 
         if(holiday == RegularLevel.Holiday.CJ){
-            diagulewindow.setMainAvatar(new Image(Assets.Splashes.YSGDZ));
+            if(Statistics.gudaZiRandomSkin == 2){
+                diagulewindow.setMainAvatar(new Image(Assets.Splashes.YSGDZ));
+            } else {
+                diagulewindow.setMainAvatar(new Image(Assets.Splashes.HSGDZ));
+            }
+
         } else if(holiday == RegularLevel.Holiday.XMAS){
             diagulewindow.setMainAvatar(new Image(Assets.Splashes.XMS_GDZ));
         } else {
