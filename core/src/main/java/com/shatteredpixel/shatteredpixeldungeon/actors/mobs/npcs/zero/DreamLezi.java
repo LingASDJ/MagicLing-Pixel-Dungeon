@@ -50,8 +50,8 @@ public class DreamLezi extends NTNPC {
             yell("没收720金币");
             first = false;
         } else if(secnod){
-           secnod = false;yell("嬗变一下吧！但是这个会必定诅咒哦！");
-            Dungeon.level.drop(new ScrollOfTeleTation().identify(), hero.pos);
+           secnod = false;yell("嬗变一下吧！但是这个会必定诅咒哦！并且只能在0层使用哦！");
+            Dungeon.level.drop(new ScrollOfTeleTation(), hero.pos);
         } else {
             yell("新年快乐，我的动物园好看吗？");
         }

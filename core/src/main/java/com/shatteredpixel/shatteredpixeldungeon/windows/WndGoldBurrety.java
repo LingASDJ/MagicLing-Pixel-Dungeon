@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfFlameCurse
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfRoseShiled;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.extra.ScrollOfTeleTation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -271,6 +272,10 @@ public class WndGoldBurrety extends Window {
             Item item = items[i];
             Item result = item;
 
+            if (!result.doPickUp( Dungeon.hero )) {
+                Dungeon.level.drop( item, hero.pos ).sprite.drop();
+            }
+
             // 输出当前处理的物品类型
             //GLog.w("之前的物品：" + item.name());
             if ((item instanceof MeleeWeapon || item instanceof MissileWeapon) && !(item instanceof MagesStaff || item instanceof TippedDart)) {
@@ -364,6 +369,7 @@ public class WndGoldBurrety extends Window {
                         hero.belongings.ring.upgrade();
                         Statistics.upgradeGold--;
                         hero.belongings.ring.noUpgrade = true;
+                        hero.belongings.ring.activate(hero);
                     }
                 } else {
                     result = changeRing((Ring) item);
@@ -557,7 +563,7 @@ public class WndGoldBurrety extends Window {
 
         @Override
         public boolean itemSelectable(Item item) {
-            if(item.noUpgrade || item == hero.belongings.misc()){
+            if(item.noUpgrade || item == hero.belongings.misc() || item instanceof ScrollOfTeleTation){
                 return false;
             }
             if(item instanceof MeleeWeapon) {

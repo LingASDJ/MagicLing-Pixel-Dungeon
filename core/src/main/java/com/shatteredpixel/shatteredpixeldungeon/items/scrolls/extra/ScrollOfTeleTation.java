@@ -45,6 +45,8 @@ public class ScrollOfTeleTation extends InventoryScroll {
 
         unique = true;
 
+        identify();
+
         talentFactor = 2f;
     }
 
