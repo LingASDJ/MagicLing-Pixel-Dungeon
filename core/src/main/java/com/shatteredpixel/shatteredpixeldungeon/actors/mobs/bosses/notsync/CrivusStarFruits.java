@@ -290,7 +290,7 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
         if (state != SLEEPING) BossHealthBar.assignBoss(this);
         if ((HP*2 <= HT)) BossHealthBar.bleed(true);
 
-        if (Statistics.crivusfruitslevel3){
+        if (Statistics.crivusfruitslevel2 || Statistics.crivusfruitslevel3){
             alignment = Alignment.ENEMY;
         } else {
             alignment = Alignment.NEUTRAL;

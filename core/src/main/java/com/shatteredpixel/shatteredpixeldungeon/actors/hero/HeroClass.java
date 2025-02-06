@@ -220,7 +220,7 @@ public enum HeroClass {
 		waterskin.collect();
 
 		new ScrollOfIdentify().identify();
-		//new KingGold().quantity(1).identify().collect();
+		//new Amulet().quantity(1).identify().collect();
 		if (Dungeon.isDLC(Conducts.Conduct.DEV)){
 
 			new PropBag().quantity(1).identify().collect();

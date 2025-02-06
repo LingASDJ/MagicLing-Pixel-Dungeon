@@ -178,7 +178,7 @@ public class WndNyzShop extends Window {
                                }
         );
     }
-    Nyz nyz;
+
     private void selectReward( Item reward ) {
 
         hide();
@@ -186,6 +186,8 @@ public class WndNyzShop extends Window {
         reward.identify();
         if (reward.doPickUp( hero )) {
             GLog.i( Messages.get(hero, "you_now_have", reward.name()) );
+        } else {
+            Dungeon.level.drop( reward, hero.pos ).sprite.drop();
         }
 
         //Ghost.Quest.complete();
@@ -211,10 +213,10 @@ public class WndNyzShop extends Window {
                         if(Statistics.bossRushMode){
                             Dungeon.rushgold -= 5;
                         } else {
-                            if(hero.belongings.getItem(LuckyGlove.class)!=null) {
-                                Dungeon.gold -= (720 * Random.Int(2) + hero.lvl / 5 + 100) * (Dungeon.hero.buff(AscensionChallenge.class) != null ? 0.7 : 1);
-                            }else{
+                            if(hero.belongings.getItem(LuckyGlove.class)!=null && Math.random()>0.9f) {
                                 Messages.get(LuckyGlove.class,"lucky");
+                            }else{
+                                Dungeon.gold -= (720 * Random.Int(2) + hero.lvl / 5 + 100) * (Dungeon.hero.buff(AscensionChallenge.class) != null ? 0.7 : 1);
                             }
                             Statistics.naiyaziCollected += 1;
                             Badges.nyzvalidateGoldCollected();
@@ -268,10 +270,10 @@ public class WndNyzShop extends Window {
                         if(Statistics.bossRushMode){
                             Dungeon.rushgold -= 5;
                         } else {
-                            if(true) {
-                                Dungeon.gold -= 270 * Random.Int(3) + 50 * (Dungeon.hero.buff(AscensionChallenge.class) != null ? 0.7 : 1);
-                            }else{
+                            if(hero.belongings.getItem(LuckyGlove.class)!=null && Math.random()>0.9f) {
                                 GLog.n(Messages.get(LuckyGlove.class,"lucky"));
+                            }else{
+                                Dungeon.gold -= (int) (270 * Random.Int(3) + 50 * (Dungeon.hero.buff(AscensionChallenge.class) != null ? 0.7 : 1));
                             }
                             Badges.nyzvalidateGoldCollected();
                             Statistics.naiyaziCollected += 1;
