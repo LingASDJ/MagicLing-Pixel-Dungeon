@@ -97,6 +97,7 @@ public class ForestHardBossLevel extends Level {
             if (boss instanceof CrivusStarFruits) {
                 if (!Statistics.crivusfruitslevel2 && boss.HP<=160) {
                     crivusfruitslevel2 = true;
+                    boss.alignment = Char.Alignment.ENEMY;
                     GLog.n(Messages.get(CrivusStarFruits.class, "anargy"));
                     GameScene.flash(0x808c8c8c);
                     //doYogLasers()
@@ -233,6 +234,7 @@ public class ForestHardBossLevel extends Level {
         Dungeon.observe();
 
         CrivusStarFruits boss = new CrivusStarFruits();
+        boss.HP = boss.HT = 280;
         boss.state = boss.WANDERING;
         boss.pos = 577;
         boss.notice();

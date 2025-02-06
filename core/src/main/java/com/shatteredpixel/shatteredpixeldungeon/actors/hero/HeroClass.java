@@ -218,7 +218,7 @@ public enum HeroClass {
 		waterskin.collect();
 
 		new ScrollOfIdentify().identify();
-		//new KingGold().quantity(1).identify().collect();
+		//new Amulet().quantity(1).identify().collect();
 		if (Dungeon.isDLC(Conducts.Conduct.DEV)){
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.dropped();
