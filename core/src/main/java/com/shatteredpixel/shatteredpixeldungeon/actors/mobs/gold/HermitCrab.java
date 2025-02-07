@@ -41,8 +41,8 @@ public class HermitCrab extends Crab {
         super.die(cause);
         HermitCrabNoShell hermitCrabNoShell = new HermitCrabNoShell();
         hermitCrabNoShell.pos = pos;
-        Buff.affect(hermitCrabNoShell, Terror.class, 5);
-        Buff.affect(hermitCrabNoShell, Haste.class, 12);
+        Buff.affect(hermitCrabNoShell, Terror.class, 6);
+        Buff.affect(hermitCrabNoShell, Haste.class, 6);
         GameScene.add(hermitCrabNoShell);
     }
 }
