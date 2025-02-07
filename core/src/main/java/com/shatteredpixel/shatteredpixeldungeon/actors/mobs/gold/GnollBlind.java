@@ -1,5 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
@@ -50,6 +51,9 @@ public class GnollBlind extends Gnoll {
 
     @Override
     public int drRoll() {
+        if(Dungeon.depth == 1){
+            return 0;
+        }
         return super.drRoll() + Random.NormalIntRange(0, 2);
     }
 

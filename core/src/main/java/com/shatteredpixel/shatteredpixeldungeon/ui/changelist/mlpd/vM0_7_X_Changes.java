@@ -2,6 +2,9 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist.mlpd;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.ArtilleristSprite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollBlindSprite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.HermitCrabSprite;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.lb.RivalSprite;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.NetIcons;
 import com.shatteredpixel.shatteredpixeldungeon.effects.PasswordBadgeBanner;
@@ -106,15 +109,31 @@ public class vM0_7_X_Changes {
         changes.hardlight(Window.GREEN_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V2.1"),
-                ("追加更多怪物，详见日志金蝶特殊敌人列表")));
-
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.Dragon_Lei), ("新物品：龙之泪"),
                 ("固定20露珠效果")));
 
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V2.1-2.2"),
+                (
+                        "金蝶模式-V2.2\n\n" +
+                        "1.修复金蝶克隆严重异常\n" +
+                        "2.修复部分怪物数值异常，支离破碎在金蝶模式中不再生效\n" +
+                        "3.优化嬗变回合，补偿无敌回合，且神器现在嬗变不再获得升级（嬗变次数有时，可无限嬗变）"),
+                        "金蝶模式-V2.1\n\n" +
+                        "1.追加更多怪物，详见日志金蝶特殊敌人列表"));
+
+        changes.addButton(new ChangeButton(new HermitCrabSprite(), ("寄居蟹"),
+                ("寄居蟹数值优化，现在破壳前0.95移速，破壳后2.0移速。\n\n" +
+                        "破壳时，同时获得6回合极速+恐惧效果。伤害削弱")));
+
+        changes.addButton(new ChangeButton(new ArtilleristSprite(), ("豺狼炮手"),
+                ("修正攻击力为1000%的严重异常")));
+
+        changes.addButton(new ChangeButton(new GnollBlindSprite(), ("老年豺狼"),
+                ("老年豺狼在第一层防御降为0，其他情况下为0-2。")));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
                 ("1.兑换码追加自动清理和NTP验证\n" +

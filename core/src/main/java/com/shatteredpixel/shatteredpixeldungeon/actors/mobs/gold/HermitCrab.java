@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -23,7 +24,7 @@ public class HermitCrab extends Crab {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(2, 7);
+        return Random.NormalIntRange(1, 3);
     }
 
     @Override
@@ -41,6 +42,7 @@ public class HermitCrab extends Crab {
         HermitCrabNoShell hermitCrabNoShell = new HermitCrabNoShell();
         hermitCrabNoShell.pos = pos;
         Buff.affect(hermitCrabNoShell, Terror.class, 5);
+        Buff.affect(hermitCrabNoShell, Haste.class, 12);
         GameScene.add(hermitCrabNoShell);
     }
 }
