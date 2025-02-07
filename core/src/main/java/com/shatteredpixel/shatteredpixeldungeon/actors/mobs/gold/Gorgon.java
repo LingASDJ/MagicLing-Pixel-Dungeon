@@ -15,7 +15,7 @@ public class Gorgon extends GoldMob {
     {
         spriteClass = GorgonSprite.class;
 
-        HP = HT = 85;
+        HP = HT = 120;
         defenseSkill = 22;
 
 
@@ -36,7 +36,7 @@ public class Gorgon extends GoldMob {
 
 
     public int damageRoll() {
-        return Random.NormalIntRange( 15, 25 );
+        return Random.NormalIntRange( 55, 95 );
     }
 
     @Override

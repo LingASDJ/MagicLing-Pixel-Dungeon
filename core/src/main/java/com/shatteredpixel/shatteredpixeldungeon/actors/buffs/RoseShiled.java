@@ -46,9 +46,6 @@ public class RoseShiled extends FlavourBuff {
 
     @Override
     public void fx(boolean on) {
-
-        if (!target.buffs(ChampionEnemy.class).isEmpty()) return;
-
         if (on) {
             target.sprite.add(CharSprite.State.ROSESHIELDED);
             target.sprite.aura(Window.Pink_COLOR);

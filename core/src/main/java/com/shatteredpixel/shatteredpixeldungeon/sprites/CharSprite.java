@@ -524,7 +524,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				soling.pour(SmokeFlameParticle.FACTORY, 0.06f);
 				break;
 			case ROSESHIELDED:
-				GameScene.effect(roseshield = new RoseHalo(this));
+				if (roseshield != null) {
+					roseshield.killAndErase();
+				}
+				GameScene.effect( roseshield = new RoseHalo( this ));
 				break;
 			case MUTATION_1:
 				mutation = emitter();

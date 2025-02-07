@@ -13,7 +13,7 @@ public class TribemanOld extends GoldMob {
     {
         spriteClass = TribemanOldSprite.class;
 
-        HP = HT = 50;
+        HP = HT = 90;
 
         defenseSkill = 18;
 

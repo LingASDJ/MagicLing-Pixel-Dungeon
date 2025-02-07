@@ -36,9 +36,17 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.ThreeLeafBug;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ancity.Turtle;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.PiraLand;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.dragon.RiceRat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Artillerist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.BoomSkull;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.DemonLord;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Drake;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GiantWorm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollBlind;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollThrower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollTwilight;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GoblinShaman;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Gorgon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.HermitCrab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Mayfly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Prisoner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.RoyalGuard;
@@ -140,23 +148,23 @@ public class MobSpawner extends Actor {
 
 			if(Statistics.RandMode){
 				switch (i) {
-					//正常刷怪
+					//金蝶刷怪
 					case 1:
 						//3x rat, 1x snake
 						return new ArrayList<>(Arrays.asList(
-								Rat.class, Mayfly.class));
+								Rat.class, GnollBlind.class));
 					case 2:
 						return new ArrayList<>(Arrays.asList(FlowerSlime.class,
 								Rat.class, OGPDZSLS.class, OGPDLLS.class,
-								Gnoll.class, Gnoll.class));
+								GnollBlind.class, Mayfly.class));
 					case 3:
 						return new ArrayList<>(Arrays.asList(FlowerSlime.class,
 								FlowerSlime.class,
 								Slime_Qs.class, Katydid.class, GiantWorm.class, Mayfly.class,
-								ClearElemental.class,Crab.class,Swarm.class));
+								ClearElemental.class,Crab.class,Swarm.class, HermitCrab.class));
 					case 4:
 						return new ArrayList<>(Arrays.asList(Katydid.class,
-								Slime_Sn.class, Slime_Red.class,
+								Slime_Sn.class, Slime_Red.class, HermitCrab.class, HermitCrab.class,
 								Slime_Orange.class,  GiantWorm.class, Mayfly.class,Crab.class));
 					case 5:
 						return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,Slime.class,Slime.class,Swarm.class,Crab.class));
@@ -166,39 +174,40 @@ public class MobSpawner extends Actor {
 
 					case 7:
 						return new ArrayList<>(Arrays.asList(Skeleton.class,
-								Thief.class, Prisoner.class,Necromancer.class,Guard.class,DM100.class));
+								Thief.class, BoomSkull.class, Prisoner.class,Necromancer.class,Guard.class,DM100.class,
+								GnollThrower.class));
 					case 8:
 						return new ArrayList<>(Arrays.asList(Skeleton.class,
 								Skeleton.class,
-								Thief.class, Guard.class,Necromancer.class, Prisoner.class));
+								Thief.class, Guard.class, BoomSkull.class, Prisoner.class,GnollThrower.class,GnollThrower.class));
 					case 9:
 						return new ArrayList<>(Arrays.asList(
 								Skeleton.class, Prisoner.class, Skeleton.class,
 								Thief.class,Thief.class,BrownBat.class,
-								Guard.class, DM100.class));
+								Guard.class, DM100.class,GnollThrower.class));
 
 					case 10:
 						return new ArrayList<>(Arrays.asList(Bat.class,
 								Brute.class, Brute.class,
 								Necromancer.class,Necromancer.class));
 					case 11:
-						return new ArrayList<>(Arrays.asList(Bat.class, Drake.class,DM200.class,ColdMagicRat.class,
-								ColdMagicRat.class));
+						return new ArrayList<>(Arrays.asList(Bat.class, Drake.class,DM200.class,ColdMagicRat.class));
 					case 12:
 						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
 						return new ArrayList<>(Arrays.asList(
 								Bat.class,DM200.class,
-								ColdMagicRat.class, Drake.class ,ColdMagicRat.class));
+								ColdMagicRat.class, Drake.class , GoblinShaman.random()));
 					case 13:
 						//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
 						return new ArrayList<>(Arrays.asList(
-								Bat.class,DM200.class,
+								GnollTwilight.class,DM200.class,GoblinShaman.random(),
+								GoblinShaman.random(),
 								Brute.class,Spinner.class, TribemanOld.class,
 								Drake.class,RedSwarm.class));
 
 					case 14:
 						return new ArrayList<>(Arrays.asList(
-								Bat.class,Drake.class,
+								Bat.class,Drake.class,GnollTwilight.class,GnollTwilight.class,
 								Spinner.class,TribemanOld.class,
 								ColdMagicRat.class,RedSwarm.class,Shaman.random()));
 					case 15:
@@ -214,25 +223,25 @@ public class MobSpawner extends Actor {
 						//5x elemental, 5x warlock, 1x monk, 2x silvercrab
 						return new ArrayList<>(Arrays.asList(
 								Monk.class,
-								Shaman.random()));
+								Shaman.random(), Artillerist.class));
 					case 17:
 						//2x elemental, 2x warlock, 2x monk, 1x silvercrab
 						return new ArrayList<>(Arrays.asList(
 								Elemental.random(),
-								Monk.class,FireGhost.class));
+								Monk.class,FireGhost.class, Artillerist.class));
 					case 18:
 						//1x elemental, 1x warlock, 2x monk, 3x golem
 						return new ArrayList<>(Arrays.asList(
 								Elemental.random(),
 								Random.NormalFloat(1,6)>=3 ? BruteBot.class : Warlock.class,
 								Monk.class, RoyalGuard.class,
-								Golem.class,FireGhost.class));
+								Golem.class,FireGhost.class, Artillerist.class));
 					case 19:
 						//1x elemental, 1x warlock, 2x monk, 3x golem
 						return new ArrayList<>(Arrays.asList(
 								Monk.class,RoyalGuard.class,RoyalGuard.class,
 								Golem.class, Warlock.class,ShieldHuntsman.class,
-								Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class));
+								Random.NormalFloat(1,6)>3 ? BruteBot.class : Warlock.class, Artillerist.class));
 					case 20:
 						//1x elemental, 1x warlock, 2x monk, 3x golem
 						return new ArrayList<>(Arrays.asList(
@@ -248,19 +257,19 @@ public class MobSpawner extends Actor {
 					case 22:
 						//3x succubus, 3x evil eye
 						return new ArrayList<>(Arrays.asList(
-								Eye.class,ShieldHuntsman.class, Gorgon.class));
+								Eye.class,ShieldHuntsman.class, Gorgon.class, DemonLord.class, DemonLord.class));
 					case 23:
 						//1x: succubus, 2x evil eye, 3x scorpio
 						return new ArrayList<>(Arrays.asList(
 								Eye.class,ShieldHuntsman.class,Ice_Scorpio.class
-								, Fire_Scorpio.class,
+								, Fire_Scorpio.class,DemonLord.class, DemonLord.class,
 								Gorgon.class));
 					//前半段决战
 					case 24:
 						//1x succubus, 2x evil eye, 3x scorpio
 						return new ArrayList<>(Arrays.asList(
 								Succubus.class,
-								Eye.class,
+								Eye.class, DemonLord.class,
 								Scorpio.class, Succubus.class,Fire_Scorpio.class,Ice_Scorpio.class,ShieldHuntsman.class));
 
 					//Hollow Mobs

@@ -130,6 +130,9 @@ public class Dungeon {
 		THEIF_MISC,
 		GUARD_ARM,
 		SHAMAN_WAND,
+
+		GOLIN_RING,
+
 		DM200_EQUIP,
 		GOLEM_EQUIP,
 

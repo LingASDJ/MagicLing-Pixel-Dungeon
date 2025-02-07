@@ -21,9 +21,8 @@ public class Artillerist extends GoldMob {
     {
         spriteClass = ArtilleristSprite.class;
 
-        HP = HT = 70;
+        HP = HT = 80;
         defenseSkill = 22;
-
 
         EXP = 9;
         maxLvl = 20;
@@ -50,7 +49,7 @@ public class Artillerist extends GoldMob {
     }
 
     public int damageRoll() {
-        return Random.NormalIntRange( 12, 18 );
+        return Random.NormalIntRange( 25, 220 );
     }
 
     @Override
@@ -60,7 +59,7 @@ public class Artillerist extends GoldMob {
 
     @Override
     public int drRoll() {
-        return Random.NormalIntRange(1, 6);
+        return Random.NormalIntRange(4, 8);
     }
 
     public void onZapComplete(int cell) {

@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -165,6 +166,18 @@ public class Waterskin extends Item {
 
 		GLog.i( Messages.get(this, "collected") );
 		volume += dew.quantity;
+		if (volume >= MAX_VOLUME) {
+			volume = MAX_VOLUME;
+			GLog.p( Messages.get(this, "full") );
+		}
+
+		updateQuickslot();
+	}
+
+	public void collectDragon( DragonWater dew ) {
+
+		GLog.i( Messages.get(this, "collected") );
+		volume += 20;
 		if (volume >= MAX_VOLUME) {
 			volume = MAX_VOLUME;
 			GLog.p( Messages.get(this, "full") );
