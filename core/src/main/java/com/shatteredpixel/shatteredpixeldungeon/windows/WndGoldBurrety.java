@@ -2,7 +2,6 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeSeed;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeStaff;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTippedDart;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTrinket;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWand;
@@ -307,17 +306,22 @@ public class WndGoldBurrety extends Window {
                 result.collect();
                 result.quantity(item.quantity);
                 item.detachAll(Dungeon.hero.belongings.backpack);
-            } else if (item instanceof MagesStaff) {
-                result = changeStaff((MagesStaff) item);
-
-
-                if(Statistics.magestaffUpgrade == 0){
+            } else if (item instanceof MagesStaff && hero.belongings.weapon() == item) {
+                if (Statistics.magestaffUpgrade == 0) {
                     Statistics.magestaffUpgrade++;
-                    item.upgrade();
-                    item.noUpgrade = true;
+                    result.noUpgrade = true;
+                    result.upgrade();
+                    result = changeStaff((MagesStaff) item);
+                    item.detachAll(Dungeon.hero.belongings.backpack);
                 }
-
                 Dungeon.quickslot.setSlot(0, result);
+            } else if (item instanceof MagesStaff){
+                changeStaff((MagesStaff) item);
+                if (Statistics.magestaffUpgrade == 0) {
+                    Statistics.magestaffUpgrade++;
+                    item.noUpgrade = true;
+                    item.upgrade();
+                }
             } else if (item instanceof Scroll&& !(item instanceof ScrollOfFlameCursed || item instanceof ScrollOfRoseShiled)) {
                 result = changeScroll( (Scroll)item );
                 result.collect();
@@ -334,6 +338,7 @@ public class WndGoldBurrety extends Window {
                 if(Statistics.upgradeGold<=18){
                     result.upgrade();
                     result.noUpgrade = true;
+                    ((Wand) result).updateLevel();
                     Statistics.upgradeGold--;
                 }
 
@@ -353,7 +358,7 @@ public class WndGoldBurrety extends Window {
                     hero.belongings.artifact = (Artifact) processArtifact(hero.belongings.artifact);
                     hero.belongings.artifact.detachAll(Dungeon.hero.belongings.backpack);
                    if(Statistics.upgradeGold<=18){
-                       hero.belongings.artifact.upgrade();
+                       hero.belongings.artifact.level = Math.min(item.level() + 1, 10);
                        Statistics.upgradeGold--;
                        hero.belongings.artifact.noUpgrade = true;
                    }
@@ -379,6 +384,16 @@ public class WndGoldBurrety extends Window {
 
             // 保存处理后的物品
             results[i] = result;
+
+            //超格处理
+            if(result != null){
+                if (!result.doPickUp( hero )) {
+                    Dungeon.level.drop( result, hero.pos ).sprite.drop();
+                }
+            }
+            if (!item.doPickUp(hero)) {
+                Dungeon.level.drop(item, hero.pos).sprite.drop();
+            }
         }
 
         return results;  // 返回处理后的物品数组
@@ -435,6 +450,20 @@ public class WndGoldBurrety extends Window {
         }
     }
 
+    public static MagesStaff changeStaff( MagesStaff staff ){
+        Class<?extends Wand> wandClass = staff.wandClass();
+
+        Wand n;
+        do {
+            n = (Wand) Generator.randomUsingDefaults(Generator.Category.WAND);
+        } while (Challenges.isItemBlocked(n) || n.getClass() == wandClass);
+        n.level(0);
+        n.identify();
+        staff.imbueWand(n, null);
+
+        return staff;
+    }
+
     private Item processTrinket(Item item) {
         if (item.level() < 6) {
             Item result = changeTrinket((Trinket) item);
@@ -448,8 +477,12 @@ public class WndGoldBurrety extends Window {
             result.collect();
             item.detach(Dungeon.hero.belongings.backpack);
             return result;
+        } else {
+            Item result = changeTrinket((Trinket) item);
+            result.collect();
+            item.detach(Dungeon.hero.belongings.backpack);
+            return result;
         }
-        return item;
     }
 
     private Artifact changeArtifact( Artifact a ) {
@@ -465,7 +498,7 @@ public class WndGoldBurrety extends Window {
             }
 
             if(Statistics.upgradeGold<=18){
-                n.upgrade();
+                n.level = Math.min(a.level() + 1, 10);
                 n.noUpgrade = true;
                 Statistics.upgradeGold--;
             }

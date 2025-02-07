@@ -39,12 +39,12 @@ public class OGPDLLS extends GoldMob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 3, 4 );
+        return Random.NormalIntRange( 5, 8 );
     }
 
     @Override
     public int attackSkill( Char target ) {
-        return 8;
+        return 18;
     }
 
     @Override

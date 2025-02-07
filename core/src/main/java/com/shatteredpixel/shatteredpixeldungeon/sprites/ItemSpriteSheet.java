@@ -792,7 +792,11 @@ public class ItemSpriteSheet {
     public static final int QKA   = QUEST+19;
     public static final int QKB   = QUEST+20;
 
+    public static final int Dragon_Lei   = QUEST+22;
+
     static{
+        assignItemRect(Dragon_Lei,   9, 14);
+
         assignItemRect(SKULL,   16, 11);
         assignItemRect(DUST,    12, 11);
         assignItemRect(CANDLE,  12, 12);

@@ -521,6 +521,8 @@ public class Assets {
 	public static class Sprites {
 
 		//Gold
+		public static final String GOLD_CRAB	   = "sprites/gold/crab.png";
+		public static final String GOLD_GNOLL	   = "sprites/gold/gnoll.png";
 		public static final String GIANT_WORM      = "sprites/gold/giant_worm.png";
 		public static final String HEROGNOLLOLD    = "sprites/gold/tribesman_old.png";
 		public static final String MAYFLY          = "sprites/gold/mayfly.png";
@@ -529,6 +531,10 @@ public class Assets {
 		public static final String ARTILLERIST     = "sprites/gold/artillerist.png";
 		public static final String ROYAL_GUARD     = "sprites/gold/royal_guard.png";
 		public static final String GORGON          = "sprites/gold/gorgon.png";
+		public static final String DEMONLORD       = "sprites/gold/demon_lord.png";
+		public static final String SKULLS			= "sprites/gold/skulls.png";
+		public static final String GOBLINSHAMAN       = "sprites/gold/goblinshaman.png";
+
 
 		//NPCS
 		public static final String KEEPERKING	= "sprites/npc/ShopKing.png";

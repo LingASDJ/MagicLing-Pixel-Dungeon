@@ -88,25 +88,8 @@ public class Challenges {
 			}
 		}
 
-//		if (Dungeon.isChallenged(NO_ARMOR)) {
-//			if (item instanceof Armor && !(item instanceof ClothArmor || item instanceof ClassArmor|| item instanceof CustomArmor)) {
-//				//GLog.n("这片大地吃布甲之外的护甲从不挑食,侦查到作弊行为，已移除"+item);
-//				GLog.n(Messages.get(Challenges.class, "no_armorx"), item);
-//				return true;
-//			}
-//		}
-
-//		if (Dungeon.isChallenged(NO_HEALING)) {
-//			if (item instanceof PotionOfHealing) {
-//				return true;
-//			} else if (item instanceof Blandfruit
-//					&& ((Blandfruit) item).potionAttrib instanceof PotionOfHealing) {
-//				return true;
-//			}
-//		}
-
-		if (Dungeon.isChallenged(NO_HERBALISM) && !(Dungeon.depth == 5 && Dungeon.branch == 3)) {
-			return item instanceof Dewdrop;
+		if (Dungeon.isChallenged(NO_HERBALISM)) {
+			return item instanceof Dewdrop ;
 		}
 
 		return false;

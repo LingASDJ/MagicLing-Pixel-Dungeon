@@ -173,13 +173,15 @@ public class TitleScene extends PixelScene {
 		}
 
 
-		if(holiday == XMAS){
-			playBGM(Assets.Music.CHRAMSS, true);
-		} else {
-			Music.INSTANCE.playTracks(
-					new String[]{Assets.Music.THEME, Assets.HOLLOW_CITY},
-					new float[]{1, 1},
-					true);
+		if(SPDSettings.music()){
+			if(holiday == XMAS){
+				playBGM(Assets.Music.CHRAMSS, true);
+			} else {
+				Music.INSTANCE.playTracks(
+						new String[]{Assets.Music.THEME, Assets.HOLLOW_CITY},
+						new float[]{1, 1},
+						true);
+			}
 		}
 
 		uiCamera.visible = false;
