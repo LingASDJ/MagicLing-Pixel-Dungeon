@@ -43,9 +43,12 @@ public class Gift implements Bundlable {
             "TUxQRC1TbmFrZVllYXJzT2xkLDE3MzkzNzI0MDAsZmFsc2U=",
             "TUxQRC00WWVhcnNPbGQsMTczOTM3MjQwMCxmYWxzZQ==",
 
+            //龙泪
+            "TUxQRC1EcmFnb25XYXRlciwxNzM5MzcyNDAwLGZhbHNl",
+
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
-            "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
+            "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",
             "VEVTVCwxNzM1NTc1MTQyLHRydWU7"//已使用兑换码
     };
 
@@ -90,6 +93,13 @@ public class Gift implements Bundlable {
         code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.DiedCrossBow", 1);
         code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
 
+        //MLPD-DragonWater
+        LinkedHashMap<String, Integer> code8 = new LinkedHashMap<>();
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",500);
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 1);
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater", 1);
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
+
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
         tempMap.put( "U1A0LVJFQURZ",code3);
@@ -98,6 +108,8 @@ public class Gift implements Bundlable {
 
         tempMap.put("TUxQRC00WWVhcnNPbGQ=",code6);
         tempMap.put("TUxQRC1TbmFrZVllYXJzT2xk",code7);
+
+        tempMap.put("TUxQRC1EcmFnb25XYXRlcg==",code8);
 
 
         GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );

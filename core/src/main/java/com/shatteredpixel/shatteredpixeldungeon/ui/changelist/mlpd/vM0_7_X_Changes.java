@@ -58,6 +58,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0810_Changes(changeInfos);
         add_V0808_Changes(changeInfos);
         add_V0805_Changes(changeInfos);
         add_V0801_Changes(changeInfos);
@@ -93,6 +94,40 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0810_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.1.0-1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V2.1"),
+                ("追加更多怪物，详见日志金蝶特殊敌人列表")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.Dragon_Lei), ("新物品：龙之泪"),
+                ("固定20露珠效果")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
+                ("1.兑换码追加自动清理和NTP验证\n" +
+                        "2.部分文案优化\n" +
+                        "3.部分素材细节优化更新")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.1.0-1:\n\n" +
+                        "-修复老魔杖的嬗变一些异常\n" +
+                        "-优化饰品嬗变，超过6级的饰品现在也可嬗变\n" +
+                        "-优化嬗变底层，文案优化\n" +
+                        "-优化破碎神器升级底层，现在至多+10，老存档无法同步，遇到旧版本超过+10卡死异常请自行处理。"));
+
     }
 
     public static void add_V0808_Changes(ArrayList<ChangeInfo> changeInfos ) {

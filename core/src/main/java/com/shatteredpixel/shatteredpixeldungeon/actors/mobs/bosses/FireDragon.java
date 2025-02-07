@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
@@ -40,13 +39,13 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
-import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.ClearCryStal;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.ClearHStal;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonHeart;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.LingJing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -519,9 +518,8 @@ public class FireDragon extends Boss implements Callback {
             item.blessed = true;
             Dungeon.level.drop(item,pos);
 
-            Dewdrop dewdrop = new Dewdrop();
-            dewdrop.quantity = 20;
-            Dungeon.level.drop(dewdrop,pos);
+            DragonWater dewdrop = new DragonWater();
+            Dungeon.level.drop(dewdrop,334);
 
             ArrayList<ClearCryStal> clearCryStals = hero.belongings.getAllItems(ClearCryStal.class);
             for (ClearCryStal w : clearCryStals.toArray(new ClearCryStal[0])){

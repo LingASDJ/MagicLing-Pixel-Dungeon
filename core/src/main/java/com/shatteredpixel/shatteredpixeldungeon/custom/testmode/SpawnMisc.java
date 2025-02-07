@@ -86,6 +86,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CrivusFruitsFlake;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.CrystalLing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.MagicBook;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.LingJing;
@@ -382,6 +383,7 @@ public class SpawnMisc extends TestItem {
             miscList.add(CeremonialCandle.class);
             miscList.add(MagicBook.class);
             miscList.add(LingJing.class);
+            miscList.add(DragonWater.class);
         }
     }
 

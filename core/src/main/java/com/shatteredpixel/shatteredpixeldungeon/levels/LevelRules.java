@@ -197,12 +197,11 @@ public class LevelRules {
                         return new CityLevel();
                     case 20:
                         if(Statistics.RandMode){
-                            switch (Random.Int(4)){
-                                case 1: return new AncientMysteryCityBossLevel();
-                                case 2: return new DwarfMasterBossLevel();
+                            switch (Random.Int(3)){
+                                case 1: return new DwarfMasterBossLevel();
                                 default:
-                                case 3: return new CerDogBossLevel();
-                                case 4: return new ShopBossLevel();
+                                case 2: return new CerDogBossLevel();
+                                case 3: return new ShopBossLevel();
                             }
                         } else {
                             return new NewCityBossLevel();

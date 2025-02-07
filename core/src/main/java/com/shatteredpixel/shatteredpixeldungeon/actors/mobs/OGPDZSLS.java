@@ -28,6 +28,8 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GoldMob;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.OGPDZSLSTT;
@@ -45,7 +47,7 @@ public class OGPDZSLS extends GoldMob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 3 );
+		return Random.NormalIntRange( 2, 9 );
 	}
 
 	@Override
@@ -58,8 +60,18 @@ public class OGPDZSLS extends GoldMob {
 	}
 
 	@Override
+	public int attackProc( Char enemy, int damage ) {
+		damage = super.attackProc( enemy, damage );
+		if (damage > 0 && Random.Int( 2 ) == 0) {
+			Buff.affect( enemy, Bleeding.class ).set( damage );
+		}
+
+		return damage;
+	}
+
+	@Override
 	public int attackSkill( Char target ) {
-		return 8;
+		return 18;
 	}
 
 	@Override
