@@ -1159,7 +1159,7 @@ public class SPDSettings extends GameSettings {
 				outdatedKeys.append( keyArray.split(",")[0] ).append( ";" );
 		}
 
-		if( !outdatedKeys.isEmpty() ){
+		if( !outdatedKeys.toString().isEmpty() ){
 			delete( KEY_GIFT_DATA, outdatedKeys.toString() );
 		}
 	}

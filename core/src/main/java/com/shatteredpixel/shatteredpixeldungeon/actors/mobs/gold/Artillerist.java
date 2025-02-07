@@ -21,7 +21,7 @@ public class Artillerist extends GoldMob {
     {
         spriteClass = ArtilleristSprite.class;
 
-        HP = HT = 80;
+        HP = HT = 100;
         defenseSkill = 22;
 
         EXP = 9;
@@ -49,7 +49,7 @@ public class Artillerist extends GoldMob {
     }
 
     public int damageRoll() {
-        return Random.NormalIntRange( 25, 220 );
+        return Random.NormalIntRange( 25, 45 );
     }
 
     @Override

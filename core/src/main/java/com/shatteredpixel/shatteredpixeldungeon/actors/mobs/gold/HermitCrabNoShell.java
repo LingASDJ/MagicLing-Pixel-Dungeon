@@ -33,7 +33,6 @@ public class HermitCrabNoShell extends Crab {
         HT = 15;
         HP = 10;
         defenseSkill = 15;
-        baseSpeed = 5f;
 
         state = FLEEING;
 
@@ -46,7 +45,7 @@ public class HermitCrabNoShell extends Crab {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 5, 15 );
+        return Random.NormalIntRange( 2, 7 );
     }
 
     @Override

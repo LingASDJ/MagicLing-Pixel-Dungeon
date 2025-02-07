@@ -159,11 +159,11 @@ public class Gift implements Bundlable {
     public static void GiftTime() {
         try {
             int length = Gift_DATA.length;
-            String decodedString = "";
+            String decodedString;
             byte[] decoded;
             List<String> saveData = new ArrayList<>();
             long currentTime = System.currentTimeMillis() / 1000;
-            long expirationDate = 0;
+            long expirationDate;
 
             for(int i = 0; i < length; i++) {
                 decoded = Base64.decode( Gift_DATA[i] );
