@@ -38,7 +38,7 @@ public class ItemButton extends Component {
 	protected void createChildren() {
 		super.createChildren();
 
-		bg = Chrome.get(Chrome.Type.RED_BUTTON);
+		bg = Chrome.get(getType());
 		add(bg);
 
 		slot = new ItemSlot() {
@@ -65,6 +65,10 @@ public class ItemButton extends Component {
 		};
 		slot.enable(true);
 		add(slot);
+	}
+
+	public Chrome.Type getType() {
+		return Chrome.Type.RED_BUTTON;
 	}
 
 	protected void onClick() {}

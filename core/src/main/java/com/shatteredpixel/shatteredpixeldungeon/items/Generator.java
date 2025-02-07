@@ -598,10 +598,11 @@ public class Generator {
 					KingAxe.class,
 					RiceSword.class,
 					Gauntlet.class,
+
 					//超模武器
 					IceSan.class,
-					WhiteBlastSword.class,
 
+					WhiteBlastSword.class,
 			};
 
 			PaswordBadges.loadGlobal();
@@ -611,13 +612,12 @@ public class Generator {
 
 			WEP_T6.classes = new Class<?>[]{
 					IceFishSword.class,
-					//IceDewVialSword.class,
 					BloodthirstyThorn.class,
 					EndingBlade.class,
 					FireFishSword.class,
 					SliverLockSword.class,
 			};
-			WEP_T6.probs = new float[]{1, 0, 0, 0, 1, 0};
+			WEP_T6.probs = new float[]{1, 0, 0, 1, 0};
 
 			//see Generator.randomArmor
 			ARMOR.classes = new Class<?>[]{

@@ -132,8 +132,7 @@ public class Artifact extends KindofMisc {
 
 	//transfers upgrades from another artifact, transfer level will equal the displayed level
 	public void transferUpgrade(int transferLvl) {
-		int transferValue = Math.round((transferLvl * levelCap) / 10f);
-		upgrade(Math.min(transferValue, 10));
+		upgrade(Math.round((transferLvl*levelCap)/10f));
 	}
 
 	@Override

@@ -3,13 +3,15 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeSeed;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTippedDart;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeTrinket;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWand;
 import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation.changeWeapon;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -18,6 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
@@ -64,13 +67,15 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class WndGoldBurrety extends Window {
 
-    private final int WIDTH = 120;
+    private final int WIDTH = 140;
 
     private final int BTN_SIZE = 25;
     private final float GAP = 2;
@@ -162,6 +167,10 @@ public class WndGoldBurrety extends Window {
 
         btnItemGold = new ItemButton() {
             @Override
+            public Chrome.Type getType() {
+                return Chrome.Type.GREY_BUTTON_TR;
+            }
+            @Override
             protected void onClick() {
                 btnPressed = btnItemGold;
                 GameScene.selectItem(GolditemSelector);
@@ -221,6 +230,12 @@ public class WndGoldBurrety extends Window {
 
                 // 进行嬗变处理
                 Item[] newItems = GoldBuretteMode(nonNullItems.toArray(new Item[0]));
+
+                // 计算回合数，例如回合数与嬗变物品的数量相关
+                int turns = newItems.length; // 或者根据需要自定义计算规则，例如 `newItems.length * 2`
+
+                // 施加 Invulnerability Buff，回合数作为参数传入
+                Buff.affect(hero, Invulnerability.class, turns-1);
 
                 // 更新物品按钮
                 Iterator<Map.Entry<ItemButton, Item>> iterator = buttonToItemMap.entrySet().iterator();
@@ -357,11 +372,6 @@ public class WndGoldBurrety extends Window {
                if(item == hero.belongings.artifact()){
                     hero.belongings.artifact = (Artifact) processArtifact(hero.belongings.artifact);
                     hero.belongings.artifact.detachAll(Dungeon.hero.belongings.backpack);
-                   if(Statistics.upgradeGold<=18){
-                       hero.belongings.artifact.level = Math.min(item.level() + 1, 10);
-                       Statistics.upgradeGold--;
-                       hero.belongings.artifact.noUpgrade = true;
-                   }
                 } else {
                     result = processArtifact(item);
                 }
@@ -385,15 +395,15 @@ public class WndGoldBurrety extends Window {
             // 保存处理后的物品
             results[i] = result;
 
-            //超格处理
-            if(result != null){
-                if (!result.doPickUp( hero )) {
-                    Dungeon.level.drop( result, hero.pos ).sprite.drop();
-                }
-            }
-            if (!item.doPickUp(hero)) {
-                Dungeon.level.drop(item, hero.pos).sprite.drop();
-            }
+//            //超格处理
+//            if(result != null){
+//                if (!result.doPickUp( hero )) {
+//                    Dungeon.level.drop( result, hero.pos ).sprite.drop();
+//                }
+//            }
+//            if (!item.doPickUp(hero)) {
+//                Dungeon.level.drop(item, hero.pos).sprite.drop();
+//            }
         }
 
         return results;  // 返回处理后的物品数组
@@ -464,16 +474,34 @@ public class WndGoldBurrety extends Window {
         return staff;
     }
 
+    // 用一个 Set 来记录已经生成过的饰品类型
+    private static Set<Class<? extends Trinket>> generatedTrinkets = new HashSet<>();
+
+    public static Trinket changeTrinket(Trinket t) {
+        Trinket n;
+        do {
+            n = (Trinket)Generator.random(Generator.Category.TRINKET);
+        } while (Challenges.isItemBlocked(n) || n.getClass() == t.getClass() || generatedTrinkets.contains(n.getClass()));
+
+        // 生成新的饰品后，将其类型加入 Set 中
+        generatedTrinkets.add(n.getClass());
+
+        // 继承属性
+        n.level(t.trueLevel());
+        n.levelKnown = t.levelKnown;
+        n.cursedKnown = t.cursedKnown;
+        n.cursed = t.cursed;
+
+        return n;
+    }
+
     private Item processTrinket(Item item) {
         if (item.level() < 6) {
             Item result = changeTrinket((Trinket) item);
-
-
             if(Statistics.upgradeGold<=18){
                 result.upgrade();
                 Statistics.upgradeGold--;
             }
-
             result.collect();
             item.detach(Dungeon.hero.belongings.backpack);
             return result;
@@ -488,37 +516,29 @@ public class WndGoldBurrety extends Window {
     private Artifact changeArtifact( Artifact a ) {
         Artifact n;
         n = Normal();
-            if (a instanceof DriedRose){
-                if (((DriedRose) a).ghostWeapon() != null){
-                    Dungeon.level.drop(((DriedRose) a).ghostWeapon(), Dungeon.hero.pos);
-                }
-                if (((DriedRose) a).ghostArmor() != null){
-                    Dungeon.level.drop(((DriedRose) a).ghostArmor(), Dungeon.hero.pos);
-                }
+
+        if (a instanceof DriedRose){
+            if (((DriedRose) a).ghostWeapon() != null){
+                Dungeon.level.drop(((DriedRose) a).ghostWeapon(), Dungeon.hero.pos);
             }
-
-            if(Statistics.upgradeGold<=18){
-                n.level = Math.min(a.level() + 1, 10);
-                n.noUpgrade = true;
-                Statistics.upgradeGold--;
+            if (((DriedRose) a).ghostArmor() != null){
+                Dungeon.level.drop(((DriedRose) a).ghostArmor(), Dungeon.hero.pos);
             }
-
-            n.cursedKnown = a.cursedKnown;
-            n.cursed = a.cursed;
-            n.levelKnown = a.levelKnown;
-            n.transferUpgrade(a.visiblyUpgraded());
-            n.collect();
-            a.detach(Dungeon.hero.belongings.backpack);
-            return n;
-
-
-
+        }
+        n.cursedKnown = a.cursedKnown;
+        n.cursed = a.cursed;
+        n.levelKnown = a.levelKnown;
+        n.collect();
+        n.transferUpgrade(a.visiblyUpgraded());
+        a.detach(Dungeon.hero.belongings.backpack);
+        return n;
     }
+
 
     private Artifact Normal() {
         Artifact artifact;
         /** 你要恶心我，我直接手写生成 TNND*/
-        switch (Random.NormalIntRange(0,9)){
+        switch (Random.NormalIntRange(0,10)){
             case 0: artifact = new UnstableSpellbook(); break;
             case 2: artifact = new HornOfPlenty(); break;
             case 3: artifact = new SandalsOfNature(); break;
@@ -526,8 +546,9 @@ public class WndGoldBurrety extends Window {
             case 5: artifact = new TimekeepersHourglass(); break;
             case 6: artifact = new AlchemistsToolkit(); break;
             case 7: artifact = new DriedRose(); break;
-            case 8: artifact = new  EtherealChains(); break;
+            case 8: artifact = new EtherealChains(); break;
             case 9: artifact = new WraithAmulet(); break;
+            case 10: artifact = new CapeOfThorns(); break;
             default:
                 artifact = new ChaliceOfBlood(); break;
         }

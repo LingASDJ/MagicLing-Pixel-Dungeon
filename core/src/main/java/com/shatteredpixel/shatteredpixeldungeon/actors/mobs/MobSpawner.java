@@ -98,7 +98,7 @@ public class MobSpawner extends Actor {
 	public static ArrayList<Class<? extends Mob>> getMobRotation(int depth ){
 		ArrayList<Class<? extends Mob>> mobs;
 
-		if(!(Dungeon.isChallenged(RLPT)) || Dungeon.depth < 6 && Dungeon.isChallenged(RLPT)){
+		if(!(Dungeon.isChallenged(RLPT)) || Dungeon.depth < 6 && Dungeon.isChallenged(RLPT) || Statistics.RandMode){
 			mobs = standardMobRotation( depth );
 		} else {
 			mobs = rlptMobDied( depth );
@@ -257,7 +257,7 @@ public class MobSpawner extends Actor {
 					case 22:
 						//3x succubus, 3x evil eye
 						return new ArrayList<>(Arrays.asList(
-								Eye.class,ShieldHuntsman.class, Gorgon.class, DemonLord.class, DemonLord.class));
+								Eye.class,ShieldHuntsman.class, Gorgon.class));
 					case 23:
 						//1x: succubus, 2x evil eye, 3x scorpio
 						return new ArrayList<>(Arrays.asList(
