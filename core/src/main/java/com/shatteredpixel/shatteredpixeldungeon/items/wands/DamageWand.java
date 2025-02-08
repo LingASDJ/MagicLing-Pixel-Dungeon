@@ -33,7 +33,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDoll;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDollB;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
 
@@ -68,11 +71,17 @@ public abstract class DamageWand extends Wand{
 			}
 			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 		}
-			if(Dungeon.hero.hasTalent(Talent.FANATICISM_MAGIC)){
-				if (dmg > 0){
-					Berserk berserk = Buff.affect(Dungeon.hero, Berserk.class);
-					berserk.damage(dmg/2);
-				}
+		if(Dungeon.hero.belongings.getItem(TerrorDoll.class)!=null || Dungeon.hero.belongings.getItem(TerrorDollB.class)!=null){
+			if(Random.Int(1,10)<=1){
+				dmg = 0;
+				GLog.n(Messages.get(TerrorDoll.class,"terror"));
+			}
+		}
+		if(Dungeon.hero.hasTalent(Talent.FANATICISM_MAGIC)){
+			if (dmg > 0){
+				Berserk berserk = Buff.affect(Dungeon.hero, Berserk.class);
+				berserk.damage(dmg/2);
+			}
 		}
 
 		return Dungeon.hero.buff(Invulnerability.GodDied.class)!=null ? dmg*2 : dmg;

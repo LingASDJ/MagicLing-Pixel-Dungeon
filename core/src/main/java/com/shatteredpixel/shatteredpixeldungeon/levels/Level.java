@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PropBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shadows;
@@ -84,7 +85,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourg
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.BossRushBloodGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.RushMobScrollOfRandom;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.NoteOfBzmdr;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.YanStudyingPaperOne;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.SmallLightHeader;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
@@ -395,6 +400,29 @@ public abstract class Level implements Bundlable {
 		createItems();
 
 		diedname = Bones.generateHeroEpitaph();
+
+
+		if(hero.belongings.getItem(YanStudyingPaperOne.class)!=null && Random.Int(1,100)<=25 && depth >0) {
+
+			ArrayList<Potion> potions = new ArrayList<>();
+			if (hero.belongings.getAllItems(Potion.class) != null) {
+				for (Potion p : hero.belongings.getAllItems(Potion.class)) {
+					if (p instanceof PotionOfStrength || p instanceof ElixirOfMight) {
+						continue;
+					} else potions.add(p);
+				}
+			}
+			if(!potions.isEmpty()){
+				int amount = Math.max(Random.Int(1,5), potions.size());
+				while(amount>0){
+					amount--;
+					potions.get(Random.Int(0, potions.size())).detach(hero.belongings.backpack);
+					Item.updateQuickslot();
+					hero.buff(PropBuff.class).potionLost = true;
+				}
+			}
+		}
+
 
 		Random.popGenerator();
 	}
@@ -1610,6 +1638,7 @@ public abstract class Level implements Bundlable {
 			if (c instanceof Hero){
 				viewDist *= 1f + 0.25f*((Hero) c).pointsInTalent(Talent.FARSIGHT);
 				viewDist *= EyeOfNewt.visionRangeMultiplier();
+				if(((Hero) c).belongings.getItem(NoteOfBzmdr.class)!=null ) viewDist *= 0.75f;
 			}
 
 			ShadowCaster.castShadow( cx, cy, width(), fieldOfView, blocking, Math.round(viewDist) );

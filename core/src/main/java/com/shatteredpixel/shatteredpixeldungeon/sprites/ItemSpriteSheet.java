@@ -1210,7 +1210,7 @@ public class ItemSpriteSheet {
     public static final int TERRORDOLLB = PROP4+1;
     public static final int CLOAKFRAGMENTSOFBZMDR = PROP3+3;
     public static final int EMOTIONALAGGREGATIONB = PROP3+4;
-    public static final int HEARTOFCRASTALFRACTAL = PROP3+5;
+    public static final int HEARTOFCRYSTALFRACTAL = PROP3+5;
     public static final int WENSTUDYINGPAPERTWO = PROP3+6;
     public static final int YANSTUDYINGPAPERONE = PROP3+7;
     public static final int NOTEOFBZMDR = PROP4+0;
