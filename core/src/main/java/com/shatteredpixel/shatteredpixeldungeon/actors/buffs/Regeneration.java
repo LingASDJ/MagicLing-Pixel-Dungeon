@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.BlockingDrug;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.NewStem;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
@@ -83,6 +84,9 @@ public class Regeneration extends Buff {
 				}
 			}
 			delay /= SaltCube.healthRegenMultiplier();
+
+			if(Dungeon.hero.belongings.getItem(BlockingDrug.class)!=null) delay *= 1.25f;
+
 			spend( delay );
 			
 		} else {

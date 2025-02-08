@@ -71,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.KingBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.LingBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.PropBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.books.bookslist.TestBooks;
@@ -81,6 +82,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.WaterSoul;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.Prop;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.YanStudyingPaperOne;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.BlessingNecklace;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.CrystalLing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
@@ -220,6 +223,10 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 		//new Amulet().quantity(1).identify().collect();
 		if (Dungeon.isDLC(Conducts.Conduct.DEV)){
+
+			new PropBag().quantity(1).identify().collect();
+			new YanStudyingPaperOne().collect();
+
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.dropped();
 			new ScrollHolder().collect();
@@ -266,6 +273,12 @@ public enum HeroClass {
 			hero.lvl = 30;
 			hero.HP=hero.HT=120;
 			hero.exp=-1;
+		}
+
+		if(Dungeon.isDLC(Conducts.Conduct.HARD)){
+			new PropBag().quantity(1).identify().collect();
+			Prop.randomPropA();
+			//Prop.randomPropB();
 		}
 
 		switch (this) {

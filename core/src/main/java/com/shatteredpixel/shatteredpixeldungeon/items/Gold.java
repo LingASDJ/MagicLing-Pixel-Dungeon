@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.RustedGoldCoin;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -59,6 +60,10 @@ public class Gold extends Item {
 	
 	@Override
 	public boolean doPickUp(Hero hero, int pos) {
+
+		if(hero.belongings.getItem(RustedGoldCoin.class)!=null){
+			 quantity *= 0.25f;
+		}
 
 		Catalog.setSeen(getClass());
 

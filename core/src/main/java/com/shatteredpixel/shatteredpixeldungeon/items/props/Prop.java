@@ -65,11 +65,15 @@ public class Prop extends Item {
         return true;
     }
 
-    public static Prop randomProp(){
-        return randomProp(0);
+    public static Prop randomPropA(){
+        return randomPropA(0);
     }
+   /* public static Prop randomPropB(){
+        return randomPropB(0);
+    }
+    */
 
-    public static Prop randomProp(int rare){
+    public static Prop randomPropA(int rare){
         Prop prop = new Prop();
 
         switch (rare){
@@ -135,4 +139,9 @@ public class Prop extends Item {
                 return prop;
         }
     }
+    /*
+    public static Prop randomPropB(int rare){
+        return
+    }
+     */
 }
