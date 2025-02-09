@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.props;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.watabou.utils.Random;
@@ -49,9 +51,12 @@ public class Prop extends Item {
 
     @Override
     public ArrayList<String> actions(Hero hero ) {
-        ArrayList<String> actions = new ArrayList<>();
+        //开发者模式不去掉
+        if(Dungeon.isDLC(Conducts.Conduct.DEV)){
+            return super.actions(hero);
+        }
         //去掉"放下"与"扔出"
-        return actions;
+        return new ArrayList<>();
     }
 
 

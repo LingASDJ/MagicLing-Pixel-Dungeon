@@ -66,6 +66,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MobSpawner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
@@ -88,6 +89,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.dlcitem.RushMobScrollOfRan
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.BottleWraith;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.NoteOfBzmdr;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.YanStudyingPaperOne;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.SmallLightHeader;
@@ -108,6 +110,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.HighGrass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -165,6 +168,43 @@ public abstract class Level implements Bundlable {
 		//重新渲染地图
 		GameScene.resetMap();
 		Dungeon.observe();
+	}
+
+	/**
+	 * 瓶装怨灵生成逻辑
+	 * @param door 门
+	 * @param level 楼层
+	 * @param left 左
+	 * @param right 右
+	 * @param top 顶
+	 * @param bottom 底
+	 */
+	public void BottleWraith(Room.Door door,Level level,int left,int right,int top,int bottom){
+		if(hero.belongings.getItem(BottleWraith.class)!=null) {
+			for (int i = 0; i < Random.IntRange(1, 2); i++) {
+				int wraithPos = -1;
+
+				// 根据门的位置决定怨灵的位置
+				if (door.x == left) { // 门在左边
+					wraithPos = level.pointToCell(new Point(door.x - 1, door.y));
+				} else if (door.x == right) { // 门在右边
+					wraithPos = level.pointToCell(new Point(door.x + 1, door.y));
+				} else if (door.y == top) { // 门在上面
+					wraithPos = level.pointToCell(new Point(door.x, door.y - 1));
+				} else if (door.y == bottom) { // 门在下面
+					wraithPos = level.pointToCell(new Point(door.x, door.y + 1));
+				}
+
+				if (wraithPos != -1) {
+					Wraith wraith = new Wraith();
+					level.mobs.add(wraith);
+					wraith.pos = wraithPos;
+					wraith.state = wraith.WANDERING;
+					level.spawnMob(wraith.pos);
+				}
+			}
+			GLog.n(Messages.get(BottleWraith.class, ""));
+		}
 	}
 	
 	public enum Feeling {

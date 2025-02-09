@@ -101,6 +101,13 @@ public class PropBuff extends Buff{
             GLog.n(Messages.get(YanStudyingPaperOne.class,"lost"));
             potionLost = false;
         }
+
+        //TODO 瓶装怨灵生成描述提示
+        if(potionLost){
+            GLog.n(Messages.get(YanStudyingPaperOne.class,"bottle_wraith_generated"));
+            potionLost = false;
+        }
+
         return true;
     }
 
