@@ -128,7 +128,7 @@ public class Shockwave extends ArmorAbility {
 									damage = hero.attackProc(ch, damage);
 									ch.damage(damage, hero);
 									if (hero.subClass == HeroSubClass.GLADIATOR && wasEnemy){
-										Buff.affect( hero, Combo.class ).hit();
+										Buff.affect( hero, Combo.class ).hit(hero.enemy());
 									}
 								} else {
 									ch.damage(damage, hero);

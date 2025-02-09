@@ -692,7 +692,7 @@ public class Hero extends Char {
 		belongings.thrownWeapon = null;
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit();
+			Buff.affect( this, Combo.class ).hit(enemy);
 		}
 
 		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
@@ -726,7 +726,7 @@ public class Hero extends Char {
 		}
 
 		if(attackDelay() >1 && hasTalent(Talent.STRONGMAN)){
-			accuracy += accuracy * Math.max((attackDelay()-1f) * ( (0.5f / 3f) * pointsInTalent(Talent.STRONGMAN)),0.5f);
+			accuracy += accuracy * Math.max (attackDelay()-1f * ( 1f/3f * pointsInTalent(Talent.STRONGMAN)) ,0.75f);
 		}
 
 		for(StarSachet star : belongings.getAllItems(StarSachet.class)) {
@@ -932,7 +932,7 @@ public class Hero extends Char {
 		}
 
 		if( attackDelay() >1 && hasTalent(Talent.STRONGMAN) && !(wep instanceof SpiritBow)){
-			dmg += (int) (dmg * Math.max (attackDelay()-1f * ( 1f/3f * pointsInTalent(Talent.STRONGMAN)) ,0.75f));
+			dmg += (int) (dmg * Math.max((attackDelay()-1f) * ( (0.5f / 3f) * pointsInTalent(Talent.STRONGMAN)),0.5f));
 		}
 
 		if(belongings.getItem(PortableWhetstone.class)!=null)  dmg += (int) (getZone()*2-1);
@@ -3176,7 +3176,7 @@ public class Hero extends Char {
 		spend( attackDelay() );
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit();
+			Buff.affect( this, Combo.class ).hit(enemy);
 		}
 
 		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){

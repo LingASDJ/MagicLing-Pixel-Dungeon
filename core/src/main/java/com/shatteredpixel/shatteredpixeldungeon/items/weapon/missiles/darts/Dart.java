@@ -87,7 +87,16 @@ public class Dart extends MissileWeapon {
 				return  4 +                     //4 base
 						bow.buffedLvl() + lvl;  //+1 per level or bow level
 			}
-		} else {
+		} else if(diedCrossBow != null ){
+			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
+				//ability increases base dmg by 37.5%, scaling by 50%
+				return  7 +                     //7 base
+						2*diedCrossBow.buffedLvl() + lvl;//+2 per bow level, +1 per level
+			} else {
+				return  4 +                     //4 base
+						diedCrossBow.buffedLvl() + lvl;  //+1 per level or bow level
+			}
+		}else{
 			return  1 +     //1 base, down from 2
 					lvl;    //scaling unchanged
 		}
@@ -99,20 +108,33 @@ public class Dart extends MissileWeapon {
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				//ability increases base dmg by 37.5%, scaling by 50%
 				return  15 +                       //15 base
-						4*bow.buffedLvl() + 2*lvl; //+4 per bow level, +2 per level
+						4*bow.buffedLvl() +
+						2*lvl; //+4 per bow level, +2 per level
 			} else {
 				return  12 +                       //12 base
-						3*bow.buffedLvl() + 2*lvl; //+3 per bow level, +2 per level
+						3*bow.buffedLvl() +
+						2*lvl; //+3 per bow level, +2 per level
 			}
-		} else {
+		} else if(diedCrossBow != null){
+			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
+				//ability increases base dmg by 37.5%, scaling by 50%
+				return  15 +                       //15 base
+						4*diedCrossBow.buffedLvl() +
+						2*lvl; //+4 per bow level, +2 per level
+			} else {
+				return  12 +                       //12 base
+						3*diedCrossBow.buffedLvl() +
+						2*lvl; //+3 per bow level, +2 per level
+			}
+		}else{
 			return  2 +     //2 base, down from 5
 					2*lvl;  //scaling unchanged
 		}
 	}
-	
+
 	public static Crossbow bow;
 
-	private static DiedCrossBow diedCrossBow;
+	public static DiedCrossBow diedCrossBow;
 	
 	private void updateCrossbow(){
 		if (Dungeon.hero == null) {
@@ -122,20 +144,27 @@ public class Dart extends MissileWeapon {
 		} else if (Dungeon.hero.belongings.secondWep() instanceof Crossbow) {
 			//player can instant swap anyway, so this is just QoL
 			bow = (Crossbow) Dungeon.hero.belongings.secondWep();
-		} else {
+		} else if(Dungeon.hero.belongings.weapon() instanceof DiedCrossBow){
+			diedCrossBow = (DiedCrossBow) Dungeon.hero.belongings.weapon();
+		}else if(Dungeon.hero.belongings.secondWep() instanceof DiedCrossBow){
+			diedCrossBow = (DiedCrossBow) Dungeon.hero.belongings.weapon();
+		}else {
 			bow = null;
+			diedCrossBow = null;
 		}
 	}
 
 	public boolean crossbowHasEnchant( Char owner ){
-		return bow != null && bow.enchantment != null && owner.buff(MagicImmune.class) == null;
+		return (bow != null && bow.enchantment != null && owner.buff(MagicImmune.class) == null) || ( diedCrossBow != null && diedCrossBow.enchantment != null && owner.buff(MagicImmune.class) == null);
 	}
 	
 	@Override
 	public boolean hasEnchant(Class<? extends Enchantment> type, Char owner) {
 		if (bow != null && bow.hasEnchant(type, owner)){
 			return true;
-		} else {
+		} else if(diedCrossBow != null && diedCrossBow.hasEnchant(type, owner)) {
+			return true;
+		} else{
 			return super.hasEnchant(type, owner);
 		}
 	}
@@ -154,6 +183,10 @@ public class Dart extends MissileWeapon {
 	public int proc(Char attacker, Char defender, int damage) {
 		if (bow != null && !processingChargedShot){
 			damage = bow.proc(attacker, defender, damage);
+		}
+
+		if (diedCrossBow != null && !processingChargedShot){
+			damage = diedCrossBow.proc(attacker, defender, damage);
 		}
 
 		int dmg = super.proc(attacker, defender, damage);
@@ -236,7 +269,14 @@ public class Dart extends MissileWeapon {
 			String info = super.info();
 			bow.level(level);
 			return info;
-		} else {
+		}else if (diedCrossBow != null && !diedCrossBow.isIdentified()){
+			int level = diedCrossBow.level();
+			//temporarily sets the level of the bow to 0 for IDing purposes
+			diedCrossBow.level(0);
+			String info = super.info();
+			diedCrossBow.level(level);
+			return info;
+		}else {
 			return super.info();
 		}
 	}
@@ -353,3 +393,6 @@ public class Dart extends MissileWeapon {
 		
 	};
 }
+/*
+
+ */

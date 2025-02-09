@@ -48,7 +48,7 @@ public class LethalDefense extends Buff{
     @Override
     public float iconFadePercent() {
         float time = 0;
-        int point=Dungeon.hero.pointsInTalent(Talent.KEEP_VIGILANCE);
+        int point=Dungeon.hero.pointsInTalent(Talent.CLEAVE);
         switch (point){
             case 1:
                 time=2f;
