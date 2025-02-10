@@ -424,7 +424,7 @@ public class DiamondKnight extends Boss implements Hero.Doom {
             BossHealthBar.assignBoss(this);
             Dungeon.level.seal();
             GameScene.bossReady();
-            BGMPlayer.playBoss();
+
             if(Dungeon.isChallenged(STRONGER_BOSSES)){
                 yell(Messages.get(this, "notice_2"));
             } else {

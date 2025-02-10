@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CavesPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.Random;
 
-public class ItemLevel extends RegularLevel {
+public class BossRushItemLevel extends RegularLevel {
 
     {
         color1 = 0x534f3e;
@@ -137,24 +137,32 @@ public class ItemLevel extends RegularLevel {
 
     @Override
     public String tilesTex() {
-        if(depth>=16){
+        if(depth>=40) {
+            return Assets.Environment.TILES_HALLS;
+        } else if(depth>=31){
             return Assets.Environment.TILES_CITY;
-        } else if(depth>=6){
+        } else if(depth>=21){
+            return Assets.Environment.TILES_COLD;
+        } else if(depth>=11){
             return Assets.Environment.TILES_PRISON;
         } else {
-            return Assets.Environment.TILES_COLD;
+            return Assets.Environment.TILES_SEWERS;
         }
 
     }
 
     @Override
     public String waterTex() {
-        if(depth>=16){
+        if(depth>=40) {
+            return Assets.Environment.WATER_HALLS;
+        } else if(depth>=31){
             return Assets.Environment.WATER_CITY;
-        } else if(depth>=6){
+        } else if(depth>=21){
+            return Assets.Environment.WATER_CAVES;
+        } else if(depth>=11){
             return Assets.Environment.WATER_PRISON;
         } else {
-            return Assets.Environment.WATER_CAVES;
+            return Assets.Environment.WATER_SEWERS;
         }
     }
 

@@ -26,7 +26,7 @@ import com.watabou.utils.Rect;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class DimandKingLevel extends Level {
+public class GreenStlingBossLevel extends Level {
 
     {
         color1 = 0x4b6636;

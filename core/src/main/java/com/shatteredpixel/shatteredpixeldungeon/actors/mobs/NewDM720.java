@@ -89,7 +89,7 @@ public class NewDM720 extends MolotovHuntsman {
         //TODO improved sprite
         spriteClass = DM720Sprite.class;
 
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 405 : 270;
+        HP = HT = Statistics.bossRushMode ? 720 : Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 405 : 270;
         EXP = 40;
         defenseSkill = 15;
         properties.add(Property.BOSS);
@@ -352,7 +352,7 @@ public class NewDM720 extends MolotovHuntsman {
 
     @Override
     public void notice() {
-        super.notice();
+
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
             turnsSinceLastAbility = 0;
