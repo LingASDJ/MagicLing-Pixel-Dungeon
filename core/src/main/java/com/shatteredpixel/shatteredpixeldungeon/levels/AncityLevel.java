@@ -7,7 +7,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NullDiedTO;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nyz;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.watabou.utils.Random;
 
 public class AncityLevel extends Level {
     private static final int[] pre_map = {
@@ -115,7 +117,9 @@ public class AncityLevel extends Level {
         drop( new PotionOfExperience(), 145 );
         drop( new PotionOfExperience(), 161 );
         drop( new PotionOfExperience(), 127 );
-        drop( new KingGold(), 144 );
+        drop( new KingGold(Random.NormalIntRange(1,5)), 144 );
+
+        drop( new PotionOfMastery(), 59 );
     }
 
     public int randomRespawnCell() {

@@ -392,7 +392,7 @@ public class Qliphoth extends Boss {
         super.notice();
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
-            BGMPlayer.playBoss();
+
             GLog.n(Messages.get(this, "notice"));
             GameScene.flash(0x8000cc00);
             Camera.main.shake(1f,3f);

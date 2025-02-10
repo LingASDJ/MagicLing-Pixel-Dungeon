@@ -27,6 +27,10 @@ import com.watabou.utils.SparseArray;
 
 public class Statistics {
 
+	//BossRush LIQUMTEAL
+	public static boolean LiquidMatalOnlyTen = false;
+	public static int LimitLiquidMatal;
+
 	//统计分数
 	public static int progressScore;
 	//种子处罚
@@ -514,6 +518,10 @@ public class Statistics {
 
 		//节日布尔-临时版本
 		Hollow_Holiday = false;
+
+		//BossRush2.5
+		LimitLiquidMatal = 0;
+		LiquidMatalOnlyTen = false;
 	}
 
     public static void storeInBundle(Bundle bundle) {
@@ -698,9 +706,17 @@ public class Statistics {
 		bundle.put("DRAM",GameKillFireDargon);
 
 		bundle.put("ALXONE",Alone);
+
+		//BossRush2.5
+		bundle.put("LIMTAL",LimitLiquidMatal);
+		bundle.put("LIMTAL_DROP",LiquidMatalOnlyTen);
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
+
+		//BossRush2.5
+		LiquidMatalOnlyTen = bundle.getBoolean("LIMTAL_DROP");
+		LimitLiquidMatal = bundle.getInt("LIMTAL");
 
 		/**/
 		Hollow_Holiday = bundle.getBoolean("HOLLOW_DAY");
