@@ -22,9 +22,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.HKD;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.BzmdrDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.Gudazi;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.HallsPainter;
@@ -184,6 +186,12 @@ public class HallsLevel extends RegularLevel {
 			Gudazi npc20 = new Gudazi();
 			npc20.pos = entrance()+1;
 			mobs.add(npc20);
+		}
+
+		if(Dungeon.depth == 24 && Dungeon.branch == 0 && Dungeon.isChallenged(Challenges.CS)){
+			BzmdrDungeon npc21 = new BzmdrDungeon();
+			npc21.pos = exit()+1;
+			mobs.add(npc21);
 		}
 	}
 	

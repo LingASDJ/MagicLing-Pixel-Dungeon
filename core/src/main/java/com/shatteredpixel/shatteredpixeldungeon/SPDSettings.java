@@ -1145,6 +1145,25 @@ public class SPDSettings extends GameSettings {
 		modifyArrayElement( KEY_GIFT_DATA, target, index, value ) ;
 	}
 
+	//清理过期礼物数组
+	public static void deleteOutdatedGift(){
+		String[] keyArrays = getAllStringArray( KEY_GIFT_DATA );
+		StringBuilder outdatedKeys = new StringBuilder();
+
+		long currentTime = System.currentTimeMillis() / 1000;
+		long expirationDate = 0;
+
+		for( String keyArray : keyArrays ){
+			expirationDate = Long.parseLong( keyArray.split(",")[1] );
+			if( currentTime > expirationDate )
+				outdatedKeys.append( keyArray.split(",")[0] ).append( ";" );
+		}
+
+		if( !outdatedKeys.toString().isEmpty() ){
+			delete( KEY_GIFT_DATA, outdatedKeys.toString() );
+		}
+	}
+
 
 	//Challanges
 

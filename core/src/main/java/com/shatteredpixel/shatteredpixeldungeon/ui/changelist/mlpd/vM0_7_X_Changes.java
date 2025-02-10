@@ -2,6 +2,9 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist.mlpd;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.ArtilleristSprite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollBlindSprite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.HermitCrabSprite;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.lb.RivalSprite;
 import com.shatteredpixel.shatteredpixeldungeon.custom.utils.NetIcons;
 import com.shatteredpixel.shatteredpixeldungeon.effects.PasswordBadgeBanner;
@@ -16,6 +19,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.DM720Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DeepSeaSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DimandKingSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DragonGirlBlueSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.DreamSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DwarfGeneralSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireCrystalSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireDragonSprite;
@@ -57,6 +61,9 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0810_Changes(changeInfos);
+        add_V0808_Changes(changeInfos);
+        add_V0805_Changes(changeInfos);
         add_V0801_Changes(changeInfos);
         add_V0800M1_Changes(changeInfos);
         add_V07993_Changes(changeInfos);
@@ -90,6 +97,150 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0810_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.1.0-1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.Dragon_Lei), ("新物品：龙之泪"),
+                ("固定20露珠效果")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V2.1-2.2"),
+                (
+                        "金蝶模式-V2.2\n\n" +
+                        "1.修复金蝶克隆严重异常\n" +
+                        "2.修复部分怪物数值异常，支离破碎在金蝶模式中不再生效\n" +
+                        "3.优化嬗变回合，补偿无敌回合，且神器现在嬗变不再获得升级（嬗变次数有时，可无限嬗变）"),
+                        "金蝶模式-V2.1\n\n" +
+                        "1.追加更多怪物，详见日志金蝶特殊敌人列表"));
+
+        changes.addButton(new ChangeButton(new HermitCrabSprite(), ("寄居蟹"),
+                ("寄居蟹数值优化，现在破壳前0.95移速，破壳后2.0移速。\n\n" +
+                        "破壳时，同时获得6回合极速+恐惧效果。伤害削弱")));
+
+        changes.addButton(new ChangeButton(new ArtilleristSprite(), ("豺狼炮手"),
+                ("修正攻击力为1000%的严重异常")));
+
+        changes.addButton(new ChangeButton(new GnollBlindSprite(), ("老年豺狼"),
+                ("老年豺狼在第一层防御降为0，其他情况下为0-2。")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("其他改动"),
+                ("1.兑换码追加自动清理和NTP验证\n" +
+                        "2.部分文案优化\n" +
+                        "3.部分素材细节优化更新")));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.1.0-1:\n\n" +
+                        "-修复老魔杖的嬗变一些异常\n" +
+                        "-优化饰品嬗变，超过6级的饰品现在也可嬗变\n" +
+                        "-优化嬗变底层，文案优化\n" +
+                        "-优化破碎神器升级底层，现在至多+10，老存档无法同步，遇到旧版本超过+10卡死异常请自行处理。"));
+
+    }
+
+    public static void add_V0808_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.0.8", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V2.0"),
+                ("完全重做，详见金蝶游戏内部说明")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD-SnakeYearsOld"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位新年快乐！")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD-4YearsOld"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位新年快乐！")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.BADGES),("新徽章加入"),
+                ("一个隐藏徽章")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.CHALLANEESICON_17), ("挑战改进:孤城迷境"),
+                ("挑战优化:\n" +
+                        "1.0层翻新，奈亚子进入常规入口会有温馨提示\n" +
+                        "2.孤城Bzmdr\n" +
+                        "3.孤城可游玩特殊模式")));
+
+        changes.addButton(new ChangeButton(new DreamSprite(), ("新NPC:晓梦加入"),
+                ("风里雨里，0层等你")));
+
+        changes.addButton(new ChangeButton(new RedNecromancerSprite(), ("BossRush2.4"),
+                ("Boss现在不会获得成长精英效果。")));
+
+        Image issxsaxs =new QliphothSprite();
+        issxsaxs.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(issxsaxs, ("果子系列Boss优化"),
+                ("现在果子在不能攻击前不再被自动瞄准，且异果藤曼开局追加10回合失明")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.0.8:\n\n" +
+                        "1.修复决斗家转职副完全不充能的问题\n" +
+                        "2.修复金蝶测试版的各种问题\n" +
+                        "3.0层魔像现在不会传送\n" +
+                        "4.其他小型崩溃Bug修正,这里不做过多描述"));
+    }
+
+    public static void add_V0805_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.0.5", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        Image dragonSprite = new FireDragonSprite();
+        dragonSprite.scale.set(PixelScene.align(0.72f));
+        changes.addButton(new ChangeButton(dragonSprite, ("熔岩火龙-绝命模式"),
+                ("调整熔岩火龙地图地形，使之更加刺激")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_GOLD), ("金蝶模式V1.5"),
+                ("1.背包中的武器不再参与嬗变\n" +
+                        "2.修复了一些潜在问题，优化了底层模块")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD_XiaonianYei"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位小年夜快乐！")));
+
+        changes.addButton(new ChangeButton(new RedNecromancerSprite(), ("BossRush2.2"),
+                ("第一大层Boss顺序发生了变化，现在是粘咕->普果->异果->天痕（困难模式），并且现在最大层不再是100。")));
+
+        Image issxsaxs =new DimandKingSprite();
+        issxsaxs.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(issxsaxs, ("拟态之王2.0"),
+                ("现在拟态之王因为实装音乐所以重新优化了一些阶段，并且迷宫不再是隐藏门" +
+                        "尤其是第二阶段，同时绝命有所调整，请自行游戏内查看")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.0.5:\n\n" +
+                        "1.修复部分武器肌肉合剂不生效的异常\n" +
+                        "2.修复苦痛刻痕使用祝福的十字架死亡的异常，以及可反复退出的问题\n" +
+                        "3.修复英雄精英效果不生效的问题\n" +
+                        "4.其他小型崩溃Bug修正,这里不做过多描述"));
     }
 
     public static void add_V0801_Changes(ArrayList<ChangeInfo> changeInfos ) {

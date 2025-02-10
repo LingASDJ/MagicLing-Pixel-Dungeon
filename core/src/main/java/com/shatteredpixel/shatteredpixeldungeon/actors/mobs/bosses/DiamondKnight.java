@@ -387,7 +387,11 @@ public class DiamondKnight extends Boss implements Hero.Doom {
         if(Statistics.dimandchestmazeCollected>=3){
             PaswordBadges.validateOMP();
             Statistics.bossScores[1] += 1000;
+            if(Statistics.RandMode){
+                Statistics.goldRefogreCount++;
+            }
         }
+
         Badges.validateBossSlain();
         phase++;
 

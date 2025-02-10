@@ -91,7 +91,25 @@ public class FayiNa extends NTNPC {
         PaswordBadges.loadGlobal();
         List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered(true);
 
-        if (passwordbadges.contains(PaswordBadges.Badge.SWORDDREAM)) {
+        if (passwordbadges.contains(PaswordBadges.Badge.SWORDDREAM) && Dungeon.depth !=0) {
+            //we do a little raw position shuffling here so that the characters are never
+            // on the same cell when logic such as occupyCell() is triggered
+            int oldPos = pos;
+            int newPos = c.pos;
+            PathFinder.buildDistanceMap(c.pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
+            if (PathFinder.distance[pos] == Integer.MAX_VALUE){
+                return true;
+            }
+            if(progress == 10){
+                yell(Messages.get(ClearElemtGuard.class, "no_road",hero.name()));
+                progress++;
+            }
+            pos = newPos;
+            c.pos = oldPos;
+            ScrollOfTeleportation.appear(this, newPos);
+            ScrollOfTeleportation.appear(c, oldPos);
+            Dungeon.observe();
+            GameScene.updateFog();
             yell(TXT_RANDOM[Random.Int(TXT_RANDOM.length)]);
         } else {
             if (first) {

@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -292,8 +293,10 @@ public class Goo extends Mob {
 
 		//Dungeon.level.drop( Generator.random( Generator.Category.WAND), pos) .sprite.drop();
 
-		Dungeon.level.drop( new CrystalKey( Dungeon.depth ), hero.pos ).sprite.drop();
-		Dungeon.level.drop( new CrystalKey( Dungeon.depth ), pos ).sprite.drop();
+		if(Dungeon.branch == 2) {
+			Dungeon.level.drop(new CrystalKey(Dungeon.depth), hero.pos).sprite.drop();
+			Dungeon.level.drop(new CrystalKey(Dungeon.depth), pos).sprite.drop();
+		}
 
 		//60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
 		int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
@@ -305,7 +308,9 @@ public class Goo extends Mob {
 			Dungeon.level.drop( Generator.random( Generator.Category.STONE), pos + ofs ).sprite.drop( pos );
 		}
 
-
+		if(Statistics.bossRushMode){
+			Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
+		}
 
 
 		Badges.GOO();

@@ -255,13 +255,16 @@ public class BloodthirstyThorn extends MeleeWeapon {
         return 6 + lvl * 4;
     }
 
-
     @Override
     public int STRReq(int lvl) {
-        if (lvl > 10) {
-            return lvl * 5;
+        int req = 14;
+        if (masteryPotionBonus){
+            req -= 2;
         }
-        return 14;
+        if (lvl > 10) {
+            req = lvl * 5;
+        }
+        return req;
     }
 
     @Override

@@ -78,6 +78,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewBlackHost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewDM720;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OGPDLLS;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OGPDZSLS;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.PhantomPiranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
@@ -99,7 +101,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SkullShaman;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SlimeKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime_Orange;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime_Qs;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime_Red;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime_Sn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectralNecromancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Spinner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
@@ -137,6 +141,22 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.bossrush.SkyG
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.CrivusStarFruits;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.CrivusStarFruitsLasher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.DiedClearElemet;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Artillerist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.BoomSkull;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.DemonLord;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Drake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GiantWorm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollBlind;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollThrower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollTwilight;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GoblinShaman;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Gorgon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.HermitCrab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.HermitCrabNoShell;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Mayfly;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.Prisoner;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.RoyalGuard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.TribemanOld;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
@@ -229,6 +249,7 @@ public enum Bestiary {
 	HELL_BOSS,
 
 	BOSSRUSH,
+	GOLDMOB,
 	ANCITY,
 	SHOP,
 
@@ -367,6 +388,23 @@ public enum Bestiary {
 				DimandKing.class,
 				Rival.class,
 				DwarfMaster.class
+		);
+
+		GOLDMOB.addEntities(
+				GnollBlind.class, Mayfly.class, OGPDLLS.class, OGPDZSLS.class, Slime_Qs.class,
+				Slime_Sn.class, GiantWorm.class, HermitCrab.class, HermitCrabNoShell.class,
+
+				Prisoner.class, GnollThrower.class, BoomSkull.class,
+
+				Drake.class, TribemanOld.class, GnollTwilight.class,
+				GoblinShaman.ShamanStrength.class,
+				GoblinShaman.ShamanFake.class,
+				GoblinShaman.ShamanRegen.class,
+				GoblinShaman.ShamanShield.class,
+
+				Artillerist.class, RoyalGuard.class,
+
+				Gorgon.class, DemonLord.class
 		);
 
 		ANCITY.addEntities(

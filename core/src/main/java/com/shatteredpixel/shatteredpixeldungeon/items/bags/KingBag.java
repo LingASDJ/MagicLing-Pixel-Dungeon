@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -48,11 +49,11 @@ public class KingBag extends Bag {
     }
 
     public int capacity(){
-        return 21;
+        return Dungeon.isChallenged(Challenges.MINIBAG) ? 12 : 21;
     }
-
-    public int price() {
-        return -1;
+    @Override
+    public int value() {
+        return  Dungeon.isChallenged(Challenges.MINIBAG) ? 30 : 20;
     }
 
 }

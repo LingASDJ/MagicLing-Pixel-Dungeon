@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ClearBleesdGoodBuff.BlessLing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RandomBuff;
@@ -69,6 +68,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.BookBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.HerbBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.KingBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.LingBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
@@ -202,21 +202,23 @@ public enum HeroClass {
 		i = new Food();
 		if (!Challenges.isItemBlocked(i)) i.collect();
 
+		if(!Dungeon.isChallenged(Challenges.MINIBAG)){
+			new HerbBag().quantity(1).identify().collect();
+			new KingBag().quantity(1).identify().collect();
+		}
+
+		if(Dungeon.isChallenged(Challenges.MINIBAG)){
+			new LingBag().quantity(1).identify().collect();
+		}
+
 		new VelvetPouch().collect();
 		Dungeon.LimitedDrops.VELVET_POUCH.drop();
-
-		new HerbBag().quantity(1).identify().collect();
-		Dungeon.LimitedDrops.HERB_BAG.drop();
-		new KingBag().quantity(1).identify().collect();
-		Dungeon.LimitedDrops.KING_BAG.drop();
-
-		Dungeon.LimitedDrops.PROP_BAG.drop();
 
 		Waterskin waterskin = new Waterskin();
 		waterskin.collect();
 
 		new ScrollOfIdentify().identify();
-		//new KingGold().quantity(1).identify().collect();
+		//new Amulet().quantity(1).identify().collect();
 		if (Dungeon.isDLC(Conducts.Conduct.DEV)){
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.dropped();

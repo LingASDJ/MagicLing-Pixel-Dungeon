@@ -80,6 +80,7 @@ public class Qliphoth extends Boss {
         HUNTING = new Hunting();
 
         state = WANDERING;
+        alignment = Alignment.NEUTRAL;
     }
 
     @Override
@@ -139,6 +140,9 @@ public class Qliphoth extends Boss {
         if(state_boss == 1 && HP<=60){
             state_boss++;
             HP = 60;
+
+            alignment = Alignment.ENEMY;
+
             Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
             this.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
             GameScene.flash(0x80cc0000);
@@ -527,6 +531,11 @@ public class Qliphoth extends Boss {
         boss_teleport = bundle.getInt(TELEPORT_BOSS);
         if (state != SLEEPING) BossHealthBar.assignBoss(this);
         if ((HP*2 <= HT)) BossHealthBar.bleed(true);
+        if(state_boss == 2){
+            alignment = Alignment.ENEMY;
+        } else {
+            alignment = Alignment.NEUTRAL;
+        }
     }
 
     private void pullEnemy( Char enemy, int pullPos ){

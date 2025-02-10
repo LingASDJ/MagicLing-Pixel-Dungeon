@@ -9,6 +9,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
@@ -35,9 +36,19 @@ public class Gift implements Bundlable {
             //灯火
             "QmFkTGFudGVyRmlyZS1Hbyw0MDcwOTUxNzc1LGZhbHNl",
 
+            //小年夜
+            "TUxQRF9YaWFvbmlhblllaSwxNzM4MTU5MjAwLGZhbHNl",
+
+            //春节兑换码
+            "TUxQRC1TbmFrZVllYXJzT2xkLDE3MzkzNzI0MDAsZmFsc2U=",
+            "TUxQRC00WWVhcnNPbGQsMTczOTM3MjQwMCxmYWxzZQ==",
+
+            //龙泪
+            "TUxQRC1EcmFnb25XYXRlciwxNzM5MzcyNDAwLGZhbHNl",
+
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
-            "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",//已过期兑换码
+            "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",
             "VEVTVCwxNzM1NTc1MTQyLHRydWU7"//已使用兑换码
     };
 
@@ -62,10 +73,44 @@ public class Gift implements Bundlable {
         code4.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 300 );
         code4.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.LanFireGo", 1 );
 
+        LinkedHashMap<String, Integer> code5 = new LinkedHashMap<>();
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",2025);
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 2);
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfNukeCole", 1);
+        code5.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonKingBreath", 1);
+
+        //MLPD-4YearsOld
+        LinkedHashMap<String, Integer> code6 = new LinkedHashMap<>();
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",700);
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.RedBlock", 3);
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Seekingspear", 1);
+        code6.put( "com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation", 1);
+
+        //MLPD-4YearsOld
+        LinkedHashMap<String, Integer> code7 = new LinkedHashMap<>();
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",400);
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 1);
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.legend.DiedCrossBow", 1);
+        code7.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
+
+        //MLPD-DragonWater
+        LinkedHashMap<String, Integer> code8 = new LinkedHashMap<>();
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin",500);
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 1);
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater", 1);
+        code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
+
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
         tempMap.put( "U1A0LVJFQURZ",code3);
-        tempMap.put( "QmFkTGFudGVyRmlyZS1Hbw==",code4);
+        tempMap.put( "QmFkTGFudGVyRmlyZS1Hbw==", code4);
+        tempMap.put( "TUxQRF9YaWFvbmlhblllaQ==",code5);
+
+        tempMap.put("TUxQRC00WWVhcnNPbGQ=",code6);
+        tempMap.put("TUxQRC1TbmFrZVllYXJzT2xk",code7);
+
+        tempMap.put("TUxQRC1EcmFnb25XYXRlcg==",code8);
+
 
         GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );
     }
@@ -114,13 +159,19 @@ public class Gift implements Bundlable {
     public static void GiftTime() {
         try {
             int length = Gift_DATA.length;
-            String decodedString = "";
+            String decodedString;
             byte[] decoded;
             List<String> saveData = new ArrayList<>();
+            long currentTime = System.currentTimeMillis() / 1000;
+            long expirationDate;
 
             for(int i = 0; i < length; i++) {
                 decoded = Base64.decode( Gift_DATA[i] );
                 decodedString = new String( decoded) ;
+
+                expirationDate = Long.parseLong( decodedString.split(",")[1] );
+                if( currentTime > expirationDate )
+                    continue;
 
                 if( SPDSettings.queryGiftExist( decodedString.split(",")[0] ) )
                     continue;
@@ -132,12 +183,16 @@ public class Gift implements Bundlable {
                 String[] result = new String[saveData.size()];
                 SPDSettings.saveGift( saveData.toArray( result ) );
             }
+
+            SPDSettings.deleteOutdatedGift();
         } catch (Exception ignored) {
         }
     }
 
     //玩家使用兑换码
     public static int ActivateGift(String key) {
+        if( TitleScene.NTP_NOINTER || TitleScene.NTP_ERROR || TitleScene.NTP_NOINTER_VEFY || TitleScene.NTP_ERROR_VEFY )
+            return 0;
 
         if(Objects.equals(key, "")){
             return 4;

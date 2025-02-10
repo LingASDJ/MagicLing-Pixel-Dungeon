@@ -292,6 +292,7 @@ public class MiningLevel extends CavesLevel {
 						protected void onSelect(int index) {
 							if (index == 0){
 								Blacksmith.Quest.complete();
+
 								MiningLevel.super.activateTransition(hero, transition);
 							}
 						}

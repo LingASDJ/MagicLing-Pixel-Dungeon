@@ -24,9 +24,7 @@ public class BGMPlayer {
 
     //解决电脑端高质量ogg的线程安全闪退问题
     public static void playBGM(String name, boolean loop) {
-        if(SPDSettings.music()){
-            Game.runOnRenderThread(() -> Music.INSTANCE.play(name, loop));
-        }
+        Game.runOnRenderThread(() -> Music.INSTANCE.play(name, loop));
     }
 
     public static void endBGM(){

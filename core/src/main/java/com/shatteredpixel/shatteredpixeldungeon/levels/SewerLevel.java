@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.notsync.DiedClearElemet;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nxhy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.extra.PinkFox;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.Gudazi;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -177,6 +178,13 @@ public class SewerLevel extends RegularLevel {
 			npc20.pos = entrance()-1;
 			mobs.add(npc20);
 		}
+
+		if(Dungeon.depth == 1 && Statistics.RandMode){
+			PinkFox npc18 = new PinkFox();
+			npc18.pos = entrance()-1;
+			mobs.add(npc18);
+		}
+
 	}
 
 	@Override

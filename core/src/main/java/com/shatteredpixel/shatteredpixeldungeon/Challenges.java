@@ -45,7 +45,9 @@ public class Challenges {
 
 	public static final int CS   = 32768;
 
-	public static final int MAX_VALUE = 65536;
+	public static final int MINIBAG   = 65536;
+
+	public static final int MAX_VALUE = 131072;
 	public static final String[] NAME_IDS = {
 			"no_food",
 			"no_armor",
@@ -63,11 +65,12 @@ public class Challenges {
 			"dhxd",
 			"morelevel",
 			"cs",
+			"mini_bag"
 	};
 
 	public static final int[] MASKS = {
 			NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS
-			, AQUAPHOBIA, CHAMPION_ENEMIES,RLPT,SBSG,EXSG,STRONGER_BOSSES,DHXD,MOREROOM,CS,
+			, AQUAPHOBIA, CHAMPION_ENEMIES,RLPT,SBSG,EXSG,STRONGER_BOSSES,DHXD,MOREROOM,CS,MINIBAG
 	};
 	public String name;
 
@@ -85,25 +88,8 @@ public class Challenges {
 			}
 		}
 
-//		if (Dungeon.isChallenged(NO_ARMOR)) {
-//			if (item instanceof Armor && !(item instanceof ClothArmor || item instanceof ClassArmor|| item instanceof CustomArmor)) {
-//				//GLog.n("这片大地吃布甲之外的护甲从不挑食,侦查到作弊行为，已移除"+item);
-//				GLog.n(Messages.get(Challenges.class, "no_armorx"), item);
-//				return true;
-//			}
-//		}
-
-//		if (Dungeon.isChallenged(NO_HEALING)) {
-//			if (item instanceof PotionOfHealing) {
-//				return true;
-//			} else if (item instanceof Blandfruit
-//					&& ((Blandfruit) item).potionAttrib instanceof PotionOfHealing) {
-//				return true;
-//			}
-//		}
-
-		if (Dungeon.isChallenged(NO_HERBALISM) && !(Dungeon.depth == 5 && Dungeon.branch == 3)) {
-			return item instanceof Dewdrop;
+		if (Dungeon.isChallenged(NO_HERBALISM)) {
+			return item instanceof Dewdrop ;
 		}
 
 		return false;

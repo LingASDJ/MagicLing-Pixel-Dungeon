@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
@@ -35,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
-import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.BlacksmithRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -51,7 +49,6 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class Blacksmith extends NPC {
 	
@@ -426,10 +423,8 @@ public class Blacksmith extends NPC {
 				
 				rooms.add(new BlacksmithRoom());
 				spawned = true;
-				PaswordBadges.loadGlobal();
-				List<PaswordBadges.Badge> passwordbadges = PaswordBadges.filtered(true);
 				//Currently cannot roll the fungi quest, as it is not fully implemented
-				type = RegularLevel.altHoliday == RegularLevel.AltHoliday.DWJ_2024 && !passwordbadges.contains(PaswordBadges.Badge.KILL_FISHBOSS) ? 4 : RegularLevel.altHoliday == RegularLevel.AltHoliday.DWJ_2024 && Random.Float()<=0.5f ? 4 : Random.IntRange(1, 2);
+				type = Random.IntRange(1, 2);
 				alternative = false;
 				
 				given = false;
@@ -541,6 +536,10 @@ public class Blacksmith extends NPC {
 			if (bossBeaten) favor += 1000;
 
 			Statistics.questScores[2] = favor;
+
+			if(Statistics.RandMode){
+				Statistics.goldRefogreCount++;
+			}
 		}
 
 		public static boolean rewardsAvailable(){

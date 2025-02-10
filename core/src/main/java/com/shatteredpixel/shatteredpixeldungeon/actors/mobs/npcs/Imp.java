@@ -160,7 +160,7 @@ public class Imp extends NPC {
 		
 		private static boolean spawned;
 		private static boolean given;
-		private static boolean completed;
+		public static boolean completed;
 		
 		public static Ring reward;
 		

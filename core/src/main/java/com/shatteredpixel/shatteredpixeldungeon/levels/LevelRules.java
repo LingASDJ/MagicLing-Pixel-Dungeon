@@ -51,9 +51,9 @@ public class LevelRules {
                     case 1: return new AncityLevel();
 
                     case 3: return new SewerBossLevel();
-
                     case 5: return new ForestPoisonBossLevel();
-
+                    case 4:
+                        return new ForestPoisonBossLevel();
                     case 7: return new ForestHardBossLevel();
 
                     case 9: return new LaveCavesBossLevel();
@@ -118,6 +118,7 @@ public class LevelRules {
 
 
                     //补给层 T1
+
                     case 2:  case 4: case 6:  case 8: case 10:
                     //补给层 T2
                     case 12: case 14:case 16: case 18: case 20:
@@ -127,7 +128,7 @@ public class LevelRules {
                     case 32: case 34: case 36: case 38:
                     //普通结局
                     case 40: case 41:
-                        return new BossRushItemLevel();
+                      return new BossRushItemLevel();
 
                     default:
                         Statistics.deepestFloor--;
@@ -224,12 +225,11 @@ public class LevelRules {
                         return new CityLevel();
                     case 20:
                         if(Statistics.RandMode){
-                            switch (Random.Int(4)){
-                                case 1: return new AncientMysteryCityBossLevel();
-                                case 2: return new DwarfMasterBossLevel();
+                            switch (Random.Int(3)){
+                                case 1: return new DwarfMasterBossLevel();
                                 default:
-                                case 3: return new CerDogBossLevel();
-                                case 4: return new ShopBossLevel();
+                                case 2: return new CerDogBossLevel();
+                                case 3: return new ShopBossLevel();
                             }
                         } else {
                             return new NewCityBossLevel();

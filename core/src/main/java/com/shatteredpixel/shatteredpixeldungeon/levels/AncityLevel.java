@@ -118,7 +118,6 @@ public class AncityLevel extends Level {
         drop( new PotionOfExperience(), 161 );
         drop( new PotionOfExperience(), 127 );
         drop( new KingGold(Random.NormalIntRange(1,5)), 144 );
-
         drop( new PotionOfMastery(), 59 );
     }
 

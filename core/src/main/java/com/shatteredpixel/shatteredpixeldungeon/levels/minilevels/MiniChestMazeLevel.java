@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.minilevels;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -9,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.status.FoundChest;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DimandMimic;
@@ -126,6 +129,7 @@ public class MiniChestMazeLevel extends RegularLevel {
             TPDoor ds0 = new TPDoor();
             ds0.pos = randomRespawnCell(ds0);
             GameScene.add(ds0);
+            Buff.affect(hero, MindVision.class, 4f);
             Statistics.fuckGeneratorAlone++;
         }
         seal();

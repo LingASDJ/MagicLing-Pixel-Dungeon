@@ -447,6 +447,14 @@ public class Wandmaker extends NPC {
 			Statistics.questScores[1] = 2000;
 		}
 
+		public static boolean processed(){
+			return spawned ;
+		}
+
+		public static boolean completed(){
+			return wand1 == null && wand2 == null;
+		}
+
 		public static int type() {
 			return type;
 		}

@@ -46,6 +46,12 @@ public class Golem extends Mob {
 		EXP = 12;
 		maxLvl = 22;
 
+		if(Dungeon.depth == 0){
+			state = PASSIVE;
+		} else {
+			state = HUNTING;
+		}
+
 		loot = Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR);
 		lootChance = 0.2f; //initially, see lootChance()
 
