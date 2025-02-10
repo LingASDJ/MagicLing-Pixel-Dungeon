@@ -491,7 +491,7 @@ public class Rival extends Boss implements Callback {
     public void notice() {
         super.notice();
         Dungeon.level.seal();
-        BGMPlayer.playBoss();
+
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
             yell(Messages.get(this, "question"));

@@ -311,14 +311,6 @@ public class CavesBossLevel extends Level {
 			boss.pos = pointToCell(Random.element(mainArena.getPoints()));
 		} while (!openSpace[boss.pos] || map[boss.pos] == Terrain.EMPTY_SP || Actor.findChar(boss.pos) != null);
 		GameScene.add( boss );
-
-		Game.runOnRenderThread(new Callback() {
-			@Override
-			public void call() {
-				Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
-			}
-		});
-
 	}
 
 	@Override
@@ -340,19 +332,6 @@ public class CavesBossLevel extends Level {
 		if (customArenaVisuals != null) customArenaVisuals.updateState();
 
 		Dungeon.observe();
-
-		Game.runOnRenderThread(new Callback() {
-			@Override
-			public void call() {
-				Music.INSTANCE.fadeOut(5f, new Callback() {
-					@Override
-					public void call() {
-						Music.INSTANCE.end();
-					}
-				});
-			}
-		});
-
 	}
 
 	public void activatePylon(){

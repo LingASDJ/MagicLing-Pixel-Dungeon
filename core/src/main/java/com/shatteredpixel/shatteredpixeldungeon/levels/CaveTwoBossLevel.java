@@ -68,7 +68,6 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.Tilemap;
-import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
@@ -392,13 +391,6 @@ public class CaveTwoBossLevel extends Level {
             } while (!openSpace[boss.pos] || map[boss.pos] == Terrain.EMPTY_SP || Actor.findChar(boss.pos) != null);
             GameScene.add( boss );
         }
-
-        Game.runOnRenderThread(new Callback() {
-            @Override
-            public void call() {
-                Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
-            }
-        });
     }
 
     @Override
@@ -420,19 +412,6 @@ public class CaveTwoBossLevel extends Level {
         if (customArenaVisuals != null) customArenaVisuals.updateState();
 
         Dungeon.observe();
-
-        Game.runOnRenderThread(new Callback() {
-            @Override
-            public void call() {
-                Music.INSTANCE.fadeOut(5f, new Callback() {
-                    @Override
-                    public void call() {
-                        Music.INSTANCE.end();
-                    }
-                });
-            }
-        });
-
     }
 
     public void activatePylon(){

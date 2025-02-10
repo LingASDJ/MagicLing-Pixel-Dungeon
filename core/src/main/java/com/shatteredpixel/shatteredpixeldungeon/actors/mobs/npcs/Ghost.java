@@ -43,7 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
-import com.shatteredpixel.shatteredpixeldungeon.levels.ItemLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.BossRushItemLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -385,7 +385,7 @@ public class Ghost extends NPC {
 			}
 		}
 
-		public static void spawnBossRush( ItemLevel level, Room room ) {
+		public static void spawnBossRush(BossRushItemLevel level, Room room ) {
 			if (!spawned && Dungeon.depth == 3) {
 
 				Ghost ghost = new Ghost();
