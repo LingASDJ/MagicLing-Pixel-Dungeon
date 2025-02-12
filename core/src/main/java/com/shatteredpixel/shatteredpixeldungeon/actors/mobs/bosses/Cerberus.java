@@ -128,7 +128,7 @@ public class Cerberus extends Boss {
 
     @Override
     public int attackSkill( Char target ) {
-        return 26;
+        return 999;
     }
 
     @Override
@@ -325,6 +325,8 @@ public class Cerberus extends Boss {
 
         return super.act();
     }
+
+
 
     public int attackProc(Char enemy, int damage) {
        damage = super.attackProc(enemy, damage);

@@ -80,7 +80,7 @@ public class DM300 extends Boss {
 	{
 		spriteClass = DM300Sprite.class;
 
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 400 : 300;
+		HP = HT = Statistics.bossRushMode ? 850 : Dungeon.isChallenged(Challenges.STRONGER_BOSSES)  ? 400 : 300;
 		EXP = 30;
 		defenseSkill = 15;
 
@@ -91,7 +91,7 @@ public class DM300 extends Boss {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 15, 25 );
+		return Statistics.bossRushMode ? Random.NormalIntRange(25,50) : Random.NormalIntRange( 15, 25 );
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class DM300 extends Boss {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 10);
+		return super.drRoll() + (Statistics.bossRushMode ? Random.NormalIntRange(7, 10) :Random.NormalIntRange(0, 10));
 	}
 
 	public int pylonsActivated = 0;
@@ -109,7 +109,7 @@ public class DM300 extends Boss {
 	public boolean chargeAnnounced = false;
 
 	private final int MIN_COOLDOWN = 5;
-	private final int MAX_COOLDOWN = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 7 : 9;
+	private final int MAX_COOLDOWN = (Statistics.bossRushMode ||Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) ? 7 : 9;
 
 	private int turnsSinceLastAbility = -1;
 	private int abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
@@ -377,7 +377,7 @@ public class DM300 extends Boss {
 
 		Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
 
-		int gasMulti = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2 : 1;
+		int gasMulti = (Statistics.bossRushMode ||Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) ? 2 : 1;
 
 		for (int i : trajectory.subPath(0, trajectory.dist)){
 			GameScene.add(Blob.seed(i, 20*gasMulti, ToxicGas.class));
@@ -478,13 +478,15 @@ public class DM300 extends Boss {
 		if (dmgTaken > 0) {
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 			if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-				if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/2f);
+				if ((Statistics.bossRushMode ||Dungeon.isChallenged(Challenges.STRONGER_BOSSES)))   lock.addTime(dmgTaken/2f);
 				else                                                    lock.addTime(dmgTaken);
 			}
 		}
 
 		int threshold;
-		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+		if (Statistics.bossRushMode){
+			threshold = HT / 5 * (4 - pylonsActivated);
+		} else if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
 			threshold = HT / 4 * (3 - pylonsActivated);
 		} else {
 			threshold = HT / 3 * (2 - pylonsActivated);
@@ -498,7 +500,7 @@ public class DM300 extends Boss {
 	}
 
 	public int totalPylonsToActivate(){
-		return Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 3 : 2;
+		return Statistics.bossRushMode ? 4 : Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 3 : 2;
 	}
 
 	@Override
@@ -515,7 +517,7 @@ public class DM300 extends Boss {
 		((CavesBossLevel)Dungeon.level).activatePylon();
 		pylonsActivated++;
 
-		spend(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2f : 3f);
+		spend((Statistics.bossRushMode ||Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) ? 2f : 3f);
 		yell(Messages.get(this, "charging"));
 		sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 		((DM300Sprite)sprite).updateChargeState(true);
@@ -572,7 +574,7 @@ public class DM300 extends Boss {
 		}
 		Statistics.bossScores[2] += 3000;
 
-		if(Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+		if((Statistics.bossRushMode ||Dungeon.isChallenged(Challenges.STRONGER_BOSSES))){
 			Dungeon.level.drop(Generator.randomUsingDefaults(Generator.Category.RING),pos);
 		}
 
@@ -620,7 +622,7 @@ public class DM300 extends Boss {
 				}
 				Dungeon.level.cleanWalls();
 				Dungeon.observe();
-				spend(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2f : 3f);
+				spend((Statistics.bossRushMode ||Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) ? 2f : 3f);
 
 				bestpos = pos;
 				for (int i : PathFinder.NEIGHBOURS8){

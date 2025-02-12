@@ -3,9 +3,11 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DimandKing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreenStingCV;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -13,9 +15,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.watabou.noosa.Group;
-import com.watabou.noosa.Tilemap;
 import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -57,12 +57,12 @@ public class GreenStlingBossLevel extends Level {
 
     @Override
     public String tilesTex() {
-        return Assets.Environment.TILES_PRISON;
+        return Statistics.bossRushMode ? Assets.Environment.TILES_CITY : Assets.Environment.TILES_PRISON;
     }
 
     @Override
     public String waterTex() {
-        return Assets.Environment.WATER_PRISON;
+        return Statistics.bossRushMode ? Assets.Environment.WATER_CITY : Assets.Environment.WATER_PRISON;
     }
 
     @Override
@@ -171,6 +171,36 @@ public class GreenStlingBossLevel extends Level {
         }
     }
 
+    public int getSummoningXPos(){
+        Mob king = getNoKing();
+        HashSet<GreenStingCV.Summoning> summons = king.buffs(GreenStingCV.Summoning.class);
+        ArrayList<Integer> positions = new ArrayList<>();
+        for (int pedestal : pedestals) {
+            boolean clear = true;
+            for (GreenStingCV.Summoning s : summons) {
+                if (s.getPos() == pedestal) {
+                    clear = false;
+                    break;
+                }
+            }
+            if (clear) {
+                positions.add(pedestal);
+            }
+        }
+        if (positions.isEmpty()){
+            return -1;
+        } else {
+            return Random.element(positions);
+        }
+    }
+
+    private Mob getNoKing(){
+        for (Mob m : mobs){
+            if (m instanceof GreenStingCV) return m;
+        }
+        return null;
+    }
+
     private Mob getKing(){
         for (Mob m : mobs){
             if (m instanceof DimandKing) return m;
@@ -237,8 +267,13 @@ public class GreenStlingBossLevel extends Level {
                 break;
             }
         }
+        Mob boss;
+        if(Statistics.bossRushMode){
+           boss = new GreenStingCV();
+        } else {
+           boss = new DimandKing();
+        }
 
-        DimandKing boss = new DimandKing();
         boss.state = boss.WANDERING;
         boss.pos = pointToCell(arena.center());
         GameScene.add( boss );
@@ -246,7 +281,7 @@ public class GreenStlingBossLevel extends Level {
         if (heroFOV[boss.pos]) {
             boss.notice();
             boss.sprite.alpha( 0 );
-            boss.sprite.parent.add( new AlphaTweener( boss.sprite, 1, 0.1f ) );
+            boss.sprite.parent.add( new AlphaTweener( boss.sprite, 1, 0.7f ) );
         }
 
         set( bottomDoor, Terrain.LOCKED_DOOR );
@@ -307,269 +342,5 @@ public class GreenStlingBossLevel extends Level {
         return visuals;
     }
 
-    //TODO need to change text for some of these tiles
-    public static class CustomGroundVisuals extends CustomTilemap {
-
-        {
-            texture = Assets.Environment.P_BOSS;
-            tileW = 15;
-            tileH = 48;
-        }
-
-        private static final int STAIR_ROWS = 7;
-
-        @Override
-        public Tilemap create() {
-            Tilemap v = super.create();
-            int[] data = new int[tileW*tileH];
-
-            int[] map = Dungeon.level.map;
-
-            int stairsTop = -1;
-
-            //upper part of the level, mostly demon halls tiles
-            for (int i = tileW; i < tileW*22; i++){
-
-                if (map[i] == Terrain.EXIT && stairsTop == -1){
-                    stairsTop = i;
-                }
-
-                //pillars
-                if (map[i] == Terrain.WALL && map[i-tileW] == Terrain.CHASM){
-                    data[i] = 13*8 + 6;
-                    data[++i] = 13*8 + 7;
-                } else if (map[i] == Terrain.WALL && map[i-tileW] == Terrain.WALL){
-                    data[i] = 14*8 + 6;
-                    data[++i] = 14*8 + 7;
-                } else if (i > tileW && map[i] == Terrain.CHASM && map[i-tileW] == Terrain.WALL) {
-                    data[i] = 15*8 + 6;
-                    data[++i] = 15*8 + 7;
-
-                    //imp's pedestal
-                } else if (map[i] == Terrain.PEDESTAL) {
-                    data[i] = 12*8 + 5;
-
-                    //skull piles
-                } else if (map[i] == Terrain.STATUE) {
-                    data[i] = 15*8 + 5;
-
-                    //ground tiles
-                } else if (map[i] == Terrain.EMPTY || map[i] == Terrain.EMPTY_DECO
-                        || map[i] == Terrain.EMBERS || map[i] == Terrain.GRASS
-                        || map[i] == Terrain.HIGH_GRASS || map[i] == Terrain.FURROWED_GRASS){
-
-                    //final ground stiching with city tiles
-                    if (i/tileW == 21){
-                        data[i] = 11 * 8;
-                        data[++i] = 11*8 + 1;
-                        data[++i] = 11*8 + 2;
-                        data[++i] = 11*8 + 3;
-                        data[++i] = 11*8 + 4;
-                        data[++i] = 11*8 + 5;
-                        data[++i] = 11*8 + 6;
-                    } else {
-
-                        //regular ground tiles
-                        if (map[i - 1] == Terrain.CHASM) {
-                            data[i] = 12 * 8 + 1;
-                        } else if (map[i + 1] == Terrain.CHASM) {
-                            data[i] = 12 * 8 + 3;
-                        } else if (map[i] == Terrain.EMPTY_DECO) {
-                            data[i] = 12 * 8 + 4;
-                        } else {
-                            data[i] = 12 * 8 + 2;
-                        }
-                    }
-
-                    //otherwise no tile here
-                } else {
-                    data[i] = -1;
-                }
-            }
-
-            //custom for stairs
-            for (int i = 0; i < STAIR_ROWS; i++){
-                for (int j = 0; j < 7; j++){
-                    data[stairsTop+j] = (i+4)*8 + j;
-                }
-                stairsTop += tileW;
-            }
-
-            //lower part: statues, pedestals, and carpets
-            for (int i = tileW*22; i < tileW * tileH; i++){
-
-                //pedestal spawners
-                if (map[i] == Terrain.PEDESTAL){
-                    data[i] = 13*8 + 4;
-
-                    //statues that should face left instead of right
-                } else if (map[i] == Terrain.STATUE && i%tileW > 7) {
-                    data[i] = 15 * 8 + 4;
-
-                    //carpet tiles
-                } else if (map[i] == Terrain.EMPTY_SP) {
-                    //top row of DK's throne
-                    if (map[i + 1] == Terrain.EMPTY_SP && map[i + tileW] == Terrain.EMPTY_SP) {
-                        data[i] = 13 * 8 + 1;
-                        data[++i] = 13 * 8 + 2;
-                        data[++i] = 13 * 8 + 3;
-
-                        //mid row of DK's throne
-                    }else if (map[i + 1] == Terrain.SIGN) {
-                        data[i] = 14 * 8 + 1;
-                        data[++i] = 14 * 8 + 2; //TODO finalize throne visuals
-                        data[++i] = 14 * 8 + 3;
-
-                        //bottom row of DK's throne
-                    } else if (map[i+1] == Terrain.EMPTY_SP && map[i-tileW] == Terrain.EMPTY_SP){
-                        data[i] = 15*8 + 1;
-                        data[++i] = 15*8 + 2;
-                        data[++i] = 15*8 + 3;
-
-                        //otherwise entrance carpet
-                    } else if (map[i-tileW] != Terrain.EMPTY_SP){
-                        data[i] = 13 * 8;
-                    } else if (map[i+tileW] != Terrain.EMPTY_SP){
-                        data[i] = 15 * 8;
-                    } else {
-                        data[i] = 14 * 8;
-                    }
-
-                    //otherwise no tile here
-                } else {
-                    data[i] = -1;
-                }
-            }
-
-            v.map( data, tileW );
-            return v;
-        }
-
-        @Override
-        public String name(int tileX, int tileY) {
-            int cell = (this.tileX + tileX) + (this.tileY + tileY)*tileW;
-
-            //demon halls tiles
-            if (cell < Dungeon.level.width()*22){
-                if (Dungeon.level.map[cell] == Terrain.STATUE){
-                    return Messages.get(HallsLevel.class, "statue_name");
-                }
-
-                //DK arena tiles
-            } else {
-                if (Dungeon.level.map[cell] == Terrain.SIGN){
-                    return Messages.get(PrisonLevel.class, "throne_name");
-                } else if (Dungeon.level.map[cell] == Terrain.PEDESTAL){
-                    return Messages.get(PrisonLevel.class, "summoning_name");
-                }
-            }
-
-            return super.name(tileX, tileY);
-        }
-
-        @Override
-        public String desc(int tileX, int tileY) {
-            int cell = (this.tileX + tileX) + (this.tileY + tileY)*tileW;
-
-            //demon halls tiles
-            if (cell < Dungeon.level.width()*22){
-                if (Dungeon.level.map[cell] == Terrain.EXIT){
-                    return Messages.get(HallsLevel.class, "exit_desc");
-                } else if (Dungeon.level.map[cell] == Terrain.STATUE){
-                    return Messages.get(HallsLevel.class, "statue_desc");
-                } else if (Dungeon.level.map[cell] == Terrain.EMPTY_DECO){
-                    return "";
-                }
-
-                //DK arena tiles
-            } else {
-                if (Dungeon.level.map[cell] == Terrain.SIGN){
-                    return Messages.get(PrisonLevel.class, "throne_desc");
-                } else if (Dungeon.level.map[cell] == Terrain.PEDESTAL){
-                    return Messages.get(PrisonLevel.class, "summoning_desc");
-                }
-            }
-
-            return super.desc(tileX, tileY);
-        }
-    }
-
-    public static class CustomWallVisuals extends CustomTilemap {
-        {
-            texture = Assets.Environment.CITY_BOSS;
-            tileW = 15;
-            tileH = 48;
-        }
-
-        @Override
-        public Tilemap create() {
-            Tilemap v = super.create();
-            int[] data = new int[tileW*tileH];
-
-            int[] map = Dungeon.level.map;
-
-            int shadowTop = -1;
-
-            //upper part of the level, mostly demon halls tiles
-            for (int i = tileW; i < tileW*21; i++) {
-
-                if (map[i] == Terrain.EXIT && shadowTop == -1){
-                    shadowTop = i - tileW*4;
-                }
-
-                //pillars
-                if (map[i] == Terrain.CHASM && map[i+tileW] == Terrain.WALL) {
-                    data[i] = 12*8 + 6;
-                    data[++i] = 12*8 + 7;
-                } else if (map[i] == Terrain.WALL && map[i-tileW] == Terrain.CHASM) {
-                    data[i] = 13 * 8 + 6;
-                    data[++i] = 13 * 8 + 7;
-
-                    //skull tops
-                } else if (map[i+tileW] == Terrain.STATUE) {
-                    data[i] = 14*8 + 5;
-
-                    //otherwise no tile here
-                } else {
-                    data[i] = -1;
-                }
-            }
-
-            //custom shadow  for stairs
-            for (int i = 0; i < 8; i++){
-                if (i < 4){
-                    data[shadowTop] = i * 8;
-                    data[shadowTop+1] = data[shadowTop+2] = data[shadowTop+3] = data[shadowTop+4] =
-                            data[shadowTop+5] = data[shadowTop+6] = i*8 + 1;
-                    data[shadowTop+7] = i*8 + 2;
-                } else {
-                    int j = i - 4;
-                    data[shadowTop] = j*8 + 3;
-                    data[shadowTop+1] = data[shadowTop+2] = data[shadowTop+3] = data[shadowTop+4] =
-                            data[shadowTop+5] = data[shadowTop+6] = j*8 + 4;
-                    data[shadowTop+7] = j*8 + 5;
-                }
-
-                shadowTop += tileW;
-            }
-
-            //lower part. Statues and DK's throne
-            for (int i = tileW*21; i < tileW * tileH; i++){
-
-                //Statues that need to face left instead of right
-                if (map[i] == Terrain.STATUE && i%tileW > 7){
-                    data[i-tileW] = 14*8 + 4;
-                } else if (map[i] == Terrain.SIGN){
-                    data[i-tileW] = 13*8 + 5;
-                }
-
-                //always no tile here (as the above statements are modifying previous tiles)
-                data[i] = -1;
-            }
-
-            v.map( data, tileW );
-            return v;
-        }
-    }
 }
 

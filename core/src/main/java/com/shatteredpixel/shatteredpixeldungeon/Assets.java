@@ -43,7 +43,7 @@ public class Assets {
 	public static final String TOWN 		= "music/town.ogg";
 	public static final String BGM_BOSSA 	= "music/Boss1.ogg";
 	public static final String BGM_BOSSA3 	= "music/Boss1.ogg";
-	public static final String BGM_YOU 		= "music/tmp/you.ogg";
+	public static final String BGM_YOU 		= "music/boss/you.ogg";
 	public static final String BGM_BOSSB 	= "music/Boss2.ogg";
 	public static final String BGM_BOSSB2 	= "music/Tengu.ogg";
 	public static final String BGM_BOSSC 	= "music/Boss3.ogg";
@@ -58,7 +58,7 @@ public class Assets {
 	public static final String HOLLOW_CITY_HARD 	= "music/hollow/Mischief_Managed.ogg";
 
 	public static final String FL_CITY 		= "music/forestflower.ogg";
-	public static final String BOSSDOG 		= "music/tmp/dogboss.ogg";
+	public static final String BOSSDOG 		= "music/boss/dogboss.ogg";
 
 	public static class Effects {
 		public static final String EFFECTS      = "effects/effects.png";
@@ -181,8 +181,12 @@ public class Assets {
 		public static final String QliPhoth_Clear  = "interfaces/bosslogo/qliphoth-clear.png";
 
 		public static final String DMOR_Title  = "interfaces/bosslogo/dm300or-title.png";
-		public static final String DIZF_Title  = "interfaces/bosslogo/dizzfar-title.png";
 
+		public static final String Goo_Title   = "interfaces/bosslogo/goo-title.png";
+		public static final String SGoo_Title  = "interfaces/bosslogo/skygoo-title.png";
+		public static final String Goo_Slain   = "interfaces/bosslogo/goo-slain.png";
+
+		public static final String DIZF_Title  = "interfaces/bosslogo/dizzfar-title.png";
 		public static final String DIZF_Slain  = "interfaces/bosslogo/dizzfar-slain.png";
 
 		public static final String UPBARS  = "interfaces/updatebar.png";
@@ -318,7 +322,7 @@ public class Assets {
 
 		public static final String PRISON_1     = "music/Level2.ogg";
 		public static final String PRISON_2     = "music/Level2.ogg";
-		public static final String PRISON_BOSS  = "music/Boss2.ogg";
+		public static final String PRISON_BOSS  = "music/Tengu.ogg";
 		public static final String CAVES_BOSS   = "music/caves_tense.ogg";
 
 		public static final String CITY_BOSS    = "music/Boss4.ogg";
@@ -727,6 +731,9 @@ public class Assets {
 		public static final String FLOWER_SLIME		= "sprites/flowers_slime.png";
 
 		public static final String GREEN		= "sprites/greenslting.png";
+
+		public static final String GREEN_KING		= "sprites/greenslting_king.png";
+
 		public static final String CLEAR		= "sprites/clearelemt.png";
 		public static final String BRUTE	= "sprites/brute.png";
 		public static final String SPINNER	= "sprites/spinner.png";

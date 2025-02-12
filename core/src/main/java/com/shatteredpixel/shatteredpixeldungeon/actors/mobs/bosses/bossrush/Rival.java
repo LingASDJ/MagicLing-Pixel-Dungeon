@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.bossrush;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
@@ -12,14 +13,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MobSpawner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.lb.RivalSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
@@ -40,8 +45,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFirebolt;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfGodIce;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.hightwand.WandOfVenom;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -59,6 +64,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
@@ -84,6 +90,12 @@ public class Rival extends Boss implements Callback {
         properties.add(Property.BOSS);
         HUNTING = new Hunting();
         WANDERING = new Wandering();
+
+        if(Statistics.bossRushMode){
+            immunities.add(Corrosion.class);
+            immunities.add(Chill.class);
+            immunities.add(FrostBurning.class);
+        }
     }
 
     public MeleeWeapon weapon;
@@ -99,7 +111,7 @@ public class Rival extends Boss implements Callback {
     protected boolean getCloser( int target ) {
         if(HP<HT/2 && state == HUNTING){
             return enemySeen && getFurther( target );
-        } else if (fieldOfView[target] && Dungeon.level.distance( pos, target ) > 2 && blinkCooldown <= 0 && !rooted) {
+        } else if (fieldOfView[target] && level.distance( pos, target ) > 2 && blinkCooldown <= 0 && !rooted) {
 
             if (blink( target )) {
                 spend(-1 / speed());
@@ -133,13 +145,13 @@ public class Rival extends Boss implements Callback {
         if (Actor.findChar( cell ) != null && cell != this.pos)
             cell = route.path.get(route.dist-1);
 
-        if (Dungeon.level.avoid[ cell ] || (properties().contains(Property.LARGE) && !Dungeon.level.openSpace[cell])){
+        if (level.avoid[ cell ] || (properties().contains(Property.LARGE) && !level.openSpace[cell])){
             ArrayList<Integer> candidates = new ArrayList<>();
             for (int n : PathFinder.NEIGHBOURS8) {
                 cell = route.collisionPos + n;
-                if (Dungeon.level.passable[cell]
+                if (level.passable[cell]
                         && Actor.findChar( cell ) == null
-                        && (!properties().contains(Property.LARGE) || Dungeon.level.openSpace[cell])) {
+                        && (!properties().contains(Property.LARGE) || level.openSpace[cell])) {
                     candidates.add( cell );
                 }
             }
@@ -293,7 +305,7 @@ public class Rival extends Boss implements Callback {
     @Override
     protected boolean canAttack( Char enemy ) {
         if(HP<HT/2){
-            return !Dungeon.level.adjacent( pos, enemy.pos )
+            return !level.adjacent( pos, enemy.pos )
                     && (super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos);
         } else {
             return super.canAttack(enemy) || weapon.canReach(this, enemy.pos) || (new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos);
@@ -302,7 +314,7 @@ public class Rival extends Boss implements Callback {
 
     protected boolean doAttack( Char enemy ) {
 
-        if (Dungeon.level.adjacent( pos, enemy.pos ) || weapon.canReach(this, enemy.pos)) {
+        if (level.adjacent( pos, enemy.pos ) || weapon.canReach(this, enemy.pos)) {
 
             return super.doAttack( enemy );
 
@@ -331,7 +343,7 @@ public class Rival extends Boss implements Callback {
     private void zap() {
         spend( TIME_TO_ZAP );
 
-        final Ballistica shot = new Ballistica( pos, enemy.pos, wand.collisionProperties);
+        final Ballistica shot = new Ballistica( pos, enemy == null ? 0 :enemy.pos, wand.collisionProperties);
 
         wand.rivalOnZap( shot, this );
     }
@@ -381,10 +393,54 @@ public class Rival extends Boss implements Callback {
         }
     }
 
+    private int SummonMob() {
+        int order;
+        DeepShadowLevel.State state = ((DeepShadowLevel) level).state();
+        switch(state) {
+            case PHASE_3:
+                order = Random.NormalIntRange(16, 19);
+                break;
+            case PHASE_4:
+                order = Random.NormalIntRange(21, 24);
+                break;
+            case PHASE_2:case PHASE_1:
+                order =  Random.NormalIntRange(11, 14);
+                break;
+            default:
+                order = Random.NormalIntRange(6, 9);;
+                break;
+        }
+        return order;
+    }
+
+    public void summon(int Rpos) {
+        if(Statistics.bossRushMode){
+            sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.4f, 2 );
+            Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
+            int numberOfMobs = Random.Int(2, 6);
+            for(int i = 0;i <= numberOfMobs ; i++){
+                Mob syncmob = Reflection.newInstance(MobSpawner.getMobRotation(SummonMob()).get(0));
+                syncmob.state = syncmob.WANDERING;
+                syncmob.pos = Rpos;
+                if (SummonMob() > 20) {
+                    syncmob.HP = (int) (syncmob.HT * 0.75f);
+                    syncmob.defenseSkill = syncmob.defenseSkill / 2;
+                }
+                syncmob.immunities.add(Corrosion.class);
+                syncmob.immunities.add(Chill.class);
+                GameScene.add(syncmob);
+                syncmob.beckon(hero.pos);
+            }
+
+            yell( Messages.get(this, "arise") );
+        }
+    }
+
     @Override
     public void die( Object cause ) {
-        Dungeon.level.unseal();
-        DeepShadowLevel.State state = ((DeepShadowLevel)Dungeon.level).state();
+        level.unseal();
+        DeepShadowLevel.State state = ((DeepShadowLevel) level).state();
+
         if (state != DeepShadowLevel.State.WON) {
 
             //cures doom and drops missile weapons
@@ -398,11 +454,10 @@ public class Rival extends Boss implements Callback {
             switch(state) {
                 case BRIDGE:
                     HP = 1;
-
                     PotionOfHealing.cure(this);
                     Buff.detach(this, Paralysis.class);
 
-                    ((DeepShadowLevel)Dungeon.level).progress();
+                    ((DeepShadowLevel) level).progress();
 
                     yell( Messages.get(this, "interrobang") );
                     return;
@@ -411,22 +466,23 @@ public class Rival extends Boss implements Callback {
                 case PHASE_3:
                 case PHASE_4:
                     HP = HT;
-                    for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+                    for (Mob mob : level.mobs.toArray(new Mob[0])){
                         if(mob instanceof Rival){
                             Buff.affect(mob, Dread.class);
                         }
                     }
+
                     PotionOfHealing.cure(this);
                     Buff.detach(this, Paralysis.class);
 
-                    if (Dungeon.level.heroFOV[pos] && hero.isAlive()) {
+                    if (level.heroFOV[pos] && hero.isAlive()) {
                         new Flare(8, 32).color(0xFFFF66, true).show(sprite, 2f);
                         CellEmitter.get(this.pos).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
                         Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
                         GLog.w( Messages.get(this, "revive") );
                     }
 
-                    ((DeepShadowLevel)Dungeon.level).progress();
+                    ((DeepShadowLevel) level).progress();
 
                     yell( Messages.get(this, "exclamation") );
 
@@ -452,26 +508,23 @@ public class Rival extends Boss implements Callback {
                             wand.curCharges = 80;
                             break;
                         case PHASE_4:
-                            wand = new WandOfGodIce();
+                            wand = new WandOfVenom();
                             wand.curCharges = 10;
                             wand.level(4);
                             wand.updateLevel();
-                            misc1 = new RingOfTenacity();
                             break;
                     }
                     HP = HT;
                     missile = (MissileWeapon)Generator.random(Generator.Category.MISSILE);
                     return;
                 case PHASE_5:
-                    ((DeepShadowLevel)Dungeon.level).progress();
+                    ((DeepShadowLevel) level).progress();
                     super.die( cause );
                     wand = new WandOfMagicMissile();
                     misc1 = new RingOfTenacity();
                     wand.curCharges = 4;
                     Statistics.doNotLookLing = true;
                     GameScene.bossSlain();
-
-
 
                     yell( Messages.get(this, "ellipsis") );
                     return;
@@ -490,7 +543,9 @@ public class Rival extends Boss implements Callback {
     @Override
     public void notice() {
         super.notice();
-        Dungeon.level.seal();
+        level.seal();
+
+        BGMPlayer.playBGM(Assets.BGM_YOU, true);
 
         if (!BossHealthBar.isAssigned()) {
             BossHealthBar.assignBoss(this);
@@ -558,7 +613,7 @@ public class Rival extends Boss implements Callback {
             //of two potential wander positions, picks the one closest to the hero
             int pos1 = super.randomDestination();
             int pos2 = super.randomDestination();
-            PathFinder.buildDistanceMap(Dungeon.hero.pos, Dungeon.level.passable);
+            PathFinder.buildDistanceMap(Dungeon.hero.pos, level.passable);
             if (PathFinder.distance[pos2] < PathFinder.distance[pos1]){
                 return pos2;
             } else {

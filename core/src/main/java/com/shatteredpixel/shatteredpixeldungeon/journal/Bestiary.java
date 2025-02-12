@@ -48,7 +48,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM201;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DemonSpawner;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DimandKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.EbonyMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
@@ -68,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollTrickster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreenStingCV;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Katydid;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MagicGirlDead;
@@ -385,7 +385,7 @@ public enum Bestiary {
 		BOSSRUSH.addEntities(
 				SkyGoo.class,
 				SlimeKing.class,
-				DimandKing.class,
+				GreenStingCV.class,
 				Rival.class,
 				DwarfMaster.class
 		);

@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NullDiedTO;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -144,6 +145,12 @@ public class ShopRoom extends SpecialRoom {
 		Mob shopkeeper = new Shopkeeper();
 		shopkeeper.pos = pos;
 		level.mobs.add( shopkeeper );
+
+		if(Dungeon.RDXLCLevel() && Statistics.bossRushMode){
+			NullDiedTO npc1 = new NullDiedTO();
+			npc1.pos = pos+1;
+			level.mobs.add(npc1);
+		}
 
 	}
 
@@ -342,7 +349,10 @@ public class ShopRoom extends SpecialRoom {
 
 		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
-		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
+		if(!Statistics.bossRushMode){
+			itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
+		}
+
 
 		Bag bag = ChooseBag(Dungeon.hero.belongings);
 		if (bag != null) {

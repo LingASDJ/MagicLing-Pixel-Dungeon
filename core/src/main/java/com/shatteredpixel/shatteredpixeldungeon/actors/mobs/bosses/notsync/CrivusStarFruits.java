@@ -5,6 +5,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.crivusfruitslevel2;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -42,10 +43,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CrivusFruitsFlake;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.LifeTreeSword;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.AlarmTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrivusStarFruitsSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -254,12 +253,12 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
         alerted = false;
         super.act();
         state = PASSIVE;
-        if (alignment == Alignment.NEUTRAL) {
-            return true;
-        }
 
         GameScene.add(Blob.seed(pos, Statistics.crivusfruitslevel2 ? 0 : 20,  ConfusionGas.class));
 
+        if (alignment == Alignment.NEUTRAL) {
+            return true;
+        }
         return super.act();
     }
     @Override
@@ -310,19 +309,18 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
         }
     }
 
-    protected void triggerEnrage(){
-        Buff.affect(this, Rage.class).setShield(HT/2 + 40);
-        if (Dungeon.level.heroFOV[pos]) {
-            sprite.showStatus( CharSprite.NEGATIVE, "!!!" );
-            AlarmTrap trap = new AlarmTrap();
-            trap.pos = super.pos;
-            trap.activate();
-            ScrollOfTeleportation.teleportToLocation(this, 577);
-            GLog.n(Messages.get(this, "died"));
+    protected void triggerEnrage() {
+        if (!hasRaged) {
+            Buff.affect(this, Rage.class).setShield(HT / 2 + 40);
+            if (Dungeon.level.heroFOV[pos]) {
+                ScrollOfTeleportation.teleportToLocation(this, 577);
+                GLog.n(Messages.get(this, "died"));
+            }
+            spend(TICK);
+            hasRaged = true;
         }
-        spend( TICK );
-        hasRaged = true;
     }
+
 
     public static class Rage extends ShieldBuff {
 
@@ -386,6 +384,7 @@ public class CrivusStarFruits extends Boss implements Hero.Doom {
         GameScene.flash(0x8000cc00);
         Camera.main.shake(1f,3f);
         GameScene.bossReady();
+        BGMPlayer.playBoss();
         for (Char ch : Actor.chars()){
             if (ch instanceof DriedRose.GhostHero){
                 ((DriedRose.GhostHero) ch).sayBoss();

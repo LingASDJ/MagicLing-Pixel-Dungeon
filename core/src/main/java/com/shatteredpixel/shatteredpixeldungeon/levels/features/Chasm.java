@@ -122,7 +122,7 @@ public class Chasm implements Hero.Doom {
 		Sample.INSTANCE.play( Assets.Sounds.FALLING );
 
 		Level.beforeTransition();
-		if(Dungeon.depth == 5 && Dungeon.branch == 0 && Statistics.ExFruit || Dungeon.depth == 6 && Statistics.bossRushMode) {
+		if(Dungeon.depth == 5 && Dungeon.branch == 0 && Statistics.ExFruit || Dungeon.depth == 7 && Statistics.bossRushMode) {
 			int SafePos = 0;
 			switch (Random.NormalIntRange(0, 4)) {
 				case 0:
@@ -145,6 +145,11 @@ public class Chasm implements Hero.Doom {
 				hero.damage(3, CrivusStarFruits.class);
 			}
 		} else if(branch!=0){
+			ScrollOfTeleportation.appear(hero, level.entrance());
+			Dungeon.hero.interrupt();
+			Dungeon.observe();
+		} else if(Dungeon.depth == 37 && Statistics.bossRushMode) {
+			GLog.n(Messages.get(Imp.class,"must_god"));
 			ScrollOfTeleportation.appear(hero, level.entrance());
 			Dungeon.hero.interrupt();
 			Dungeon.observe();

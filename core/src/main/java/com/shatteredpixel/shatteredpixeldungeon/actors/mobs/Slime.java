@@ -43,6 +43,17 @@ public class Slime extends Mob {
 		
 		lootChance = 0.2f; //by default, see lootChance()
 	}
+
+	public static Class<? extends Mob> random(){
+		float roll = Random.Float();
+		if (roll < 0.4f){
+			return Slime_Lg.class;
+		} else if (roll < 0.8f){
+			return Slime_Sz.class;
+		} else {
+			return Slime_Red.class;
+		}
+	}
 	
 	@Override
 	public int damageRoll() {
