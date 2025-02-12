@@ -20,6 +20,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndError;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
+import com.watabou.utils.Random;
 
 import java.util.Calendar;
 import java.util.List;
@@ -169,7 +170,14 @@ public class GameRules {
 
             // 获取当前月份
             int month = calendar.get(Calendar.MONTH); // 注意，月份是从0开始的，0表示1月，11表示12月
-        if(RegularLevel.holiday == RegularLevel.Holiday.CJ) {
+        if(RegularLevel.holiday == RegularLevel.Holiday.YX) {
+            boolean year = Random.Float() <= 0.5f;
+            if (!SPDSettings.ClassUI()) {
+                banners = Assets.Interfaces.BANNERS_YX;
+            } else {
+                banners = Assets.Interfaces.BANNERS_BD;
+            }
+        }else if(RegularLevel.holiday == RegularLevel.Holiday.CJ) {
             banners = Assets.Interfaces.BANNERS_CJ;
         } else if (month == 2 || month == 3 || month == 4) { // 春季：3, 4, 5月
                 banners = Assets.Interfaces.BANNERS_SR;

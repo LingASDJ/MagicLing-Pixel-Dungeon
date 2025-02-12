@@ -224,6 +224,7 @@ public abstract class RegularLevel extends Level {
         HWEEN,//2nd week of october though first day of november
         XMAS,
 		CJ,
+		YX,
 		QMJ
     }
 	
