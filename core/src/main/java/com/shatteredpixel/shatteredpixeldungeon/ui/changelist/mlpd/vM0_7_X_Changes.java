@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist.mlpd;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.PaswordBadges;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.ArtilleristSprite;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.GnollBlindSprite;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.HermitCrabSprite;
@@ -40,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.PiraLandSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PumkingGhostSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QinWolfSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QliphothSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.QuestionSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RedNecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SakaFishBossSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkKingSprite;
@@ -52,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ZakoSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.ChangeButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.ChangeInfo;
@@ -61,6 +64,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0820_Changes(changeInfos);
         add_V0810_Changes(changeInfos);
         add_V0808_Changes(changeInfos);
         add_V0805_Changes(changeInfos);
@@ -97,6 +101,244 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0820_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.2.0", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo("预载", false, null);
+        changes.hardlight(Window.CBLACK);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.EMOTIONALAGGREGATION), ("藏品系统V0.1"),
+                ("为后续困难模式打下良好的基础，已可在开发者模式的杂项生成器进行试玩")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.NEWS), ("新兑换码：MLPD-YX4YearsBirthday"),
+                ("进入游戏通过落白商店 或者 游戏菜单 获取奖励，祝各位元宵快乐！")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), ("杂项改动"),
+                ("1.素材系统初始化，本次元宵和魔绫时间冲突，开启魔绫主题是魔绫4周年效果，关闭则是元宵Logo效果。\n" +
+                        "2.部分细节优化更新\n" +
+                        "3.部分界面优化")));
+
+        changes.addButton(new ChangeButton(new QuestionSprite(), ("问号君2.0"),
+                (
+                        "问号君重制了自己的NPC代码，有着许多有趣的新功能\n\n" +
+                                "如果想去玩玩，去看看旅馆附近的湖边看看他吧。")));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOSSRUSH_GOLD), ("BossRush3.0正式版"),
+                (
+                        "完全重做BossRush\n\n" +
+                                "1.至多与20个Boss进行作战，每一次BR都是一次新的冒险\n" +
+                                "2.幽妹固定4层生成，完成任务即可让幽妹一同行动\n" +
+                                "3.商人领主与商人一同在12，18，22，24，32，40层出现，可在这里购买补给品\n" +
+                                "4.大部分Boss已经获得加强，请查看右侧的星级图标获取详情\n" +
+                                "5.卡戎现在可以使用金券，补给层大调整，调整请查看右侧的楼层图标获取详情\n" +
+                                "6.BossRush酸液体的生成概率调整为5%，爆炸体替换为完全体\n" +
+                                "7.BossRush精英现在只有：鬼磷，索敌，天佑，烈焰")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), ("BossRush3.0-Boss调整一览表"),
+                ("随机音乐【已实装】\n" +
+                        "BossRush的Boss音乐完全随机，除暗影，Yog-Zot，拟态王，矮人将军\n" +
+                        "\n" +
+                        "水中祝福 & 污泥浊水 & 支离破碎【已实装】\n" +
+                        "不再有效\n" +
+                        "饮用水灵药剂，转换为英雄当前血量的一半奥术护盾。【已实装】\n" +
+                        "\n" +
+                        "金券商店【已实装】\n" +
+                        "12，18，22，24，32，40加入商人领主\n" +
+                        "\n" +
+                        "液金刷金券【已实装】\n" +
+                        "不再有效，必须打包购买。且至多10个，后续购买液金将不再给予金券。\n" +
+                        "\n" +
+                        "暗影调整【已实装】\n" +
+                        "暗影在每次切换地图后，都会召唤2/3/4/5区的敌人前来助阵\n" +
+                        "数量：2-6个 随机\n" +
+                        "平衡：5区的敌人闪避减半，血量为以前的75%\n" +
+                        "暗影抗性追加：酸蚀，寒冷，霜火\n" +
+                        "暗影召唤的敌人追加抗性：酸蚀，寒冷\n" +
+                        "暗影最终法杖替换为：毒杖【包括金蝶】\n" +
+                        "暗影最终掉落法杖替换为随机法杖，等级0-2级【包括金蝶】\n" +
+                        "\n" +
+                        "绿野调整【已实装】\n" +
+                        "调整到19层" +
+                        "\n怪组：随机史莱姆，冰魔像，吸血蝙蝠\n" +
+                        "血量：450\n" +
+                        "\n" +
+                        "始祖食人鱼【已实装】\n" +
+                        "在21层，\n" +
+                        "怪组为：幻影食人鱼，食人鱼使徒，糯米老鼠\n" +
+                        "此层为奖励关，可以挖掘暗金在下层兑换更多金券，\n" +
+                        "小心，这里陷阱比较多，而且食人鱼不会让你走的潇洒的！\n" +
+                        "奖励关说明：未开启Boss战时，可以相当于常规楼层\n" +
+                        "\n" +
+                        "浊焰魔女【已实装】\n" +
+                        "调整到25层，由于莲娜自身就是成长Boss,\n" +
+                        "这里不再加强，但对于吃塔激光的，\n" +
+                        "会有更加严重的惩罚\n" +
+                        "其赋予的效果与矮人污泥浊水的效果完全一致\n" +
+                        "抗性追加：酸蚀，寒冷，眩晕，普通火焰（莲娜能免疫火不是很正常吗（）\n" +
+                        "\n" +
+                        "DM300调整【已实装】\n" +
+                        "血量：850\n" +
+                        "防御区间：7-10\n" +
+                        "需要摧毁全部塔\n" +
+                        "伤害区间调整：25-50\n" +
+                        "所有技能全部是绝命头目挑战（无论有没有开）\n" +
+                        "额外奖励：龙之泪x1\n" +
+                        "\n" +
+                        "冰雪魔女【已实装】\n" +
+                        "调整到27层，数值有所调整\n" +
+                        "伤害区间：25-46【加强】\n" +
+                        "期命中值：50【加强】\n" +
+                        "闪避值：20【加强】\n" +
+                        "血量：1000【加强】\n" +
+                        "物理防御：4-8【不变】\n" +
+                        "\n" +
+                        "冰雪魔女晶塔调整\n" +
+                        "1.塔的血量提升到90，原先为45\n" +
+                        "2.增加新塔：\n" +
+                        "幻想结界水晶-暴食\n" +
+                        "攻击模式：向目标地点发射一条射线，下回合更新目标地点，从上次命中地点发射一条射线。给目标造成磷火效果\n" +
+                        "\n" +
+                        "幻想结界水晶-贪欲\n" +
+                        "攻击模式：向目标地点发射一条射线，下回合更新目标地点，从上次命中地点发射一条射线。给目标造成降级效果\n" +
+                        "\n" +
+                        "幻想结界水晶-咒灵\n" +
+                        "攻击模式：向目标地点发射一条射线，下回合更新目标地点，从上次命中地点发射一条射线。给目标造成定命效果【在冰雪魔女本体死亡后解除】\n" +
+                        "\n" +
+                        "3.抗性追加：冻结，霜火\n" +
+                        "\n" +
+                        "DM720\n" +
+                        "调整到27层，数值有所调整\n" +
+                        "血量：720\n" +
+                        "伤害区间：24-36\n" +
+                        "命中值：35\n" +
+                        "所有技能和强化全部是绝命头目挑战（无论有没有开）\n" +
+                        "\n" +
+                        "血月长老\n" +
+                        "1.获得天佑精英\n" +
+                        "2.血量：120（原：180）\n" +
+                        "3.伤害区间：15-50\n" +
+                        "所有技能全部是绝命头目挑战（无论有没有开）\n" +
+                        "\n" +
+                        "萨卡班甲鱼【已实装】\n" +
+                        "调整到31层，数值有所调整\n" +
+                        "1.血量：648（原480)\n" +
+                        "2.闪避：20（原10)\n" +
+                        "\n" +
+                        "死亡激光\n" +
+                        "伤害提升至：50-70\n" +
+                        "抗性追加：失明，眩晕，幻惑\n" +
+                        "\n" +
+                        "修复Bug:\n" +
+                        "1.两个随从召唤后醒着，在所有模式生效\n" +
+                        "2.两个随从命中率少加一个0，现为5，应为50，在所有模式生效\n" +
+                        "\n" +
+                        "矮人将军【已实装】\n" +
+                        "1.额外召唤一次军旗\n" +
+                        "2.添加了阶段控制，现在不可能被秒杀（全模式生效）\n" +
+                        "\n" +
+                        "矮人武将【已实装】\n" +
+                        "1.怪组调整为：矮人炮手，美杜莎，矮人武僧\n" +
+                        "2.添加了阶段控制，现在不可能被秒杀（全模式生效）\n" +
+                        "\n" +
+                        "Yog\n" +
+                        "1.全部为绝命头目的加成\n" +
+                        "\n" +
+                        "磷焰拳头\n" +
+                        "1.激光伤害提升至2倍\n" +
+                        "\n" +
+                        "Yog-Zot【已实装】\n" +
+                        "1.最终阶段追加额外敌人\n" +
+                        "2.如果有孤城，则全部敌人获得孤城印记")));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), ("BossRush3.0-补给层调整一览表"),
+                ("T1 补给层（楼层：3, 5, 7, 8, 10）\n" +
+                        "1 力量药水，2 治疗药水，1 随机宝箱，1 升级卷轴，1 经验药水，2 随机食物\n" +
+                        "\n" +
+                        "T2 补给层（楼层：12, 14, 15）\n" +
+                        "1 经验药水，1 治疗药水，1 随机食物，\n" +
+                        "1 随机武器，1 随机护甲，40% 概率生成 1 随机宝箱\n" +
+                        "新增（BossRush 3.0）\n：1 升级卷轴，1 随机 2 阶投掷物品，1 嬗变卷轴\n" +
+                        "\n" +
+                        "T2+ 补给层（楼层：19, 20）\n" +
+                        "1 经验药水，1 治疗药水，1 随机食物，1 随机武器，\n" +
+                        "1 随机护甲，1 升级卷轴，40% 概率生成 1 随机宝箱\n" +
+                        "新增（BossRush 3.0）\n：1 随机 3 阶投掷物品，1 嬗变卷轴，1 随机药水\n" +
+                        "\n" +
+                        "T3 补给层（楼层：22, 25）\n" +
+                        "1 升级卷轴，1 力量药水，\n" +
+                        "1 治疗药水，1 随机食物，1 随机武器\n" +
+                        "\n" +
+                        "T3+ 补给层（楼层：28, 30）\n" +
+                        "1 力量药水，1 治疗药水，1 随机食物，\n" +
+                        "1 随机武器，20% 概率生成 1 随机宝箱，1 随机护甲\n" +
+                        "新增（BossRush 3.0）\n：1 随机魔药（水爆/淤泥/冰爆/炼狱/雷鸣），" +
+                        "1 升级卷轴，2 嬗变卷轴，1 随机药水\n" +
+                        "\n" +
+                        "T4 补给层（楼层：32, 34, 36, 38, 40, 41）\n" +
+                        "1 奥术护盾合剂，" +
+                        "1-2 随机秘卷（决斗/虹卫/蜕变/灵爆/塞壬之歌）" +
+                        "\n2 随机宝箱，1 随机药水，1 随机 4 阶投掷物品，1 嬗变卷轴")));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.2.0修正以下问题:\n\n" +
+                        "1. 修复金蝶克隆严重异常 - 报告员：Archetto - 处理人：JDSALing\n" +
+                        "2. 修复部分怪物数值异常，支离破碎在金蝶模式中不再生效 - 报告员：sks123456 - 处理人：JDSALing\n" +
+                        "3. 优化嬗变，神器现在嬗变不再获得升级 - 报告员：xiaomeng - 处理人：JDSALing\n" +
+                        "4. 修复哥布林祭司异常 - 报告员：Archetto - 处理人：JDSALing\n" +
+                        "5. 修复老法杖充能异常 - 报告员：Archetto - 处理人：JDSALing\n" +
+                        "6. 修复吸血鬼刀数值显示问题 - 报告员：Archetto - 处理人：JDSALing\n" +
+                        "7. 修复愚人号层幻影食人鱼带有精英效果 - 报告员：xiaomeng - 处理人：JDSALing\n" +
+                        "8. 修复无敌buff效果异常 - 报告员：sks123456 - 处理人：JDSALing\n" +
+                        "9. 修复甲鱼地图生成问题 - 报告员：sks123456 - 处理人：JDSALing\n" +
+                        "10. 修复异果boss战音乐错误 - 报告员：sks123456 - 处理人：JDSALing\n" +
+                        "11. 修复br拟态王进入传送门会进入13-d子层 - 报告员：xiaomeng - 处理人：JDSALing\n" +
+                        "12. 修复br模式npc生成异常 - 报告员：sks123456 - 处理人：JDSALing\n" +
+                        "13. 修复br污水异常 - 报告员：sks123456 - 处理人：JDSALing\n" +
+                        "14. 修复br冰女异常 - 报告员：Archetto - 处理人：JDSALing\n" +
+                        "15. 修复br异果异常 - 报告员：Archetto - 处理人：JDSALing\n" +
+                        "16. 修复变幻莫测部分楼层文本缺失 - 报告员：JDSALing - 处理人：JDSALing\n" +
+                        "17. 修复肌肉合剂对部分武器没有效果 - 报告员：QinYue - 处理人：JDSALing"));
+
+                changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
+                changes.hardlight(Window.R_COLOR);
+                changeInfos.add(changes);
+
+                changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.DIEDCROSSBOW), ("重型弩炮"),
+                ("弩炮技能更改：造成5*5范围的115%近战伤害，可以给飞镖伤害与附魔加成")));
+
+                changes.addButton( new ChangeButton(new TalentIcon(Talent.STRONGMAN), "天赋调整",
+                "角斗士天赋保持警惕退回为破碎的“连战热忱”\n\n" +
+                        " 排山倒海数值调整：\n" +
+                        " 获得0.137%/0.33%/0.5%伤害加成，上限50%\n" +
+                        " 获得0.33%/0.66%/1%的精准加成，上限75%"));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.HIGHTWAND_1), ("毒液侵染法杖"),
+                ("进入猩红毒雾的任何单位都会持续受到起始为_X点_的持续伤害并持续积累毒素，当同一单位累计受到的伤害达到_X*8_时将会在毒雾内持续失明，达到_X*20_时将会在毒雾内持续麻痹 \n\n" +
+                        "服用_治疗药水_或_全面净化合剂_可清除毒素积累量。")));
+
+        changes = new ChangeInfo("v0.8.2中测验收通过，予以更新", true, null);
+        changes.hardlight(Window.CYELLOW);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo("2025-2-12", true, null);
+        changes.hardlight(Window.CPINK);
+        changeInfos.add(changes);
+
+
     }
 
     public static void add_V0810_Changes(ArrayList<ChangeInfo> changeInfos ) {

@@ -592,27 +592,43 @@ public class Dungeon {
 
 	public static boolean souNeeded() {
 
-		// 如果是BR模式且当前层数小于2层，则不生成卷轴
-		if (Statistics.bossRushMode && depth < 2) {
+		// 排除非BR模式、Boss层、第0层、分支层等
+		if ((depth < 2 && Statistics.bossRushMode) || Dungeon.RushBossLevel(depth) && Statistics.bossRushMode) {
 			return false;
 		}
-
-		// 如果是Boss Rush模式，或者是Boss层（根据RushBossLevel判断），则不需要生成卷轴
-		if (Statistics.bossRushMode && RushBossLevel(depth)) {
-			return false;
-		}
-
 		if (Dungeon.RDLCLevel()) return false;
-		if (depth==0) return false;
-		if (Dungeon.branch !=0 ) return false;
+		if (depth == 0) return false;
+		if (Dungeon.branch != 0) return false;
 
-		int souLeftThisSet;
-		//3 SOU each floor set
-		souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
+		// 仅在BR模式下启用新逻辑
+		if (Statistics.bossRushMode) {
+			// 总随机卷轴配额为14
+			final int totalRandomSOU = 14;
+			int generated = LimitedDrops.UPGRADE_SCROLLS.count;
+
+			// 如果已生成足够，直接返回false
+			if (generated >= totalRandomSOU) return false;
+
+			// 计算剩余有效层数（从当前层到41层，排除Boss层）
+			int remainingValidFloors = 0;
+			for (int d = depth; d <= 41; d++) {
+				if (!Dungeon.RushBossLevel(d)) {
+					remainingValidFloors++;
+				}
+			}
+
+			// 剩余需要生成的卷轴数量
+			int remainingQuota = totalRandomSOU - generated;
+
+			// 概率 = 剩余配额 / 剩余有效层数
+			// 保证在剩余层数中均匀分配剩余卷轴
+			return Random.Int(remainingValidFloors) < remainingQuota;
+		}
+
+		// 原逻辑（非BR模式）
+		int souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
 		if (souLeftThisSet <= 0) return false;
-
 		int floorThisSet = (depth % 5);
-		//chance is floors left / scrolls left
 		return Random.Int(5 - floorThisSet) < souLeftThisSet;
 	}
 

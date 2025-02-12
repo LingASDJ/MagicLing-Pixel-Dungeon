@@ -24,7 +24,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.custom.utils.plot;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Rankings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.Question;
+import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndDialog;
@@ -33,10 +40,11 @@ import com.watabou.noosa.Game;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
+import java.util.ArrayList;
+
 public class QuestionPlot extends Plot {
 
-
-    private final static int maxprocess = 4;
+    private final static int maxprocess = 1;
 
     {
         process = 1;
@@ -49,45 +57,24 @@ public class QuestionPlot extends Plot {
     @Override
     public void reachProcess(WndDialog wndDialog) {
         diagulewindow = wndDialog;
-        while (this.process < needed_process) {
+
+        while(this.process < needed_process )
+        {
             this.process();
         }
     }
 
     @Override
     public void process() {
-        if (diagulewindow != null) {
+        if(diagulewindow!=null) {
             switch (process) {
                 default:
                 case 1:
                     process_to_1();
                     break;
-                case 2:
-                    process_to_9();
-                    break;
-                case 3:
-                    process_to_10();
-                    break;
-                case 4:
-                    process_to_11();
-                    break;
-                case 5:
-                    process_to_15();
-                    break;
-                case 6:
-                    process_to_16();
-                    break;
-                case 7:
-                    process_to_17();
-                    break;
-                case 8:
-                    process_to_19();
-                    break;
-                case 9:
-                    process_to_20();
-                    break;
             }
             diagulewindow.update();
+            process ++;
         }
     }
 
@@ -105,184 +92,561 @@ public class QuestionPlot extends Plot {
 
     @Override
     public void skip() {
+        diagulewindow.cancel();
+        WndDialog.settedPlot = null;
     }
 
-    Question question = new Question();
-
-    private void process_to_1() {
-        diagulewindow.changeText(Messages.get(Question.class, "message1"));
-        Game.runOnRenderThread(new Callback() {
-            @Override
-            public void call() {
-
-                GameScene.show(new WndOptions(
-                                       question.sprite(),
-                                       Messages.titleCase(question.name()),
-                                       Messages.get(Question.class, "title"),
-                                       Messages.get(Question.class, "option_nothing"),
-                                       Messages.get(Question.class, "option_chat"),
-                                       Messages.get(Question.class, "option_enquire"),
-                                       Messages.get(Question.class, "option_request"),
-                                       Messages.get(Question.class, "option_duel"),
-                                       Messages.get(Question.class, "option_game")
-                               ) {
-                                   @Override
-                                   protected void onSelect(int index) {
-                                       if (index==1){
-                                           int i = Random.Int(2);
-                                           if (i==0){
-                                               process_to_2();
-                                           } else {
-                                               if (true){
-                                                   process_to_3();
-                                               } else {
-                                                   process_to_4();
-                                               }
-                                           }
-                                       } else if (index==2){
-                                           process_to_5();
-                                       } else if (index==3){
-                                           process++;
-                                       } else if (index==4){
-                                           if (true){
-                                               process_to_14();
-                                           } else if (true){
-                                               process = 5;
-                                           } else if (true){
-                                               process_to_18();
-                                           }
-                                       } else if (index==5){
-                                           process = 8;
-                                       }
-                                   }
-                               }
-                );
-            }});
-    }
-
-    private void process_to_2() {
-        diagulewindow.changeText(Messages.get(Question.class, "message2"));
-    }
-
-    private void process_to_3() {
-        diagulewindow.changeText(Messages.get(Question.class, "message3"));
-    }
-
-    private void process_to_4() {
-        diagulewindow.changeText(Messages.get(Question.class, "message4"));
-    }
-
-    private void process_to_5() {
-        Game.runOnRenderThread(new Callback() {
-            @Override
-            public void call(){
-                GameScene.show(new WndOptions(
-                        question.sprite(),
-                        Messages.titleCase(question.name()),
-                        Messages.get(Question.class, "title_1"),
-                        Messages.get(Question.class, "ling"),
-                        Messages.get(Question.class, "text1"),
-                        Messages.get(Question.class, "text2")
-                ){
-                    @Override
-                    protected void onSelect(int index) {
-                        if (index==0){
-                            process_to_6();
-                        } else if (index==1){
-                            process_to_7();
-                        } else if (index==2){
-                            process_to_8();
-                        }
-                    }
-                });
+    private void process_to_1()
+    {
+        diagulewindow.hideAll();
+        diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+        if (Random.Int(2)==0 || Rankings.INSTANCE.records.isEmpty()){
+            diagulewindow.changeText(Messages.get(Question.class,"message1_1"));
+        } else {
+            for (Rankings.Record rec : Rankings.INSTANCE.records){
+                if (Rankings.INSTANCE.lastRecord==0){
+                    diagulewindow.changeText(Messages.get(Question.class,rec.win ? "message1_2" : "message1_3"));
+                    break;
+                }
             }
-        });
+        }
     }
 
-    private void process_to_6() {
-        diagulewindow.changeText(Messages.get(Question.class, "message6"));
-    }
+    public static class Plot_1 extends Plot {
+        private final static int maxprocess = 2;
 
-    private void process_to_7() {
-        diagulewindow.changeText(Messages.get(Question.class, "message7"));
-    }
+        {
+            process = 1;
+        }
 
-    private void process_to_8() {
-        diagulewindow.changeText(Messages.get(Question.class, "message8"));
-    }
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
 
-    private void process_to_9() {
-        diagulewindow.changeText(Messages.get(Question.class, "message9"));
-        process++;
-    }
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
 
-    private void process_to_10() {
-        diagulewindow.changeText(Messages.get(Question.class, "message10"));
-        process++;
-    }
-
-    private void process_to_11() {
-        Game.runOnRenderThread(new Callback() {
-            @Override
-            public void call(){
-                GameScene.show(new WndOptions(
-                        question.sprite(),
-                        Messages.titleCase(question.name()),
-                        Messages.get(Question.class, "title_2"),
-                        Messages.get(Question.class, "true"),
-                        Messages.get(Question.class, "false")
-                        ){
-                    @Override
-                    protected void onSelect(int index) {
-                        process = 1;
-                        if (index==0){
-                            process_to_12();
-                        } else if (index==1){
-                            process_to_13();
-                        }
-                    }
-                });
+            while(this.process < needed_process )
+            {
+                this.process();
             }
-        });
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                    case 2:
+                        process_to_2();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            diagulewindow.changeText(Messages.get(Question.class,"message2_1"));
+        }
+
+        private void process_to_2()
+        {
+            diagulewindow.changeText(Messages.get(Question.class,"message2_2"));
+            Game.runOnRenderThread(new Callback() {
+                @Override
+                public void call(){
+                    Question qes = new Question();
+                    GameScene.show(new WndOptions(
+                            qes.sprite(),
+                            Messages.titleCase(qes.name()),
+                            Messages.get(Question.class, "title_5"),
+                            Messages.get(Question.class, "true"),
+                            Messages.get(Question.class, "false")
+                    ){
+                        @Override
+                        protected void onSelect(int index) {
+                            if (index==0){
+                                diagulewindow.changeText(Messages.get(Question.class, "message2_3"));
+                                process_to_3();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        private void process_to_3() {}
     }
 
-    private void process_to_12() {
-        diagulewindow.changeText(Messages.get(Question.class, "message12"));
+    public static class Plot_2 extends Plot {
+        private final static int maxprocess = 3;
+
+        {
+            process = 1;
+        }
+
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
+
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while(this.process < needed_process )
+            {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                    case 2:
+                        process_to_2();
+                        break;
+                    case 3:
+                        process_to_3();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return ending() ? process > maxprocess : process > 1;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            ArrayList<Item> items = new ArrayList<>(hero.belongings.backpack.items);
+            boolean win = false;
+            for (Item i : items)
+                if (i instanceof Amulet)
+                    win = true;
+            if (Dungeon.isDLC(Conducts.Conduct.DEV)){
+                diagulewindow.changeText(Messages.get(Question.class,"message4_1"));
+            } else if (win){
+                diagulewindow.changeText(Messages.get(Question.class,"message4_2"));
+            } else {
+                diagulewindow.changeText(Messages.get(Question.class,"message4_3"));
+            }
+        }
+
+        private void process_to_2()
+        {
+            diagulewindow.changeText(Messages.get(Question.class,"message4_4"));
+        }
+
+        private void process_to_3()
+        {
+            diagulewindow.changeText(Messages.get(Question.class,"message4_5"));
+        }
+
+        private boolean ending(){
+            ArrayList<Item> items = new ArrayList<>(hero.belongings.backpack.items);
+            boolean win = false;
+            for (Item i : items)
+                if (i instanceof Amulet)
+                    win = true;
+            if (Dungeon.isDLC(Conducts.Conduct.DEV)){
+                return false;
+            } else if (win){
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
-    private void process_to_13() {
-        diagulewindow.changeText(Messages.get(Question.class, "message13"));
+    public static class Plot_3 extends Plot {
+        private final static int maxprocess = 2;
+
+        {
+            process = 1;
+        }
+
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
+
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while(this.process < needed_process )
+            {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                    case 2:
+                        process_to_2();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            diagulewindow.changeText(Messages.get(Question.class,"message5_1"));
+            Game.runOnRenderThread(new Callback() {
+                @Override
+                public void call(){
+                    Question qes = new Question();
+                    GameScene.show(new WndOptions(
+                            qes.sprite(),
+                            Messages.titleCase(qes.name()),
+                            Messages.get(Question.class, "title_1"),
+                            Messages.get(Question.class, "ling"),
+                            Messages.get(Question.class, "birth"),
+                            Messages.get(Question.class, "dungeon")
+                    ){
+                        @Override
+                        protected void onSelect(int index) {
+                            if (index==0){
+                                diagulewindow.changeText(Messages.get(Question.class,"message5_2"));
+                            } else if (index==1){
+                                diagulewindow.changeText(Messages.get(Question.class,"message5_3"));
+                            } else if (index==2){
+                                diagulewindow.changeText(Messages.get(Question.class,"message5_4"));
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        private void process_to_2(){}
     }
 
-    private void process_to_14() {
-        diagulewindow.changeText(Messages.get(Question.class, "message14"));
+    public static class Plot_4 extends Plot {
+        private final static int maxprocess = 2;
+
+        {
+            process = 1;
+        }
+
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
+
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while(this.process < needed_process )
+            {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                    case 2:
+                        process_to_2();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            diagulewindow.changeText(Messages.get(Question.class,"no_more_1"));
+        }
+
+        private void process_to_2()
+        {
+            diagulewindow.changeText(Messages.get(Question.class,"no_more_2"));
+        }
     }
 
-    private void process_to_15() {
-        diagulewindow.changeText(Messages.get(Question.class, "message15"));
-        process++;
+    public static class Plot_WIN extends Plot {
+        private final static int maxprocess = 1;
+
+        {
+            process = 1;
+        }
+
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
+
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while(this.process < needed_process )
+            {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            diagulewindow.changeText(Messages.get(Question.class,"win"));
+        }
     }
 
-    private void process_to_16() {
-        diagulewindow.changeText(Messages.get(Question.class, "message16"));
-        process++;
+    public static class Plot_LOSE extends Plot {
+        private final static int maxprocess = 1;
+
+        {
+            process = 1;
+        }
+
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
+
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while(this.process < needed_process )
+            {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            diagulewindow.changeText(Messages.get(Question.class,"lose"));
+        }
     }
 
-    private void process_to_17() {
-        diagulewindow.changeText(Messages.get(Question.class, "message17"));
-        process = 1;
-    }
+    public static class Plot_DRAW extends Plot {
+        private final static int maxprocess = 1;
 
-    private void process_to_18() {
-        diagulewindow.changeText(Messages.get(Question.class, "message18"));
-    }
+        {
+            process = 1;
+        }
 
-    private void process_to_19() {
-        diagulewindow.changeText(Messages.get(Question.class, "message19"));
-        process++;
-    }
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
 
-    private void process_to_20() {
-        //先不码这里了直接注释掉
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while(this.process < needed_process )
+            {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if(diagulewindow!=null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                }
+                diagulewindow.update();
+                process ++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1()
+        {
+            diagulewindow.hideAll();
+            diagulewindow.setLeftName(Messages.get(Question.class,"name"));
+            diagulewindow.changeText(Messages.get(Question.class,"draw"));
+        }
     }
 }

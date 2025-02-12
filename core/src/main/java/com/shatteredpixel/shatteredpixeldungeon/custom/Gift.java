@@ -47,7 +47,7 @@ public class Gift implements Bundlable {
             "TUxQRC1EcmFnb25XYXRlciwxNzM5MzcyNDAwLGZhbHNl",
 
             //元宵节
-            "TUxQRC1MYW50ZXJuRmVzdGl2YWw0WWVhcnNCaXJ0aGRheSwxNzQwMzEzODAwLGZhbHNl",
+            "TUxQRC1ZWDRZZWFyc0JpcnRoZGF5LDE3NDAzMTM4MDAsZmFsc2U=",
 
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
@@ -103,21 +103,38 @@ public class Gift implements Bundlable {
         code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater", 1);
         code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
 
-        //MLPD_Yuanxio
+        //MLPD_Yuanxiao
         LinkedHashMap<String, Integer> code9 = new LinkedHashMap<>();
-        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 400);
-        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.Torch", 114514);
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 600);
+        //晓梦的火把
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.Torch", 5);
+        //猫猫的陷阱晶核
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.spells.ReclaimTrap", 1);
+        //Dove猫猫的假护身符
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.JAmulet", 1);
+        //急急国王的羊群符石
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock", 1);
+        //Bzmdr的收藏品试玩版 乐
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.props.NoteOfBzmdr", 1);
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.props.ArmorScalesOfBzmdr", 1);
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.props.CloakFragmentsOfBzmdr", 1);
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.bags.PropBag", 1);
+        //Ling的幸运手套
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.props.LuckyGlove", 1);
+        //太上老君的财富教学
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.books.playbookslist.MoneyMoreBooks", 1);
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.CrystalLing", 1);
 
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
         tempMap.put( "U1A0LVJFQURZ",code3);
         tempMap.put( "QmFkTGFudGVyRmlyZS1Hbw==", code4);
         tempMap.put( "TUxQRF9YaWFvbmlhblllaQ==",code5);
-
         tempMap.put("TUxQRC00WWVhcnNPbGQ=",code6);
         tempMap.put("TUxQRC1TbmFrZVllYXJzT2xk",code7);
-
         tempMap.put("TUxQRC1EcmFnb25XYXRlcg==",code8);
+
+        tempMap.put("TUxQRC1ZWDRZZWFyc0JpcnRoZGF5",code9);
 
 
         GIFT_ITEM = new HashMap<>( Collections.unmodifiableMap( tempMap ) );

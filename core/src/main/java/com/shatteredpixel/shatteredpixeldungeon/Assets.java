@@ -233,6 +233,9 @@ public class Assets {
 
 		public static final String BANNERS_CJ  = "interfaces/Banners/banners_cj.png";
 
+		public static final String BANNERS_YX  = "interfaces/Banners/banners_yx.png";
+		public static final String BANNERS_BD  = "interfaces/Banners/banners_MLBD.png";
+
 		public static final String MENUTITLE  = "interfaces/menutitle.png";
 
 
