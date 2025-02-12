@@ -274,7 +274,9 @@ public class LevelTeleporter extends TestItem {
             if(crivusfruitslevel3){
                 crivusfruitslevel3 = false;
             }
-
+            if(Statistics.dwarfKill){
+                Statistics.dwarfKill = false;
+            }
             if(Statistics.TrueYogNoDied){
                 Statistics.TrueYogNoDied   = false;
             }

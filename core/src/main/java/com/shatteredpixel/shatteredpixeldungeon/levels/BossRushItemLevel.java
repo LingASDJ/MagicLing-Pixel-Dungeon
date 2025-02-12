@@ -29,11 +29,24 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShielding;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.RandomChest;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CavesPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.Random;
@@ -74,7 +87,7 @@ public class BossRushItemLevel extends RegularLevel {
                 addItemToSpawn(Generator.random(Generator.Category.FOOD));
           break;
            //T2 补给层
-           case 14: case 12: case 15:
+         case 12: case 14: case 15:
                addItemToSpawn(new PotionOfExperience());
                addItemToSpawn(new PotionOfHealing());
                addItemToSpawn(Generator.random(Generator.Category.FOOD));
@@ -83,6 +96,14 @@ public class BossRushItemLevel extends RegularLevel {
                if(Random.Float()<0.4f){
                    addItemToSpawn(new RandomChest());
                }
+
+               //3.0 BossRushT2等级 补给层新增了3个物品
+               //1个升级卷轴+1个随机2阶投掷+1个嬗变卷轴
+               addItemToSpawn(new ScrollOfUpgrade());
+               addItemToSpawn(Generator.random(Generator.Category.MIS_T2));
+               addItemToSpawn(new ScrollOfTransmutation());
+               //T2+ 补给层
+               break;
            case 19: case 20:
                addItemToSpawn(new PotionOfExperience());
                addItemToSpawn(new PotionOfHealing());
@@ -93,6 +114,12 @@ public class BossRushItemLevel extends RegularLevel {
                if(Random.Float()<0.4f){
                    addItemToSpawn(new RandomChest());
                }
+
+               //3.0 BossRush T2+等级 补给层新增了3个物品
+               //1个随机3阶投掷+ 1个嬗变卷轴 + 1个随机药水
+               addItemToSpawn(Generator.random(Generator.Category.MIS_T3));
+               addItemToSpawn(new ScrollOfTransmutation());
+               addItemToSpawn(Generator.random(Generator.Category.POTION));
           break;
           //T3 补给层
            case 22: case 25:
@@ -101,6 +128,8 @@ public class BossRushItemLevel extends RegularLevel {
                addItemToSpawn(new PotionOfHealing());
                addItemToSpawn(Generator.random(Generator.Category.FOOD));
                addItemToSpawn(Generator.randomWeapon());
+               break;
+          //T3+ 补给层
            case 28: case 30:
                addItemToSpawn(new PotionOfStrength());
                addItemToSpawn(new PotionOfHealing());
@@ -110,7 +139,57 @@ public class BossRushItemLevel extends RegularLevel {
                    addItemToSpawn(new RandomChest());
                }
                addItemToSpawn(Generator.randomArmor());
+
+               /**
+                * 3.0 BossRush T3+等级
+                * 补给层新增了5个物品
+                * 1个随机魔药[水爆/淤泥/冰爆/炼狱/雷鸣]
+                * 2个嬗变卷轴 + 1个随机药水 + 1个升级卷轴
+                * */
+               Item w;
+               switch (Random.Int(5)){
+                   case 1: w = new AquaBrew();    break;
+                   case 2: w = new CausticBrew();    break;
+                   case 3: w = new InfernalBrew();   break;
+                   case 4: w = new ShockingBrew();   break;
+                   default:
+                   case 0: w = new BlizzardBrew(); break;
+               }
+               addItemToSpawn(w);
+               addItemToSpawn(new ScrollOfUpgrade());
+               addItemToSpawn(new ScrollOfTransmutation());
+               addItemToSpawn(new ScrollOfTransmutation());
+               addItemToSpawn(Generator.random(Generator.Category.POTION));
+
+               //T4 补给层【从T4开始，成长性质的物品会减少，增加更多对策性的物品】
+               //奥术护盾合剂，随机秘卷1-2个，随机药水，随机4阶武器，一个嬗变卷轴
+               //2个随机盲盒箱子
                break;
+           case 32: case 34: case 36:
+           case 38: case 40: case 41:
+               addItemToSpawn(new PotionOfShielding());
+
+               switch (Random.Int(5)) {
+                   case 1: w = new ScrollOfChallenge();break;
+                   case 2: w = new ScrollOfMetamorphosis();break;
+                   case 3: w = new ScrollOfAntiMagic();break;
+                   case 4: w = new ScrollOfPsionicBlast();break;
+                   default:
+                          w = new ScrollOfSirensSong();break;
+               }
+               w.quantity = Random.NormalIntRange(1, 2);
+               addItemToSpawn(w);
+
+               addItemToSpawn(new RandomChest());
+               addItemToSpawn(new RandomChest());
+
+               addItemToSpawn(Generator.random(Generator.Category.POTION));
+               addItemToSpawn(Generator.random(Generator.Category.MIS_T4));
+               addItemToSpawn(new ScrollOfTransmutation());
+               break;
+               //TODO T5 ???
+               //TODO 【BossRush4.0 死灵与幽冥之地 内容扩展（3）敬请期待  】
+               //TODO 【商人领主&莲娜：我们已经收集足够多的能量，现在让我们平息BR宇宙的灾难吧！ 】
        }
         super.createItems();
     }

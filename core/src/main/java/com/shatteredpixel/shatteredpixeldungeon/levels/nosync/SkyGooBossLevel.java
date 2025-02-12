@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.nosync;
 
 import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.BARRICADE;
+import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.BOOKSHELF;
 import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.CHASM;
 import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.CRYSTAL_DOOR;
 import static com.shatteredpixel.shatteredpixeldungeon.levels.Terrain.DOOR;
@@ -40,12 +41,14 @@ public class SkyGooBossLevel extends Level {
     private static final int M = LOCKED_DOOR;
     private static final int L = BARRICADE;
 
+    private static final int A = BOOKSHELF;
+
 
     private static final int[] pre_map = {
             W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
-            W,G,G,G,G,G,G,G,Q,Q,E,Q,Q,G,G,G,G,G,G,G,W,
-            W,V,V,L,V,V,V,L,V,V,Q,V,V,L,V,V,V,L,V,V,W,
-            W,G,L,L,L,G,G,L,G,G,Q,G,G,L,G,G,L,L,L,G,W,
+            W,G,G,G,G,G,G,G,Q,A,E,A,Q,G,G,G,G,G,G,G,W,
+            W,V,V,L,V,V,V,L,V,V,A,V,V,L,V,V,V,L,V,V,W,
+            W,G,L,L,L,G,G,L,G,A,Q,A,G,L,G,G,L,L,L,G,W,
             W,V,V,L,V,V,V,L,Q,Q,Q,Q,Q,L,V,V,V,L,V,V,W,
             W,G,G,G,G,G,G,G,Q,Q,G,Q,Q,G,G,G,G,G,G,G,W,
             W,W,W,D,W,W,W,W,Q,G,G,G,Q,W,W,W,W,W,D,W,W,

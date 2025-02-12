@@ -1,8 +1,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -78,6 +81,13 @@ public class Artillerist extends GoldMob {
                 Dungeon.hero.damage(dmg,new Bomb());
             }
         }
+
+        if(Random.Int(10)<=3) {
+            if(Statistics.bossRushMode){
+                Buff.affect(enemy, Degrade.class, 6f);
+            }
+        }
+
         for(int c: PathFinder.NEIGHBOURS4){
             CellEmitter.get(cell+c).burst(BlastParticle.FACTORY, 20);
             Mob mob = Dungeon.level.findMob(cell+c);

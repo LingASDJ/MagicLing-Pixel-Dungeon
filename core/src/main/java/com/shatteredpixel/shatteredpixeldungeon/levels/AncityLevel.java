@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NullDiedTO;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nyz;
@@ -82,7 +83,7 @@ public class AncityLevel extends Level {
 
 
         int entranceCell =  (this.width * 8 + 8);
-        int exitCell =  0;
+        int exitCell =  59;
 
         LevelTransition enter = new LevelTransition(this, entranceCell, LevelTransition.Type.REGULAR_EXIT);
         transitions.add(enter);
@@ -95,6 +96,15 @@ public class AncityLevel extends Level {
             this.map[var1] = mapToTerrain(pre_map[var1]);
         }
         return true;
+    }
+
+    @Override
+    public boolean activateTransition(Hero hero, LevelTransition transition) {
+        if (transition.type == LevelTransition.Type.REGULAR_ENTRANCE) {
+            return false;
+        } else {
+            return super.activateTransition(hero,transition);
+        }
     }
 
     public Mob createMob() {

@@ -1319,14 +1319,11 @@ public abstract class Mob extends Char {
 		sprite.showAlert();
 		if (!BossHealthBar.isAssigned()) {
 			if (Dungeon.level.locked) {
-				switch (Dungeon.depth) {
-					case 25:
-						Dungeon.level.playLevelMusic();
-						break;
-					default:
-						BGMPlayer.playBoss();
-						break;
-				}
+                if (Dungeon.depth == 25) {
+                    level.playLevelMusic();
+                } else {
+                    BGMPlayer.playBoss();
+                }
 			}
 		}
 	}

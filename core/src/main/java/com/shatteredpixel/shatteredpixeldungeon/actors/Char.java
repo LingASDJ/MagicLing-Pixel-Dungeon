@@ -1317,7 +1317,7 @@ public abstract class Char extends Actor {
 		return result * RingOfElements.resist(this, effect);
 	}
 
-	protected final HashSet<Class> immunities = new HashSet<>();
+	public final HashSet<Class> immunities = new HashSet<>();
 
 	public boolean isImmune(Class effect ){
 		HashSet<Class> immunes = new HashSet<>(immunities);

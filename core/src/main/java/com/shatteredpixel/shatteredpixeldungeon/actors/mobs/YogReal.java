@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.gold.DemonLord;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Nxhy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.spical.DM275;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.spical.GnollHero;
@@ -131,7 +132,7 @@ public class YogReal extends Boss {
     private ArrayList<Class> regularSummons = new ArrayList<>();
     {
         for (int i = 0; i < SUMMON_DECK_SIZE; i++){
-            if (i >= Statistics.spawnersAlive){
+            if (i >= Statistics.spawnersAlive && !Statistics.bossRushMode){
                 regularSummons.add(Larva.class);
             } else {
                 regularSummons.add(YogRealRipper.class);
@@ -431,7 +432,31 @@ public class YogReal extends Boss {
             yell(Messages.get(this, "time"));
             summonCD = -20;
             phase = 5;
-            regularSummons.add(YogRealRipper.class);
+
+
+            if(Statistics.bossRushMode){
+                Warlock warlock = new Warlock();
+                warlock.HP=warlock.HT=100;
+                warlock.pos = pos+2;
+                GameScene.add(warlock);
+
+                Golem golem = new Golem();
+                golem.HP=golem.HT=150;
+                golem.pos = pos-2;
+                GameScene.add(golem);
+
+                Ice_Scorpio iceScorpio = new Ice_Scorpio();
+                iceScorpio.HP=iceScorpio.HT=120;
+                iceScorpio.pos = pos+3;
+                GameScene.add(iceScorpio);
+
+                DemonLord demonLord = new DemonLord();
+                demonLord.HP=demonLord.HT=180;
+                demonLord.pos = pos-3;
+            } else {
+                regularSummons.add(RipperDemon.class);
+            }
+
             YogFist.FreezingFist freezingFist = new YogFist.FreezingFist();
             freezingFist.HP=freezingFist.HT=600;
             freezingFist.pos = pos-3;
@@ -472,6 +497,9 @@ public class YogReal extends Boss {
 
             Statistics.NoTime = true;
 
+
+
+
             Game.runOnRenderThread(new Callback() {
                 @Override
                 public void call() {
@@ -490,6 +518,16 @@ public class YogReal extends Boss {
             haloFist.HP=haloFist.HT=500;
             haloFist.pos = pos+3;
             GameScene.add(haloFist);
+
+
+            if(Dungeon.isChallenged(Challenges.CS)){
+                if(Statistics.bossRushMode){
+                    for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+                        Buff.affect(mob,ChampionEnemy.AloneCity.class);
+                    }
+                }
+            }
+
         }
 
         spend(TICK);

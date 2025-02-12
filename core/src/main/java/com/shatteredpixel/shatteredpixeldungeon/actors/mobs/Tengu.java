@@ -336,6 +336,7 @@ public class Tengu extends Boss {
 	public void notice() {
 		super.notice();
 		if (!BossHealthBar.isAssigned()) {
+			GameScene.bossReady();
 			BossHealthBar.assignBoss(this);
 			if (HP <= HT/2) BossHealthBar.bleed(true);
 			if (HP == HT) {

@@ -46,6 +46,9 @@ public class Gift implements Bundlable {
             //龙泪
             "TUxQRC1EcmFnb25XYXRlciwxNzM5MzcyNDAwLGZhbHNl",
 
+            //元宵节
+            "TUxQRC1MYW50ZXJuRmVzdGl2YWw0WWVhcnNCaXJ0aGRheSwxNzQwMzEzODAwLGZhbHNl",
+
             //圣诞2024
             "TUxQRF9DaHJpc3RtYXMtMjAyNCwxNzM1NTc1MTQyLGZhbHNl",
             "SEVMTE9aRVJPRUlHSFQsMTczMzQxNTE0MixmYWxzZTs=",
@@ -99,6 +102,11 @@ public class Gift implements Bundlable {
         code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie", 1);
         code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.quest.DragonWater", 1);
         code8.put( "com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience", 1);
+
+        //MLPD_Yuanxio
+        LinkedHashMap<String, Integer> code9 = new LinkedHashMap<>();
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin", 400);
+        code9.put( "com.shatteredpixel.shatteredpixeldungeon.items.Torch", 114514);
 
         tempMap.put( "TUxQRFpFUk8=", code1 );
         tempMap.put( "TUxQRF9DaHJpc3RtYXMtMjAyNA==", code2 );
