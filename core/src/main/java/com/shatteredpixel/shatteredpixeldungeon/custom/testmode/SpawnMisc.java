@@ -574,7 +574,7 @@ public class SpawnMisc extends TestItem {
     }
 
     private int maxCategory(){
-        return 14;
+        return 15;
     }
 
     private class SettingsWindow extends Window {
@@ -642,7 +642,7 @@ public class SpawnMisc extends TestItem {
         private void createCategoryImage(){
             float left;
             float top = GAP + TITLE_BTM;
-            int length = 14;
+            int length = 15;
             int maxImageCount = 6;
             for (int i = 0; i < length; ++i) {
                 final int j = i;

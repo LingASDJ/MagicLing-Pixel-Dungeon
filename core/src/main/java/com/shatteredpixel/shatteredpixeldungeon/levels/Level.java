@@ -203,7 +203,7 @@ public abstract class Level implements Bundlable {
 					level.spawnMob(wraith.pos);
 				}
 			}
-			GLog.n(Messages.get(BottleWraith.class, ""));
+			GLog.n(Messages.get(BottleWraith.class, "bottle_wraith_generated"));
 		}
 	}
 	
