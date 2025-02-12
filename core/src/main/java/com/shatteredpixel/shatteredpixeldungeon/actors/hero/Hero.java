@@ -185,9 +185,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.ArmorScalesOfBzmdr;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.CloakFragmentsOfBzmdr;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.EmotionalAggregation;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.EmotionalAggregationB;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.HeartOfCrystalFractal;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.Monocular;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.PortableWhetstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.StarSachet;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDoll;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDollB;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.CrystalLing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DevItem.MagicBook;
@@ -686,7 +692,7 @@ public class Hero extends Char {
 		belongings.thrownWeapon = null;
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit();
+			Buff.affect( this, Combo.class ).hit(enemy);
 		}
 
 		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
@@ -720,7 +726,7 @@ public class Hero extends Char {
 		}
 
 		if(attackDelay() >1 && hasTalent(Talent.STRONGMAN)){
-			accuracy += accuracy * Math.max((attackDelay()-1f) * ( (0.5f / 3f) * pointsInTalent(Talent.STRONGMAN)),0.5f);
+			accuracy += accuracy * Math.max (attackDelay()-1f * ( 1f/3f * pointsInTalent(Talent.STRONGMAN)) ,0.75f);
 		}
 
 		for(StarSachet star : belongings.getAllItems(StarSachet.class)) {
@@ -728,6 +734,8 @@ public class Hero extends Char {
 				accuracy += (float) getZone();
 			}
 		};
+
+		if(belongings.getItem(TerrorDoll.class) != null || belongings.getItem(TerrorDollB.class) != null) accuracy *= 0.75f;
 
 		if( Dungeon.isDLC(Conducts.Conduct.DEV) && CustomPlayer.overrideGame &&CustomPlayer.shouldOverride ){
 			return  CustomPlayer.baseAccuracy;
@@ -793,11 +801,13 @@ public class Hero extends Char {
 			return CustomPlayer.baseEvasion;
 		}
 
-		for(StarSachet star : belongings.getAllItems(StarSachet.class)) {
-			if(star!=null){
-				evasion += (float) getZone();
-			}
+		if(belongings.getItem(StarSachet.class)!=null) {
+			evasion += (float) getZone();
 		};
+
+		if( belongings.getItem(HeartOfCrystalFractal.class)!=null){
+			evasion *= 0.7f;
+		}
 
 		return Math.round(evasion);
 	}
@@ -882,6 +892,14 @@ public class Hero extends Char {
 			dmg = CustomPlayer.baseDamage;
 		}
 
+		if(belongings.getItem(Monocular.class) != null && wep instanceof MissileWeapon ){
+			int distance = distance(enemy);
+			while(distance >3) {
+				dmg += Random.Int(0, 3);
+				distance -= 4;
+			}
+		}
+
 		if (!RingOfForce.fightingUnarmed(this)) {
 			dmg = wep.damageRoll( this );
 
@@ -914,10 +932,19 @@ public class Hero extends Char {
 		}
 
 		if( attackDelay() >1 && hasTalent(Talent.STRONGMAN) && !(wep instanceof SpiritBow)){
-			dmg += (int) (dmg * Math.max (attackDelay()-1f * ( 1f/3f * pointsInTalent(Talent.STRONGMAN)) ,0.75f));
+			dmg += (int) (dmg * Math.max((attackDelay()-1f) * ( (0.5f / 3f) * pointsInTalent(Talent.STRONGMAN)),0.5f));
 		}
 
 		if(belongings.getItem(PortableWhetstone.class)!=null)  dmg += (int) (getZone()*2-1);
+		if(belongings.getItem(CloakFragmentsOfBzmdr.class)!=null) {
+			if(getZone() == 1){
+				dmg --;
+			} else if (getZone() == 5) {
+				dmg -= 15;
+			}else{
+				dmg -= (int) (getZone()-1) *3;
+			}
+		}
 
 		if (dmg < 0) dmg = 0;
 		return dmg;
@@ -1990,6 +2017,10 @@ public class Hero extends Char {
 		if(hero.belongings.getItem(EmotionalAggregation.class)!=null && Math.random()>0.9){
 			GLog.n(Messages.get(EmotionalAggregation.class,"block"));
 			return;
+		}
+
+		if(hero.belongings.getItem(EmotionalAggregationB.class)!=null){
+			dmg += (int) getZone()*2 -1;
 		}
 
 		MIME.GOLD_FIVE getHeal = Dungeon.hero.belongings.getItem(MIME.GOLD_FIVE.class);
@@ -3152,7 +3183,7 @@ public class Hero extends Char {
 		spend( attackDelay() );
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
-			Buff.affect( this, Combo.class ).hit();
+			Buff.affect( this, Combo.class ).hit(enemy);
 		}
 
 		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){

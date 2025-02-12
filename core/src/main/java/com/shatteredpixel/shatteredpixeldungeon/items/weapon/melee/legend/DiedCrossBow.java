@@ -11,6 +11,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -26,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -38,11 +40,21 @@ public class DiedCrossBow extends LegendWeapon {
         image = ItemSpriteSheet.DIEDCROSSBOW;
         tier = 5;
         legend = 3;
-        baseMin = 7;
-        baseMax = 20;
-        min = Lmin();
-        max = Lmax();
+        baseMin = 4;
+        baseMax = 25;
+        min = min();
+        max = max();
         usesTargeting = cooldown == 0;
+    }
+
+    @Override
+    public int Lmin(){
+        return (int) (min() * 1.15f);
+    }
+
+    @Override
+    public int Lmax(){
+        return (int) (max() * 1.15f);
     }
 
     @Override
@@ -194,9 +206,6 @@ public class DiedCrossBow extends LegendWeapon {
                                 @Override
                                 public void call() {
                                     curUser = user;
-                                    onThrow(cell);
-                                    onThrow(cell+2);
-                                    onThrow(cell-2);
                                 }
                             });
 
@@ -245,55 +254,60 @@ public class DiedCrossBow extends LegendWeapon {
             }
 
             boolean terrainAffected = false;
-            for (int n : PathFinder.NEIGHBOURS8) {
-                int c = cell + n;
-                if (c >= 0 && c < Dungeon.level.length()) {
-                    if (Dungeon.level.heroFOV[c]) {
-                        CellEmitter.get(c).burst(SmokeParticle.FACTORY, 4);
+
+            PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
+            for (int c = 0; c < PathFinder.distance.length; c++) {
+                if (PathFinder.distance[c] < Integer.MAX_VALUE) {
+                    if (c >= 0 && c < Dungeon.level.length()) {
+                        if (Dungeon.level.heroFOV[c]) {
+                            CellEmitter.get(c).burst(SmokeParticle.FACTORY, 4);
+                        }
+
+                        if (Dungeon.level.flamable[c]) {
+                            Dungeon.level.destroy(c);
+                            GameScene.updateMap(c);
+                            terrainAffected = true;
+                        }
+
+                        Char ch = Actor.findChar(c);
+                        if (ch != null) {
+                            affected.add(ch);
+                        }
                     }
 
-                    if (Dungeon.level.flamable[c]) {
-                        Dungeon.level.destroy(c);
-                        GameScene.updateMap(c);
-                        terrainAffected = true;
+                    for (Char ch : affected){
+
+                        //if they have already been killed by another bomb
+                        if(!ch.isAlive()){
+                            continue;
+                        }
+
+                        DiedCrossBow diedCrossBow =  hero.belongings.getItem(DiedCrossBow.class);
+                        int dmg = Random.NormalIntRange(diedCrossBow.Lmin(),diedCrossBow.Lmin());
+
+                        //those not at the center of the blast take less damage
+                        if (ch.pos != cell){
+                            dmg = Math.round(dmg*0.67f);
+                        }
+
+                        if (ch == hero) dmg *= 0.25f;
+
+                        dmg -= ch.drRoll();
+
+                        if (dmg > 0) {
+                            ch.damage(dmg, this);
+                        }
+
+                        if (ch == hero && !ch.isAlive()) {
+                            //Badges.BOMB();
+                            Dungeon.fail( getClass() );
+                            GLog.n( Messages.get(DiedCrossBow.class, "ondeath") );
+                        }
                     }
 
-                    Char ch = Actor.findChar(c);
-                    if (ch != null) {
-                        affected.add(ch);
+                    if (terrainAffected) {
+                        Dungeon.observe();
                     }
-                }
-
-                for (Char ch : affected){
-
-                    //if they have already been killed by another bomb
-                    if(!ch.isAlive()){
-                        continue;
-                    }
-
-                    DiedCrossBow diedCrossBow =  hero.belongings.getItem(DiedCrossBow.class);
-                    int dmg = Random.NormalIntRange(diedCrossBow.Lmin(),diedCrossBow.Lmin());
-
-                    //those not at the center of the blast take less damage
-                    if (ch.pos != cell){
-                        dmg = Math.round(dmg*0.67f);
-                    }
-
-                    dmg -= ch.drRoll();
-
-                    if (dmg > 0) {
-                        ch.damage(dmg, this);
-                    }
-
-                    if (ch == hero && !ch.isAlive()) {
-                        //Badges.BOMB();
-                        Dungeon.fail( getClass() );
-                        GLog.n( Messages.get(DiedCrossBow.class, "ondeath") );
-                    }
-                }
-
-                if (terrainAffected) {
-                    Dungeon.observe();
                 }
             }
         }

@@ -78,6 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourg
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.BrokenBone;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
@@ -904,6 +905,7 @@ public abstract class Mob extends Char {
 
 		dropBonus += ShardOfOblivion.lootChanceMultiplier()-1f;
 
+		if(hero.belongings.getItem(BrokenBone.class)!=null) dropBonus *= 0.4f;
 		return lootChance * dropBonus;
 	}
 
