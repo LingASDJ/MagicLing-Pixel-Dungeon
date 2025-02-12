@@ -129,7 +129,7 @@ public class vM0_7_X_Changes {
                 ("寄居蟹数值优化，现在破壳前0.95移速，破壳后2.0移速。\n\n" +
                         "破壳时，同时获得6回合极速+恐惧效果。伤害削弱")));
 
-        changes.addButton(new ChangeButton(new ArtilleristSprite(), ("豺狼炮手"),
+        changes.addButton(new ChangeButton(new ArtilleristSprite(), ("矮人炮手"),
                 ("修正攻击力为1000%的严重异常")));
 
         changes.addButton(new ChangeButton(new GnollBlindSprite(), ("老年豺狼"),

@@ -249,7 +249,7 @@ public abstract class RegularLevel extends Level {
 
 
 
-		if(feeling == Feeling.DIEDROOM){
+		if(feeling == Feeling.DIEDROOM && !Statistics.bossRushMode){
 			switch (branch){
 				case 0:
 					switch (depth) {
@@ -377,7 +377,8 @@ public abstract class RegularLevel extends Level {
 		}
 
 
-		if (depth == 18 && !anCityQuestProgress && !Statistics.RandMode) {
+
+		if (depth == 18 && !anCityQuestProgress && !(Statistics.RandMode || Statistics.bossRushMode)) {
 			initRooms.add(new DreamcatcherRoom());
 			DragonGirlBlue.Quest.spawned = true;
 			anCityQuestProgress = true;
@@ -487,8 +488,10 @@ public abstract class RegularLevel extends Level {
 			mobs += Random.NormalIntRange(1,3);
 		}
 
-		if(Dungeon.isChallenged(CS)){
+		if(Dungeon.isChallenged(CS) && Statistics.bossRushMode && depth != 21){
 			mobs -= 1;
+		} else if(Statistics.bossRushMode && depth == 21){
+			mobs += 3;
 		}
 
 		return mobs;
@@ -507,6 +510,10 @@ public abstract class RegularLevel extends Level {
 				}
 			}
 		}
+
+
+
+
 		Random.shuffle(stdRooms);
 		Iterator<Room> stdRoomIter = stdRooms.iterator();
 
@@ -654,7 +661,7 @@ public abstract class RegularLevel extends Level {
 		}
 
 		//DLC EX()SP
-		if(depth>25){
+		if(depth>25 && Statistics.Hollow_Holiday){
 			nItems /= 100;
 		}
 

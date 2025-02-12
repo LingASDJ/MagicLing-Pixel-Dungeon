@@ -2464,7 +2464,9 @@ public class Hero extends Char {
 	/** 节日深度 */
 	private boolean HolidayEvent() {
 		boolean result;
-		if(holiday == RegularLevel.Holiday.XMAS){
+		if(bossRushMode){
+			result = Dungeon.depth < 43;
+		} else if(holiday == RegularLevel.Holiday.XMAS){
 			result = Dungeon.depth < 31;
 		} else {
 			result = Dungeon.depth < 31;
@@ -2825,8 +2827,10 @@ public class Hero extends Char {
 	}
 
 	private boolean actMove( HeroAction.Move action ) {
-		//水中祝福
-		if(Dungeon.branch == 0 || Dungeon.branch == 10){
+
+
+		//水中祝福 但在BR不生效
+		if((Dungeon.branch == 0 || Dungeon.branch == 10) && !bossRushMode){
 			MoveWater();
 		}
 
@@ -3091,21 +3095,24 @@ public class Hero extends Char {
 		super.move( step, travelling);
 
 		//矮人层
-		if(Dungeon.DiedWaterLevel() && Dungeon.level.water[pos] && flying && Dungeon.isChallenged(AQUAPHOBIA)) {
-			Buff.affect(this, HasteLing.class, Haste.DURATION/20);
-		} else if (Dungeon.DiedWaterLevel()&& Dungeon.level.water[pos] && Dungeon.hero.buff(WaterSoulX.class)== null && Dungeon.isChallenged(AQUAPHOBIA)){
-			Buff.prolong(hero, Chill.class, 2f);
-			Buff.prolong(hero, Blindness.class, Blindness.DURATION/5f);
-			Buff.prolong( hero, Cripple.class, Cripple.DURATION/5f );
-			Buff.prolong( hero, Hex.class, Hex.DURATION/10f );
-		} else if (Dungeon.DiedWaterLevel()&& Dungeon.level.water[pos] && Dungeon.isChallenged(AQUAPHOBIA)){
-			Buff.affect(this, HasteLing.class, Haste.DURATION/20);
-		} else if(Dungeon.DiedWaterLevel()&& !Dungeon.level.water[pos] && Dungeon.isChallenged(AQUAPHOBIA))
-			for (Buff buff : hero.buffs()) {
-				if (buff instanceof HasteLing) {
-					buff.detach();
+		if(!bossRushMode){
+			if(Dungeon.DiedWaterLevel() && Dungeon.level.water[pos] && flying && Dungeon.isChallenged(AQUAPHOBIA)) {
+				Buff.affect(this, HasteLing.class, Haste.DURATION/20);
+			} else if (Dungeon.DiedWaterLevel()&& Dungeon.level.water[pos] && Dungeon.hero.buff(WaterSoulX.class)== null && Dungeon.isChallenged(AQUAPHOBIA)){
+				Buff.prolong(hero, Chill.class, 2f);
+				Buff.prolong(hero, Blindness.class, Blindness.DURATION/5f);
+				Buff.prolong( hero, Cripple.class, Cripple.DURATION/5f );
+				Buff.prolong( hero, Hex.class, Hex.DURATION/10f );
+			} else if (Dungeon.DiedWaterLevel()&& Dungeon.level.water[pos] && Dungeon.isChallenged(AQUAPHOBIA)){
+				Buff.affect(this, HasteLing.class, Haste.DURATION/20);
+			} else if(Dungeon.DiedWaterLevel()&& !Dungeon.level.water[pos] && Dungeon.isChallenged(AQUAPHOBIA))
+				for (Buff buff : hero.buffs()) {
+					if (buff instanceof HasteLing) {
+						buff.detach();
+					}
 				}
-			}
+		}
+
 
 		if (!flying && travelling) {
 			if (Dungeon.level.water[pos]) {

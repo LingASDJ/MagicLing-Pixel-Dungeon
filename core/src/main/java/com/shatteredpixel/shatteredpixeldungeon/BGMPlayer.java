@@ -6,17 +6,8 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MoloHR;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.REN;
-import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
-import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 public class BGMPlayer {
@@ -42,7 +33,29 @@ public class BGMPlayer {
         int s = branch;
 
         if (Statistics.bossRushMode) {
-            if (d == 1) {
+
+            if( d == 13 && s == 4 ){
+                Music.INSTANCE.playTracks(
+                        new String[]{Assets.Music.DIAMAND_KING_INTRO,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                        },
+                        new float[]{1
+                                ,1 ,1 ,1 ,1 ,1
+                                ,1 ,1 ,1 ,1 ,1
+                                ,1 ,1 ,1 ,1 ,1
+                                ,1 ,1 ,1 ,1 ,1
+                        },
+                        false);
+            } else if (d == 1) {
                 playBGM(Assets.TOWN, true);
             }  else if(depth>=40) {
                 playBGM(Assets.BGM_5, true);
@@ -71,7 +84,7 @@ public class BGMPlayer {
                 if(d == 25){
                     playBGM(Assets.Music.THEME_FINALE, true);
                 }
-                if(d == 10){
+                if(d == 10 ||d == 11 || d == 13 ){
                     Music.INSTANCE.playTracks(
                             new String[]{Assets.Music.DIAMAND_KING_INTRO,
                                     Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
@@ -156,19 +169,53 @@ public class BGMPlayer {
     }
 
     private static String[] MUISC_RANDOM = {
-            Assets.BGM_BOSSA, Assets.BGM_BOSSB, Assets.BGM_BOSSC,
-            Assets.BGM_BOSSD, Assets.BGM_BOSSE3, Assets.BGM_BOSSE4,
-            Assets.SKBJY, Assets.Music.DRAGON_LING, Assets.Music.CITY_BOSS_FINALE,
-            Assets.Music.CAVES_BOSS_FINALE, Assets.BGM_BOSSD2, Assets.BGM_BOSSB2
+            Assets.BGM_BOSSA, Assets.BGM_BOSSC,
+            Assets.BGM_BOSSD,
+
+            Assets.Music.CITY_BOSS_FINALE,
+            Assets.Music.CAVES_BOSS_FINALE, Assets.BGM_YOU,
+
+            Assets.Music.DRAGON_LING,
+            Assets.BOSSDOG,
     };
 
     public static void playBoss() {
         int t = depth;
         int s = branch;
-
         if (Statistics.bossRushMode) {
-            if (level.locked) {
-                playBGM(MUISC_RANDOM[Random.Int(MUISC_RANDOM.length)],true);
+            if (t == 42 &&  !Statistics.NoTime) {
+                playBGM(Assets.BGM_BOSSE3, true);
+            } else if(t == 42) {
+                playBGM(Assets.BGM_BOSSE4, true);
+            } else if(depth == 33) {
+                playBGM(Assets.BGM_BOSSD2, true);
+            } else if(depth == 13){
+                Music.INSTANCE.playTracks(
+                        new String[]{Assets.Music.DIAMAND_KING_INTRO,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                                Assets.Music.DIAMAND_KING_LOOP,Assets.Music.DIAMAND_KING_LOOP,
+                        },
+                        new float[]{1
+                                ,1 ,1 ,1 ,1 ,1
+                                ,1 ,1 ,1 ,1 ,1
+                                ,1 ,1 ,1 ,1 ,1
+                                ,1 ,1 ,1 ,1 ,1
+                        },
+                        false);
+            } else {
+                if(!Statistics.NightDreamLoop){
+                    playBGM(MUISC_RANDOM[Random.Int(MUISC_RANDOM.length)],true);
+                    Statistics.NightDreamLoop = true;
+                }
+
             }
         } else {
             if(s == 10) {

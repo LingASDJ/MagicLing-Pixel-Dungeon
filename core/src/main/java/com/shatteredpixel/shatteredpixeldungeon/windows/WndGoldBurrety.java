@@ -327,6 +327,7 @@ public class WndGoldBurrety extends Window {
                     result.noUpgrade = true;
                     result.upgrade();
                     result = changeStaff((MagesStaff) item);
+                    ((MagesStaff) result).activate(hero);
                     item.detachAll(Dungeon.hero.belongings.backpack);
                 }
                 Dungeon.quickslot.setSlot(0, result);
@@ -388,7 +389,11 @@ public class WndGoldBurrety extends Window {
                     }
                 } else {
                     result = changeRing((Ring) item);
-                    result.noUpgrade = true;
+                   if(Statistics.upgradeGold<=18){
+                       result.upgrade();
+                       Statistics.upgradeGold--;
+                       result.noUpgrade = true;
+                   }
                 }
             }
 

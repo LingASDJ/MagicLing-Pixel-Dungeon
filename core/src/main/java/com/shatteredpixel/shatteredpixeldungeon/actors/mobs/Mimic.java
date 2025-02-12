@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -320,7 +319,7 @@ public class Mimic extends Mob {
 		//宝藏迷宫
 		Statistics.goldchestmazeCollected++;
 
-		if((Dungeon.depth == 10 || Dungeon.depth == 11) && Dungeon.branch == 4){
+		if((Dungeon.depth == 10 || Dungeon.depth == 11 || Dungeon.depth == 13) && Dungeon.branch == 4){
 			Statistics.KillMazeMimic++;
 		}
 

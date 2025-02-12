@@ -415,6 +415,8 @@ public class DwarfGeneralBossLevel extends Level {
         } else if(Statistics.dwarfKill && !SPDSettings.KillDwarf()) {
             GLog.n(Messages.get(DwarfGeneral.class,"story"));
             return false;
+        } else if(Statistics.bossRushMode) {
+            return super.activateTransition(hero, transition);
         } else {
             return false;
         }

@@ -1452,7 +1452,7 @@ public class GameScene extends PixelScene {
 			case AMULET:
 			case GARDEN:
 			case YOG:
-				if(!Statistics.bossRushMode || !Statistics.RandMode){
+				if(!Statistics.bossRushMode && !Statistics.RandMode){
 					switch (Dungeon.depth) {
 						case 0:
 							if(Dungeon.isChallenged(CS)) {
@@ -1807,84 +1807,122 @@ public class GameScene extends PixelScene {
 		if (Dungeon.hero.isAlive()) {
 			Banner bossSlain = new Banner( BannerSprites.get( BannerSprites.Type.NULL ) );
 
-
-			//Boss开始后的处理Logo,不在Switch中就是默认的Logo。
-			switch (Dungeon.depth){
-				case 2:
-					if(Statistics.bossRushMode){
-						bossSlain.texture( Assets.Interfaces.QliPhoth_Title );
-						bossSlain.show( 0xFFFFFF, 0.3f, 5f );
-						scene.showBanner( bossSlain );
-					}
-					break;
-				case 4:
-					if(Statistics.bossRushMode){
-						bossSlain.texture(Assets.Interfaces.QliPhothEX_Title);
-						bossSlain.show( Window.CYELLOW, 0.3f, 5f);
+			if(Statistics.bossRushMode){
+				switch (Dungeon.depth){
+					case 3:
+						bossSlain.texture(Assets.Interfaces.Goo_Title);
+						bossSlain.show(Window.CBLACK, 0.3f, 5f);
 						scene.showBanner(bossSlain);
 						break;
-					}
-				case 5:
-					if(Dungeon.branch ==3 ){
-						bossSlain.texture(Assets.Interfaces.DIZF_Title);
-						bossSlain.show( Window.R_COLOR, 0.4f, 6f);
+					case 5:
+						bossSlain.texture(Assets.Interfaces.QliPhoth_Title);
+						bossSlain.show(Window.G_COLOR, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					} else {
-						bossSlain.texture(Statistics.ExFruit ? Assets.Interfaces.QliPhothEX_Title : Assets.Interfaces.QliPhoth_Title);
-						bossSlain.show( Window.CYELLOW, 0.3f, 5f);
-						scene.showBanner(bossSlain);
-					}
 					break;
-				case 10:
-					if ( ((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) && !Statistics.mustTengu) {
-						bossSlain.texture(Assets.Interfaces.D_Title);
-						bossSlain.show( Window.TITLE_COLOR, 0.3f, 4f);
+					case 7:
+						bossSlain.texture(Assets.Interfaces.QliPhothEX_Title);
+						bossSlain.show(Window.G_COLOR, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					} else {
+					break;
+					case 9:
 						bossSlain.texture(Assets.Interfaces.Tengu_Title);
-						bossSlain.show( Window.R_COLOR, 0.3f, 4f);
+						bossSlain.show(Window.CBLACK, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					}
-
+						break;
+					case 11:
+						bossSlain.texture(Assets.Interfaces.DIZF_Title);
+						bossSlain.show(Window.RED_COLOR, 0.3f, 5f);
+						scene.showBanner(bossSlain);
 					break;
-				case 14:
-					bossSlain.texture(Assets.Interfaces.DMOR_Title);
-					bossSlain.show( Window.CBLACK, 0.3f, 5f);
-					scene.showBanner(bossSlain);
+					case 15:
+						bossSlain.texture(Assets.Interfaces.SGoo_Title);
+						bossSlain.show(Window.WATA_COLOR, 0.3f, 5f);
+						scene.showBanner(bossSlain);
 					break;
-				case 17:case 18:
-					if(Dungeon.branch == 3) {
-						bossSlain.texture(Assets.Interfaces.SakaBJY_Title);
+					case 33:
+						bossSlain.texture(Assets.Interfaces.General_Title);
+						bossSlain.show(Window.ANSDO_COLOR, 0.3f, 5f);
+						scene.showBanner(bossSlain);
+						break;
+					case 37:
+						bossSlain.texture(Assets.Interfaces.Cerdog_Title);
 						bossSlain.show(Window.CYELLOW, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					}
-					break;
-				case 20:
-					if(Dungeon.branch == 1){
-						bossSlain.texture(Assets.Interfaces.General_Title);
-						bossSlain.show( Window.ANSDO_COLOR, 0.3f, 5f);
-						scene.showBanner(bossSlain);
-					}
-					break;
-				case 25:
-					if(Dungeon.isChallenged(CS)) {
+					case 42:
 						bossSlain.texture(Assets.Interfaces.YogZot_Title);
 						bossSlain.show(Window.R_COLOR, 0.3f, 5f);
 						GameScene.flash(Window.GDX_COLOR);
 						scene.showBanner(bossSlain);
-					}
 					break;
-				case 30: case 26:
-					if(Dungeon.branch == 10){
-						bossSlain.texture(Assets.Interfaces.Tawi_Title);
-						bossSlain.show( 0x800080, 0.3f, 5f);
+				}
+			} else {
+				//Boss开始后的处理Logo,不在Switch中就是默认的Logo。
+				switch (Dungeon.depth) {
+                    case 5:
+						if (Dungeon.branch == 3) {
+							bossSlain.texture(Assets.Interfaces.DIZF_Title);
+							bossSlain.show(Window.R_COLOR, 0.4f, 6f);
+							scene.showBanner(bossSlain);
+						} else {
+							bossSlain.texture(Statistics.ExFruit ? Assets.Interfaces.QliPhothEX_Title : Assets.Interfaces.QliPhoth_Title);
+							bossSlain.show(Window.CYELLOW, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						break;
+					case 10:
+						if (((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) && !Statistics.mustTengu) {
+							bossSlain.texture(Assets.Interfaces.D_Title);
+							bossSlain.show(Window.TITLE_COLOR, 0.3f, 4f);
+							scene.showBanner(bossSlain);
+						} else {
+							bossSlain.texture(Assets.Interfaces.Tengu_Title);
+							bossSlain.show(Window.R_COLOR, 0.3f, 4f);
+							scene.showBanner(bossSlain);
+						}
+
+						break;
+					case 14:
+						bossSlain.texture(Assets.Interfaces.DMOR_Title);
+						bossSlain.show(Window.CBLACK, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					} else {
-						bossSlain.texture(Assets.Interfaces.Cerdog_Title);
-						bossSlain.show(Window.CYELLOW, 0.3f, 5f);
-						scene.showBanner(bossSlain);
-					}
-					break;
+						break;
+					case 17:
+					case 18:
+						if (Dungeon.branch == 3) {
+							bossSlain.texture(Assets.Interfaces.SakaBJY_Title);
+							bossSlain.show(Window.CYELLOW, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						break;
+					case 20:
+						if (Dungeon.branch == 1) {
+							bossSlain.texture(Assets.Interfaces.General_Title);
+							bossSlain.show(Window.ANSDO_COLOR, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						break;
+					case 25:
+						if (Dungeon.isChallenged(CS)) {
+							bossSlain.texture(Assets.Interfaces.YogZot_Title);
+							bossSlain.show(Window.R_COLOR, 0.3f, 5f);
+							GameScene.flash(Window.GDX_COLOR);
+							scene.showBanner(bossSlain);
+						}
+						break;
+					case 30:
+					case 26:
+						if (Dungeon.branch == 10) {
+							bossSlain.texture(Assets.Interfaces.Tawi_Title);
+							bossSlain.show(0x800080, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						} else {
+							bossSlain.texture(Assets.Interfaces.Cerdog_Title);
+							bossSlain.show(Window.CYELLOW, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						break;
+				}
+
 			}
 
 			if (Dungeon.hero.buff(LockedFloor.class) == null) {
@@ -1902,80 +1940,109 @@ public class GameScene extends PixelScene {
 			bossSlain.show( 0xFFFFFF, 0.3f, 5f );
 			scene.showBanner( bossSlain );
 
-
-			//Boss死亡后的处理Logo,不在Switch中就是默认的Logo。
-			switch (Dungeon.depth){
-				case 2:
-					if(Statistics.bossRushMode){
-						bossSlain.texture( Assets.Interfaces.QliPhoth_Clear );
-						bossSlain.show( 0xFFFFFF, 0.3f, 5f );
-						scene.showBanner( bossSlain );
-					}
-					break;
-				case 5:
-					if(Dungeon.branch == 3) {
+			if(Statistics.bossRushMode){
+				switch (Dungeon.depth) {
+					case 9:
+						bossSlain.texture(Assets.Interfaces.Tengu_Clear);
+						bossSlain.show(Window.CBLACK, 0.4f, 6f);
+						scene.showBanner(bossSlain);
+						Statistics.GetFoodLing = 0;
+						break;
+					case 11:
 						bossSlain.texture(Assets.Interfaces.DIZF_Slain);
 						bossSlain.show(Window.R_COLOR, 0.4f, 6f);
 						scene.showBanner(bossSlain);
-					} else {
-						bossSlain.texture(Assets.Interfaces.QliPhoth_Clear);
-						bossSlain.show( Window.CYELLOW, 0.3f, 5f);
-						scene.showBanner(bossSlain);
-					}
-					Statistics.GetFoodLing=0;
-					break;
-				case 10:
-					if ( ((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) && !Statistics.mustTengu) {
-						bossSlain.texture(Assets.Interfaces.D_Clear);
-						bossSlain.show( Window.TITLE_COLOR, 0.2f, 5f);
-						scene.showBanner(bossSlain);
-					} else {
-						bossSlain.texture(Assets.Interfaces.Tengu_Clear);
-						bossSlain.show( Window.R_COLOR, 0.2f, 5f);
-						scene.showBanner(bossSlain);
-					}
-					Statistics.GetFoodLing=0;
-					break;
-				case 15:
-					Statistics.GetFoodLing=0;
-					break;
-				case 17:case 18:
-					if(Dungeon.branch == 3){
+						Statistics.GetFoodLing = 0;
+						break;
+					case 31:
 						bossSlain.texture(Assets.Interfaces.SakaBJY_Clear);
 						bossSlain.show( Window.CYELLOW, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					}
-					break;
-				case 20:
-					if(Dungeon.branch == 1){
+						break;
+					case 33:
 						bossSlain.texture(Assets.Interfaces.General_Clear);
-						bossSlain.show( Window.ANSDO_COLOR, 0.3f, 5f);
+						bossSlain.show(Window.ANSDO_COLOR, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					}
-					Statistics.GetFoodLing=0;
-					break;
-				case 25:
-					if(Dungeon.isChallenged(CS)) {
-						bossSlain.texture(Assets.Interfaces.YogZot_Slain);
-						bossSlain.show(Window.GDX_COLOR, 0.3f, 5f);
-						GameScene.flash(Window.TITLE_COLOR);
-						scene.showBanner(bossSlain);
-					}
-					Statistics.GetFoodLing=0;
-					break;
-				case 30:
-				case 26:
-					if(Dungeon.branch == 10){
-						bossSlain.texture(Assets.Interfaces.Tawi_Clear);
-						bossSlain.show( 0x800080, 0.3f, 5f);
-						scene.showBanner(bossSlain);
-					} else {
+						break;
+					case 37:
 						bossSlain.texture(Assets.Interfaces.Cerdog_Clear);
-						bossSlain.show( 0xF7941D, 0.3f, 5f);
+						bossSlain.show(Window.CYELLOW, 0.3f, 5f);
 						scene.showBanner(bossSlain);
-					}
-					break;
+					case 42:
+						bossSlain.texture(Assets.Interfaces.YogZot_Slain);
+						bossSlain.show(Window.R_COLOR, 0.4f, 6f);
+						scene.showBanner(bossSlain);
+						Statistics.GetFoodLing = 0;
+						break;
+				}
+			} else {
+				switch (Dungeon.depth){
+					case 5:
+						if(Dungeon.branch == 3) {
+							bossSlain.texture(Assets.Interfaces.DIZF_Slain);
+							bossSlain.show(Window.R_COLOR, 0.4f, 6f);
+							scene.showBanner(bossSlain);
+						} else {
+							bossSlain.texture(Assets.Interfaces.QliPhoth_Clear);
+							bossSlain.show( Window.CYELLOW, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						Statistics.GetFoodLing=0;
+						break;
+					case 10:
+						if ( ((Statistics.boss_enhance & 0x2) != 0 || Statistics.mimicking) && !Statistics.mustTengu) {
+							bossSlain.texture(Assets.Interfaces.D_Clear);
+							bossSlain.show( Window.TITLE_COLOR, 0.2f, 5f);
+							scene.showBanner(bossSlain);
+						} else {
+							bossSlain.texture(Assets.Interfaces.Tengu_Clear);
+							bossSlain.show( Window.R_COLOR, 0.2f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						Statistics.GetFoodLing=0;
+						break;
+					case 15:
+						Statistics.GetFoodLing=0;
+						break;
+					case 17:case 18:
+						if(Dungeon.branch == 3){
+							bossSlain.texture(Assets.Interfaces.SakaBJY_Clear);
+							bossSlain.show( Window.CYELLOW, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						break;
+					case 20:
+						if(Dungeon.branch == 1){
+							bossSlain.texture(Assets.Interfaces.General_Clear);
+							bossSlain.show( Window.ANSDO_COLOR, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						Statistics.GetFoodLing=0;
+						break;
+					case 25:
+						if(Dungeon.isChallenged(CS)) {
+							bossSlain.texture(Assets.Interfaces.YogZot_Slain);
+							bossSlain.show(Window.GDX_COLOR, 0.3f, 5f);
+							GameScene.flash(Window.TITLE_COLOR);
+							scene.showBanner(bossSlain);
+						}
+						Statistics.GetFoodLing=0;
+						break;
+					case 30:
+					case 26:
+						if(Dungeon.branch == 10){
+							bossSlain.texture(Assets.Interfaces.Tawi_Clear);
+							bossSlain.show( 0x800080, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						} else {
+							bossSlain.texture(Assets.Interfaces.Cerdog_Clear);
+							bossSlain.show( 0xF7941D, 0.3f, 5f);
+							scene.showBanner(bossSlain);
+						}
+						break;
+				}
 			}
+			//Boss死亡后的处理Logo,不在Switch中就是默认的Logo。
 
 			if(lanterfireactive && Dungeon.branch == 0 || Dungeon.branch == 6 || Statistics.bossRushMode){
 				cure( Dungeon.hero );

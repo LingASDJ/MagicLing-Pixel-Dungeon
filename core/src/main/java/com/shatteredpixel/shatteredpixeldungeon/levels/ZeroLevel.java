@@ -184,7 +184,7 @@ public class ZeroLevel extends Level {
     };
 
     public static int[] SALEPOS_FOUR = new int[]{
-            1118,1082
+            864,1008
     };
 
     public static int[] POSSALE = new int[]{

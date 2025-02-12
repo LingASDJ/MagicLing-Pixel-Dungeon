@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.YogSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
@@ -228,7 +229,7 @@ public class YogDzewa extends Boss {
 					}
 
 					if (hit( this, ch, true )) {
-						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) || Statistics.bossRushMode) {
 							ch.damage(Random.NormalIntRange(30, 50), new Eye.DeathGaze());
 						} else {
 							ch.damage(Random.NormalIntRange(20, 30), new Eye.DeathGaze());
@@ -348,6 +349,9 @@ public class YogDzewa extends Boss {
 		if (summonCooldown > 0) summonCooldown--;
 		if (abilityCooldown > 0) abilityCooldown--;
 
+
+
+
 		//extra fast abilities and summons at the final 100 HP
 		if (phase == 5 && abilityCooldown > 2){
 			abilityCooldown = 2;
@@ -373,6 +377,16 @@ public class YogDzewa extends Boss {
 					Music.INSTANCE.fadeOut(0.5f, new Callback() {
 						@Override
 						public void call() {
+							if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) || Statistics.bossRushMode){
+								YogFist.FreezingFist freezingFist = new YogFist.FreezingFist();
+								freezingFist.pos = pos-3;
+								GameScene.add(freezingFist);
+								Camera.main.shake(1,3f);
+								GameScene.flash(0x808080,true);
+								YogFist.HaloFist haloFist = new YogFist.HaloFist();
+								haloFist.pos = pos+3;
+								GameScene.add(haloFist);
+							}
 							Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
 						}
 					});
@@ -421,7 +435,7 @@ public class YogDzewa extends Boss {
 
 			addFist((YogFist)Reflection.newInstance(fistSummons.remove(0)));
 
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) || Statistics.bossRushMode){
 				addFist((YogFist)Reflection.newInstance(challengeSummons.remove(0)));
 			}
 
@@ -436,7 +450,7 @@ public class YogDzewa extends Boss {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/3f);
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) || Statistics.bossRushMode)   lock.addTime(dmgTaken/3f);
 			else                                                    lock.addTime(dmgTaken/2f);
 		}
 

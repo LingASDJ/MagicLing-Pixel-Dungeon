@@ -51,25 +51,24 @@ public class LevelRules {
                     case 1: return new AncityLevel();
 
                     case 3: return new SewerBossLevel();
+
                     case 5: return new ForestPoisonBossLevel();
-                    case 4:
-                        return new ForestPoisonBossLevel();
                     case 7: return new ForestHardBossLevel();
 
-                    case 9: return new LaveCavesBossLevel();
+                    case 9: return new PrisonBossLevel();
 
                     //T2-Boss区
-                    case 11: return new PrisonBossLevel();
+                    case 11: return new LaveCavesBossLevel();
 
                     case 13:
-                        if(Statistics.difficultyDLCEXLevel >=2)
-                            return new SkyGooBossLevel();
-                         else {
-                            return new BossRushItemLevel();
-                        }
+                        return new ColdChestBossLevel();
 
                     case 15:
-                        return new ColdChestBossLevel();
+                        if(Statistics.difficultyDLCEXLevel >=2)
+                            return new SkyGooBossLevel();
+                        else {
+                            return new BossRushItemLevel();
+                        }
 
                     case 17:
                         if(Statistics.difficultyDLCEXLevel >=2)
@@ -102,7 +101,7 @@ public class LevelRules {
                         return new AncientMysteryCityBossLevel();
 
                     case 33:
-                        return new NewCityBossLevel();
+                        return new DwarfGeneralBossLevel();
 
                     case 35:
                         return new DwarfMasterBossLevel();
@@ -118,7 +117,6 @@ public class LevelRules {
 
 
                     //补给层 T1
-
                     case 2:  case 4: case 6:  case 8: case 10:
                     //补给层 T2
                     case 12: case 14:case 16: case 18: case 20:
@@ -322,7 +320,7 @@ public class LevelRules {
                     case 17:
                     case 18:
                         return new GardenLevel();
-                    case 10: case 11:
+                    case 10: case 11: case 13:
                         return new MiniChestMazeLevel();
                     default:
                         return new DeadEndLevel();

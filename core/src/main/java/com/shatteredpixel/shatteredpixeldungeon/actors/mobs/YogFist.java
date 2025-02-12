@@ -810,12 +810,15 @@ public abstract class YogFist extends Mob {
 				}
 			}
 
-			for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-				if (mob.alignment == Alignment.ENEMY && mob != this && !(mob instanceof YogReal || mob instanceof YogDzewa || mob instanceof YogFist.FreezingFist||mob instanceof SuccubusQueen||mob instanceof GreenSlting||
-						mob instanceof DM275||mob instanceof GnollHero) ) {
-					mob.die( cause );
+			if(!Statistics.bossRushMode){
+				for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+					if (mob.alignment == Alignment.ENEMY && mob != this && !(mob instanceof YogReal || mob instanceof YogDzewa || mob instanceof YogFist.FreezingFist||mob instanceof SuccubusQueen||mob instanceof GreenSlting||
+							mob instanceof DM275||mob instanceof GnollHero) ) {
+						mob.die( cause );
+					}
 				}
 			}
+
 
 			super.die( cause );
 		}
@@ -847,7 +850,11 @@ public abstract class YogFist extends Mob {
 						Dungeon.observe();
 					}
 					for (Char ch : affected) {
-						ch.damage(Random.NormalIntRange(28, 42),new DarkBolt());
+						int dmg = Random.NormalIntRange(28, 42);
+						if(Statistics.bossRushMode){
+							dmg *= 2;
+						}
+						ch.damage(dmg,new DarkBolt());
 
 						if (Dungeon.level.heroFOV[pos]) {
 							ch.sprite.flash();

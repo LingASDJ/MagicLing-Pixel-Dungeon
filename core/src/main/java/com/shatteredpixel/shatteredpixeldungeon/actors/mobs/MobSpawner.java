@@ -98,7 +98,7 @@ public class MobSpawner extends Actor {
 	public static ArrayList<Class<? extends Mob>> getMobRotation(int depth ){
 		ArrayList<Class<? extends Mob>> mobs;
 
-		if(!(Dungeon.isChallenged(RLPT)) || Dungeon.depth < 6 && Dungeon.isChallenged(RLPT) || Statistics.RandMode){
+		if(!(Dungeon.isChallenged(RLPT)) || Dungeon.depth < 6 && Dungeon.isChallenged(RLPT) || Statistics.RandMode || Statistics.bossRushMode){
 			mobs = standardMobRotation( depth );
 		} else {
 			mobs = rlptMobDied( depth );
@@ -251,9 +251,14 @@ public class MobSpawner extends Actor {
 								Golem.class, Golem.class,Ice_Scorpio.class, Fire_Scorpio.class));
 
 					case 21:
-						//3x succubus, 3x evil eye
-						return new ArrayList<>(Arrays.asList(
-								Eye.class,ShieldHuntsman.class, Fire_Scorpio.class));
+    						if (Statistics.bossRushMode) {
+    						    return new ArrayList<>(Arrays.asList(
+    						            PiraLand.class, PiraLand.class, PhantomPiranha.class,
+    						            RiceRat.class, RiceRat.class, PhantomPiranha.class));
+    						} else {
+    						    return new ArrayList<>(Arrays.asList(
+    						            Eye.class, ShieldHuntsman.class, Fire_Scorpio.class));
+    						}
 					case 22:
 						//3x succubus, 3x evil eye
 						return new ArrayList<>(Arrays.asList(
@@ -413,9 +418,14 @@ public class MobSpawner extends Actor {
 								Golem.class, Golem.class,Ice_Scorpio.class));
 
 					case 21:
-						//3x succubus, 3x evil eye
-						return new ArrayList<>(Arrays.asList(
-								Eye.class,ShieldHuntsman.class));
+						if (Statistics.bossRushMode) {
+							return new ArrayList<>(Arrays.asList(
+									PiraLand.class, PiraLand.class, PhantomPiranha.class,
+									RiceRat.class, RiceRat.class, PhantomPiranha.class));
+						} else {
+							return new ArrayList<>(Arrays.asList(
+									Eye.class, ShieldHuntsman.class, Fire_Scorpio.class));
+						}
 					case 22:
 						//3x succubus, 3x evil eye
 						return new ArrayList<>(Arrays.asList(
@@ -454,15 +464,29 @@ public class MobSpawner extends Actor {
 								PumkingBomber.class, Pumking_Ghost.class
 						));
 
-					case 30:
-						return new ArrayList<>(Arrays.asList(
-								ApprenticeWitch.class,
-								ApprenticeWitch.class,
-								Butcher.class,Butcher.class,
-								Pumking_Ghost.class
-								, PumkingBomber.class
-						));
-
+					case 30: case 32: case 34: case 36: case 38:
+						//普通结局
+					case 40: case 41:
+						if(Statistics.bossRushMode){
+							return new ArrayList<>(Arrays.asList(
+									Succubus.class,	ApprenticeWitch.class,
+									Butcher.class,Butcher.class,
+									PumkingBomber.class, Pumking_Ghost.class,
+									DemonLord.class,
+									Gorgon.class,
+									Eye.class,Eye.class, Eye.class,
+									Scorpio.class, Eye.class,Succubus.class,Monk.class,
+									Golem.class,IceGolem.class,Fire_Scorpio.class,Fire_Scorpio.class,
+									Scorpio.class, Succubus.class, DrTerror.class,Ice_Scorpio.class,ShieldHuntsman.class));
+						} else {
+							return new ArrayList<>(Arrays.asList(
+									ApprenticeWitch.class,
+									ApprenticeWitch.class,
+									Butcher.class,Butcher.class,
+									Pumking_Ghost.class
+									, PumkingBomber.class
+							));
+						}
 					default:
 						return new ArrayList<>(Arrays.asList(FlowerSlime.class, FlowerSlime.class,
 								FlowerSlime.class,

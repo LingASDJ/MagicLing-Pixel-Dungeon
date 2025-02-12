@@ -17,9 +17,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HaloFireImBlue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
@@ -73,10 +75,15 @@ public class MagicGirlDead extends Boss {
         spriteClass = MagicGirlSprite.class;
 
         initProperty();
-        initBaseStatus(16, 22, 28, 16, 400, 4, 8);
+
+
+        if(Statistics.bossRushMode){
+            initBaseStatus(25, 46, 28, 20, 1000, 4, 8);
+        } else {
+            initBaseStatus(16, 22, 28, 16, 400, 4, 8);
+        }
+
         initStatus(76);
-        HP=400;
-        HT=400;
         viewDistance = 18;
     }
     //the actual affected cells
@@ -96,11 +103,19 @@ public class MagicGirlDead extends Boss {
         resistances.add(Roots.class);
         resistances.add(Slow.class);
 
+        if(Statistics.bossRushMode){
+            immunities.add(Chill.class);
+            immunities.add(Frost.class);
+            immunities.add(FrostBurning.class);
+        }
+
         immunities.add(Paralysis.class);
     }
 
     //0~7 phases. if health < threshold[phase], then go on.
     private static final int[] healthThreshold = new int[]{399, 330, 270, 210, 160, 120, 80, 40, -1000000};
+
+    private static final int[] healthThresholdX = new int[]{900, 600, 550, 400, 300, 220, 120, 100, -1000000};
 
     private int phase = 0;
 
@@ -111,7 +126,7 @@ public class MagicGirlDead extends Boss {
 
     @Override
     public String info(){
-        return Messages.get(this, "desc", phase, HP - healthThreshold[phase]);
+        return Messages.get(this, "desc", phase, HP - (Statistics.bossRushMode? healthThresholdX[phase] : healthThreshold[phase]));
     }
 
     @Override
@@ -132,7 +147,7 @@ public class MagicGirlDead extends Boss {
             places.add(18*Dungeon.level.width()-5);
             Random.shuffle(places);
             for(int i=0;i<Math.min(phase/2, 4);++i){
-                summonCaster(Random.Int(4), places.get(i),false);
+                summonCaster(Random.Int(Statistics.bossRushMode? 8 : 4), places.get(i),false);
             }
 //        }else{
 //            destroyAll();
@@ -275,7 +290,7 @@ public class MagicGirlDead extends Boss {
 //        }
         if(summonCD<0f){
             summonCD += Math.max(60f - phase * 2f, 40f);
-            summonCaster(Random.Int(4), findRandomPlaceForCaster(), phase>5);
+            summonCaster(Random.Int(Statistics.bossRushMode? 8 : 4), findRandomPlaceForCaster(), phase>5);
         }
         summonCD -= 1/speed();
         return super.act();
@@ -355,7 +370,7 @@ public class MagicGirlDead extends Boss {
         int preHP = HP;
         super.damage(damage, src);
         int postHP = HP;
-        if(preHP>healthThreshold[phase] && postHP<=healthThreshold[phase]){
+        if(preHP> (Statistics.bossRushMode? healthThresholdX[phase] : healthThreshold[phase]) && postHP<= (Statistics.bossRushMode? healthThresholdX[phase] : healthThreshold[phase])){
             Actor.add(new Actor() {
 
                 {
@@ -365,7 +380,7 @@ public class MagicGirlDead extends Boss {
                 @Override
                 protected boolean act() {
                     Actor.remove(this);
-                    HP = healthThreshold[phase];
+                    HP =  Statistics.bossRushMode? healthThresholdX[phase] : healthThreshold[phase];
                     goOnPhase();
                     return true;
                 }
@@ -381,8 +396,9 @@ public class MagicGirlDead extends Boss {
     public void die(Object src){
         Statistics.bossScores[2] += 5000;
         super.die(src);
-      if(Statistics.bossRushMode){
+        if(Statistics.bossRushMode){
             GetBossLoot();
+            Buff.detach( hero, Doom.class );
         }
         Badges.validateBossSlain();
         if (Statistics.qualifiedForBossChallengeBadge){
@@ -464,6 +480,9 @@ public class MagicGirlDead extends Boss {
     private static final int HALOFIRE = 3;
     private static final int BOUNCE = 4;
 
+    private static final int DEGRADE = 5;
+    private static final int DEATHRAY = 6;
+
     protected void fallingRockVisual(int pos){
         Camera.main.shake(0.4f, 2f);
         CellEmitter.get( pos - Dungeon.level.width() ).start(Speck.factory(Speck.RED_LIGHT), 0.08f, 10);
@@ -486,11 +505,18 @@ public class MagicGirlDead extends Boss {
                 case LIGHT:
                     caster = new SpellCaster.LightCaster();
                     break;
-//                case HALOFIRE:
-//                    caster = new SpellCaster.HaloFireCaster();
-//                    break;
+                case HALOFIRE:
+                    caster = new SpellCaster.HaloFireCaster();
+                    break;
+                case DEGRADE:
+                    caster = new SpellCaster.DegradeCaster();
+                    break;
+                case DEATHRAY:
+                    caster = new SpellCaster.DeadLingCaster();
+                    break;
                 case BOUNCE: default:
                     caster = new SpellCaster.BounceCaster();
+                    break;
             }
             caster.pos = pos;
             GameScene.add(caster, Random.Float(2f, 8f));
@@ -675,7 +701,7 @@ public class MagicGirlDead extends Boss {
 
     @Override
     public boolean isAlive(){
-        return HP>0 || healthThreshold[phase]>0;
+        return HP>0 || (Statistics.bossRushMode ? healthThresholdX[phase] : healthThreshold[phase])>0;
     }
 }
 

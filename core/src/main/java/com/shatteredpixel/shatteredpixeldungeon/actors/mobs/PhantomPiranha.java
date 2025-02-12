@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.CrivusFruits;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
@@ -47,6 +48,13 @@ public class PhantomPiranha extends Piranha {
 		}
 		loot = PhantomMeat.class;
 		lootChance = 1f;
+
+		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+			if(buff != null){
+				buff.detach();
+			}
+		}
+
 	}
 
 	@Override

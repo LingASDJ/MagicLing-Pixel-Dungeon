@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -125,7 +126,7 @@ public class WndEnergizeItem extends WndInfoItem {
 		}
 	}
 
-	private static void energize(Item item){
+	public static void energize(Item item){
 		Hero hero = Dungeon.hero;
 
 		if (ShatteredPixelDungeon.scene() instanceof AlchemyScene){
@@ -142,7 +143,7 @@ public class WndEnergizeItem extends WndInfoItem {
 			hero.spend(-hero.cooldown());
 			new EnergyCrystal(item.energyVal()).doPickUp(hero);
 			item.identify();
-			GLog.h("You energized: " + item.name());
+			GLog.h(Messages.get(Alchemize.class,"refoge") + item.name());
 
 		}
 	}
