@@ -68,10 +68,10 @@ public class WandOfVenom extends DamageWand {
 
     @Override
     public void onZap(Ballistica bolt) {
-        VenomGas gas = Blob.seed(bolt.collisionPos, 90 + 50 * buffedLvl(),  VenomGas.class);
+        VenomGas gas = Blob.seed(bolt.collisionPos, 150 + 50 * buffedLvl(),  VenomGas.class);
         //gas.setLevel(this);
         CellEmitter.get(bolt.collisionPos).burst(Speck.factory(Speck.CORROSION), 10 );
-        gas.setStrength(3 + buffedLvl(), getClass());
+        gas.setWandlvl(buffedLvl(), getClass());
         GameScene.add(gas);
         Sample.INSTANCE.play(Assets.Sounds.GAS);
 
@@ -126,12 +126,12 @@ public class WandOfVenom extends DamageWand {
 
     @Override
     public int min(int lvl) {
-        return 2*lvl;
+        return lvl + 1 + Dungeon.scalingDepth()/5;
     }
 
     @Override
     public int max(int lvl) {
-        return 3+2*lvl;
+        return lvl + 1 + Dungeon.scalingDepth()/5;
     }
 
     @Override
