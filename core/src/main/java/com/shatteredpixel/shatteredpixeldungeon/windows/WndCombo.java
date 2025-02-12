@@ -75,7 +75,7 @@ public class WndCombo extends Window {
 				protected void onClick() {
 					super.onClick();
 					hide();
-					combo.useMove(move);
+					combo.useMove(move , Dungeon.hero.enemy());
 				}
 			};
 			moveBtn.leftJustify = true;

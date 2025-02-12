@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.NoteOfBzmdr;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.SmallLightHeader;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
@@ -876,6 +877,9 @@ public class Dungeon {
 	public static void observe(){
 		int dist = Math.max(Dungeon.hero.viewDistance, 8);
 		dist *= 1f + 0.25f*Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
+		if(Dungeon.hero.belongings.getItem(NoteOfBzmdr.class)!=null){
+			dist *= 0.75;
+		}
 
 		if (Dungeon.hero.buff(MagicalSight.class) != null){
 			dist = Math.max( dist, MagicalSight.DISTANCE );

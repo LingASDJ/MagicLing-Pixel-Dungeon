@@ -116,7 +116,7 @@ public class LevelRules {
                         return new YogGodHardBossLevel();
 
 
-                    //补给层 T1
+
                     case 2:  case 4: case 6:  case 8: case 10:
                     //补给层 T2
                     case 12: case 14:case 16: case 18: case 20:

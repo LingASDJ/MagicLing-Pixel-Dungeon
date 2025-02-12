@@ -99,7 +99,7 @@ public enum Talent {
 	//Berserker T3
 	ENDLESS_RAGE(11, 3), PAIN_SCAR(12, 3), FANATICISM_MAGIC(13, 3),
 	//Gladiator T3
-	KEEP_VIGILANCE(14, 3), LETHAL_DEFENSE(15, 3), VENT_NOPLACE(16, 3),
+	CLEAVE(14, 3), LETHAL_DEFENSE(15, 3), VENT_NOPLACE(16, 3),
 	//Heroic Leap T4
 	BODY_SLAM(17, 4), IMPACT_WAVE(18, 4), DOUBLE_JUMP(19, 4),
 	//Shockwave T4
@@ -954,7 +954,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, ENDLESS_RAGE, PAIN_SCAR, FANATICISM_MAGIC);
 				break;
 			case GLADIATOR:
-				Collections.addAll(tierTalents, KEEP_VIGILANCE, LETHAL_DEFENSE, VENT_NOPLACE);
+				Collections.addAll(tierTalents, CLEAVE, LETHAL_DEFENSE, VENT_NOPLACE);
 				break;
 			case BATTLEMAGE:
 				Collections.addAll(tierTalents, EMPOWERED_STRIKE, MYSTICAL_CHARGE, EXCESS_CHARGE);

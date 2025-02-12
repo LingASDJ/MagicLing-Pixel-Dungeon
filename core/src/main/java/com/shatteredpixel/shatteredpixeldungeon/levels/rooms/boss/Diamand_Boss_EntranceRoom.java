@@ -10,6 +10,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EntranceRoom;
 import com.watabou.utils.Point;
 
@@ -39,9 +40,12 @@ public class Diamand_Boss_EntranceRoom extends EntranceRoom {
     public void paint(Level level) {
         fill(level, this, Terrain.WALL);
         fill(level, this,1, EMPTY_DECO);
-        for (Door door : connected.values()) {
-            door.set( Door.Type.REGULAR );
+
+        for (Room.Door door : connected.values()) {
+            door.set( Room.Door.Type.REGULAR );
+            level.BottleWraith(door, level, left, right, top, bottom);
         }
+
         Point center = new Point((left + right) / 2, (top + bottom) / 2);
         int centerX = left + width() / 2;
         int centerY = top + height() / 2;
