@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -47,11 +48,28 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class Alchemize extends Spell {
-	
+
 	{
 		image = ItemSpriteSheet.ALCHEMIZE;
 
 		talentChance = 1/(float)Recipe.OUT_QUANTITY;
+	}
+
+	@Override
+	public ArrayList<String> actions(Hero hero) {
+		if (Statistics.bossRushMode) {
+			return new ArrayList<>(); //no actions in boss rush mode
+		}
+		return super.actions(hero);
+	}
+
+	@Override
+	public String desc() {
+		String desc = super.desc();
+		if(Statistics.bossRushMode){
+			desc = Messages.get(this, "No_desc");
+		}
+		return desc;
 	}
 
 	private static WndBag parentWnd;
@@ -93,7 +111,7 @@ public class Alchemize extends Spell {
 
 		@Override
 		public int cost(ArrayList<Item> ingredients) {
-			return 2;
+			return Statistics.bossRushMode ? 999999 : 2;
 		}
 
 		@Override

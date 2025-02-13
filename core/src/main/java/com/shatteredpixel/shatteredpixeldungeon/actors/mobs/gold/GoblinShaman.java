@@ -107,6 +107,11 @@ public abstract class GoblinShaman extends GoldMob {
         {
             buff = new ChampionEnemy.Blessed();
             spriteClass = GoblinShamanSprite.ShamanStrength.class;
+
+            Buff giantBuff = buff(ChampionEnemy.Blessed.class);
+            if(giantBuff != null){
+                giantBuff.detach();
+            }
         }
     }
     public static class ShamanShield extends GoblinShaman {

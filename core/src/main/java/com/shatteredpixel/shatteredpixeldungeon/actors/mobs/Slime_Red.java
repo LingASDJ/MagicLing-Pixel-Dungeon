@@ -36,16 +36,30 @@ public class Slime_Red extends Slime {
         lootChance = 0.15f;
         loot = PotionOfHealing.class;
         properties.add(Property.ACIDIC);
+        HP = HT = 40;
     }
 
-    private int combo = 0;
+    @Override
+    public int attackSkill( Char target ) {
+        return 60;
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange(20, 25);
+    }
+
+    @Override
+    public int drRoll() {
+        return super.drRoll() + Random.NormalIntRange(0, 5);
+    }
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (Random.Int(0, 6) > 4) {
-            Buff.affect( enemy, Bleeding.class ).set( 3 );
+        if (Random.Int(0, 6) < 4) {
+            Buff.affect( enemy, Bleeding.class ).set( damage/3f );
         }
-        return Slime_Red.super.attackProc(enemy, this.combo + damage);
+        return Slime_Red.super.attackProc(enemy, damage);
     }
 
 }

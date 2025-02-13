@@ -377,12 +377,18 @@ public class Dungeon {
 		return depth == 6 || depth == 11 || depth == 16;
 	}
 
-	public static boolean DragonBoss() {
-		return depth == 5;
+	public static boolean RDXLCLevel() {
+		//12，18，22，24，32，40
+		return depth == 12 || depth == 18|| depth == 22 ||  depth == 24 || depth == 32|| depth == 40;
+	}
+
+	public static boolean noLEvelsLeft() {
+		//13 17 33 42
+		return depth == 13 || depth == 17 || depth == 33 || depth == 42;
 	}
 
 	public static boolean shopRushLevel() {
-		return depth == 5 || depth == 12 || depth == 19 || depth == 25;
+		return depth == 12 || depth == 18|| depth == 22 ||  depth == 24 || depth == 32|| depth == 40;
 	}
 
 	public static boolean exgoldLevel() {
@@ -413,6 +419,19 @@ public class Dungeon {
 	public static boolean bossLevel() {
 		return bossLevel( depth );
 	}
+
+	// 判断是否是Boss层
+	public static boolean RushBossLevel(int depth) {
+		int[] bossLevels = {1, 3, 5, 7, 9, 11, 13,15, 17,19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 42};
+		for (int level : bossLevels) {
+			if (depth == level) {
+				return true;
+				// 是Boss层，返回true表示不生成卷轴
+			}
+		}
+		return false; // 不是Boss层，返回false可以生成卷轴
+	}
+
 
 	public static boolean bossLevel( int depth ) {
 		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25|| depth == 30 || depth == -15| depth == -31;
@@ -572,6 +591,16 @@ public class Dungeon {
 	}
 
 	public static boolean souNeeded() {
+
+		// 如果是BR模式且当前层数小于2层，则不生成卷轴
+		if (Statistics.bossRushMode && depth < 2) {
+			return false;
+		}
+
+		// 如果是Boss Rush模式，或者是Boss层（根据RushBossLevel判断），则不需要生成卷轴
+		if (Statistics.bossRushMode && RushBossLevel(depth)) {
+			return false;
+		}
 
 		if (Dungeon.RDLCLevel()) return false;
 		if (depth==0) return false;

@@ -16,12 +16,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.FrostFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.HalomethaneFire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HalomethaneBurning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewDM720;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DragonGirlBlue;
@@ -73,20 +76,28 @@ public class SakaFishBoss extends Boss {
     /***/
     {
         spriteClass = SakaFishBossSprites.class;
-        initBaseStatus(19, 25, 6, 10, 480, 5, 12);
+        if(Statistics.bossRushMode){
+            initBaseStatus(19, 25, 6, 20, 648, 5, 12);
+        } else {
+            initBaseStatus(19, 25, 6, 10, 480, 5, 12);
+        }
         state = SLEEPING;
         initProperty();
         HUNTING = new Hunting();
         baseSpeed = 1.75f;
         initStatus(76);
-        HP=480;
-        HT=480;
         immunities.add(FrostBurning.class);
         immunities.add(HalomethaneBurning.class);
         immunities.add(Terror.class);
         properties.add(Property.ICY);
         properties.add(Property.ELECTRIC);
         properties.add(Property.FIERY);
+
+        if(Statistics.bossRushMode){
+            immunities.add(Hex.class);
+            immunities.add(Vertigo.class);
+            immunities.add(Blindness.class);
+        }
 
         viewDistance = 30;
     }
@@ -612,7 +623,9 @@ public class SakaFishBoss extends Boss {
             }
 
             if (hit( this, ch, true )) {
-                if(Dungeon.isChallenged(STRONGER_BOSSES)){
+                if(Dungeon.isChallenged(STRONGER_BOSSES)) {
+                    ch.damage( Random.NormalIntRange( 50, 70), new DeathGaze());
+                } else if(Dungeon.isChallenged(STRONGER_BOSSES)){
                     ch.damage( Random.NormalIntRange( 40, 60 ), new DeathGaze() );
                 } else {
                     ch.damage( Random.NormalIntRange( 30, 60 ), new DeathGaze() );

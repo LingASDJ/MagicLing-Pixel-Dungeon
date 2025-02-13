@@ -75,6 +75,9 @@ abstract public class Boss extends Mob {
     public void die( Object cause ) {
         super.die(cause);
 
+        if(Statistics.NightDreamLoop){
+            Statistics.NightDreamLoop = false;
+        }
 
             ArrayList<IceCyanBlueSquareCoin> ice = hero.belongings.getAllItems(IceCyanBlueSquareCoin.class);
             if(ice != null){
@@ -232,11 +235,6 @@ abstract public class Boss extends Mob {
                 }
                 first = true;
             }
-        } else if (Statistics.bossRushMode && Statistics.difficultyDLCEXLevel == 3) {
-            Buff.affect(this, ChampionEnemy.Halo.class);
-            Buff.affect(this, ChampionEnemy.Sider.class);
-        } else if (Statistics.bossRushMode && Statistics.difficultyDLCEXLevel == 2) {
-            Buff.affect(this, ChampionEnemy.Halo.class);
         }
     }
 

@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
@@ -196,7 +197,9 @@ public class RedDragon extends NPC {
                     break;
 
             }
-
+            if(Statistics.bossRushMode){
+                Dungeon.level.drop(new Pickaxe(), hero.pos).sprite.drop();
+            }
             questBoss.pos = Dungeon.level.randomRespawnCell( this );
 
             if (questBoss.pos != -1) {

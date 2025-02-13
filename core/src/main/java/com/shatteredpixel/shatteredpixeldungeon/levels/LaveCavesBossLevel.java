@@ -49,6 +49,8 @@ public class LaveCavesBossLevel extends Level{
 
     private static final short B= Terrain.BARRICADE;
 
+    private static final short S= Terrain.CRYSTAL_DOOR;
+
     private static final int[] codedMap = {
             W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
             W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,Y,W,W,W,W,W,W,W,
@@ -121,12 +123,52 @@ public class LaveCavesBossLevel extends Level{
 
     };
 
+    private static final int[] Rush_codedMap = {
+            W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
+            W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,Y,W,W,W,W,W,W,W,
+            W,W,W,W,W,W,W,W,V,V,R,R,R,R,R,R,R,R,R,R,R,R,R,W,W,W,W,W,W,W,W,W,
+            W,W,W,W,W,W,R,R,V,V,R,R,R,R,R,R,R,R,R,R,Y,R,R,R,R,W,W,W,W,W,W,W,
+            W,W,W,W,R,R,R,R,V,V,R,R,R,R,Y,Y,R,R,Y,R,R,R,R,R,Y,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,R,R,V,V,R,R,R,Y,G,Y,Y,Y,Y,R,R,R,R,Y,R,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,R,R,V,V,R,R,Y,Y,Y,Y,Y,Y,Y,Y,R,R,R,R,R,W,W,W,W,W,W,W,
+            W,W,R,R,R,R,R,R,V,V,R,R,Y,Y,Y,Y,Y,R,V,Y,Y,R,R,R,Y,R,W,W,W,W,W,W,
+            W,W,R,R,R,R,R,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,R,V,R,Y,Y,Y,Y,Y,Y,R,R,W,W,W,W,
+            W,W,R,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,R,V,R,Y,Y,Y,Y,Y,R,R,R,W,W,W,W,
+            W,R,Y,Y,Y,Y,R,R,Y,Y,Y,Y,Y,Y,L,Y,Y,Y,V,R,Y,Y,Y,Y,Y,R,R,R,W,W,W,W,
+            W,R,Y,R,R,R,R,R,R,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,Y,R,R,R,W,W,
+            W,Y,Y,R,R,R,R,R,R,R,Y,Y,Y,Y,Y,V,Y,Y,Y,Y,Y,R,R,Y,V,V,Y,Y,R,R,W,W,
+            W,Y,Y,R,R,R,R,R,R,R,Y,Y,Y,Y,V,V,Y,Y,Y,Y,R,R,R,V,V,V,Y,Y,R,R,W,W,
+            W,Y,R,R,R,R,Y,Y,R,R,V,V,Y,Y,Y,Y,Y,Y,Y,Y,R,R,R,V,V,V,R,Y,Y,R,W,W,
+            W,Y,R,R,R,R,R,Y,R,R,V,V,Y,Y,Y,Y,Y,Y,R,R,Y,Y,Y,V,V,V,R,Y,Y,R,W,W,
+            W,Y,R,R,R,R,R,Y,Y,R,V,V,Y,Y,Y,Y,Y,R,R,R,R,Y,R,V,V,V,R,Y,Y,R,W,W,
+            W,Y,R,R,R,R,R,R,Y,Y,V,V,Y,Y,Y,Y,R,R,R,R,R,R,R,V,V,V,Y,Y,Y,R,W,W,
+            W,Y,Y,R,R,R,R,R,R,R,R,Y,Y,Y,Y,Y,R,R,R,R,R,R,R,V,V,V,Y,Y,Y,Y,W,W,
+            W,R,Y,R,R,R,R,Y,R,R,R,R,R,Y,Y,Y,R,R,Y,R,R,R,R,V,V,Y,Y,Y,R,W,W,W,
+            W,R,Y,Y,R,R,Y,Y,Y,R,R,R,R,Y,Y,Y,Y,Y,Y,R,R,R,R,V,Y,Y,Y,R,R,W,W,W,
+            W,R,R,Y,Y,Y,Y,Y,Y,R,R,V,R,Y,Y,R,R,R,R,Y,R,R,R,Y,Y,Y,R,R,R,W,W,W,
+            W,R,R,Y,Y,Y,Y,Y,Y,Y,Y,V,V,Y,Y,R,R,R,R,R,R,Y,Y,Y,R,R,R,W,W,W,W,W,
+            W,R,R,Y,Y,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,R,R,R,R,R,Y,Y,R,R,R,R,W,W,W,W,W,
+            W,W,R,R,Y,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,Y,R,R,R,R,Y,Y,Y,Y,Y,Y,W,W,W,W,W,
+            W,W,W,R,R,Y,Y,Y,Y,Y,Y,V,V,V,Y,Y,Y,Y,Y,Y,Y,Y,Y,W,W,W,W,W,W,W,W,W,
+            W,W,W,R,R,R,Y,Y,R,R,R,R,R,X,Y,Y,Y,Y,W,W,W,W,S,W,W,W,W,W,W,W,W,W,
+            W,W,W,W,R,R,Y,Y,R,R,R,R,R,R,Y,Y,Y,Y,W,W,W,W,Y,Y,G,G,Y,R,R,G,W,W,
+            W,W,W,W,W,R,R,Y,R,R,R,R,R,R,Y,Y,Y,W,W,W,W,W,Y,G,Y,G,Y,Y,Y,Y,W,W,
+            W,W,W,W,W,W,R,R,Y,R,R,R,R,R,Y,Y,Y,W,W,W,W,W,Y,Y,V,V,V,Y,M,Y,W,W,
+            W,W,W,W,W,W,W,W,W,R,Y,R,R,R,Y,Y,Y,W,W,W,W,W,Y,Y,Y,Y,Y,Y,Y,Y,W,W,
+            W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,
+
+    };
+
     private static final int HOME = 845;
     @Override
     public void seal() {
         super.seal();
         set( HOME, Terrain.EMPTY );
         GameScene.updateMap( HOME );
+
+        set(334, Terrain.PEDESTAL );
+        GameScene.updateMap( 334);
+
         Dungeon.observe();
         Game.runOnRenderThread(new Callback() {
             @Override
@@ -141,6 +183,10 @@ public class LaveCavesBossLevel extends Level{
         super.unseal();
         set( HOME, Terrain.ENTRANCE );
         GameScene.updateMap( HOME );
+
+        set(334, Terrain.EXIT );
+        GameScene.updateMap( 334);
+
         Dungeon.observe();
         Game.runOnRenderThread(new Callback() {
             @Override
@@ -196,7 +242,7 @@ public class LaveCavesBossLevel extends Level{
 
         setSize(32, 32);
 
-        map = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? Hard_codedMap : codedMap.clone();
+        map = Statistics.bossRushMode ? Rush_codedMap.clone() : Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? Hard_codedMap : codedMap.clone();
 
         CustomTilemap vis = new townBehind();
         vis.pos(0, 0);
@@ -213,11 +259,23 @@ public class LaveCavesBossLevel extends Level{
         WellWater.seed(956, 1, waterClass, this);
 
         int enter = 845;
-        LevelTransition ent = new LevelTransition(this, enter, LevelTransition.Type.BRANCH_ENTRANCE);
-        transitions.add(ent);
+        if(Statistics.bossRushMode){
+            LevelTransition ent = new LevelTransition(this, enter, LevelTransition.Type.REGULAR_ENTRANCE);
+            transitions.add(ent);
+        } else {
+            LevelTransition ent = new LevelTransition(this, enter, LevelTransition.Type.BRANCH_ENTRANCE);
+            transitions.add(ent);
+        }
 
-        LevelTransition exit = new LevelTransition(this,0, LevelTransition.Type.BRANCH_EXIT);
-        transitions.add(exit);
+        if(Statistics.bossRushMode){
+            LevelTransition exit = new LevelTransition(this,334, LevelTransition.Type.REGULAR_EXIT);
+            transitions.add(exit);
+        } else {
+            LevelTransition exit = new LevelTransition(this,0, LevelTransition.Type.BRANCH_EXIT);
+            transitions.add(exit);
+        }
+
+
 
         return true;
     }
@@ -245,7 +303,7 @@ public class LaveCavesBossLevel extends Level{
     public static class townBehind extends CustomTilemap {
 
         {
-            texture = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ?  Assets.Environment.LAVACAVE_OP_HRAD : Assets.Environment.LAVACAVE_OP;
+            texture = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && !Statistics.bossRushMode ?  Assets.Environment.LAVACAVE_OP_HRAD : Assets.Environment.LAVACAVE_OP;
 
             tileW = 32;
             tileH = 32;

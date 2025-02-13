@@ -27,6 +27,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import static com.shatteredpixel.shatteredpixeldungeon.Statistics.lanterfireactive;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -423,7 +424,7 @@ public class InterlevelScene extends PixelScene {
 
 			LevelTransition destTransition = level.getTransition(curTransition.destType);
 			curTransition = null;
-			if(Dungeon.depth == 14 && branch == 0 && Statistics.difficultyDLCEXLevel>1 || Statistics.RandMode && level instanceof DeepShadowLevel ){
+			if(Dungeon.depth == 17 && branch == 0 && Statistics.difficultyDLCEXLevel>1 || Statistics.RandMode && level instanceof DeepShadowLevel ){
 				Dungeon.switchLevel( level, 847 );
 			} else {
 				Dungeon.switchLevel( level, destTransition.cell() );
@@ -490,6 +491,17 @@ public class InterlevelScene extends PixelScene {
 		Dungeon.switchLevel( level, returnPos );
 	}
 
+	private static String[] MUISC_RANDOM = {
+			Assets.BGM_BOSSA, Assets.BGM_BOSSC,
+			Assets.BGM_BOSSD,
+
+			Assets.Music.CITY_BOSS_FINALE,
+			Assets.Music.CAVES_BOSS_FINALE, Assets.BGM_YOU,
+
+			Assets.Music.DRAGON_LING,
+			Assets.BOSSDOG,
+	};
+
 	private void restore() throws IOException {
 
 		Mob.clearHeldAllies();
@@ -504,6 +516,12 @@ public class InterlevelScene extends PixelScene {
 			Level level = Dungeon.loadLevel( GamesInProgress.curSlot );
 			Dungeon.switchLevel( level, hero.pos );
 		}
+		if(Statistics.bossRushMode){
+			if(!Dungeon.noLEvelsLeft()){
+				BGMPlayer.playBGM(MUISC_RANDOM[Random.Int(MUISC_RANDOM.length)],true);
+			}
+		}
+
 	}
 
 	private void resurrect() {

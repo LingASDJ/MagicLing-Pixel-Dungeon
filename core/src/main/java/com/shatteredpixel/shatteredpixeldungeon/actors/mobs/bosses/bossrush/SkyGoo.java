@@ -25,6 +25,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.BGMPlayer.playBGM;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -62,7 +63,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
-import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
@@ -76,10 +76,10 @@ import java.util.Iterator;
 public class SkyGoo extends Boss implements Callback {
 
 	{
-		HT = 280 * Dungeon.depth/5;
-		HP = 280 * Dungeon.depth/5;
+		HT = 140 * Dungeon.depth/5;
+		HP = 140 * Dungeon.depth/5;
 		EXP = 30;
-		defenseSkill = 5;
+		defenseSkill = 15;
 		spriteClass = GooSprite.class;
 		properties.add(Char.Property.BOSS);
 		properties.add(Char.Property.DEMONIC);
@@ -377,11 +377,13 @@ public class SkyGoo extends Boss implements Callback {
 	@Override
 	public void notice() {
 		super.notice();
+		BGMPlayer.playBoss();
 		if (!BossHealthBar.isAssigned()) {
 			BossHealthBar.assignBoss(this);
 			yell(Messages.get(this, "notice"));
 			Dungeon.level.seal();
-			Music.INSTANCE.play(Assets.BGM_BOSSA, true);
+			GameScene.bossReady();
+
 			Iterator<Char> it = Actor.chars().iterator();
 			while (it.hasNext()) {
 				Char ch = it.next();
