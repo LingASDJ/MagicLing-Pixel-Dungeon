@@ -21,10 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
-import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.Holiday.XMAS;
-import static com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel.holiday;
-
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.GameRules;
 import com.watabou.noosa.Image;
 
@@ -57,8 +53,6 @@ public class BannerSprites {
         }
 		return icon;
 	}
-
-    ;
 
     public enum Type {
         PIXEL_DUNGEON,

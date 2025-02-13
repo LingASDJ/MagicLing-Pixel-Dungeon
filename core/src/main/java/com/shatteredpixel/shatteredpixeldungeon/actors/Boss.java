@@ -210,12 +210,19 @@ abstract public class Boss extends Mob {
 
     private void RollEX(){
         Class<?extends ChampionEnemy> buffCls2;
-        switch (Random.Int(4)){
-            case 0:     default:          buffCls2 = ChampionEnemy.Bomber.class;      break;
-            case 1:                       buffCls2 = ChampionEnemy.Sider.class;       break;
-            case 2:                       buffCls2 = ChampionEnemy.LongSider.class;   break;
-            case 3:                       buffCls2 = ChampionEnemy.Big.class;         break;
+        float roll = Random.Float(); // 生成 0.0~1.0 的随机数
+
+        if (roll < 0.05f) { // 5% 概率生成酸液体
+            buffCls2 = ChampionEnemy.Sider.class;
+        } else {
+            // 剩余95%概率由其他三种类型均分（各约31.67%）
+            switch (Random.Int(3)){
+                case 0: default: buffCls2 = ChampionEnemy.Middle.class;   break;
+                case 1:         buffCls2 = ChampionEnemy.LongSider.class;break;
+                case 2:         buffCls2 = ChampionEnemy.Big.class;      break;
+            }
         }
+
         Buff.affect(this, buffCls2);
         this.state = this.WANDERING;
     }

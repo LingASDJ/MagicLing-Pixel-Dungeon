@@ -415,9 +415,9 @@ public class ZeroCityLevel extends Level {
             npc3.pos = 382;
             mobs.add(npc3);
 
-            Question npc6 = new Question();
-            npc6.pos = 3757;
-            mobs.add(npc6);
+//            Question npc6 = new Question();
+//            npc6.pos = 3757;
+//            mobs.add(npc6);
 
             LanFire npc7 = new LanFire();
             npc7.pos = 3020;

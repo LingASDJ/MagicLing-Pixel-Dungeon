@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -36,22 +37,32 @@ public class Slime_Red extends Slime {
         lootChance = 0.15f;
         loot = PotionOfHealing.class;
         properties.add(Property.ACIDIC);
-        HP = HT = 40;
+        if(Statistics.bossRushMode){
+            HT = HP = 40;
+        } else {
+            HT = HP = 20;
+        }
     }
 
     @Override
     public int attackSkill( Char target ) {
-        return 60;
+        if(Statistics.bossRushMode){
+            return 60;
+        }
+        return 12;
     }
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(20, 25);
+        if(Statistics.bossRushMode){
+            return Random.NormalIntRange(20, 25);
+        }
+        return super.damageRoll();
     }
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 5);
+        return super.drRoll() + (Statistics.bossRushMode ?Random.NormalIntRange(0, 5) : 0);
     }
 
     @Override
