@@ -87,8 +87,6 @@ public class PirahaKing extends Boss {
                     if (!candidates.isEmpty()) {
                         ScrollOfTeleportation.appear(this, Random.element(candidates));
                         aggro(dmgSource);
-                    } else {
-                        teleportAway();
                     }
                 }
             } else {

@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.FireCrystalSprites;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FireDragonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FrankensteinSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostHalloweenSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GudaziSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HollowKnightSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -64,6 +65,7 @@ import java.util.ArrayList;
 
 public class vM0_7_X_Changes {
     public static void addAllChanges(ArrayList<ChangeInfo> changeInfos) {
+        add_V0822_Changes(changeInfos);
         add_V0820_Changes(changeInfos);
         add_V0810_Changes(changeInfos);
         add_V0808_Changes(changeInfos);
@@ -101,6 +103,75 @@ public class vM0_7_X_Changes {
         add_V074_Changes(changeInfos);
         add_V071_Changes(changeInfos);
         add_GYD_Changes(changeInfos);
+    }
+
+    public static void add_V0822_Changes(ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("v0.8.2.1-2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(Window.GREEN_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new GhostSprite(), ("悲伤幽灵任务优化"),
+                ("现在悲伤幽灵的任务怪物会显示血条以方便玩家查看目标怪物，并且在任务完成后自动消失。")));
+
+        Image s =new CrivusStarFruitsSprite();
+        s.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(s, ("Boss优化:克里璃斯之果"),
+                "异果调整说明：\n" +
+                        "1.第二阶段血量调整为200血\n" +
+                        "2.第三阶段的盾不再消失，回复到93血以上后周期性对敌人造成伤害\n" +
+                        "异果奖励追加：\n" +
+                        "极速药水x1 圣愈秘药x1 强能晶柱x1"));
+
+        Image xs =new RivalSprite();
+        xs.scale.set(PixelScene.align(0.8f));
+        changes.addButton(new ChangeButton(xs, ("Boss优化:暗影"),
+                "1. 半血以下优先使用投掷武器，弹药耗尽后逼近玩家。  \n" +
+                        "2. 半血以上优先用法杖攻击，充能耗尽后强制近战。  \n" +
+                        "3. 有远程手段时，距离过近会主动远离保持射程。  \n" +
+                        "4. 无弹药时不再卡死，直接切换近战攻击。  \n" +
+                        "5. 修复了Boss在无弹药时游戏死循环的问题。"));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "0.8.2.1-2:\n\n" +
+                        "1.果子系列boss遇到完全体会卡关【严重游戏阻断问题】\n" +
+                        "2.悲伤幽灵的任务BGM缺失【一般问题】\n" +
+                        "3.BossRush的一些文案修正【一般问题】\n" +
+                        "4.BossRush的Hell难度下4层血红史莱姆数值异常【一般问题】\n" +
+                        "5.修复暗影的隐藏楼层异常"));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
+        changes.hardlight(Window.R_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WRALIPS), ("暗金宝石护符"),
+                        ("_-_ 经验获取调整：40/20 → 25/20（低于5级/高于5级）\n" +
+                        "_-_ 冷却优化：40-等级 → 40-1.65*等级\n" +
+                        "_-_ 充能公式调整：\n90基础 → 120基础，3倍 → 4倍等级系数\n" +
+                        "_-_ 诅咒伤害降低：4-6倍 → 2-4倍等级\n" +
+                        "_-_ 升级条件：修正双倍升级的异常\n" +
+                        "_-_ 暗杀消耗保持6充能不变" )));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.HIGHTWAND_1), ("毒液侵染法杖"),
+                ("为BOSS添加不在毒气内则累积毒素清零\n" +
+                        "气体量由150 +50*lvl削弱至 50+10*lvl\n" +
+                        "修复带有气体免疫的生物仍然会受到毒杖效果的bug")));
+
+        changes = new ChangeInfo("v0.8.2.2中测验收通过，予以更新", true, null);
+        changes.hardlight(Window.CYELLOW);
+        changeInfos.add(changes);
+
+        changes = new ChangeInfo("2025-2-14", true, null);
+        changes.hardlight(Window.CPINK);
+        changeInfos.add(changes);
     }
 
     public static void add_V0820_Changes(ArrayList<ChangeInfo> changeInfos ) {

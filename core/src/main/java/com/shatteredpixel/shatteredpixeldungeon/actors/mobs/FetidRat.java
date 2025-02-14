@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FetidRatSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
+import com.watabou.noosa.Camera;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -77,6 +79,15 @@ public class FetidRat extends Rat {
 		GameScene.add(Blob.seed(pos, 20, StenchGas.class));
 
 		return super.defenseProc(enemy, damage);
+	}
+
+	@Override
+	public void notice() {
+
+		if (!BossHealthBar.isAssigned()) {
+			BossHealthBar.assignBoss(this);
+			Camera.main.shake(1f,3f);
+		}
 	}
 
 	@Override

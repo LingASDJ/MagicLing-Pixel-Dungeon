@@ -107,27 +107,6 @@ public class Rival extends Boss implements Callback {
 
     private int blinkCooldown = 0;
 
-    @Override
-    protected boolean getCloser( int target ) {
-        if(HP<HT/2 && state == HUNTING){
-            return enemySeen && getFurther( target );
-        } else if (fieldOfView[target] && level.distance( pos, target ) > 2 && blinkCooldown <= 0 && !rooted) {
-
-            if (blink( target )) {
-                spend(-1 / speed());
-                return true;
-            } else {
-                return false;
-            }
-
-        } else {
-
-            blinkCooldown--;
-            return super.getCloser( target );
-
-        }
-    }
-
     private boolean blink( int target ) {
 
         Ballistica route = new Ballistica( pos, target, Ballistica.PROJECTILE);
@@ -301,43 +280,84 @@ public class Rival extends Boss implements Callback {
         return speed;
     }
 
-
     @Override
-    protected boolean canAttack( Char enemy ) {
-        if(HP<HT/2){
-            return !level.adjacent( pos, enemy.pos )
-                    && (super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos);
+    protected boolean getCloser(int target) {
+        // 判断远程攻击能力是否失效
+        boolean hasRangedOption;
+        if (HP < HT / 2) {
+            // 半血以下时，投掷武器是否可用？
+            hasRangedOption = missile != null && missile.quantity > 0;
         } else {
-            return super.canAttack(enemy) || weapon.canReach(this, enemy.pos) || (new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos);
+            // 半血以上时，法杖充能是否可用？
+            hasRangedOption = wand != null && wand.curCharges > 0;
+        }
+
+        // 如果没有远程攻击手段，强制逼近玩家
+        if (!hasRangedOption) {
+            return super.getCloser(target);
+        }
+
+        // 如果有远程攻击手段，执行原有逻辑
+        if (HP < HT / 2 && state == HUNTING) {
+            // 半血以下且处于 HUNTING 状态时，远离玩家
+            return enemySeen && getFurther(target);
+        } else if (fieldOfView[target] && level.distance(pos, target) > 2 && blinkCooldown <= 0 && !rooted) {
+            // 使用闪烁技能逼近玩家
+            if (blink(target)) {
+                spend(-1 / speed());
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            // 其他情况，正常逼近玩家
+            blinkCooldown--;
+            return super.getCloser(target);
         }
     }
 
-    protected boolean doAttack( Char enemy ) {
+    @Override
+    protected boolean canAttack(Char enemy) {
+        boolean canRanged = (HP < HT/2 && missile.quantity > 0)
+                || (HP >= HT/2 && wand.curCharges > 0);
+        boolean canMelee = level.adjacent(pos, enemy.pos) || weapon.canReach(this, enemy.pos);
+        return canRanged || canMelee || super.canAttack(enemy);
+    }
 
-        if (level.adjacent( pos, enemy.pos ) || weapon.canReach(this, enemy.pos)) {
+    @Override
+    protected boolean doAttack(Char enemy) {
+        // 检查是否在近战范围内
+        boolean inMeleeRange = level.adjacent(pos, enemy.pos) || weapon.canReach(this, enemy.pos);
 
-            return super.doAttack( enemy );
-
-        } else {
-
+        // 如果不在近战范围内，尝试远程攻击
+        if (!inMeleeRange) {
             boolean visible = fieldOfView[pos] || fieldOfView[enemy.pos];
-            if (wand.curCharges > 0) {
+
+            // 半血以下时，优先使用投掷武器
+            if (HP < HT / 2 && missile != null && missile.quantity > 0) {
                 if (visible) {
-                    sprite.zap( enemy.pos );
+                    sprite.toss(enemy.pos); // 可见时播放投掷动画
                 } else {
-                    zap();
+                    toss(); // 不可见时直接投掷
                 }
-                wand.curCharges--;
-            } else if (missile.quantity() > 0) {
-                if (visible) {
-                    sprite.toss( enemy.pos );
-                } else {
-                    toss();
-                }
+                missile.quantity--; // 消耗投掷武器弹药
+                return !visible; // 返回是否不可见
             }
 
-            return !visible;
+            // 半血以上时，优先使用法杖
+            if (wand != null && wand.curCharges > 0) {
+                if (visible) {
+                    sprite.zap(enemy.pos); // 可见时播放法杖动画
+                } else {
+                    zap(); // 不可见时直接施法
+                }
+                wand.curCharges--; // 消耗法杖充能
+                return !visible; // 返回是否不可见
+            }
         }
+
+        // 如果没有远程攻击条件，或者已经在近战范围内，切换到近战攻击
+        return super.doAttack(enemy);
     }
 
     private void zap() {
@@ -492,6 +512,7 @@ public class Rival extends Boss implements Callback {
                             wand.curCharges = 20;
                             wand.level(3);
                             wand.updateLevel();
+                            missile.quantity = 2;
                             break;
                         case PHASE_2:
                             wand = new WandOfBlastWave();
@@ -499,6 +520,7 @@ public class Rival extends Boss implements Callback {
                             misc1 = new RingOfHaste();
                             wand.level(2);
                             wand.updateLevel();
+                            missile.quantity = 2;
                             break;
                         case PHASE_3:
                             wand = new WandOfFirebolt();
@@ -506,12 +528,14 @@ public class Rival extends Boss implements Callback {
                             wand.level(1);
                             wand.updateLevel();
                             wand.curCharges = 80;
+                            missile.quantity = 3;
                             break;
                         case PHASE_4:
                             wand = new WandOfVenom();
                             wand.curCharges = 10;
                             wand.level(4);
                             wand.updateLevel();
+                            missile.quantity = Random.IntRange(2, 4);
                             break;
                     }
                     HP = HT;
@@ -564,7 +588,7 @@ public class Rival extends Boss implements Callback {
             desc += Messages.get(this, "ring", misc1.toString() );
             desc += Messages.get(this, "ring", misc2.toString() );
             desc += Messages.get(this, "wand", wand.toString() );
-            desc += Messages.get(this, "missile", missile.name() );
+            desc += Messages.get(this, "missile", missile.toString() );
             desc += Messages.get(this, "ankhs");
         } else {
             desc += "";

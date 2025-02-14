@@ -346,7 +346,7 @@ public class LevelRules {
                         return new AncityLevel();
 
                     case 2:
-                        return new ForestBossLevel();
+                        return new ForestPoisonBossLevel();
 
                     case 4:
                         return new ForestHardBossLevel();
