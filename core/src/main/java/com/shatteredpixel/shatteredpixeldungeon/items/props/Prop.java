@@ -48,6 +48,8 @@ public class Prop extends Item {
 
     //既然都准备做分级了对吧……  generation
     public int rareness = 0;
+    public int kind = 0;
+    //0积极 1 消极;
 
     @Override
     public ArrayList<String> actions(Hero hero ) {
