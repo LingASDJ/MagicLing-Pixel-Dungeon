@@ -93,61 +93,77 @@ public class ForestHardBossLevel extends Level {
         //GLog.p(String.valueOf(hero.pos));
         boolean isTrue = ch.pos == LDBossDoor && ch == hero && Dungeon.level.distance(ch.pos, entrance) >= 2;
 
-        for (Mob boss : Dungeon.level.mobs.toArray(new Mob[0])) {
-            if (boss instanceof CrivusStarFruits) {
-                if (!Statistics.crivusfruitslevel2 && boss.HP<=160) {
-                    crivusfruitslevel2 = true;
-                    boss.alignment = Char.Alignment.ENEMY;
-                    GLog.n(Messages.get(CrivusStarFruits.class, "anargy"));
-                    GameScene.flash(0x808c8c8c);
-                    //doYogLasers()
+        // 获取当前Dungeon.level上的Mob数组
+        Mob[] mobs = Dungeon.level.mobs.toArray(new Mob[0]);
+        Mob[] mobsx = Dungeon.level.mobs.toArray(new Mob[0]);
+        // 检查Mob数量是否为1
+        // 检查Mob数量是否为1
+        if (mobs.length == 1) {
+            // 检查唯一的Mob是否是Boss
+            if (mobs[0] instanceof CrivusStarFruits && !crivusfruitslevel2 && mobs[0].HP == 280) {
+                Statistics.crivusfruitslevel2 = true;
+                mobs[0].HP = 200;
+                for (Mob boss : Dungeon.level.mobs.toArray(new Mob[0])) {
+                    if (boss instanceof CrivusStarFruits) {
+                        crivusfruitslevel2 = true;
+                        boss.alignment = Char.Alignment.ENEMY;
+                        GLog.n(Messages.get(CrivusStarFruits.class, "anargy"));
+                        GameScene.flash(0x808c8c8c);
+                        //doYogLasers()
 
-                    changeMap(boss_CHASM_Map);
+                        changeMap(boss_CHASM_Map);
 
-                    for (Heap heap : Dungeon.level.heaps.valueList()) {
-                        List<Item> toRemove = new ArrayList<>();
-                        for (Item item : heap.items) {
-                            if (!(item instanceof PotionOfPurity.PotionOfPurityLing)) {
-                                item.doPickUp(hero, hero.pos);
-                                toRemove.add(item);  // 收集待删除的元素
-                            } else {
-                                toRemove.add(item);  // 同样收集待删除的元素
+                        for (Heap heap : Dungeon.level.heaps.valueList()) {
+                            List<Item> toRemove = new ArrayList<>();
+                            for (Item item : heap.items) {
+                                if (!(item instanceof PotionOfPurity.PotionOfPurityLing)) {
+                                    item.doPickUp(hero, hero.pos);
+                                    toRemove.add(item);  // 收集待删除的元素
+                                } else {
+                                    toRemove.add(item);  // 同样收集待删除的元素
+                                }
                             }
+                            // 删除所有收集到的元素
+                            heap.items.removeAll(toRemove);
+                            heap.destroy();  // 销毁 heap
                         }
-                        // 删除所有收集到的元素
-                        heap.items.removeAll(toRemove);
-                        heap.destroy();  // 销毁 heap
-                    }
 
 
-                    for (int i : TPos) {
-                        Heap s = drop(new Bomb(), i);
-                        s.type = Heap.Type.SKELETON;
-                        s.sprite.view(s);
-                    }
+                        for (int i : TPos) {
+                            Heap s = drop(new Bomb(), i);
+                            s.type = Heap.Type.SKELETON;
+                            s.sprite.view(s);
+                        }
 
-                    Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-                    boss.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
-                    ScrollOfTeleportation.teleportToLocation(hero, 248);
-                    boss.HP = boss.HT = 160;
-                    for (Buff b : boss.buffs()){
-                        b.detach();
+                        Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+                        boss.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+                        ScrollOfTeleportation.teleportToLocation(hero, 248);
+                        for (Buff b : boss.buffs()){
+                            b.detach();
+                        }
+                        for (int i : ForestHardBossLasherTWOPos) {
+                            ClearElemental csp = new ClearElemental();
+                            csp.HT = csp.HP = 30;
+                            csp.pos = i;
+                            GameScene.add(csp);
+                            csp.state = csp.WANDERING;
+                            Buff.affect(csp, CrivusFruits.CFBarrior.class).setShield(30);
+                        }
+                        for (int i : MobPos) {
+                            CrivusStarFruitsLasher csp = new CrivusStarFruitsLasher();
+                            csp.pos = i;
+                            csp.state = csp.WANDERING;
+                            GameScene.add(csp);
+                        }
                     }
-                    for (int i : ForestHardBossLasherTWOPos) {
-                        ClearElemental csp = new ClearElemental();
-                        csp.HT = csp.HP = 30;
-                        csp.pos = i;
-                        GameScene.add(csp);
-                        csp.state = csp.WANDERING;
-                        Buff.affect(csp, CrivusFruits.CFBarrior.class).setShield(30);
-                    }
-                    for (int i : MobPos) {
-                        CrivusStarFruitsLasher csp = new CrivusStarFruitsLasher();
-                        csp.pos = i;
-                        csp.state = csp.WANDERING;
-                        GameScene.add(csp);
-                    }
-                    //crivusfruitslevel2 = true;
+                }
+            }
+        } else {
+            if (mobsx.length == 1) {
+                // 检查唯一的Mob是否是Boss
+                if (mobsx[0] instanceof CrivusStarFruits && !Statistics.crivusfruitslevel3 && Statistics.crivusfruitslevel2 &&  mobs[0].HP == 160) {
+                    Statistics.crivusfruitslevel3 = true;
+                    mobs[0].HP = 60;
                 }
             }
         }

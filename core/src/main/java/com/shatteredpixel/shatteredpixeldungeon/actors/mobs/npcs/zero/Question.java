@@ -42,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndDialog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
@@ -69,39 +68,39 @@ public class Question extends NTNPC {
     private static final String SECOND = "second";
     private static final String TIRED = "tried";
 
-    @Override
-    public void restoreFromBundle( Bundle bundle ) {
-        super.restoreFromBundle(bundle);
-        bundle.put(FIRST, first);
-        bundle.put(SECOND, second);
-        bundle.put(TIRED, tired);
-        for (int i=0; i<bundle.getIntArray(ANOTHER).length; i++)
-            another.add(bundle.getIntArray(ANOTHER)[i]);
-        for (int i=0; i<bundle.getIntArray(PLAYER).length; i++)
-            player.add(bundle.getIntArray(PLAYER)[i]);
-        for (int i=0; i<bundle.getBooleanArray(RULE).length; i++)
-            rule.add(bundle.getBooleanArray(RULE)[i]);
-    }
-
-    @Override
-    public void storeInBundle( Bundle bundle ) {
-        super.storeInBundle(bundle);
-        first = bundle.getInt(FIRST);
-        second = bundle.getInt(SECOND);
-        tired = bundle.getInt(TIRED);
-        int[] Another = new int[another.size()];
-        for (int i=0; i< another.size(); i++)
-            Another[i] = another.get(i);
-        bundle.put(ANOTHER, Another);
-        int[] Player = new int[player.size()];
-        for (int i=0; i< player.size(); i++)
-            Another[i] = player.get(i);
-        bundle.put(PLAYER, Player);
-        boolean[] Rule = new boolean[rule.size()];
-        for (int i=0; i< rule.size(); i++)
-            Rule[i] = rule.get(i);
-        bundle.put(RULE, Rule);
-    }
+//    @Override
+//    public void restoreFromBundle( Bundle bundle ) {
+//        super.restoreFromBundle(bundle);
+//        bundle.put(FIRST, first);
+//        bundle.put(SECOND, second);
+//        bundle.put(TIRED, tired);
+//        for (int i=0; i<bundle.getIntArray(ANOTHER).length; i++)
+//            another.add(bundle.getIntArray(ANOTHER)[i]);
+//        for (int i=0; i<bundle.getIntArray(PLAYER).length; i++)
+//            player.add(bundle.getIntArray(PLAYER)[i]);
+//        for (int i=0; i<bundle.getBooleanArray(RULE).length; i++)
+//            rule.add(bundle.getBooleanArray(RULE)[i]);
+//    }
+//
+//    @Override
+//    public void storeInBundle( Bundle bundle ) {
+//        super.storeInBundle(bundle);
+//        first = bundle.getInt(FIRST);
+//        second = bundle.getInt(SECOND);
+//        tired = bundle.getInt(TIRED);
+//        int[] Another = new int[another.size()];
+//        for (int i=0; i< another.size(); i++)
+//            Another[i] = another.get(i);
+//        bundle.put(ANOTHER, Another);
+//        int[] Player = new int[player.size()];
+//        for (int i=0; i< player.size(); i++)
+//            Another[i] = player.get(i);
+//        bundle.put(PLAYER, Player);
+//        boolean[] Rule = new boolean[rule.size()];
+//        for (int i=0; i< rule.size(); i++)
+//            Rule[i] = rule.get(i);
+//        bundle.put(RULE, Rule);
+//    }
 
     @Override
     public boolean interact(Char c) {

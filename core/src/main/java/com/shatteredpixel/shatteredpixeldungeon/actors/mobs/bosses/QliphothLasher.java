@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ClearElemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
@@ -34,6 +35,8 @@ import com.watabou.utils.Random;
 public class QliphothLasher extends Mob implements Hero.Doom {
 
     public int state_lasher_boss;
+
+    public int state_Phase;
 
     {
         spriteClass = QliphothLasherSprite.class;
@@ -59,11 +62,38 @@ public class QliphothLasher extends Mob implements Hero.Doom {
 
     @Override
     public void die( Object cause ) {
-        super.die(cause);
-        if(state_lasher_boss == 1){
+            super.die(cause);
+        if(state_lasher_boss >= 1){
             GameScene.add(Blob.seed(pos, 16, StormCloud.class));
         }
+            // 获取当前Dungeon.level上的Mob数组
+            Mob[] mobsx = Dungeon.level.mobs.toArray(new Mob[0]);
+
+            if (mobsx.length >= 1) {
+                boolean containsBoss = false;
+                boolean onlyCRWithBoss = true;
+                for (Mob mob : mobsx) {
+                    if (mob instanceof Qliphoth) {
+                        containsBoss = true;
+                    } else if (!(mob instanceof ClearElemental)) {
+                        onlyCRWithBoss = false;
+                    }
+                }
+                // 如果场景中包含Boss并且除了Boss外只含有CR怪物
+                if (containsBoss && onlyCRWithBoss) {
+                    for (Mob mob : mobsx) {
+                        if (mob instanceof ClearElemental) {
+                            mob.die(true ); // CR怪物死亡
+                        } else if (mob instanceof Qliphoth) {
+                            if((mob.HP>=60 && mob.HP<=100)){
+                                mob.HP = 60;
+                            }
+                        }
+                 }
+            }
+        }
     }
+
 
     @Override
     public void damage(int dmg, Object src) {
@@ -170,11 +200,13 @@ public class QliphothLasher extends Mob implements Hero.Doom {
     }
 
     private static final String STATE_LASHER_BOSS   = "state_lasher_boss";
+    private static final String STATE_PHASE         = "state_Phase";
 
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         state_lasher_boss = bundle.getInt(STATE_LASHER_BOSS);
+        state_Phase = bundle.getInt(STATE_PHASE);
         if(state_lasher_boss >= 1){
             immunities.add( Fire.class );
         }
@@ -184,6 +216,7 @@ public class QliphothLasher extends Mob implements Hero.Doom {
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put(STATE_LASHER_BOSS, state_lasher_boss);
+        bundle.put(STATE_PHASE, state_Phase);
     }
 
     @Override

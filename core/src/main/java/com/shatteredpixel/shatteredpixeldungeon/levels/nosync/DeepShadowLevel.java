@@ -12,6 +12,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RoseShiled;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.bossrush.Rival;
@@ -538,6 +539,14 @@ public class DeepShadowLevel extends Level {
                 || map[pos] == Terrain.CHASM
                 || map[pos] == Terrain.ENTRANCE);
         return pos;
+    }
+
+    @Override
+    public boolean activateTransition(Hero hero, LevelTransition transition) {
+        if(locked){
+            return false;
+        }
+        return super.activateTransition(hero, transition);
     }
 
 }

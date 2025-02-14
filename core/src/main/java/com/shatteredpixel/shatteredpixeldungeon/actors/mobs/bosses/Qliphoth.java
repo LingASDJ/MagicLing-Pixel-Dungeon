@@ -4,7 +4,6 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import static com.shatteredpixel.shatteredpixeldungeon.levels.ForestPoisonBossLevel.ForestBoss2_LasherPos;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.BGMPlayer;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -61,6 +60,8 @@ import com.watabou.utils.Random;
 public class Qliphoth extends Boss {
 
     public int state_boss;
+
+    public int state_two_phase;
 
     public int boss_teleport;
 
@@ -120,10 +121,20 @@ public class Qliphoth extends Boss {
     protected boolean act() {
 
         for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
-            if (mob instanceof PhantomPiranha) {
-               onlyFish = true;
-            } else {
-                onlyFish = false;
+            onlyFish = mob instanceof PhantomPiranha && mob.alignment == Alignment.ENEMY;
+        }
+
+        boolean ST1 = false;
+        // 获取当前Dungeon.level上的Mob数组
+        Mob[] mobs = Dungeon.level.mobs.toArray(new Mob[0]);
+        // 检查Mob数量是否为1
+        if (mobs.length == 1) {
+            // 检查唯一的Mob是否是Boss
+            if (mobs[0] instanceof Qliphoth) {
+                if (state_boss == 0) {
+                    ST1 = true;
+                }
+
             }
         }
 
@@ -137,7 +148,27 @@ public class Qliphoth extends Boss {
             GameScene.add(Blob.seed(i,10, Invisibility_Fogs.class));
         }
 
-        if(state_boss == 1 && HP<=60){
+        if(state_boss==0 && HP == 150 && ST1){
+            HP = 100;
+            state_boss++;
+            summon_Lasher();
+            GLog.n(Messages.get(this,"summon"));
+            for (int i : SuperAttack_Pos) {
+                MagicMissile.boltFromChar(sprite.parent,
+                        MagicMissile.SHAMAN_PURPLE,
+                        new MissileSprite(),
+                        i,
+                        new Callback() {
+                            @Override
+                            public void call() {
+                                if(!(Dungeon.isChallenged(Challenges.STRONGER_BOSSES))) {
+                                    Dungeon.level.drop(new FishingSpear(), i);
+                                }
+                                Dungeon.level.drop(new FishingSpear(),i);
+                            }
+                        });
+            }
+        } else if(state_boss == 1 && (HP>=60 && HP<100)){
             state_boss++;
             HP = 60;
 
@@ -196,29 +227,9 @@ public class Qliphoth extends Boss {
             }
         }
 
-        if(state_boss==0 && HP<=100){
-            HP = 100;
-            state_boss++;
-            summon_Lasher();
-            GLog.n(Messages.get(this,"summon"));
 
-            for (int i : SuperAttack_Pos) {
-                MagicMissile.boltFromChar(sprite.parent,
-                        MagicMissile.SHAMAN_PURPLE,
-                        new MissileSprite(),
-                        i,
-                        new Callback() {
-                            @Override
-                            public void call() {
-                                if(!(Dungeon.isChallenged(Challenges.STRONGER_BOSSES))) {
-                                    Dungeon.level.drop(new FishingSpear(), i);
-                                }
-                                Dungeon.level.drop(new FishingSpear(),i);
-                            }
-                        });
-            }
 
-        }
+
 
         return super.act();
     }
@@ -286,7 +297,13 @@ public class Qliphoth extends Boss {
 
     @Override
     public boolean isInvulnerable(Class effect) {
-        return this.HP > 60 && effect != Lasher_Damage.class || onlyFish;
+        boolean invulnerable;
+        if(state_boss < 2){
+            invulnerable = true;
+        } else {
+            invulnerable = onlyFish;
+        }
+        return invulnerable;
     }
 
     @Override
@@ -515,10 +532,12 @@ public class Qliphoth extends Boss {
 
     private static final String STATE_BOSS     = "state_lasher_boss";
     private static final String TELEPORT_BOSS  = "teleport_boss";
+    private static final String STATE_TWO_BOSS = "state_two_phase";
 
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
+        bundle.put(STATE_TWO_BOSS, state_two_phase);
         bundle.put(STATE_BOSS, state_boss);
         bundle.put(TELEPORT_BOSS,boss_teleport);
     }
@@ -527,6 +546,7 @@ public class Qliphoth extends Boss {
     @Override
     public void restoreFromBundle( Bundle bundle ) {
         super.restoreFromBundle( bundle );
+        bundle.put(STATE_TWO_BOSS, state_two_phase);
         state_boss = bundle.getInt(STATE_BOSS);
         boss_teleport = bundle.getInt(TELEPORT_BOSS);
         if (state != SLEEPING) BossHealthBar.assignBoss(this);
