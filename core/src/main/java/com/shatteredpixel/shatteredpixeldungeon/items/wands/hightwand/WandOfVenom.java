@@ -137,8 +137,8 @@ public class WandOfVenom extends DamageWand {
     @Override
     public String statsDesc() {
         if (levelKnown)
-            return Messages.get(this, "stats_desc", 4+buffedLvl());
+            return Messages.get(this, "stats_desc", (buffedLvl() + 1 + Dungeon.scalingDepth()/5),(buffedLvl() + 1 + Dungeon.scalingDepth()/5)*8,(buffedLvl() + 1 + Dungeon.scalingDepth()/5)*20);
         else
-            return Messages.get(this, "stats_desc", 4);
+            return Messages.get(this, "stats_desc", (1 + Dungeon.scalingDepth()/5),(1 + Dungeon.scalingDepth()/5)*8,(1+ Dungeon.scalingDepth()/5)*20);
     }
 }
