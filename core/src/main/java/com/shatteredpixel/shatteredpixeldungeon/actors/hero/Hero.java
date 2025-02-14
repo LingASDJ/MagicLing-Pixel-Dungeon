@@ -2019,7 +2019,7 @@ public class Hero extends Char {
 			return;
 		}
 
-		if(hero.belongings.getItem(EmotionalAggregationB.class)!=null){
+		if(hero.belongings.getItem(EmotionalAggregationB.class)!=null && !(src instanceof Buff) && !(src instanceof Blob)){
 			dmg += (int) getZone()*2 -1;
 		}
 
