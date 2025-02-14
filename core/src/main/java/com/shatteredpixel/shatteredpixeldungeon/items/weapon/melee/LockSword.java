@@ -119,7 +119,7 @@ public class LockSword extends MeleeWeapon {
 
     @Override
     public int max(int lvl) {
-        return  14 + lvl*6;
+        return  14 + lvl*12;
     }
 
     public String desc() {
