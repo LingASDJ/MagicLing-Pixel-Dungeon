@@ -160,6 +160,11 @@ public class vM0_7_X_Changes {
                         "_-_ 升级条件：修正双倍升级的异常\n" +
                         "_-_ 暗杀消耗保持6充能不变" )));
 
+        changes.addButton(new ChangeButton(new QuestionSprite(), ("问号君暂时下线"),
+                (
+                        "问号君重制了自己的NPC代码，但有着许多Bug, 其中还有严重导致游戏崩溃的BUG，" +
+                                "\n\n为此暂时下线，暂时不再0层生成，请等待后续版本更新。")));
+
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.HIGHTWAND_1), ("毒液侵染法杖"),
                 ("为BOSS添加不在毒气内则累积毒素清零\n" +
                         "气体量由150 +50*lvl削弱至 50+10*lvl\n" +
