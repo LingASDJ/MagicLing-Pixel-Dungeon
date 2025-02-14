@@ -49,6 +49,7 @@ public class PhantomPiranha extends Piranha {
 		loot = PhantomMeat.class;
 		lootChance = 1f;
 
+		//TODO 暂时无法特判 为此只能检测含有buff进行处理 需要玩家进行行动以更新回合机会
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
 			if(buff != null){
 				buff.detach();

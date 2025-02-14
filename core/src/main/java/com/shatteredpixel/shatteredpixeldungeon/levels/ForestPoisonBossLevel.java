@@ -15,7 +15,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.Qliphoth;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.bosses.QliphothLasher;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -27,9 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -272,18 +269,11 @@ public class ForestPoisonBossLevel extends Level {
             Buff.affect(qliphothLasher,Qliphoth.Lasher_Damage.class);
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
                 if(mob instanceof Qliphoth){
-                    MagicMissile.boltFromChar( mob.sprite.parent,
-                            MagicMissile.FIRE_CONE,
-                            new MissileSprite(),
-                            i,
-                            new Callback() {
-                                @Override
-                                public void call() {
-                                    qliphothLasher.pos = i;
-                                    GameScene.add(qliphothLasher);
-                                    mob.notice();
-                                }
-                            } );
+                    qliphothLasher.pos = i;
+                    GameScene.add(qliphothLasher);
+                    mob.HP = 150;
+                    mob.notice();
+                    break;
                 }
 
             }

@@ -185,7 +185,7 @@ public class Ghost extends NPC {
 					questBoss = new GreatCrab();
 					txt_quest = Messages.get(this, "crab_1", Messages.titleCase(Dungeon.hero.name())); break;
 			}
-
+			questBoss.notice();
 			questBoss.pos = Dungeon.level.randomRespawnCell( this );
 
 			if (questBoss.pos != -1) {
@@ -464,9 +464,21 @@ public class Ghost extends NPC {
 		public static void process() {
 			if (spawned && given && !processed && (depth == Dungeon.depth)) {
 				GLog.n( Messages.get(Ghost.class, "find_me") );
+				GameScene.bossSlain();
 				Sample.INSTANCE.play( Assets.Sounds.GHOST );
 				processed = true;
 				Statistics.questScores[0] = 1000;
+				Game.runOnRenderThread(new Callback() {
+					@Override
+					public void call() {
+						Music.INSTANCE.fadeOut(5f, new Callback() {
+							@Override
+							public void call() {
+								Music.INSTANCE.play(Assets.BGM_1, true);
+							}
+						});
+					}
+				});
 			}
 		}
 

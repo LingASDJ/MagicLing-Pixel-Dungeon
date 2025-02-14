@@ -21,7 +21,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -194,9 +194,11 @@ abstract public class Boss extends Mob {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         first = bundle.getBoolean(FIRST);
+        if (state != SLEEPING) BossHealthBar.assignBoss(this);
+        if ((HP*2 <= HT)) BossHealthBar.bleed(true);
     }
 
-    private void RollCS(){
+    public void RollCS(){
         Class<?extends ChampionEnemy> buffCls;
         switch (Random.Int(4)){
             case 0: default:    buffCls = ChampionEnemy.Blazing.class;      break;
@@ -208,7 +210,7 @@ abstract public class Boss extends Mob {
         this.state = this.WANDERING;
     }
 
-    private void RollEX(){
+    public void RollEX(){
         Class<?extends ChampionEnemy> buffCls2;
         float roll = Random.Float(); // 生成 0.0~1.0 的随机数
 
