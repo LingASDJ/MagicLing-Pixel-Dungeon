@@ -146,7 +146,8 @@ public class vM0_7_X_Changes {
                         "2.悲伤幽灵的任务BGM缺失【一般问题】\n" +
                         "3.BossRush的一些文案修正【一般问题】\n" +
                         "4.BossRush的Hell难度下4层血红史莱姆数值异常【一般问题】\n" +
-                        "5.修复暗影的隐藏楼层异常"));
+                        "5.修复暗影的隐藏楼层异常\n" +
+                        "6.部分武器应该可参与炼金，但在之前无法直接放入"));
 
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
         changes.hardlight(Window.R_COLOR);
