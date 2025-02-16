@@ -62,7 +62,7 @@ public class Gold extends Item {
 	public boolean doPickUp(Hero hero, int pos) {
 
 		if(hero.belongings.getItem(RustedGoldCoin.class)!=null){
-			 quantity *= 0.25f;
+			 quantity *= 0.75f;
 		}
 
 		Catalog.setSeen(getClass());
