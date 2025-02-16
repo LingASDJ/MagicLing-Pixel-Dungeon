@@ -21,15 +21,20 @@ import com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.Prop;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.DeviceCompat;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 abstract public class Boss extends Mob {
@@ -97,12 +102,30 @@ abstract public class Boss extends Mob {
                 }
             }
 
-            if((isDLC(Conducts.Conduct.HARD) || isDLC(Conducts.Conduct.DEV)) ){
+            if((isDLC(Conducts.Conduct.HARD) || isDLC(Conducts.Conduct.DEV)) && DeviceCompat.isMidTest() && (new ArrayList<>(Arrays.asList(5,10,15,20)).contains(Dungeon.depth) && Dungeon.branch ==0 )){
                 SmallLeafHardDungeon smallLeafHardDungeon = new SmallLeafHardDungeon();
                 smallLeafHardDungeon.pos = pos;
                 Dungeon.level.mobs.add(smallLeafHardDungeon);
                 GameScene.add( smallLeafHardDungeon );
                 Dungeon.level.occupyCell( smallLeafHardDungeon );
+
+                if(Dungeon.depth == 10){
+                    Prop p1 = Prop.randomPropA();
+                    Prop p2 = Prop.randomPropB();
+                    p1.collect();
+                    p2.collect();
+                    GLog.i(Messages.get(hero, "you_now_have", p1.name()));
+                    GLog.i(Messages.get(hero, "you_now_have", p2.name()));
+                }
+
+                if(Dungeon.depth == 20){
+                    Prop p1 = Prop.randomPropA(1);
+                    Prop p2 = Prop.randomPropB(1);
+                    p1.collect();
+                    p2.collect();
+                    GLog.i(Messages.get(hero, "you_now_have", p1.name()));
+                    GLog.i(Messages.get(hero, "you_now_have", p2.name()));
+                }
             }
 
             if(Statistics.RandMode && Dungeon.depth == 10){

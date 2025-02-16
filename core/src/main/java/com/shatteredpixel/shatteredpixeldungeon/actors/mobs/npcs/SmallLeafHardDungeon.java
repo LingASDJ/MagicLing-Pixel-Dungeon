@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.zero.SmallLeaf;
@@ -11,7 +12,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PropBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.Prop;
-import com.shatteredpixel.shatteredpixeldungeon.items.props.Props;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDoll;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDollB;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.Trash;
@@ -174,7 +174,7 @@ public class SmallLeafHardDungeon extends NPC {
                                     p.collect();
                                     GLog.i(Messages.get(hero, "you_now_have", p.name()));
 
-                                    Props.add((Prop)btnItem.item());
+                                    Statistics.add((Prop)btnItem.item());
 
                                     btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                     break;
@@ -184,7 +184,7 @@ public class SmallLeafHardDungeon extends NPC {
                                     p.collect();
                                     GLog.i(Messages.get(hero, "you_now_have", p.name()));
 
-                                    Props.add((Prop)btnItem.item());
+                                    Statistics.add((Prop)btnItem.item());
 
                                     btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                     break;
@@ -201,7 +201,7 @@ public class SmallLeafHardDungeon extends NPC {
                                         p2.collect();
                                         GLog.i(Messages.get(hero, "you_now_have", p2.name()));
 
-                                        Props.add((Prop)btnItem.item());
+                                        Statistics.add((Prop)btnItem.item());
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
                                     case 1:
@@ -209,7 +209,7 @@ public class SmallLeafHardDungeon extends NPC {
                                         p.collect();
                                         GLog.i(Messages.get(hero, "you_now_have", p.name()));
 
-                                        Props.add((Prop)btnItem.item());
+                                        Statistics.add((Prop)btnItem.item());
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
                                 }
@@ -220,9 +220,9 @@ public class SmallLeafHardDungeon extends NPC {
                                         p.collect();
                                         GLog.i(Messages.get(hero, "you_now_have", p.name()));
                                         if(btnItem.item() instanceof TerrorDollB){
-                                            Props.add(new TerrorDoll());
+                                            Statistics.add(new TerrorDoll());
                                         }else{
-                                            Props.add((Prop)(btnItem.item()));
+                                            Statistics.add((Prop)(btnItem.item()));
                                         }
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
@@ -236,9 +236,9 @@ public class SmallLeafHardDungeon extends NPC {
                                         GLog.i(Messages.get(hero, "you_now_have", p2.name()));
 
                                         if(btnItem.item() instanceof TerrorDollB){
-                                            Props.add(new TerrorDoll());
+                                            Statistics.add(new TerrorDoll());
                                         }else{
-                                            Props.add((Prop)(btnItem.item()));
+                                            Statistics.add((Prop)(btnItem.item()));
                                         }
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
