@@ -193,7 +193,7 @@ public class SmallLeafHardDungeon extends NPC {
                             if(Random.Float()>0.66f){
                                 switch (((Prop) btnItem.item()).kind) {
                                     case 0:
-                                        Prop p1 = Prop.randomPropA(( (Prop) btnItem.item()).rareness);
+                                        Prop p1 = Prop.randomPropA(( (Prop) btnItem.item()).rareness+1);
                                         p1.collect();
                                         GLog.i(Messages.get(hero, "you_now_have", p1.name()));
 
@@ -227,7 +227,7 @@ public class SmallLeafHardDungeon extends NPC {
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
                                     case 1:
-                                        Prop p1 = Prop.randomPropB(( (Prop) btnItem.item()).rareness);
+                                        Prop p1 = Prop.randomPropB(( (Prop) btnItem.item()).rareness+1);
                                         p1.collect();
                                         GLog.i(Messages.get(hero, "you_now_have", p1.name()));
 
