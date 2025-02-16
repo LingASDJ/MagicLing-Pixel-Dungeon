@@ -6,5 +6,6 @@ public class TheGriefOfSpeechless extends Prop{
     {
         rareness = 2;
         image = ItemSpriteSheet.THEGRIEFOFSPEECHLESS;
+        kind = 1;
     }
 }

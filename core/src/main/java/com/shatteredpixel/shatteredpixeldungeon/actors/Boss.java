@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.isDLC;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
@@ -14,6 +15,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Yog;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.SmallLeafHardDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.IceCyanBlueSquareCoin;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
@@ -21,6 +24,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -93,6 +97,14 @@ abstract public class Boss extends Mob {
                 }
             }
 
+            if((isDLC(Conducts.Conduct.HARD) || isDLC(Conducts.Conduct.DEV)) ){
+                SmallLeafHardDungeon smallLeafHardDungeon = new SmallLeafHardDungeon();
+                smallLeafHardDungeon.pos = pos;
+                Dungeon.level.mobs.add(smallLeafHardDungeon);
+                GameScene.add( smallLeafHardDungeon );
+                Dungeon.level.occupyCell( smallLeafHardDungeon );
+            }
+
             if(Statistics.RandMode && Dungeon.depth == 10){
                 Dungeon.level.drop(new TengusMask(),pos);
             }
@@ -132,7 +144,6 @@ abstract public class Boss extends Mob {
                     }
                 }
             }
-
     }
 
     @Override

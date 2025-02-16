@@ -6,5 +6,6 @@ public class TerrorDoll extends Prop{
     {
         rareness = 2;
         image = ItemSpriteSheet.TERRORDOLL;
+        kind = 1;
     }
 }

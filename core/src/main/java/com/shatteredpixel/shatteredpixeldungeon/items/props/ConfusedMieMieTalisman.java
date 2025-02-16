@@ -7,8 +7,9 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ConfusedMieMieTalisman extends Prop{
     {
-        rareness = 2;
+        rareness = 0;
         image = ItemSpriteSheet.CONfUSEDMIEMIETALISMAN;
+        kind = 1;
     }
 
     @Override
