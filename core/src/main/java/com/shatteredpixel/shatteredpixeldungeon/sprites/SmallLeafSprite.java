@@ -31,6 +31,9 @@ public class SmallLeafSprite extends MobSprite {
         // 然后使用toArray方法将List转换回数组，因为frames方法接受的是Object...类型的参数。
         idle.frames(textureFilm, Arrays.asList(frameSequence).toArray());
 
+        die = new Animation(4, false);
+        die.frames(textureFilm, 1,2,3,4);
+
         play(this.idle);
     }
 

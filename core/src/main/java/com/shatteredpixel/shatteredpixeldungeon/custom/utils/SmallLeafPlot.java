@@ -301,4 +301,77 @@ public class SmallLeafPlot extends Plot {
 
     }
 
+    public static class PropChange extends Plot {
+
+        public boolean change = false;
+
+        private final static int maxprocess = 1;
+
+        {
+            process = 1;
+        }
+
+        protected String getPlotName() {
+            return SEWER_NAME;
+        }
+
+        @Override
+        public void reachProcess(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+
+            while (this.process < needed_process) {
+                this.process();
+            }
+        }
+
+        @Override
+        public void process() {
+            if (diagulewindow != null) {
+                switch (process) {
+                    default:
+                    case 1:
+                        process_to_1();
+                        break;
+                }
+                diagulewindow.update();
+                process++;
+            }
+        }
+
+        @Override
+        public void initial(WndDialog wndDialog) {
+            diagulewindow = wndDialog;
+            process = 2;
+            process_to_1();
+        }
+
+        @Override
+        public boolean end() {
+            return process > maxprocess;
+        }
+
+        @Override
+        public void skip() {
+            diagulewindow.cancel();
+            WndDialog.settedPlot = null;
+        }
+
+        private void process_to_1() {
+            diagulewindow.hideAll();
+            if(Statistics.amuletObtained){
+                diagulewindow.setMainAvatar(new Image(Assets.Splashes.SMLS));
+            } else {
+                diagulewindow.setMainAvatar(new Image(Assets.Splashes.SMLF));
+            }
+            diagulewindow.setLeftName(Messages.get(SmallLeaf.class, "name"));
+
+            if(!change) {
+                diagulewindow.changeText(Messages.get(SmallLeaf.class, "descofpropchange"));
+            }else{
+                diagulewindow.changeText(Messages.get(SmallLeaf.class, "rest"));
+            }
+        }
+    }
+
+
 }
