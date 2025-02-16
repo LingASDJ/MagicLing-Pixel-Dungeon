@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -13,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.props.Prop;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.Props;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDoll;
 import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDollB;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.Trash;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -168,14 +170,20 @@ public class SmallLeafHardDungeon extends NPC {
 
                             switch (((Prop) btnItem.item()).kind) {
                                 case 0:
-                                    Prop.randomPropA(( (Prop) btnItem.item()).rareness).collect();
+                                    Prop p = Prop.randomPropA(( (Prop) btnItem.item()).rareness);
+                                    p.collect();
+                                    GLog.i(Messages.get(hero, "you_now_have", p.name()));
+
                                     Props.add((Prop)btnItem.item());
 
                                     btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                     break;
 
                                 case 1:
-                                    Prop.randomPropB(( (Prop) btnItem.item()).rareness).collect();
+                                    p = Prop.randomPropB(( (Prop) btnItem.item()).rareness);
+                                    p.collect();
+                                    GLog.i(Messages.get(hero, "you_now_have", p.name()));
+
                                     Props.add((Prop)btnItem.item());
 
                                     btnItem.item().detach(Dungeon.hero.belongings.backpack);
@@ -185,13 +193,22 @@ public class SmallLeafHardDungeon extends NPC {
                             if(Random.Float()>0.66f){
                                 switch (((Prop) btnItem.item()).kind) {
                                     case 0:
-                                        Prop.randomPropA(((Prop) btnItem.item()).rareness).collect();
-                                        Prop.randomPropA(((Prop) btnItem.item()).rareness).collect();
+                                        Prop p1 = Prop.randomPropA(( (Prop) btnItem.item()).rareness);
+                                        p1.collect();
+                                        GLog.i(Messages.get(hero, "you_now_have", p1.name()));
+
+                                        Prop p2 = Prop.randomPropA(( (Prop) btnItem.item()).rareness);
+                                        p2.collect();
+                                        GLog.i(Messages.get(hero, "you_now_have", p2.name()));
+
                                         Props.add((Prop)btnItem.item());
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
                                     case 1:
-                                        Prop.randomPropA(((Prop) btnItem.item()).rareness).collect();
+                                        Prop p = Prop.randomPropA(( (Prop) btnItem.item()).rareness);
+                                        p.collect();
+                                        GLog.i(Messages.get(hero, "you_now_have", p.name()));
+
                                         Props.add((Prop)btnItem.item());
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
@@ -199,7 +216,9 @@ public class SmallLeafHardDungeon extends NPC {
                             }else{
                                 switch (((Prop) btnItem.item()).kind) {
                                     case 0:
-                                        Prop.randomPropB(((Prop) btnItem.item()).rareness+1).collect();
+                                        Prop p = Prop.randomPropB(( (Prop) btnItem.item()).rareness);
+                                        p.collect();
+                                        GLog.i(Messages.get(hero, "you_now_have", p.name()));
                                         if(btnItem.item() instanceof TerrorDollB){
                                             Props.add(new TerrorDoll());
                                         }else{
@@ -208,8 +227,14 @@ public class SmallLeafHardDungeon extends NPC {
                                         btnItem.item().detach(Dungeon.hero.belongings.backpack);
                                         break;
                                     case 1:
-                                        Prop.randomPropB(((Prop) btnItem.item()).rareness+1).collect();
-                                        Prop.randomPropB(((Prop) btnItem.item()).rareness).collect();
+                                        Prop p1 = Prop.randomPropB(( (Prop) btnItem.item()).rareness);
+                                        p1.collect();
+                                        GLog.i(Messages.get(hero, "you_now_have", p1.name()));
+
+                                        Prop p2 = Prop.randomPropB(( (Prop) btnItem.item()).rareness);
+                                        p2.collect();
+                                        GLog.i(Messages.get(hero, "you_now_have", p2.name()));
+
                                         if(btnItem.item() instanceof TerrorDollB){
                                             Props.add(new TerrorDoll());
                                         }else{
@@ -221,6 +246,14 @@ public class SmallLeafHardDungeon extends NPC {
                             }
                         }
                     }
+
+                    if(Dungeon.hero.belongings.getItem(Trash.class)!= null){
+                        for(Trash t : Dungeon.hero.belongings.getAllItems(Trash.class)){
+                            t.detach(Dungeon.hero.belongings.backpack);
+                        }
+                        GLog.b(Messages.get(Trash.class,"trash"));
+                    }
+
                     hide();
                     if (wndParent != null){
                         wndParent.hide();
