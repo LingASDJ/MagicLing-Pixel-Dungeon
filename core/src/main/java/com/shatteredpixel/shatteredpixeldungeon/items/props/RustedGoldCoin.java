@@ -4,7 +4,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class RustedGoldCoin extends Prop{
     {
-        rareness = 2;
+        rareness = 0;
+        kind = 1;
         image = ItemSpriteSheet.RUSTEDGOLDCOIN;
     }
 }

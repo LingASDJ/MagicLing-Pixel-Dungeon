@@ -8,8 +8,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class WenStudyingPaperTwo extends Prop{
     {
 
-        rareness = 2;
-        //..(摊手)
+        rareness = 0;
+        kind = 1;
         image = ItemSpriteSheet.WENSTUDYINGPAPERTWO;
 
     }

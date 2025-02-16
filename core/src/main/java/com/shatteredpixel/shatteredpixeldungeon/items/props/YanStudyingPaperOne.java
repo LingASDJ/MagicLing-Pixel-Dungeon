@@ -7,9 +7,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class YanStudyingPaperOne extends Prop{
     {
-
         rareness = 2;
-        //..(摊手)
+        kind = 1;
         image = ItemSpriteSheet.YANSTUDYINGPAPERONE;
     }
 

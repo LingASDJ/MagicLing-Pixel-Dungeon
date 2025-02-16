@@ -5,8 +5,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class EmotionalAggregationB extends Prop{
     {
 
-        rareness = 2;
-        //..(摊手)
+        rareness = 1;
+        kind = 1;
         image = ItemSpriteSheet.EMOTIONALAGGREGATIONB;
 
     }

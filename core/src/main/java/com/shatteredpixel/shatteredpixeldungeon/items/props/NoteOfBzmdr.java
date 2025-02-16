@@ -5,8 +5,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class NoteOfBzmdr extends Prop{
     {
 
-        rareness = 2;
-        //..(摊手)
+        rareness = 0;
+        kind = 1;
         image = ItemSpriteSheet.NOTEOFBZMDR;
 
     }
