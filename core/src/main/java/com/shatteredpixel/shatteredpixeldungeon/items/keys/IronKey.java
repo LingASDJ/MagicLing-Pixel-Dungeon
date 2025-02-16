@@ -44,7 +44,7 @@ public class IronKey extends Key {
 		// 相当于程序知道了 lvl来源为 lockSword，为此即可调用（前提这个方法是公开的（public)
 
 		if(lockSword != null) {
-			int index = 5;
+			int index = 10;
 			lockSword.lvl += index;
 			int lvl = lockSword.lvl;
 			if (lvl >= 100 && lvl <= 1000 && lvl % 100 == 0) {
