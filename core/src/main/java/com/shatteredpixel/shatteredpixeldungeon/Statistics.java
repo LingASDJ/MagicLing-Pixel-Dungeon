@@ -21,9 +21,39 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.props.ArmorScalesOfBzmdr;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.BlockingDrug;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.BottleWraith;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.BrokenBone;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.CloakFragmentsOfBzmdr;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.ConfusedMieMieTalisman;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.DeliciousRecipe;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.EmotionalAggregation;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.EmotionalAggregationB;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.HeartOfCrystalFractal;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.KnightStabbingSword;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.LuckyGlove;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.Monocular;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.NewStem;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.NoteOfBzmdr;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.PortableWhetstone;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.Prop;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.RapidEarthRoot;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.RustedGoldCoin;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.StarSachet;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDoll;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TerrorDollB;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.TheGriefOfSpeechless;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.WenStudyingPaperOne;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.WenStudyingPaperTwo;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.YanStudyingPaperOne;
+import com.shatteredpixel.shatteredpixeldungeon.items.props.YanStudyingPaperTwo;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Statistics {
 
@@ -390,9 +420,59 @@ public class Statistics {
 
 	private static final String XOL		= "xol";
 
-
+	public static ArrayList<Prop> propPositive0;
+	public static ArrayList<Prop> propPositive1;
+	public static ArrayList<Prop> propPositive2;
+	public static ArrayList<Prop> propNegative0;
+	public static ArrayList<Prop> propNegative1;
+	public static ArrayList<Prop> propNegative2;
 
     public static void reset() {
+
+		propPositive0 = new ArrayList<>(Arrays.asList(
+				new ArmorScalesOfBzmdr(),
+				new StarSachet(),
+				new PortableWhetstone()
+		));
+
+		propNegative0 = new ArrayList<>(Arrays.asList(
+				new BlockingDrug(),
+				new ConfusedMieMieTalisman(),
+				new RustedGoldCoin()
+		));
+
+		propPositive1 = new ArrayList<>(Arrays.asList(
+				new DeliciousRecipe(),
+				new NewStem(),
+				new RapidEarthRoot(),
+				new WenStudyingPaperOne(),
+				new YanStudyingPaperTwo()
+		));
+
+		propNegative1 = new ArrayList<>(Arrays.asList(
+				new BottleWraith(),
+				new EmotionalAggregationB(),
+				new HeartOfCrystalFractal(),
+				new NoteOfBzmdr(),
+				new TheGriefOfSpeechless(),
+				new WenStudyingPaperTwo()
+		));
+
+		propPositive2 = new ArrayList<>(Arrays.asList(
+				new LuckyGlove(),
+				new EmotionalAggregation(),
+				new Monocular(),
+				new KnightStabbingSword()
+		));
+
+		propNegative2 = new ArrayList<>(Arrays.asList(
+				new CloakFragmentsOfBzmdr(),
+				new BrokenBone(),
+				new TerrorDoll(),
+				new YanStudyingPaperOne()
+		));
+
+
         boss_enhance = 0;
         ChaicBlood = 0;
         readBooks = 0;
@@ -549,6 +629,59 @@ public class Statistics {
 		//BossRush2.5
 		LimitLiquidMatal = 0;
 		LiquidMatalOnlyTen = false;
+	}
+
+	public static boolean hasAllRarenessProp(int rare,int kind){
+		if(kind == 0){
+			switch (rare){
+				case 0:
+					return propPositive0.isEmpty();
+				case 1:
+					return propPositive1.isEmpty();
+				case 2:
+					return propPositive2.isEmpty();
+			}
+		}else{
+			switch (rare){
+				case 0:
+					return propNegative0.isEmpty();
+				case 1:
+					return propNegative1.isEmpty();
+				case 2:
+					return propNegative2.isEmpty();
+			}
+		}
+		return  false;
+	}
+
+	public static void add(Prop prop){
+		if( prop.kind == 0){
+			switch (prop.rareness){
+				case 0:
+					propPositive0.add(prop);
+					break;
+				case 1:
+					propPositive1.add(prop);
+					break;
+				case 2:
+					propPositive2.add(prop);
+					break;
+			}
+		}else{
+			switch (prop.rareness){
+				case 0:
+					propNegative0.add(prop);
+					break;
+				case 1:
+					propNegative1.add(prop);
+					break;
+				case 2:
+					propNegative2.add(prop);
+					if(prop instanceof TerrorDoll) propNegative2.add(new TerrorDollB());
+					if(prop instanceof TerrorDollB) propNegative2.add(new TerrorDoll());
+					break;
+			}
+		}
 	}
 
     public static void storeInBundle(Bundle bundle) {

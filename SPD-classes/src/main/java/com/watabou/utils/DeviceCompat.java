@@ -67,6 +67,10 @@ public class DeviceCompat {
 	public static boolean isDebug(){
 		return Game.version.contains("INDEV");
 	}
+
+	public static boolean isMidTest() {
+		return Game.version.contains("MDTEST");
+	}
 	
 	public static void log( String tag, String message ){
 		Gdx.app.log( tag, message );
