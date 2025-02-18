@@ -32,6 +32,9 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class QliphothLasher extends Mob implements Hero.Doom {
 
     public int state_lasher_boss;
@@ -68,11 +71,15 @@ public class QliphothLasher extends Mob implements Hero.Doom {
         }
             // 获取当前Dungeon.level上的Mob数组
             Mob[] mobsx = Dungeon.level.mobs.toArray(new Mob[0]);
+            ArrayList<Mob> enemys = new ArrayList<>();
+            for(Mob mob : mobsx){
+                if(mob.alignment == Alignment.ENEMY) enemys.add(mob);
+            }
 
-            if (mobsx.length >= 1) {
+            if (!enemys.isEmpty()) {
                 boolean containsBoss = false;
                 boolean onlyCRWithBoss = true;
-                for (Mob mob : mobsx) {
+                for (Mob mob : enemys) {
                     if (mob instanceof Qliphoth) {
                         containsBoss = true;
                     } else if (!(mob instanceof ClearElemental)) {
@@ -81,11 +88,11 @@ public class QliphothLasher extends Mob implements Hero.Doom {
                 }
                 // 如果场景中包含Boss并且除了Boss外只含有CR怪物
                 if (containsBoss && onlyCRWithBoss) {
-                    for (Mob mob : mobsx) {
+                    for (Mob mob : enemys) {
                         if (mob instanceof ClearElemental) {
                             mob.die(true ); // CR怪物死亡
                         } else if (mob instanceof Qliphoth) {
-                            if((mob.HP>=60 && mob.HP<=100)){
+                            if((mob.HP>=60 && mob.HP<=150)){
                                 mob.HP = 60;
                             }
                         }
