@@ -92,7 +92,7 @@ public class QliphothLasher extends Mob implements Hero.Doom {
                         if (mob instanceof ClearElemental) {
                             mob.die(true ); // CR怪物死亡
                         } else if (mob instanceof Qliphoth) {
-                            if((mob.HP>=60 && mob.HP<=150)){
+                            if((mob.HP>=60 && mob.HP<=100)){
                                 mob.HP = 60;
                             }
                         }
