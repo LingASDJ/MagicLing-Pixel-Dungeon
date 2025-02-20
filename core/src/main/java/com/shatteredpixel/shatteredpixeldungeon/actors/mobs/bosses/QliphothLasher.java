@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QliphothLasherSprite;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -73,6 +74,7 @@ public class QliphothLasher extends Mob implements Hero.Doom {
             Mob[] mobsx = Dungeon.level.mobs.toArray(new Mob[0]);
             ArrayList<Mob> enemys = new ArrayList<>();
             for(Mob mob : mobsx){
+                if(mob instanceof Qliphoth) enemys.add(mob);
                 if(mob.alignment == Alignment.ENEMY) enemys.add(mob);
             }
 
@@ -96,8 +98,8 @@ public class QliphothLasher extends Mob implements Hero.Doom {
                                 mob.HP = 60;
                             }
                         }
-                 }
-            }
+                    }
+                }
         }
     }
 
