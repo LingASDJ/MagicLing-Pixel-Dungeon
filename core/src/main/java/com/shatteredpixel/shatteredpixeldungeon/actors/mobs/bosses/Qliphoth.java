@@ -67,7 +67,7 @@ public class Qliphoth extends Boss {
 
     {
         initProperty();
-        initBaseStatus(8, 13, 33, 8, 140, 0, 3);
+        initBaseStatus(8, 13, 33, 8, 150, 0, 3);
         initStatus(20);
         defenseSkill = 8;
 

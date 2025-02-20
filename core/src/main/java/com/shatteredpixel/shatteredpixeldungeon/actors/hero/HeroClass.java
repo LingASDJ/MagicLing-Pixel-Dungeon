@@ -225,7 +225,6 @@ public enum HeroClass {
 		if (Dungeon.isDLC(Conducts.Conduct.DEV)){
 
 			new PropBag().quantity(1).identify().collect();
-			new YanStudyingPaperOne().collect();
 
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.dropped();

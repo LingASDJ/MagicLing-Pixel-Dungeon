@@ -54,9 +54,9 @@ public class Prop extends Item {
         if(rare >2) rare =2;
 
         if(Statistics.hasAllRarenessProp(rare,0)){
-            GLog.n(rare+"轮空");
-            if(rare != 0) return randomPropA(rare-1);
-            else return new Trash();
+            if(rare != 0) {
+                return randomPropA(rare - 1);
+            }else return new Trash();
         }
 
         switch (rare){
@@ -89,9 +89,9 @@ public class Prop extends Item {
         if(rare >2) rare =2;
 
         if(Statistics.hasAllRarenessProp(rare,1)){
-            GLog.n(rare+"轮空");
-            if(rare != 0) return randomPropB(rare-1);
-            else return new Trash();
+            if(rare != 0) {
+                return randomPropB(rare - 1);
+            }else return new Trash();
         }
 
         switch (rare){

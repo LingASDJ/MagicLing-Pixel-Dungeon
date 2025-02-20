@@ -26,11 +26,15 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.QliphothLasherSprite;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class QliphothLasher extends Mob implements Hero.Doom {
 
@@ -68,11 +72,16 @@ public class QliphothLasher extends Mob implements Hero.Doom {
         }
             // 获取当前Dungeon.level上的Mob数组
             Mob[] mobsx = Dungeon.level.mobs.toArray(new Mob[0]);
+            ArrayList<Mob> enemys = new ArrayList<>();
+            for(Mob mob : mobsx){
+                if(mob instanceof Qliphoth) enemys.add(mob);
+                if(mob.alignment == Alignment.ENEMY) enemys.add(mob);
+            }
 
-            if (mobsx.length >= 1) {
+            if (!enemys.isEmpty()) {
                 boolean containsBoss = false;
                 boolean onlyCRWithBoss = true;
-                for (Mob mob : mobsx) {
+                for (Mob mob : enemys) {
                     if (mob instanceof Qliphoth) {
                         containsBoss = true;
                     } else if (!(mob instanceof ClearElemental)) {
@@ -81,7 +90,7 @@ public class QliphothLasher extends Mob implements Hero.Doom {
                 }
                 // 如果场景中包含Boss并且除了Boss外只含有CR怪物
                 if (containsBoss && onlyCRWithBoss) {
-                    for (Mob mob : mobsx) {
+                    for (Mob mob : enemys) {
                         if (mob instanceof ClearElemental) {
                             mob.die(true ); // CR怪物死亡
                         } else if (mob instanceof Qliphoth) {
@@ -89,8 +98,8 @@ public class QliphothLasher extends Mob implements Hero.Doom {
                                 mob.HP = 60;
                             }
                         }
-                 }
-            }
+                    }
+                }
         }
     }
 
