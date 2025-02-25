@@ -42,6 +42,7 @@ public class Vampire extends Mob {
         maxLvl = 35;
 
         flying = true;
+        isAnimal = true;
 
         properties.add( Property.HOLLOW );
         properties.add(Char.Property.DEMONIC);

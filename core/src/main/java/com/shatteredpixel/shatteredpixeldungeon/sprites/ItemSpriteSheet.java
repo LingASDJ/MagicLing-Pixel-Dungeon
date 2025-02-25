@@ -1089,6 +1089,7 @@ public class ItemSpriteSheet {
     public static final int HIGHTWAND_5  = + HIGHTWAND+4;
 
     public static final int HIGHTWAND_6  = + HIGHTWAND+5;
+    public static final int HIGHTWAND_7  = + HIGHTWAND+6;
     static {
         for (int i =HIGHTWAND; i < HIGHTWAND+15; i++)
             assignItemRect(i, 14, 14);
