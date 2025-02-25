@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ElectricalSmokeBlob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WellWater;
@@ -103,6 +104,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MossyClump;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrapMechanism;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfSun;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -1656,8 +1658,8 @@ public abstract class Level implements Bundlable {
 
 			//allies and specific enemies can see through shrouding fog
 			if ((c.alignment != Char.Alignment.ALLY && !(c instanceof GnollGeomancer))
-					&& Dungeon.level.blobs.containsKey(SmokeScreen.class)
-					&& Dungeon.level.blobs.get(SmokeScreen.class).volume > 0) {
+					&& (Dungeon.level.blobs.containsKey(SmokeScreen.class) || Dungeon.level.blobs.containsKey(ElectricalSmokeBlob.class))
+					&& ((Dungeon.level.blobs.get(SmokeScreen.class).volume > 0) || Dungeon.level.blobs.get(ElectricalSmokeBlob.class).volume > 0)) {
 				if (blocking == null) {
 					System.arraycopy(Dungeon.level.losBlocking, 0, modifiableBlocking, 0, modifiableBlocking.length);
 					blocking = modifiableBlocking;
@@ -1668,6 +1670,14 @@ public abstract class Level implements Bundlable {
 						blocking[i] = true;
 					}
 				}
+
+				Blob e = Dungeon.level.blobs.get(SmokeScreen.class);
+				for (int i = 0; i < blocking.length; i++){
+					if (!blocking[i] && e.cur[i] > 0){
+						blocking[i] = true;
+					}
+				}
+
 			}
 
 			if (blocking == null){
@@ -1814,6 +1824,22 @@ public abstract class Level implements Bundlable {
 				}
 			}
 
+			for(Actor actor : Actor.all()){
+				if(actor instanceof WandOfSun.MiniSun){
+					WandOfSun.MiniSun sun = (WandOfSun.MiniSun) actor;
+					int[] neighbours7 = {
+							-3,-2,-1,0,1,2,3
+					};
+					for (int i : neighbours7) heroMindFov[sun.pos+i - width] = true;
+					for (int i : neighbours7) heroMindFov[sun.pos+i - (width)*2] = true;
+					for (int i : neighbours7) heroMindFov[sun.pos+i - (width)*3] = true;
+					for (int i : neighbours7) heroMindFov[sun.pos+i] = true;
+					for (int i : neighbours7) heroMindFov[sun.pos+i + width] = true;
+					for (int i : neighbours7) heroMindFov[sun.pos+i + (width)*2] = true;
+					for (int i : neighbours7) heroMindFov[sun.pos+i + (width)*3] = true;
+				}
+			}
+
 			for (RevealedArea a : c.buffs(RevealedArea.class)){
 				if (depth != a.depth || Dungeon.branch != a.branch) continue;
 				for (int i : PathFinder.NEIGHBOURS9) heroMindFov[a.pos+i] = true;
@@ -1948,7 +1974,7 @@ public abstract class Level implements Bundlable {
 	}
 	
 	public String tileDesc( int tile ) {
-		
+
 		switch (tile) {
 			case Terrain.CHASM:
 				return Messages.get(Level.class, "chasm_desc");

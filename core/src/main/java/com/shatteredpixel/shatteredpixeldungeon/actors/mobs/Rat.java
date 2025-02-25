@@ -41,6 +41,7 @@ public class Rat extends Mob {
 
 		EXP = (Dungeon.isChallenged(CS) && Dungeon.depth == 1 && hero.lvl<2) ? 2 : 1;
 
+		isAnimal = true;
 		maxLvl = 5;
 	}
 

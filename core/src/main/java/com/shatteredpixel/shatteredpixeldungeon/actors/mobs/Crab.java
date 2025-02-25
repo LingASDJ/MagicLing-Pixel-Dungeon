@@ -37,6 +37,7 @@ public class Crab extends Mob {
 		
 		EXP = 4;
 		maxLvl = 9;
+		isAnimal = true;
 		
 		loot = new MysteryMeat();
 		lootChance = 0.167f;

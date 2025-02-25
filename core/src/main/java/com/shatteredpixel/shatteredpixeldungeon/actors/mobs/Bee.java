@@ -41,6 +41,7 @@ public class Bee extends Mob {
 		spriteClass = BeeSprite.class;
 		
 		viewDistance = 4;
+		isAnimal = true;
 
 		EXP = 0;
 		
