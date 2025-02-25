@@ -830,7 +830,7 @@ public class GameScene extends PixelScene {
 		}
 	}
 
-	public static void add(WandOfSun.MiniSun actor) {
+	public void add(WandOfSun.MiniSun actor) {
 		Actor.add(actor);
 		if(scene != null){
 			scene.add(actor.sprite);
