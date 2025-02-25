@@ -128,6 +128,8 @@ public class ElectricalSmokeBlob extends Blob{
 
     public void decrease(Class c){
         if(artifact.potionCate.get(c)!=0){
+            int old = artifact.potionCate.get(c);
+
             artifact.potionCate.replace(c,artifact.potionCate.get(c)- artifact.decrease);
         }
     }

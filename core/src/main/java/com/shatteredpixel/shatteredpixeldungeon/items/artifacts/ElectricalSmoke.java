@@ -197,7 +197,7 @@ public class ElectricalSmoke extends Artifact {
 
     @Override
     public boolean doEquip( final Hero hero ) {
-        if(!cursed && super.doEquip(hero)) hero.withElectricalSmoke = true;
+        if(!cursed) hero.withElectricalSmoke = true;
         return super.doEquip(hero);
     }
 
