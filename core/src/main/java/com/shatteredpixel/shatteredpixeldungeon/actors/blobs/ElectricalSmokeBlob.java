@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -127,15 +128,15 @@ public class ElectricalSmokeBlob extends Blob{
     }
 
     public void decrease(Class c){
-        if(artifact.potionCate.get(c)!=0){
+        if(artifact.potionCate.get(c)>0){
             int old = artifact.potionCate.get(c);
-
-            artifact.potionCate.replace(c,artifact.potionCate.get(c)- artifact.decrease);
+            artifact.potionCate.remove(c);
+            artifact.potionCate.put(c,old-artifact.decrease);
         }
     }
 
     public boolean has(Class c){
-        return artifact.potionCate.get(c) != 0;
+        return artifact.potionCate.get(c) > 0;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Smoking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElectricalSmokeParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
@@ -30,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -39,7 +41,7 @@ import java.util.HashMap;
 
 public class ElectricalSmoke extends Artifact {
     {
-        image = ItemSpriteSheet.ARTIFACT_SANDALS;
+        image = ItemSpriteSheet.RUIKE;
 
         levelCap = 10;
 
@@ -55,6 +57,31 @@ public class ElectricalSmoke extends Artifact {
     public static final String AC_SMOKE = "SMOKE";
 
     public ArrayList<Class> potions = new ArrayList<>();
+
+    @Override
+    public Emitter emitter() {
+        Emitter emitter = new Emitter();
+        emitter.pos(13f, 4);
+        emitter.fillTarget = false;
+        emitter.pour(StaffParticleFactory, 0.1f);
+        return emitter;
+    }
+
+    private final Emitter.Factory StaffParticleFactory = new Emitter.Factory() {
+        /**
+         * @param emitter 目标来源
+         * @param index 特效来源
+         * @param x,y 位置
+         */
+        @Override
+        public void emit( Emitter emitter, int index, float x, float y ) {
+            ((ElectricalSmokeParticle)emitter.recycle( ElectricalSmokeParticle.class )).reset( x, y+3 );
+        }
+        @Override
+        public boolean lightMode() {
+            return true;
+        }
+    };
 
     @Override
     public ArrayList<String> actions(Hero hero) {
@@ -86,12 +113,14 @@ public class ElectricalSmoke extends Artifact {
                 GLog.i(Messages.get(this, "low_charge"));
             else {
                 if(hero.buff(Smoking.class)==null) {
+
                     Buff.affect(hero, Smoking.class);
                     hero.buff(Smoking.class).setArtifact(this);
 
                     hero.sprite.operate( hero.pos );
                     hero.busy();
                     hero.spend(Actor.TICK);
+
                 }else{
                     hero.sprite.operate( hero.pos );
                     hero.buff(Smoking.class).detach();
@@ -148,7 +177,8 @@ public class ElectricalSmoke extends Artifact {
     @Override
     public Item upgrade(){
         decrease = 100/(10+level());
-        return super.upgrade();
+        if(levelCap > level) return super.upgrade();
+        else return this;
     }
 
     protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
@@ -173,19 +203,20 @@ public class ElectricalSmoke extends Artifact {
             Hero hero = Dungeon.hero;
             if (item != null && gasPotion.contains(item.getClass())) {
                 hero.sprite.operate( hero.pos );
-                int oldCapacity = potionCate.get(item.getClass());
-                potionCate.replace((Class<? extends Potion>) item.getClass(), (oldCapacity + 100));
+                add(item.getClass(), 100);
 
                 if(item instanceof ShockingBrew) {
-                    upgrade();
-                    upgrade();
-                    GLog.p(Messages.get(ElectricalSmoke.class, "levelup"));
+                    if(level<levelCap){
+                        GLog.p(Messages.get(ElectricalSmoke.class, "levelup"));
+                        upgrade();
+                    }
+                    if(level<levelCap) upgrade();
                 }
 
                 item.detach(hero.belongings.backpack);
 
             } else if(item != null){
-                upgrade();
+                if(level<levelCap) upgrade();
                 hero.sprite.operate( hero.pos );
                 GLog.p(Messages.get(ElectricalSmoke.class, "levelup"));
                 item.detach(hero.belongings.backpack);
@@ -280,7 +311,7 @@ public class ElectricalSmoke extends Artifact {
     }
 
     public boolean has(Class c){
-        return potionCate.get(c) != 0;
+        return potionCate.get(c) > 0;
     }
 
     public class SmokingAlloy extends ArtifactBuff{
@@ -301,6 +332,10 @@ public class ElectricalSmoke extends Artifact {
             }
             spend(TICK);
             return true;
+        }
+
+        public HashMap<Class<? extends Potion>, Integer> getMap(){
+            return potionCate;
         }
 
     }
@@ -337,16 +372,22 @@ public class ElectricalSmoke extends Artifact {
     public void restoreFromBundle( Bundle bundle){
         super.restoreFromBundle(bundle);
 
-        potionCate.replace(PotionOfFrost.class,bundle.getInt(FROST));
-        potionCate.replace(PotionOfLiquidFlame.class,bundle.getInt(FLAME));
-        potionCate.replace(PotionOfToxicGas.class,bundle.getInt(TOXIC));
-        potionCate.replace(PotionOfLevitation.class,bundle.getInt(LEVITATION));
-        potionCate.replace(PotionOfParalyticGas.class,bundle.getInt(PARALYTIC));
-        potionCate.replace(PotionOfLiquidFlameX.class,bundle.getInt(FLAMEX));
-        potionCate.replace(PotionOfCorrosiveGas.class,bundle.getInt(CORROSIVE));
-        potionCate.replace(BlizzardBrew.class,bundle.getInt(BLIZZARD));
-        potionCate.replace(InfernalBrew.class,bundle.getInt(INFERNAL));
-        potionCate.replace(ShockingBrew.class,bundle.getInt(SHOCKING));
+        add(PotionOfFrost.class,bundle.getInt(FROST));
+        add(PotionOfLiquidFlame.class,bundle.getInt(FLAME));
+        add(PotionOfToxicGas.class,bundle.getInt(TOXIC));
+        add(PotionOfLevitation.class,bundle.getInt(LEVITATION));
+        add(PotionOfParalyticGas.class,bundle.getInt(PARALYTIC));
+        add(PotionOfLiquidFlameX.class,bundle.getInt(FLAMEX));
+        add(PotionOfCorrosiveGas.class,bundle.getInt(CORROSIVE));
+        add(BlizzardBrew.class,bundle.getInt(BLIZZARD));
+        add(InfernalBrew.class,bundle.getInt(INFERNAL));
+        add(ShockingBrew.class,bundle.getInt(SHOCKING));
 
+    }
+
+    public void add(Class c,int i){
+        int old = potionCate.get(c);
+        potionCate.remove(c);
+        potionCate.put(c,old+i);
     }
 }
