@@ -48,6 +48,7 @@ public class BrownBat extends Mob {
         maxLvl = 15;
 
         flying = true;
+        isAnimal = true;
 
         loot = new PotionOfHealing();
         lootChance = 0.1667f; //by default, see rollToDropLoot()

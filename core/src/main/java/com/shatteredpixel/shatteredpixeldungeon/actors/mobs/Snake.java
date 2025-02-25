@@ -39,6 +39,7 @@ public class Snake extends Mob {
 		
 		EXP = 2;
 		maxLvl = 7;
+		isAnimal = true;
 		
 		loot = Generator.Category.SEED;
 		lootChance = 0.25f;

@@ -73,6 +73,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ElectricalSmoke;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
@@ -148,6 +149,8 @@ public abstract class Mob extends Char {
 	protected int enemyID = -1; //used for save/restore
 	protected boolean enemySeen;
 	protected boolean alerted = false;
+
+	public boolean isAnimal = false;
 
 	//whether the hero should interact with the mob (true) or attack it (false)
 	public boolean heroShouldInteract(){
@@ -412,6 +415,19 @@ public abstract class Mob extends Char {
 	protected boolean act() {
 
 		super.act();
+
+		if(isAnimal && hero.withElectricalSmoke) {
+			this.alignment = Alignment.NEUTRAL;
+		}else{
+			this.alignment = Alignment.ENEMY;
+		}
+
+		if(hero.buff(ElectricalSmoke.SmokingAlloy.class)!=null){
+			if(hero.buff(ElectricalSmoke.SmokingAlloy.class).isCursed()){
+				if(state == SLEEPING) state = HUNTING;
+				beckon(hero.pos);
+			}
+		}
 
 		//相位体
 		if (!Dungeon.level.heroFOV[pos] && HP < HT && buff(ChampionEnemy.HealRight.class) != null) {

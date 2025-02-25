@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -33,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
@@ -43,8 +45,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfSun;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -66,6 +70,7 @@ public class MagesStaff extends MeleeWeapon {
 
 	public static final String AC_IMBUE = "IMBUE";
 	public static final String AC_ZAP	= "ZAP";
+	public static final String AC_DISMISS = "DISMISS";
 
 	private static final float STAFF_SCALE_FACTOR = 0.75f;
 
@@ -85,6 +90,10 @@ public class MagesStaff extends MeleeWeapon {
 
 	public MagesStaff() {
 		wand = null;
+	}
+
+	public Wand getWand() {
+		return wand;
 	}
 
 	@Override
@@ -109,6 +118,11 @@ public class MagesStaff extends MeleeWeapon {
 		if (wand!= null && wand.curCharges > 0) {
 			actions.add( AC_ZAP );
 		}
+
+		if(wand != null && wand instanceof WandOfSun){
+			actions.add( AC_DISMISS );
+		}
+
 		return actions;
 	}
 
@@ -153,7 +167,36 @@ public class MagesStaff extends MeleeWeapon {
 			else                             wand.cursed = false;
 			wand.execute(hero, AC_ZAP);
 		}
+
+		if (action.equals(AC_DISMISS)) {
+			GameScene.selectCell(cellSelector);
+		}
+
 	}
+
+	protected CellSelector.Listener cellSelector = new CellSelector.Listener(){
+
+		@Override
+		public void onSelect(Integer cell) {
+			if (cell != null){
+				for(Actor a :Actor.all()){
+					if(a instanceof WandOfSun.MiniSun){
+						WandOfSun.MiniSun s = (WandOfSun.MiniSun) a;
+						if(s.pos == cell){
+							s.die();
+							return;
+						}
+					}
+				}
+				GLog.i(Messages.get(WandOfSun.class,"dissun"));
+			}
+		}
+
+		@Override
+		public String prompt() {
+			return Messages.get(SandalsOfNature.class, "prompt_target");
+		}
+	};
 
 	@Override
 	public int buffedVisiblyUpgraded() {

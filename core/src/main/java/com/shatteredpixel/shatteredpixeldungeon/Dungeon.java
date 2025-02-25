@@ -62,6 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.SmallLightHeader;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfSun;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagicTorch;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -78,6 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
 import com.watabou.utils.BArray;
@@ -1027,6 +1029,32 @@ public class Dungeon {
 					pos+=level.width();
 				}
 				GameScene.updateFog(ch.pos, dist);
+			}
+		}
+
+		for(Actor actor : Actor.all()){
+			if(actor instanceof WandOfSun.MiniSun){
+				WandOfSun.MiniSun sun = (WandOfSun.MiniSun) actor;
+				x = sun.pos % level.width();
+				y = sun.pos / level.width();
+
+				//left, right, top, bottom
+				dist = sun.viewDistance+1;
+				l = Math.max( 0, x - dist );
+				r = Math.min( x + dist, level.width() - 1 );
+				t = Math.max( 0, y - dist );
+				b = Math.min( y + dist, level.height() - 1 );
+
+				width = r - l + 1;
+				height = b - t + 1;
+
+				pos = l + t * level.width();
+
+				for (int i = t; i <= b; i++) {
+					BArray.or( level.visited, level.heroFOV, pos, width, level.visited );
+					pos+=level.width();
+				}
+				GameScene.updateFog(sun.pos, dist);
 			}
 		}
 

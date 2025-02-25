@@ -87,6 +87,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.DimensionalSundial;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfSun;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -208,7 +209,7 @@ public class GameScene extends PixelScene {
 		if (scene != null && scene.status != null) scene.status.updateAvatar();
 	}
 
-	private void tell(String text) {
+    private void tell(String text) {
 		Game.runOnRenderThread(new Callback() {
 								   @Override
 								   public void call() {
@@ -826,6 +827,13 @@ public class GameScene extends PixelScene {
 		Actor.add( gas );
 		if (scene != null) {
 			scene.addBlobSprite( gas );
+		}
+	}
+
+	public static void add(WandOfSun.MiniSun actor) {
+		Actor.add(actor);
+		if(scene != null){
+			scene.add(actor.sprite);
 		}
 	}
 

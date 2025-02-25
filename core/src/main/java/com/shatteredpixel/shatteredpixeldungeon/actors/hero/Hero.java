@@ -164,6 +164,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolki
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ElectricalSmoke;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
@@ -420,6 +421,9 @@ public class Hero extends Char {
 	public boolean resting = false;
 	public Belongings belongings;
 	public int exp = 0;
+
+	public boolean withElectricalSmoke = false;
+
 	public int HTBoost = 0;
 	//This list is maintained so that some logic checks can be skipped
 	// for enemies we know we aren't seeing normally, resulting in better performance
@@ -2992,6 +2996,8 @@ public class Hero extends Char {
 				Buff.affect(mob, Dread.class);
 			}
 		}
+
+		if( buff(ElectricalSmoke.SmokingAlloy.class) != null) GLog.n(Messages.get(ElectricalSmoke.class,"die"));
 
 		//灯火值低于40 死亡生成自己的邪恶面，并清空金币，背包也一并带走。（灵感：空洞骑士）
 		for (Ankh i : belongings.getAllItems(Ankh.class)) {
