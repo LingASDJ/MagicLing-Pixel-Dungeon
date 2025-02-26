@@ -79,7 +79,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
 import com.watabou.utils.BArray;
@@ -1211,6 +1210,7 @@ public class Dungeon {
 			bundle.put( ZBADGES, passwordbadges );
 
 			BloodBat.saveLevel(bundle);
+
 			FileUtils.bundleToFile( GamesInProgress.gameFile(save), bundle);
 
 		} catch (IOException e) {
@@ -1223,6 +1223,7 @@ public class Dungeon {
 
 		Bundle bundle = FileUtils.bundleFromFile( GamesInProgress.gameFile( save ) );
 		BloodBat.loadLevel(bundle);
+
 		//pre-1.3.0 saves
 		if (bundle.contains(INIT_VER)){
 			initialVersion = bundle.getInt( INIT_VER );

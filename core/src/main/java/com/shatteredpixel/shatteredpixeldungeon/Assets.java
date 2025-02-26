@@ -851,6 +851,7 @@ public class Assets {
 		public static final String ANIMATIONS_SOS = "sprites/items/Animation/DistressSignalNesting.png";
 		public static final String ANIMATIONS_SXS = "sprites/items/Animation/SliverLockSword.png";
 
+		public static final String ANIMATIONS_SUN = "sprites/items/Animation/Sun.png";
 
 	}
 

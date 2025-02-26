@@ -1,55 +1,31 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
-import static com.shatteredpixel.shatteredpixeldungeon.levels.Level.heroMindFov;
-
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Smoking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SunFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ElectricalSmoke;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.SunSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
-import com.watabou.gltextures.TextureCache;
-import com.watabou.noosa.Game;
-import com.watabou.noosa.Image;
-import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 
 public class WandOfSun extends Wand{
@@ -129,9 +105,10 @@ public class WandOfSun extends Wand{
         if(Dungeon.level.passable[target] && curCharges >0) {
             this.owner = owner;
             MiniSun sun = new MiniSun(target);
+
             sun.sprite.place(target);
             sun.sprite.parent = Dungeon.level.addVisuals();
-            GameScene.add(sun);
+            GameScene.scene.add(sun);
             sun.duration = (int) ( 3 + buffedLvl()*0.3f);
             sun.wand = this;
             collisionPos = target;
@@ -166,7 +143,7 @@ public class WandOfSun extends Wand{
         public MagesStaff staff = null;
         public int duration = 3;
         public int viewDistance = 9;
-        public Class<? extends CharSprite> spriteClass = BatSprite.class;
+        public Class<? extends CharSprite> spriteClass = SunSprite.class;
         public int pos;
         public boolean[] fieldOfView = null;
         public CharSprite sprite = Reflection.newInstance(spriteClass);
@@ -176,6 +153,21 @@ public class WandOfSun extends Wand{
         }
         public CharSprite sprite() {
             return Reflection.newInstance(spriteClass);
+        }
+
+        private static final String MINISUNSTATUS = "minisun_status";
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            if( bundle.contains( MINISUNSTATUS ) )
+                duration = bundle.getInt( MINISUNSTATUS );
+        }
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put( MINISUNSTATUS, duration) ;
         }
 
         public void die(){
