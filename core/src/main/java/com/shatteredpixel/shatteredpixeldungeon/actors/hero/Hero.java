@@ -161,6 +161,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
@@ -1109,6 +1110,12 @@ public class Hero extends Char {
 
 	@Override
 	public boolean act() {
+
+		if(buff(ElectricalSmoke.SmokingAlloy.class) != null && !buff(ElectricalSmoke.SmokingAlloy.class).isCursed() && !withElectricalSmoke){
+			withElectricalSmoke = true;
+		}else if(buff(ElectricalSmoke.SmokingAlloy.class) == null || buff(ElectricalSmoke.SmokingAlloy.class).isCursed()){
+			withElectricalSmoke = false;
+		}
 
 
 		LanFireGo lanFireGo = hero.belongings.getItem(LanFireGo.class);
