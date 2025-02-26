@@ -4,6 +4,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ElectricalSmokeBlob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -51,7 +52,9 @@ public class ElectricalSmoke extends Artifact {
     }
 
     public float process;
+    public ElectricalSmoke artifact = this;
     public int decrease = 10;
+    public Hero hero = Dungeon.hero;
 
     public static final String AC_CHARGE = "CHARGE";
     public static final String AC_SMOKE = "SMOKE";
@@ -315,6 +318,9 @@ public class ElectricalSmoke extends Artifact {
     }
 
     public class SmokingAlloy extends ArtifactBuff{
+
+        public ElectricalSmoke smoke = artifact;
+
         @Override
         public boolean act() {
             if(isCursed()){
@@ -330,6 +336,9 @@ public class ElectricalSmoke extends Artifact {
                 charge++;
                 if(charge>chargeCap)charge = chargeCap;
             }
+
+            smoke = artifact;
+
             spend(TICK);
             return true;
         }

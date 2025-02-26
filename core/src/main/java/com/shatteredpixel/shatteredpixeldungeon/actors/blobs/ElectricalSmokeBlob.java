@@ -39,6 +39,10 @@ public class ElectricalSmokeBlob extends Blob{
         super.evolve();
         blobEffect();
 
+        if(hero.buff(ElectricalSmoke.SmokingAlloy.class)!=null){
+            artifact = ( hero.buff(ElectricalSmoke.SmokingAlloy.class)).smoke;
+        }
+
     }
 
     public void blobEffect(){
@@ -132,6 +136,7 @@ public class ElectricalSmokeBlob extends Blob{
             int old = artifact.potionCate.get(c);
             artifact.potionCate.remove(c);
             artifact.potionCate.put(c,old-artifact.decrease);
+            GLog.i(""+artifact.potionCate.get(c));
         }
     }
 

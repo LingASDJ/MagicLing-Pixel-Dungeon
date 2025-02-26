@@ -212,8 +212,6 @@ public class ElectricalSmokeParticle extends PixelParticle.Shrinking {
             }
         }
 
-
-        GLog.i(""+ (has(PotionOfLiquidFlame.class)));
         this.x = x;
         this.y = y;
 
