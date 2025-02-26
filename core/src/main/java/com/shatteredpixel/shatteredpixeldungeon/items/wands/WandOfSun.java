@@ -19,6 +19,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SunSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -152,6 +153,21 @@ public class WandOfSun extends Wand{
         }
         public CharSprite sprite() {
             return Reflection.newInstance(spriteClass);
+        }
+
+        private static final String MINISUNSTATUS = "minisun_status";
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            if( bundle.contains( MINISUNSTATUS ) )
+                duration = bundle.getInt( MINISUNSTATUS );
+        }
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put( MINISUNSTATUS, duration) ;
         }
 
         public void die(){
