@@ -160,7 +160,8 @@ public class WandOfSun extends Wand{
         @Override
         public void restoreFromBundle(Bundle bundle) {
             super.restoreFromBundle(bundle);
-            duration = bundle.getInt(MINISUNSTATUS);
+            if(bundle.contains(MINISUNSTATUS))
+                duration = bundle.getInt(MINISUNSTATUS);
         }
 
         @Override
